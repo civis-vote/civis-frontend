@@ -1,0 +1,227 @@
+@import './src/assets/styles/app';
+
+.read-response-container {
+
+  .submit-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    height: 63px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $primary-color;
+    .sticky-btn {
+     background: transparent;
+     color: $white;
+     padding: 10px 30px;
+     border: 1px solid $white;
+     box-sizing: border-box;
+     border-radius: 4px;
+    }
+  }
+
+  .paper-effect {
+    position: relative;
+    padding: 28px 32px;
+    background-color: $white;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.13);
+    border-radius: 5px;
+    z-index: 1;
+    @media screen and (max-width: 991px) {
+      padding: 20px 15px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
+
+  .heading {
+    @include general-text($font-size: 16px, $weight: bold);
+  }
+
+  .summary-content {
+    @include general-text;
+    @media screen {
+      font-size: 14px;
+    }
+  }
+
+  .what-resp-text {
+    font-size: 13px;
+    color: #939393;
+    text-decoration: underline;
+  }
+
+  .response-container {
+    padding: 25px 0;
+    border-bottom: 1px solid $divider-border;
+    &:last-child {
+      border-bottom: none;
+    }
+    .vote-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .vote-count {
+        display: flex;
+        align-items: center;
+        color: #A6A6A6;
+
+        span:nth-child(odd) {
+          font-size: 24px;
+          margin-right: 5px;
+          cursor: pointer;
+        }
+
+        span:nth-child(even) {
+          font-size: 14px;
+        } 
+        
+        .active {
+          color: $primary-color !important;
+
+          &__btn {
+            border: 1px solid $primary-color;
+            border-radius: 50%;
+            padding: 5px 10px;
+          }
+        }
+      }
+
+      .response-btn {
+        padding: 5px 10px;
+        color: $primary-color;
+        background-color: transparent;
+        border-radius: 3px;
+        border: 1px solid #1894EA;
+      }
+    }
+    .text-16 {
+      @media screen and (max-width: 991px) {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .response-index {
+    min-height: 386px;
+    background: #FFFFFF;
+    box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.13);
+    border-radius: 5px;
+    position: relative;
+
+    &__nav {
+      height: 60px;
+      background:#F2F2F2;
+      border-radius: 5px 5px 0 0;
+      padding: 0 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .heading {
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 106.6%;
+        color: #525252;
+      }
+
+      .link {
+        font-size: 14px;
+        line-height: 106.6%;
+        text-decoration-line: underline;
+        color: #0E73B9;
+      }
+
+      .info-mark {
+        font-size: 40px;
+        color: rgba(196, 196, 196, 0.5);
+      }
+    }
+
+    &__content {
+      padding: 5px 30px;
+      .text-space {
+        resize: none;
+        border: none;
+        width: 100%;
+        min-height: 275px;
+
+        &:focus {
+          outline: none;
+        }
+
+        &::-webkit-input-placeholder {
+          color: #C4C4C4;
+        }
+        
+        &:-moz-placeholder { /* Firefox 18- */
+          color: #C4C4C4;  
+        }
+        
+        &::-moz-placeholder {  /* Firefox 19+ */
+          color: #C4C4C4;  
+        }
+        
+        &:-ms-input-placeholder {
+          color: #C4C4C4;  
+        }
+        
+        &::placeholder {
+          color: #C4C4C4;  
+        }
+      }
+    }
+
+    &__footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+
+      .checkbox-area {
+        min-height: 40px;
+        background: #F8F8F8;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+
+        label {
+          font-size: 14px;
+          line-height: 124.7%;
+          letter-spacing: 0.02em;
+          color: #5A5A5A;
+        }
+
+        .link {
+          margin-left: 5px;
+          font-size: 12px;
+          line-height: 124.7%;
+          letter-spacing: 0.02em;
+          text-decoration-line: underline;
+          color: #939393;
+          cursor: pointer;
+        }
+      }
+
+      .draggable-area {
+        padding: 5px 0;
+        background: #E3E3E3;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        .drag-bars {
+          width: 30px;
+          border: 2px solid #FFFFFF;
+
+          &:nth-child(1) {
+            margin-bottom: 2px;
+          }
+        }
+      }
+    }
+  }
+}

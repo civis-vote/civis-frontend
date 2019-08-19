@@ -1,0 +1,69 @@
+<section class="read-response-container" #responseIndex>
+  <div class="paper-effect">
+    <p class="heading">Summary</p>
+    <p class="summary-content">{{profileData?.summary}}</p>
+  </div>
+
+  <div class="response-index mt-4" ngResizable [rzHandles]="'s'" *ngIf="showCreateResponse()"> 
+    <div class="response-index__nav">
+      <div class="w-50">
+        <div class="heading">Your response</div>
+      </div>
+      <div class="w-50 row no-gutters justify-content-end align-items-center">
+        <div class="link mr-3">or, select a public response</div>
+        <div class="info-mark"><i class="fa fa-question-circle"></i></div>
+      </div>
+    </div>
+    <div class="response-index__content">
+      <textarea class="text-space" placeholder="Type your response here..." [(ngModel)]="responseText" (ngModelChange)="enableSubmitResponse($event)"></textarea>
+    </div>
+    <div class="response-index__footer">
+      <div class="checkbox-area">
+        <div class="input-checbox">
+          <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility"/> 
+          <label class="m-0"> Make my response public </label>
+          <span class="link">What does this mean?</span>
+        </div>
+      </div>
+      <div class="draggable-area">
+        <span class="drag-bars"></span>
+        <span class="drag-bars"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="paper-effect mt-4 m-0-sm " *ngIf="responseList?.length">
+    <div class="d-flex justify-content-between">
+      <p class="text-18 text-16-sm m-0 bold-text">Public responses</p>
+      <a href="javascript:void(0)" class="what-resp-text">What are public responses?</a>
+    </div>
+    <ng-container *ngFor="let response of responseList">
+      <div class="response-container">
+        <div class="d-inline-flex align-items-center">
+          <img class="avatar avatar--42" src="https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1" />
+          <p class="regular-text bold-text m-0 ml-2">{{response?.node.user.firstName}}</p>
+        </div>
+        <p class="text-16">{{response.node.responseText}}</p>
+        <div class="vote-section">
+          <div class="vote-count">
+            <div [ngClass]="response?.node.votedAs?.voteDirection === 'up'  ? 'active' : ''">
+                <span (click)="vote('up', response?.node)" [ngClass]="response?.node.votedAs?.voteDirection === 'up' ? 'active__btn' : ''"><i class="fa fa-thumbs-up"></i></span>
+                <span>{{response.node?.upVoteCount ? response.node?.upVoteCount : '' }}</span>
+            </div>
+            <div [ngClass]="response?.node.votedAs?.voteDirection === 'down'  ? 'active' : ''">
+                <span (click)="vote('down', response?.node)" class="ml-4" [ngClass]="response?.node.votedAs?.voteDirection === 'down' ? 'active__btn' : ''"><i class="fa fa-thumbs-down"></i></span>
+                <span>{{ response.node?.downVoteCount ? response.node?.downVoteCount : ''}}</span>
+            </div>
+            <div *ngIf="response.node?.templatesCount">
+                <span class="ml-4 mr-2"><i class="fa fa-refresh"></i></span>
+                <span>{{response.node?.templatesCount}}</span>
+            </div>
+          </div>
+          <div>
+            <button class="app-btn response-btn" (click)="useThisResponse(response?.node)" >Use this response</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>      
+</section>

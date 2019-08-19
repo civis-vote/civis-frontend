@@ -22,14 +22,14 @@
 
     <div class="navbar-space__middle col-4" *ngIf="currentUrl === 'consultations-profile'">
       <div class="row no-gutters justify-content-center h-100">
-          <div class="profile-tab active-tab px-3">
+          <a class="profile-tab active-tab px-3" (click)="routeToConsultation('read')">
             <p>Read  &  Respond</p>
             <p>Submit your feedback</p>
-          </div>
-          <div class="profile-tab px-3">
+          </a>
+          <a class="profile-tab px-3" (click)="routeToConsultation('discuss')">
             <p>Discuss  &  Engage</p>
             <p>Talk to the community</p>
-          </div>
+          </a>
       </div>
     </div>
 

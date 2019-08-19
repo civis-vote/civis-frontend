@@ -2,151 +2,91 @@
   <div class="consultation-bg-img" [ngStyle]="{'background-image': 'url(' + profileData?.ministry?.coverPhoto?.url + ')'}"></div>
   <div class="consultation-profile">
 
-    <section class="consultation-profile__sidebar-section">
+    <aside class="consultation-profile__sidebar-section">
       <app-profile-card [profile]='profileData' (openFeedbackModal)="openFeedbackModal()"></app-profile-card>
-    </section>
-
-    <section class="consultation-profile__main-section" #responseIndex>
-      <div class="paper-effect">
-        <p class="heading">Summary</p>
-        <p class="summary-content">{{profileData?.summary}}</p>
-      </div>
-
-      <div class="response-index mt-4" ngResizable [rzHandles]="'s'" *ngIf="showCreateResponse()"> 
-        <div class="response-index__nav">
-          <div class="w-50">
-            <div class="heading">Your response</div>
-          </div>
-          <div class="w-50 row no-gutters justify-content-end align-items-center">
-            <div class="link mr-3">or, select a public response</div>
-            <div class="info-mark"><i class="fa fa-question-circle"></i></div>
-          </div>
-        </div>
-        <div class="response-index__content">
-          <textarea class="text-space" placeholder="Type your response here..." [(ngModel)]="responseText" (ngModelChange)="enableSubmitResponse($event)"></textarea>
-        </div>
-        <div class="response-index__footer">
-          <div class="checkbox-area">
-            <div class="input-checbox">
-              <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility"/> 
-              <label class="m-0"> Make my response public </label>
-              <span class="link">What does this mean?</span>
-            </div>
-          </div>
-          <div class="draggable-area">
-            <span class="drag-bars"></span>
-            <span class="drag-bars"></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="paper-effect mt-4 m-0-sm " *ngIf="responseList?.length">
-        <div class="d-flex justify-content-between">
-          <p class="text-18 text-16-sm m-0 bold-text">Public responses</p>
-          <a href="javascript:void(0)" class="what-resp-text">What are public responses?</a>
-        </div>
-        <ng-container *ngFor="let response of responseList">
-          <div class="response-container">
-            <div class="d-inline-flex align-items-center">
-                <img class="avatar avatar--42" 
-                [src]="response?.node?.user?.profilePicture?.url ? response?.node?.user?.profilePicture?.url : 
-                'https://i0.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?resize=256%2C256&quality=100&ssl=1'" />              
-                <p class="regular-text bold-text m-0 ml-2">{{response?.node?.user?.firstName}}</p>
-            </div>
-            <p class="text-16">{{response.node.responseText}}</p>
-            <div class="vote-section">
-              <div class="vote-count">
-                <div [ngClass]="response?.node.votedAs?.voteDirection === 'up'  ? 'active' : ''">
-                    <span (click)="vote('up', response?.node)" [ngClass]="response?.node.votedAs?.voteDirection === 'up' ? 'active__btn' : ''"><i class="fa fa-thumbs-up"></i></span>
-                    <span>{{response.node?.upVoteCount ? response.node?.upVoteCount : '' }}</span>
-                </div>
-                <div [ngClass]="response?.node.votedAs?.voteDirection === 'down'  ? 'active' : ''">
-                    <span (click)="vote('down', response?.node)" class="ml-4" [ngClass]="response?.node.votedAs?.voteDirection === 'down' ? 'active__btn' : ''"><i class="fa fa-thumbs-down"></i></span>
-                    <span>{{ response.node?.downVoteCount ? response.node?.downVoteCount : ''}}</span>
-                </div>
-                <div *ngIf="response.node?.templatesCount">
-                    <span class="ml-4 mr-2"><i class="fa fa-refresh"></i></span>
-                    <span>{{response.node?.templatesCount}}</span>
-                </div>
-              </div>
-              <div>
-                <button class="app-btn response-btn" (click)="useThisResponse(response?.node)" >Use this response</button>
-              </div>
-            </div>
-          </div>
-        </ng-container>
-      </div>      
+    </aside>
+    <section>
+      <router-outlet></router-outlet>
     </section>
   </div>
 </section>
 
-  <!-- rating-model -->
-  <div class="feedback-index">
+<!-- rating-model -->
+<div class="feedback-index">
   <div bsModal #feedbackModal="bs-modal" class="modal fade" tabindex="-1" [ngClass]="step == 2 ? 'align-center' : ''"
-  [config]="{show: false, backdrop: 'static', ignoreBackdropClick: true, keyboard: false}"
-  role="dialog" aria-labelledby="feedbackModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
+    [config]="{show: false, backdrop: 'static', ignoreBackdropClick: true, keyboard: false}" role="dialog"
+    aria-labelledby="feedbackModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
           <p class="heading">Here’re the overall satisfation levels for this draft from people</p>
-      </div>
-      <div class="modal-body">
-        <label class="radio-block">
+        </div>
+        <div class="modal-body">
+          <label class="radio-block">
             <div class="radio-btn">
               <div class="radio-text" [class.active-text]="responseFeedback === 'dissatisfied'">Dissatisfied</div>
-              <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.dissatisfied ? satisfactionRatingDistribution?.dissatisfied : 0}}</div>
-              <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'dissatisfied'" [ngStyle]="{'width': satisfactionRatingDistribution?.dissatisfied ? getPercentageValue(satisfactionRatingDistribution, 'dissatisfied') + '%' : '0%' }"></div>
+              <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.dissatisfied ?
+                satisfactionRatingDistribution?.dissatisfied : 0}}</div>
+              <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'dissatisfied'"
+                [ngStyle]="{'width': satisfactionRatingDistribution?.dissatisfied ? getPercentageValue(satisfactionRatingDistribution, 'dissatisfied') + '%' : '0%' }"></div>
             </div>
             <div class="input-space">
-                <input type="radio" class="cm-radio ml-3" name="feedback" value="dissatisfied" [(ngModel)]="responseFeedback"
+              <input type="radio" class="cm-radio ml-3" name="feedback" value="dissatisfied" [(ngModel)]="responseFeedback"
                 (ngModelChange)="choose($event)" [disabled]="(responseFeedback && responseFeedback !== 'dissatisfied')">
             </div>
-        </label>
-        <label class="radio-block">
+          </label>
+          <label class="radio-block">
             <div class="radio-btn">
-              <div class="radio-text" [class.active-text]="responseFeedback === 'somewhat_dissatisfied'">Somewhat Dissatisfied</div>
-              <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.somewhat_dissatisfied ? satisfactionRatingDistribution?.somewhat_dissatisfied : 0}}</div>
-              <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'somewhat_dissatisfied'" [ngStyle]="{'width': satisfactionRatingDistribution?.somewhat_dissatisfied ? getPercentageValue(satisfactionRatingDistribution, 'somewhat_dissatisfied') + '%' : '0%' }"></div>
+              <div class="radio-text" [class.active-text]="responseFeedback === 'somewhat_dissatisfied'">Somewhat
+                Dissatisfied</div>
+              <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.somewhat_dissatisfied
+                ? satisfactionRatingDistribution?.somewhat_dissatisfied : 0}}</div>
+              <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'somewhat_dissatisfied'"
+                [ngStyle]="{'width': satisfactionRatingDistribution?.somewhat_dissatisfied ? getPercentageValue(satisfactionRatingDistribution, 'somewhat_dissatisfied') + '%' : '0%' }"></div>
             </div>
             <div class="input-space">
-                <input type="radio" class="cm-radio ml-3" name="feedback" value="somewhat_dissatisfied" [(ngModel)]="responseFeedback"
+              <input type="radio" class="cm-radio ml-3" name="feedback" value="somewhat_dissatisfied" [(ngModel)]="responseFeedback"
                 (ngModelChange)="choose($event)" [disabled]="(responseFeedback && responseFeedback !== 'somewhat_dissatisfied')">
             </div>
-        </label>
-        <label class="radio-block">
+          </label>
+          <label class="radio-block">
             <div class="radio-btn">
-                <div class="radio-text" [class.active-text]="responseFeedback === 'somewhat_satisfied'">Somewhat Satisfied</div>
-                <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.somewhat_satisfied ? satisfactionRatingDistribution?.somewhat_satisfied : 0}}</div>
-                <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'somewhat_satisfied'" [ngStyle]="{'width': satisfactionRatingDistribution?.somewhat_satisfied ? getPercentageValue(satisfactionRatingDistribution, 'somewhat_satisfied') + '%' : '0%' }"></div>
-              </div>
-              <div class="input-space">
-                  <input type="radio" class="cm-radio ml-3" name="feedback" value="somewhat_satisfied" [(ngModel)]="responseFeedback"
-                  (ngModelChange)="choose($event)" [disabled]="(responseFeedback && responseFeedback !== 'somewhat_satisfied')">
-              </div>
-        </label>
-        <label class="radio-block">
+              <div class="radio-text" [class.active-text]="responseFeedback === 'somewhat_satisfied'">Somewhat
+                Satisfied</div>
+              <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.somewhat_satisfied
+                ? satisfactionRatingDistribution?.somewhat_satisfied : 0}}</div>
+              <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'somewhat_satisfied'"
+                [ngStyle]="{'width': satisfactionRatingDistribution?.somewhat_satisfied ? getPercentageValue(satisfactionRatingDistribution, 'somewhat_satisfied') + '%' : '0%' }"></div>
+            </div>
+            <div class="input-space">
+              <input type="radio" class="cm-radio ml-3" name="feedback" value="somewhat_satisfied" [(ngModel)]="responseFeedback"
+                (ngModelChange)="choose($event)" [disabled]="(responseFeedback && responseFeedback !== 'somewhat_satisfied')">
+            </div>
+          </label>
+          <label class="radio-block">
             <div class="radio-btn">
-                <div class="radio-text" [class.active-text]="responseFeedback === 'satisfied'">Satisfied</div>
-                <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.satisfied ? satisfactionRatingDistribution?.satisfied : 0}}</div>
-                <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'satisfied'" [ngStyle]="{'width': satisfactionRatingDistribution?.satisfied ? getPercentageValue(satisfactionRatingDistribution, 'satisfied') + '%' : '0%' }"></div>
-              </div>
-              <div class="input-space">
-                  <input type="radio" class="cm-radio ml-3" name="feedback" value="satisfied" [(ngModel)]="responseFeedback"
-                  (ngModelChange)="choose($event)" [disabled]="(responseFeedback && responseFeedback !== 'satisfied')">
-              </div>
-        </label>
-        <div class="footer-space">
-          <div class="footer-space__left">
+              <div class="radio-text" [class.active-text]="responseFeedback === 'satisfied'">Satisfied</div>
+              <div class="mx-2 count-text" *ngIf="responseFeedback">{{satisfactionRatingDistribution?.satisfied ?
+                satisfactionRatingDistribution?.satisfied : 0}}</div>
+              <div *ngIf="responseFeedback" class="progress-color" [class.active-progress]="responseFeedback === 'satisfied'"
+                [ngStyle]="{'width': satisfactionRatingDistribution?.satisfied ? getPercentageValue(satisfactionRatingDistribution, 'satisfied') + '%' : '0%' }"></div>
+            </div>
+            <div class="input-space">
+              <input type="radio" class="cm-radio ml-3" name="feedback" value="satisfied" [(ngModel)]="responseFeedback"
+                (ngModelChange)="choose($event)" [disabled]="(responseFeedback && responseFeedback !== 'satisfied')">
+            </div>
+          </label>
+          <div class="footer-space">
+            <div class="footer-space__left">
               <div class="points-text">You get 50 points for submitting this!</div>
               <div class="link">View Leaderboard</div>
-          </div>
-          <div class="footer-space__right">
-            <button (click)="createResponse()">Ok Great</button>
+            </div>
+            <div class="footer-space__right">
+              <button (click)="createResponse()">Ok Great</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  </div>
 </div>
-

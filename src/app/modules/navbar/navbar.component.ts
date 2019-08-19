@@ -21,7 +21,12 @@ export class NavbarComponent implements OnInit {
   transparentNav = false;
   activeCount: any;
 
-  constructor(private router: Router, private userService: UserService, private apollo: Apollo,) { }
+  constructor(
+    private router: Router,
+    private userService: UserService,
+    private apollo: Apollo,
+    private route: ActivatedRoute,
+    ) { }
 
   ngOnInit() {
     this.router.events.subscribe(event => {
@@ -31,6 +36,7 @@ export class NavbarComponent implements OnInit {
     });
     this.getCurrentUser();
     this.getActiveConsulationCount();
+    console.log('navbar ac route: ', this.router);
   }
 
   openMenu() {
@@ -67,13 +73,13 @@ export class NavbarComponent implements OnInit {
 
   getCurrentUser() {
     this.userService.userLoaded$
-    .subscribe((data) => {
-      if (data) {
-        this.currentUser = this.userService.currentUser;
-      } else {
-        this.currentUser = null;
-      }
-    });
+      .subscribe((data) => {
+        if (data) {
+          this.currentUser = this.userService.currentUser;
+        } else {
+          this.currentUser = null;
+        }
+      });
   }
 
   showProfilePopup() {
@@ -89,27 +95,36 @@ export class NavbarComponent implements OnInit {
     this.userService.userLoaded$.next(false);
     this.router.navigate(['']);
   }
-  
+
   @HostListener('window:scroll', [])
-	scrollPos() {
-    let number = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-		if (number < 150) {
+  scrollPos() {
+    const number = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    if (number < 150) {
       this.transparentNav = false;
-		} else if (number > 150) {
-			this.transparentNav = true;
-		}
+    } else if (number > 150) {
+      this.transparentNav = true;
+    }
   }
 
   getActiveConsulationCount() {
     this.apollo.query({
-      query: ConsultationList, 
-      variables: {statusFilter: 'published',featuredFilter: false}
+      query: ConsultationList,
+      variables: { statusFilter: 'published', featuredFilter: false }
     })
-    .pipe (
-      map((res: any) => res.data.consultationList)
-    )
-    .subscribe(item => {
-      this.activeCount = item.paging.totalItems;
-    })
+      .pipe(
+        map((res: any) => res.data.consultationList)
+      )
+      .subscribe(item => {
+        this.activeCount = item.paging.totalItems;
+      });
+  }
+
+  routeToConsultation(subRoute: string) {
+    const urlArray = this.router.url.split('/');
+    const consultationIndex = +urlArray.findIndex(i => i === 'consultations') + 1;
+    if (consultationIndex > 0) {
+      const consulationId = urlArray[consultationIndex];
+      this.router.navigateByUrl(`/consultations/${consulationId}/${subRoute}`);
+    }
   }
 }

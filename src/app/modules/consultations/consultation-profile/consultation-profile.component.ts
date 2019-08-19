@@ -46,11 +46,13 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
   ) {
       this.subscription = this.activatedRoute.params.subscribe((param: any) => {
         this.consultationId = +param['id'];
+        this.consultationsService.consultationId$.next(this.consultationId);
       });
   }
 
   ngOnInit() {
     this.getCurrentUser();
+    console.log('ac route: ', this.activatedRoute.url);
   }
 
   getConsultationProfile() {
@@ -66,7 +68,7 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
     .subscribe((data: any) => {
         this.profileData = data;
         this.satisfactionRatingDistribution = data.satisfactionRatingDistribution;
-        this.responseList = data.sharedResponses.edges
+        this.responseList = data.sharedResponses.edges;
     }, err => {
       this.errorService.showErrorModal(err);
     });
@@ -197,26 +199,6 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
     return selectedPercentage;
   }
 
-  showCreateResponse() {
-    if ((this.checkExpired(this.profileData ? this.profileData.responseDeadline : null) === 'Expired')
-        || !this.currentUser || (this.profileData && this.profileData.respondedOn)) {
-        return false;
-    }
-    return true;
-  }
-
-  checkExpired(deadline) {
-    if (deadline) {
-      const today = moment();
-      const lastDate = moment(deadline);
-      const difference = lastDate.diff(today, 'days');
-      if (difference <= 0) {
-        return 'Expired';
-      } else {
-        return `Active`;
-      }
-    }
-  }
 
   vote(direction, response) {
     if (!response.votedAs && this.currentUser) {

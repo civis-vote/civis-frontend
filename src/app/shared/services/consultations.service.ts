@@ -7,6 +7,7 @@ import {BehaviorSubject} from 'rxjs';
 export class ConsultationsService {
 
     enableSubmitResponse =  new BehaviorSubject(null);
+    consultationId$ = new BehaviorSubject(null);
 
   constructor() {
   }

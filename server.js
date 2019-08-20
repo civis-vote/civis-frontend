@@ -3,6 +3,7 @@ const app = express()
 const path = require('path');
 const secure = require('ssl-express-www');
 const compression = require('compression');
+const disqusRouter = require('./server-app/disqus');
 
 if(!process.env.APP_ENVIRONMENT) {
     require('dotenv').config();
@@ -26,6 +27,10 @@ app.use(function (req, res, next) {
 
     next();
 });
+
+console.log('disqus: ', disqusRouter);
+
+app.use('/disqus', disqusRouter);
 
 app.get('/getEnvironment', (req, res) => {
     const environment = process.env.APP_ENVIRONMENT;

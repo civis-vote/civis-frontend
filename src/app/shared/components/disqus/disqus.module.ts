@@ -3,9 +3,14 @@ import { CommonModule } from '@angular/common';
 import { DisqusComponent } from './disqus.component';
 
 @NgModule({
-  declarations: [DisqusComponent],
+  declarations: [
+    DisqusComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+  ],
+  exports: [
+    DisqusComponent,
   ]
 })
 export class DisqusModule { }

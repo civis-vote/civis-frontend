@@ -84,6 +84,14 @@
                   "with": "src/environments/environment.dev.prod.ts"
                 }
               ]
+            },
+            "dev-staging-j": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.j.staging.ts"
+                }
+              ]
             }
           }
         },
@@ -105,6 +113,9 @@
             },
             "dev-production": {
               "browserTarget": "civis:build:dev-production"
+            },
+            "dev-staging-j": {
+              "browserTarget": "civis:build:dev-staging-j"
             }
           }
         },

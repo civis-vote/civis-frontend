@@ -13,7 +13,10 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./modules/landing/landing.module').then(m => m.LandingModule)
   },
-
+  {
+    path: 'donate',
+    loadChildren: () => import('./modules/donate/donate.module').then(m => m.DonateModule)
+  },
   {
     path: 'home',
     loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)

@@ -17,7 +17,7 @@
 
     <div class="app-navbar__center-item" *ngIf="currentUrl === 'consultations-profile'">
       <div class="profile-tab-wrapper">
-        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.--> 
+        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.-->
           <a class="profile-tab px-3" [ngClass]="activeTab === 'read & respond' ? 'active-tab' : ''"
           (click)="routeToConsultation('read')">
           <p>{{'Read & Respond' | translate}}</p>
@@ -69,6 +69,11 @@
 
     <div class="app-navbar__right-item">
       <div class="nav-btns" *ngIf="currentUrl !== 'consultations-profile'">
+        <button class="btn btn-oval" (click)="donate()">
+          {{'Donate' | translate}}
+        </button>
+      </div>
+      <div class="nav-btns" *ngIf="currentUrl !== 'consultations-profile'">
         <button class="btn btn-oval" (click)="submitConsultation()">
           {{'Submit a Consultation' | translate}}
         </button>
@@ -86,7 +91,7 @@
           <p (click)="logout($event)">{{'Logout' | translate}}</p>
         </div>
       </div>
-      
+
       <div class="mobile-space">
         <div class="mobile-space__auth" *ngIf="!currentUser">
           <button class="nav-btn" (click)="onSignUp()">{{'Sign Up' | translate}}</button>
@@ -136,6 +141,10 @@
           <div class="nav-btn">
             <button class="close-btn btn btn-transparent" [routerLink]="['/how-civis-works']" (click)="closeMenu()">
               {{'How Civis Works' | translate}}
+            </button>
+          <div class="nav-btn">
+            <button class="btn-oval" (click)="closeMenu(); donate()">
+              {{'Donate' | translate}}
             </button>
           </div>
           <div class="nav-btn">

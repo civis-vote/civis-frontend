@@ -83,6 +83,9 @@
               <span class="mr-2 clr-blue"><i class="fa fa-share"></i></span>
               <span class="blue-text bold-text">{{'Spread the word' | translate}}</span>
             </button>
+            <button mat-button (click)="openDialog()" class="btn-circular" style="float: right;">
+              <span class="blue-text bold-text">{{'Glossary' | translate}}</span>
+            </button>
           </div>
         </div>
 
@@ -125,5 +128,5 @@
     </div>
   </div>
 </div>
-
+<app-glossary *ngIf="showGlossaryModal" (close)="showGlossaryModal = false"></app-glossary>
 <app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false"></app-confirm-email-modal>

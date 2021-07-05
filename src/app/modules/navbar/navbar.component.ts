@@ -194,7 +194,7 @@ export class NavbarComponent implements OnInit {
       this.transparentNav = true;
     }
   }
-  
+
   @HostListener('document:click', ['$event']) clickedOutside(event) {
     this.profilePopup = false;
   }
@@ -223,6 +223,10 @@ export class NavbarComponent implements OnInit {
       const consulationId = urlArray[consultationIndex];
       this.router.navigateByUrl(`/consultations/${consulationId}/${subRoute}`);
     }
+  }
+
+  donate() {
+    this.router.navigateByUrl('/donate');
   }
 
   submitConsultation() {

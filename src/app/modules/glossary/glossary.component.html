@@ -1,0 +1,41 @@
+<div bsModal #glossaryModal="bs-modal" class="modal fade"
+  [config]="{show: true, backdrop: 'static', ignoreBackdropClick: true}" [ngClass]="showModal ? 'align-center' : ''">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="title">{{'Glossary Terms' | translate}}</div>
+        <div class="pointer" (click)="closeModal()">X</div>
+      </div>
+      <div class="modal-body">
+        <div class="glossary-wrapper__inner-container">
+          <table>
+            <thead>
+              <tr class="container-body__data-row ">
+                <th>
+                  S No.
+                </th>
+                <th>
+                  Legal Terms
+                </th>
+                <th>
+                  Definition
+                </th>
+              </tr>
+            </thead>
+            <tr class="container-body__data-row " *ngFor="let item of glossaryWordArray; let i = index">
+              <td>
+                {{i +1}}
+              </td>
+              <td>
+                {{item?.wordindex.word}}
+              </td>
+              <td>
+                {{item?.wordindex.description}}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

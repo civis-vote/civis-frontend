@@ -38,7 +38,7 @@ import { StarterService } from './shared/services/starter.service';
     PolicyModule,
     CitySelectionModalModule,
     CookieModule.forRoot(),
-    NgxWebstorageModule.forRoot(),
+    NgxWebstorageModule.forRoot()
   ],
   providers: [
     LandingGuard,

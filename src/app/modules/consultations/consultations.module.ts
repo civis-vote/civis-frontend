@@ -39,6 +39,7 @@ import { SummaryResponseContainerComponent } from './consultation-profile/summar
 import {
     SatisfactionRatingSelectionComponent
  } from './consultation-profile/satisfaction-rating-selection/satisfaction-rating-selection.component';
+import { GlossaryModule } from '../glossary/glossary.module';
 
 @NgModule({
     imports: [
@@ -60,6 +61,7 @@ import {
         UserProfileModalModule,
         CKEditorModule,
         PipesModule,
+        GlossaryModule
     ],
     exports: [TooltipModule],
     declarations: [

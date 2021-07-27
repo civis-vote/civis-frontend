@@ -53,3 +53,13 @@ query{
   }
 }
 `;
+
+export const profanityList =  gql`
+query{
+  profanityList {
+    data {
+      profaneWord
+    }
+  }
+}
+`;

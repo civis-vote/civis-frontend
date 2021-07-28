@@ -61,14 +61,22 @@ export class ConsultationResponseTextComponent
   scrollToError: any;
   authModal = false;
   isConfirmModal = false;
+  isResponseShort = false;
   confirmMessage = {
     msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
     title: ''
   };
+  responseMessage = {
+      msg: 'We detected that your response is too short. Please refer to other responses for more detailed output.',
+      title: ''
+    };
   nudgeMessageDisplayed = false;
+  nudgeShortMessageDisplayed = false;
   profanityCount: any;
+  shortResponseCount: any;
   userData:any;
   profanity_count_changed: boolean=false;
+  short_response_count_changed: boolean=false;
   isUserResponseProfane: boolean=false;
   isApproved = 0;
 
@@ -320,7 +328,7 @@ export class ConsultationResponseTextComponent
     }
     return true;
   }
-  
+
   urlToText(text: string): string {
     if (text) {
       const str: any =  text.replace(/<\/?[^>]+(>|$)/g, '');
@@ -358,7 +366,7 @@ export class ConsultationResponseTextComponent
             map((res: any) => res.data.userCountUser)
           )
           .subscribe(data => {
-            if(!this.profanity_count_changed){
+            if(!this.profanity_count_changed || !this.short_response_count_changed){
               this.userData=data;
               this.updateProfanityCount();
             }
@@ -382,6 +390,88 @@ export class ConsultationResponseTextComponent
       this.scrollToError = true;
     }
   }
+
+  updateResponseCount(){
+    if (this.userData!==null){
+      this.shortResponseCount=this.userData.shortResponseCount;
+    }
+    else{
+      this.shortResponseCount=0;
+      if((this.responseText.length - 8) <= 50){
+        if (!this.nudgeShortMessageDisplayed) {
+          this.isResponseShort = true;
+          this.nudgeShortMessageDisplayed=true;
+          return;
+        }
+        this.shortResponseCount+=1;
+        this.isApproved=+1;
+      }
+      this.apollo.mutate({
+        mutation: CreateUserCountRecord,
+        variables:{
+          userCount:{
+            userId: this.currentUser.id,
+            profanityCount: 0,
+            shortResponseCount: this.shortResponseCount
+          }
+        },
+      })
+      .subscribe((data) => {
+         this.invokeSubmitResponse();
+      }, err => {
+        this.errorService.showErrorModal(err);
+      });
+      this.short_response_count_changed=true;
+      return;
+      }
+
+    if((this.responseText.length - 8) <= 50) {
+      if (!this.nudgeShortMessageDisplayed && this.shortResponseCount>2) {
+        this.isResponseShort = true;
+        this.nudgeShortMessageDisplayed=true;
+        return;
+      }
+      this.shortResponseCount+=1;
+      this.isApproved=+1;
+
+      this.apollo.mutate({
+        mutation: UpdateUserCountRecord,
+        variables:{
+          userCount:{
+          userId: this.currentUser.id,
+          profanityCount: this.userData.profanityCount,
+          shortResponseCount: this.shortResponseCount
+          }
+        },
+      })
+      .subscribe((data) => {
+        this.invokeSubmitResponse();
+      }, err => {
+        this.errorService.showErrorModal(err);
+      });
+      this.short_response_count_changed=true;
+    } else {
+      this.shortResponseCount=0;
+      this.apollo.mutate({
+        mutation: UpdateUserCountRecord,
+        variables:{
+          userCount:{
+            userId: this.currentUser.id,
+            profanityCount: this.userData.profanityCount,
+            shortResponseCount: this.shortResponseCount
+          }
+        },
+      })
+      .subscribe((data) => {
+        this.invokeSubmitResponse();
+      }, err => {
+        this.errorService.showErrorModal(err);
+      });
+      this.short_response_count_changed=true;
+      return;
+    }
+  }
+
   updateProfanityCount(){
     var Filter = require('bad-words'),
     filter = new Filter();
@@ -414,7 +504,11 @@ export class ConsultationResponseTextComponent
         },
       })
       .subscribe((data) => {
-         this.invokeSubmitResponse();
+        if(this.profanityCount == 0 ){
+          this.updateResponseCount();
+        } else {
+          this.invokeSubmitResponse();
+        }
       }, err => {
         this.errorService.showErrorModal(err);
       });
@@ -436,10 +530,10 @@ export class ConsultationResponseTextComponent
       }
     }
     else{
-      this.invokeSubmitResponse();
+      this.updateResponseCount();
       return;
     }
-    
+
     this.apollo.mutate({
       mutation: UpdateUserCountRecord,
       variables:{
@@ -460,6 +554,7 @@ export class ConsultationResponseTextComponent
 
   confirmed(event) {
     this.isConfirmModal = false;
+    this.isResponseShort = false;
   }
 
   invokeSubmitResponse(){

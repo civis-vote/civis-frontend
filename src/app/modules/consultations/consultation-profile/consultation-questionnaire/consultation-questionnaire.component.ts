@@ -71,10 +71,6 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
 
     this.apollo.watchQuery({
       query: profanityList,
-      variables: {
-        perPage: 200,
-        page: 1
-      },
       fetchPolicy: 'network-only'
     })
     .valueChanges

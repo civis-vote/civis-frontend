@@ -91,10 +91,6 @@ export class ConsultationResponseTextComponent
 
       this.apollo.watchQuery({
         query: profanityList,
-        variables: {
-          perPage: 200,
-          page: 1
-        },
         fetchPolicy: 'network-only'
       })
       .valueChanges

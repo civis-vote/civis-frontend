@@ -423,11 +423,11 @@ export class ConsultationResponseTextComponent
         this.isApproved=+1;
       }
       this.apollo.mutate({
-        mutation: CreateUserCountRecord,
+        mutation: UpdateUserCountRecord,
         variables:{
           userCount:{
             userId: this.currentUser.id,
-            profanityCount: this.userData.profanityCount,
+            profanityCount: 0,
             shortResponseCount: this.shortResponseCount
           }
         },

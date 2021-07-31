@@ -68,7 +68,7 @@ export class ConsultationResponseTextComponent
     title: ''
   };
   responseMessage = {
-      msg: 'We detected that your response is too short. Please refer to other responses for more detailed output.',
+      msg: 'Are you sure?',
       title: ''
     };
   nudgeMessageDisplayed = false;
@@ -109,7 +109,7 @@ export class ConsultationResponseTextComponent
         this.profaneWords = response.profanityList.data.map((profane) => profane.profaneWord);
       }, (err: any) => {
       });
-  
+
   }
 
   ngOnInit(): void {
@@ -414,16 +414,15 @@ export class ConsultationResponseTextComponent
     else{
       this.shortResponseCount=0;
       if((this.responseText.length - 8) <= 50){
-        if (!this.nudgeShortMessageDisplayed) {
+        if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
           this.isResponseShort = true;
           this.nudgeShortMessageDisplayed=true;
           return;
         }
         this.shortResponseCount+=1;
-        this.isApproved=+1;
       }
       this.apollo.mutate({
-        mutation: CreateUserCountRecord,
+        mutation: UpdateUserCountRecord,
         variables:{
           userCount:{
             userId: this.currentUser.id,
@@ -442,13 +441,12 @@ export class ConsultationResponseTextComponent
       }
 
     if((this.responseText.length - 8) <= 50) {
-      if (!this.nudgeShortMessageDisplayed && this.shortResponseCount>2) {
+      if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
         this.isResponseShort = true;
         this.nudgeShortMessageDisplayed=true;
         return;
       }
       this.shortResponseCount+=1;
-      this.isApproved=+1;
 
       this.apollo.mutate({
         mutation: UpdateUserCountRecord,

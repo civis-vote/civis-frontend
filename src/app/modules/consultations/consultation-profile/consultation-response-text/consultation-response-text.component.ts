@@ -420,7 +420,6 @@ export class ConsultationResponseTextComponent
           return;
         }
         this.shortResponseCount+=1;
-        this.isApproved=+1;
       }
       this.apollo.mutate({
         mutation: UpdateUserCountRecord,
@@ -448,7 +447,6 @@ export class ConsultationResponseTextComponent
         return;
       }
       this.shortResponseCount+=1;
-      this.isApproved=+1;
 
       this.apollo.mutate({
         mutation: UpdateUserCountRecord,

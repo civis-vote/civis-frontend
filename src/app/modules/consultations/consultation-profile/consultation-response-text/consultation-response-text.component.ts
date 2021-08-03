@@ -414,11 +414,6 @@ export class ConsultationResponseTextComponent
     else{
       this.shortResponseCount=0;
       if((this.responseText.length - 8) <= 50){
-//         if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
-//           this.isResponseShort = true;
-//           this.nudgeShortMessageDisplayed=true;
-//           return;
-//         }
         this.shortResponseCount+=1;
         this.apollo.mutate({
           mutation: UpdateUserCountRecord,

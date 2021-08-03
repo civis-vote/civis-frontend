@@ -12,6 +12,7 @@ import { ConsultationsService } from 'src/app/shared/services/consultations.serv
 import { CookieService } from 'ngx-cookie';
 import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
 import { ModalDirective } from 'ngx-bootstrap';
+import { profanityList } from 'src/app/graphql/queries.graphql';
 
 @Component({
   selector: 'app-read-respond',
@@ -34,6 +35,7 @@ export class ReadRespondComponent implements OnInit {
   questionnaireExist: boolean;
   earnedPoints: any;
   emailVerification = false;
+  profaneWords = [];
 
   @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
@@ -51,6 +53,19 @@ export class ReadRespondComponent implements OnInit {
     )
     .subscribe((consulationId: any) => {
       this.consultationId = consulationId;
+    });
+
+    this.apollo.watchQuery({
+      query: profanityList,
+      fetchPolicy: 'network-only'
+    })
+    .valueChanges
+    .pipe(
+      map((res: any) => res.data)
+    )
+    .subscribe((response: any) => {
+      this.profaneWords = response.profanityList.data.map((profane) => profane.profaneWord);
+    }, (err: any) => {
     });
   }
 
@@ -219,6 +234,14 @@ export class ReadRespondComponent implements OnInit {
 
   submitResponse(consultationResponse) {
     localStorage.removeItem('consultationResponse');
+
+    // if the response is profane then we discard the draft, otherwise it is submitted
+    var Filter = require('bad-words'),
+    filter = new Filter({list: this.profaneWords});
+    if(filter.isProfane(consultationResponse.responseText.replace(/(<([^>]+)>)/gi, ""))){
+      return;
+    }
+
     this.apollo.mutate({
       mutation: SubmitResponseQuery,
       variables: {

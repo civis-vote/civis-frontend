@@ -382,7 +382,7 @@ export class ConsultationResponseTextComponent
             map((res: any) => res.data.userCountUser)
           )
           .subscribe(data => {
-            if(!this.profanity_count_changed || !this.short_response_count_changed){
+            if(!this.profanity_count_changed && !this.short_response_count_changed){
               this.userData=data;
               this.updateProfanityCount();
             }
@@ -414,31 +414,31 @@ export class ConsultationResponseTextComponent
     else{
       this.shortResponseCount=0;
       if((this.responseText.length - 8) <= 50){
-        if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
-          this.isResponseShort = true;
-          this.nudgeShortMessageDisplayed=true;
-          return;
-        }
+//         if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
+//           this.isResponseShort = true;
+//           this.nudgeShortMessageDisplayed=true;
+//           return;
+//         }
         this.shortResponseCount+=1;
+        this.apollo.mutate({
+          mutation: UpdateUserCountRecord,
+          variables:{
+            userCount:{
+              userId: this.currentUser.id,
+              profanityCount: 0,
+              shortResponseCount: this.shortResponseCount
+            }
+          },
+        })
+        .subscribe((data) => {
+           this.invokeSubmitResponse();
+        }, err => {
+          this.errorService.showErrorModal(err);
+        });
+        this.short_response_count_changed=true;
+        return;
       }
-      this.apollo.mutate({
-        mutation: UpdateUserCountRecord,
-        variables:{
-          userCount:{
-            userId: this.currentUser.id,
-            profanityCount: 0,
-            shortResponseCount: this.shortResponseCount
-          }
-        },
-      })
-      .subscribe((data) => {
-         this.invokeSubmitResponse();
-      }, err => {
-        this.errorService.showErrorModal(err);
-      });
-      this.short_response_count_changed=true;
-      return;
-      }
+    }
 
     if((this.responseText.length - 8) <= 50) {
       if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
@@ -447,43 +447,27 @@ export class ConsultationResponseTextComponent
         return;
       }
       this.shortResponseCount+=1;
+    } else {
+      this.shortResponseCount=0;
+    }
 
-      this.apollo.mutate({
-        mutation: UpdateUserCountRecord,
-        variables:{
-          userCount:{
+    this.apollo.mutate({
+      mutation: UpdateUserCountRecord,
+      variables:{
+        userCount:{
           userId: this.currentUser.id,
           profanityCount: this.userData.profanityCount,
           shortResponseCount: this.shortResponseCount
-          }
-        },
-      })
-      .subscribe((data) => {
-        this.invokeSubmitResponse();
-      }, err => {
-        this.errorService.showErrorModal(err);
-      });
-      this.short_response_count_changed=true;
-    } else {
-      this.shortResponseCount=0;
-      this.apollo.mutate({
-        mutation: UpdateUserCountRecord,
-        variables:{
-          userCount:{
-            userId: this.currentUser.id,
-            profanityCount: this.userData.profanityCount,
-            shortResponseCount: this.shortResponseCount
-          }
-        },
-      })
-      .subscribe((data) => {
-        this.invokeSubmitResponse();
-      }, err => {
-        this.errorService.showErrorModal(err);
-      });
-      this.short_response_count_changed=true;
-      return;
-    }
+        }
+      },
+    })
+    .subscribe((data) => {
+      this.invokeSubmitResponse();
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+    this.short_response_count_changed=true;
+    return;
   }
 
   updateProfanityCount(){

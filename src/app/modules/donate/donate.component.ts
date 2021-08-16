@@ -49,7 +49,7 @@ export class DonateComponent implements OnInit {
     let id = await this.order_response(donationForm.value.amount*100);
 
     let option: any = {
-      "key": "rzp_test_7uFpRekBxdblL5",
+      "key": "rzp_test_DoDpuQIQklAfF3",
       "amount": donationForm.value.amount*100,
       "currency": "INR",
       "name": "Civis",

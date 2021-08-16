@@ -228,7 +228,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
           .subscribe(data => {
             if(!this.profanity_count_changed){
               this.userData=data;
-              this.updateProfanityCount();
+              this.checkAndUpdateProfanityCount();
             }
           }, err => {
             const e = new Error(err);
@@ -236,10 +236,10 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
           });
         } else {
           this.authModal = true;
-          // localStorage.setItem(
-          //   'consultationResponse',
-          //   JSON.stringify(consultationResponse)
-          // ); //TODO
+          localStorage.setItem(
+            'consultationResponse',
+            JSON.stringify(consultationResponse)
+          );
         }
       }
     } else {
@@ -251,7 +251,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     }
   }
 
-  updateProfanityCount(){
+  checkAndUpdateProfanityCount(){
     var Filter = require('bad-words'),
     filter = new Filter({list: this.profaneWords});
 

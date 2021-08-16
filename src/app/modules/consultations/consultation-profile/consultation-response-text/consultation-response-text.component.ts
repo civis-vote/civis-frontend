@@ -372,6 +372,7 @@ export class ConsultationResponseTextComponent
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
+          // this query fetches the data for the user 
           this.apollo.watchQuery({
             query: UserCountUser,
             variables: {userId:this.currentUser.id},
@@ -382,9 +383,10 @@ export class ConsultationResponseTextComponent
             map((res: any) => res.data.userCountUser)
           )
           .subscribe(data => {
+            // here this check ensures that this query doesn't runs again when we update the record
             if(!this.profanity_count_changed && !this.short_response_count_changed){
               this.userData=data;
-              this.updateProfanityCount();
+              this.checkAndUpdateProfanityCount();
             }
           }, err => {
             const e = new Error(err);
@@ -392,10 +394,10 @@ export class ConsultationResponseTextComponent
           });
         } else {
           this.authModal = true;
-          // localStorage.setItem(
-          //   'consultationResponse',
-          //   JSON.stringify(consultationResponse)
-          // ); //TODO
+          localStorage.setItem(
+            'consultationResponse',
+            JSON.stringify(consultationResponse)
+          );
         }
       }
     } else {
@@ -465,11 +467,14 @@ export class ConsultationResponseTextComponent
     return;
   }
 
-  updateProfanityCount(){
+  checkAndUpdateProfanityCount(){
     var Filter = require('bad-words'),
     filter = new Filter({list: this.profaneWords});
     this.isUserResponseProfane=filter.isProfane(this.responseText);
-
+    
+    //if we have no record for the user then we will create one
+    //if response is profane then we will if display the nudge first, and then only proceed further
+    //if response is not profane, then only we will check for the short response count, otherwise we will submit the response
     if (this.userData!==null){
       this.profanityCount=this.userData.profanityCount;
     }
@@ -507,6 +512,9 @@ export class ConsultationResponseTextComponent
       return;
     }
 
+    //if we have a record for the user in our table
+    // if profane then display nudge, if the profanity count > 3, then submit the response with the second nudge
+    // if not profane then proceed with the short response count check
     if(this.isUserResponseProfane){
       if (!this.nudgeMessageDisplayed) {
         this.isConfirmModal = true;
@@ -525,6 +533,7 @@ export class ConsultationResponseTextComponent
       return;
     }
 
+    //update the existing record to reflect new profanity count
     this.apollo.mutate({
       mutation: UpdateUserCountRecord,
       variables:{

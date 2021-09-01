@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationProfileCurrentUser,
          ConsultationProfile,
-         SubmitResponseQuery} from '../consultation-profile.graphql';
+         SubmitResponseQuery,UserCountUser} from '../consultation-profile.graphql';
 import { Apollo } from 'apollo-angular';
 import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
@@ -36,6 +36,13 @@ export class ReadRespondComponent implements OnInit {
   earnedPoints: any;
   emailVerification = false;
   profaneWords = [];
+  //Changes for profane resposne nudge
+  isConfirmModal = false;
+  confirmMessage = {
+    msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
+    title: ''
+  };
+  profanity_count_changed: boolean=false;
 
   @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
@@ -231,15 +238,15 @@ export class ReadRespondComponent implements OnInit {
     return true;
   }
 
+  confirmed(event) {
+    this.isConfirmModal = false;
+    this.testSubmitResponse();
+  }
 
-  submitResponse(consultationResponse) {
-    localStorage.removeItem('consultationResponse');
-
-    // if the response is profane then we discard the draft, otherwise it is submitted
-    var Filter = require('bad-words'),
-    filter = new Filter({list: this.profaneWords});
-    if(filter.isProfane(consultationResponse.responseText.replace(/(<([^>]+)>)/gi, ""))){
-      return;
+  testSubmitResponse(consultationResponse:any = null){
+    if(!consultationResponse){
+      consultationResponse=JSON.parse(localStorage.getItem('consultationResponse'));
+      localStorage.removeItem('consultationResponse');
     }
 
     this.apollo.mutate({
@@ -266,9 +273,51 @@ export class ReadRespondComponent implements OnInit {
     .subscribe((res) => {
         this.earnedPoints = res.points;
         this.showThankYouModal = true;
+        this.profanity_count_changed=true;
     }, err => {
       this.errorService.showErrorModal(err);
     });
+  }
+
+  submitResponse(consultationResponse) {
+
+    // if the response is profane then we discard the draft, otherwise it is submitted
+    var Filter = require('bad-words'),
+    filter = new Filter({list: this.profaneWords});
+    if(filter.isProfane(consultationResponse.responseText.replace(/(<([^>]+)>)/gi, ""))){
+      this.apollo.watchQuery({
+        query: UserCountUser,
+        variables: {userId:this.currentUser.id},
+        fetchPolicy:'no-cache'
+      })
+      .valueChanges
+      .pipe (
+        map((res: any) => res.data.userCountUser)
+      )
+      .subscribe(data => {
+        // here this check ensures that this query doesn't runs again when we update the record
+        if(!this.profanity_count_changed){
+          debugger
+          console.log(data)
+          if(data){
+            if(data.profanityCount>3){
+              this.confirmMessage.msg = 'We detected that your response may contain harmful language. This response will be moderated and sent to the Government at our moderator\'s discretion.'
+            }
+            else{
+              this.confirmMessage.msg = 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.'
+            }
+          }
+          this.isConfirmModal = true;
+        }
+      }, err => {
+        const e = new Error(err);
+        this.errorService.showErrorModal(err);
+      });
+    }
+    else{
+      localStorage.removeItem('consultationResponse');
+      this.testSubmitResponse(consultationResponse);
+    }
   }
 
   onCloseThanksModal() {

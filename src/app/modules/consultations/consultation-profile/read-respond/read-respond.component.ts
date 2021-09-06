@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationProfileCurrentUser,
          ConsultationProfile,
-         SubmitResponseQuery,UserCountUser} from '../consultation-profile.graphql';
+         SubmitResponseQuery,UserCountUser,CreateUserCountRecord,UpdateUserCountRecord} from '../consultation-profile.graphql';
 import { Apollo } from 'apollo-angular';
 import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
@@ -240,14 +240,16 @@ export class ReadRespondComponent implements OnInit {
 
   confirmed(event) {
     this.isConfirmModal = false;
-    this.testSubmitResponse();
+    this.submitConsultationResponse(null,true);
   }
 
-  testSubmitResponse(consultationResponse:any = null){
+  submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
     if(!consultationResponse){
       consultationResponse=JSON.parse(localStorage.getItem('consultationResponse'));
       localStorage.removeItem('consultationResponse');
     }
+
+    consultationResponse.responseStatus = isProfane ? 1:0;
 
     this.apollo.mutate({
       mutation: SubmitResponseQuery,
@@ -279,6 +281,42 @@ export class ReadRespondComponent implements OnInit {
     });
   }
 
+  updateProfanityCountRecord(profanityCount,shortResponseCount){
+    this.apollo.mutate({
+      mutation: UpdateUserCountRecord,
+      variables:{
+        userCount:{
+          userId: this.currentUser.id,
+          profanityCount: profanityCount,
+          shortResponseCount: shortResponseCount
+        }
+       },
+    })
+    .subscribe((data) => {
+      this.isConfirmModal = true;
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+  }
+
+  createProfanityCountRecord(){
+    this.apollo.mutate({
+      mutation: CreateUserCountRecord,
+      variables:{
+        userCount:{
+          userId: this.currentUser.id,
+          profanityCount: 1,
+          shortResponseCount: 0
+        }
+      },
+    })
+    .subscribe((data) => {
+      this.isConfirmModal = true;
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+  }
+
   submitResponse(consultationResponse) {
 
     // if the response is profane then we discard the draft, otherwise it is submitted
@@ -297,17 +335,21 @@ export class ReadRespondComponent implements OnInit {
       .subscribe(data => {
         // here this check ensures that this query doesn't runs again when we update the record
         if(!this.profanity_count_changed){
-          debugger
-          console.log(data)
+
+          let profanityCount=0;
           if(data){
-            if(data.profanityCount>3){
+            if(data.profanityCount>=2){
               this.confirmMessage.msg = 'We detected that your response may contain harmful language. This response will be moderated and sent to the Government at our moderator\'s discretion.'
             }
             else{
               this.confirmMessage.msg = 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.'
             }
+            profanityCount=data.profanityCount+1;
+            this.updateProfanityCountRecord(profanityCount,data.shortResponseCount);
           }
-          this.isConfirmModal = true;
+          else{
+            this.createProfanityCountRecord();
+          }
         }
       }, err => {
         const e = new Error(err);
@@ -316,7 +358,7 @@ export class ReadRespondComponent implements OnInit {
     }
     else{
       localStorage.removeItem('consultationResponse');
-      this.testSubmitResponse(consultationResponse);
+      this.submitConsultationResponse(consultationResponse);
     }
   }
 

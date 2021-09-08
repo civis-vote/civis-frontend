@@ -43,6 +43,12 @@ export class ReadRespondComponent implements OnInit {
     title: ''
   };
   profanity_count_changed: boolean=false;
+  short_response_count_changed: boolean=false;
+  responseMessage = {
+    msg: 'Are you sure?',
+    title: ''
+  };
+  isResponseShort = false;
 
   @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
@@ -240,6 +246,7 @@ export class ReadRespondComponent implements OnInit {
 
   confirmed(event) {
     this.isConfirmModal = false;
+    this.isResponseShort = false;
     this.submitConsultationResponse(null,true);
   }
 
@@ -276,12 +283,13 @@ export class ReadRespondComponent implements OnInit {
         this.earnedPoints = res.points;
         this.showThankYouModal = true;
         this.profanity_count_changed=true;
+        this.short_response_count_changed=true;
     }, err => {
       this.errorService.showErrorModal(err);
     });
   }
 
-  updateProfanityCountRecord(profanityCount,shortResponseCount){
+  updateProfanityCountRecord(profanityCount,shortResponseCount, isProfane){
     this.apollo.mutate({
       mutation: UpdateUserCountRecord,
       variables:{
@@ -293,25 +301,29 @@ export class ReadRespondComponent implements OnInit {
        },
     })
     .subscribe((data) => {
-      this.isConfirmModal = true;
+      if(isProfane){
+        this.isConfirmModal = true;
+      }
     }, err => {
       this.errorService.showErrorModal(err);
     });
   }
 
-  createProfanityCountRecord(){
+  createProfanityCountRecord(profanityCount,shortResponseCount, isProfane){
     this.apollo.mutate({
       mutation: CreateUserCountRecord,
       variables:{
         userCount:{
           userId: this.currentUser.id,
-          profanityCount: 1,
-          shortResponseCount: 0
+          profanityCount: profanityCount,
+          shortResponseCount: shortResponseCount
         }
       },
     })
     .subscribe((data) => {
-      this.isConfirmModal = true;
+      if(isProfane){
+        this.isConfirmModal = true;
+      }
     }, err => {
       this.errorService.showErrorModal(err);
     });
@@ -335,7 +347,6 @@ export class ReadRespondComponent implements OnInit {
       .subscribe(data => {
         // here this check ensures that this query doesn't runs again when we update the record
         if(!this.profanity_count_changed){
-
           let profanityCount=0;
           if(data){
             if(data.profanityCount>=2){
@@ -345,10 +356,39 @@ export class ReadRespondComponent implements OnInit {
               this.confirmMessage.msg = 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.'
             }
             profanityCount=data.profanityCount+1;
-            this.updateProfanityCountRecord(profanityCount,data.shortResponseCount);
+            this.updateProfanityCountRecord(profanityCount,data.shortResponseCount, true);
           }
           else{
-            this.createProfanityCountRecord();
+            this.createProfanityCountRecord(1, 0, true);
+          }
+        }
+      }, err => {
+        const e = new Error(err);
+        this.errorService.showErrorModal(err);
+      });
+    } else if ( consultationResponse.responseText.length <= 50 ) {
+      this.apollo.watchQuery({
+        query: UserCountUser,
+        variables: {userId:this.currentUser.id},
+        fetchPolicy:'no-cache'
+      })
+      .valueChanges
+      .pipe (
+        map((res: any) => res.data.userCountUser)
+      )
+      .subscribe(data => {
+        // here this check ensures that this query doesn't runs again when we update the record
+        if(!this.short_response_count_changed){
+          let shortResponseCount=0;
+          if(data) {
+            if(data.shortResponseCount > 2) {
+              this.isResponseShort = true;
+            }
+            shortResponseCount=data.shortResponseCount+1;
+            this.updateProfanityCountRecord(data.profanityCount,shortResponseCount, false);
+          }
+          else{
+            this.createProfanityCountRecord(0, 1, false);
           }
         }
       }, err => {

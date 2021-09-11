@@ -245,9 +245,13 @@ export class ReadRespondComponent implements OnInit {
   }
 
   confirmed(event) {
-    this.isConfirmModal = false;
-    this.isResponseShort = false;
-    this.submitConsultationResponse(null,true);
+    if ( this.isConfirmModal ) {
+      this.isConfirmModal = false;
+      this.submitConsultationResponse(null,true);
+    } else {
+      this.isResponseShort = false;
+      this.submitConsultationResponse(null,false);
+    }
   }
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
@@ -289,7 +293,7 @@ export class ReadRespondComponent implements OnInit {
     });
   }
 
-  updateProfanityCountRecord(profanityCount,shortResponseCount, isProfane){
+  updateProfanityCountRecord(profanityCount,shortResponseCount, isProfanity){
     this.apollo.mutate({
       mutation: UpdateUserCountRecord,
       variables:{
@@ -301,7 +305,7 @@ export class ReadRespondComponent implements OnInit {
        },
     })
     .subscribe((data) => {
-      if(isProfane){
+      if(isProfanity){
         this.isConfirmModal = true;
       }
     }, err => {
@@ -309,7 +313,7 @@ export class ReadRespondComponent implements OnInit {
     });
   }
 
-  createProfanityCountRecord(profanityCount,shortResponseCount, isProfane){
+  createProfanityCountRecord(profanityCount,shortResponseCount, isProfanity){
     this.apollo.mutate({
       mutation: CreateUserCountRecord,
       variables:{
@@ -321,7 +325,7 @@ export class ReadRespondComponent implements OnInit {
       },
     })
     .subscribe((data) => {
-      if(isProfane){
+      if(isProfanity){
         this.isConfirmModal = true;
       }
     }, err => {
@@ -384,11 +388,15 @@ export class ReadRespondComponent implements OnInit {
             if(data.shortResponseCount > 2) {
               this.isResponseShort = true;
             }
+            else {
+              this.submitConsultationResponse(consultationResponse);
+            }
             shortResponseCount=data.shortResponseCount+1;
             this.updateProfanityCountRecord(data.profanityCount,shortResponseCount, false);
           }
           else{
             this.createProfanityCountRecord(0, 1, false);
+            this.submitConsultationResponse(consultationResponse, false);
           }
         }
       }, err => {

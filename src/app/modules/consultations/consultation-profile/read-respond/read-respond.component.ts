@@ -389,6 +389,7 @@ export class ReadRespondComponent implements OnInit {
               this.isResponseShort = true;
             }
             else {
+              localStorage.removeItem('consultationResponse');
               this.submitConsultationResponse(consultationResponse);
             }
             shortResponseCount=data.shortResponseCount+1;
@@ -396,6 +397,7 @@ export class ReadRespondComponent implements OnInit {
           }
           else{
             this.createProfanityCountRecord(0, 1, false);
+            localStorage.removeItem('consultationResponse');
             this.submitConsultationResponse(consultationResponse, false);
           }
         }

@@ -370,7 +370,7 @@ export class ReadRespondComponent implements OnInit {
         const e = new Error(err);
         this.errorService.showErrorModal(err);
       });
-    } else if ( consultationResponse.responseText.length <= 50 ) {
+    } else if ( ( consultationResponse.responseText.length - 8 ) <= 50 ) {
       this.apollo.watchQuery({
         query: UserCountUser,
         variables: {userId:this.currentUser.id},
@@ -407,6 +407,23 @@ export class ReadRespondComponent implements OnInit {
       });
     }
     else{
+      this.apollo.watchQuery({
+        query: UserCountUser,
+        variables: {userId:this.currentUser.id},
+        fetchPolicy:'no-cache'
+      })
+      .valueChanges
+      .pipe (
+        map((res: any) => res.data.userCountUser)
+      )
+      .subscribe(data => {
+        if(data) {
+          this.updateProfanityCountRecord(data.profanityCount,0, false);
+        }
+      }, err => {
+        const e = new Error(err);
+        this.errorService.showErrorModal(err);
+      });
       localStorage.removeItem('consultationResponse');
       this.submitConsultationResponse(consultationResponse);
     }

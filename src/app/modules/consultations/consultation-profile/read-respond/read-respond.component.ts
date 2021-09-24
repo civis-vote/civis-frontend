@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationProfileCurrentUser,
          ConsultationProfile,
-         SubmitResponseQuery} from '../consultation-profile.graphql';
+         SubmitResponseQuery,UserCountUser,CreateUserCountRecord,UpdateUserCountRecord} from '../consultation-profile.graphql';
 import { Apollo } from 'apollo-angular';
 import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
@@ -36,6 +36,19 @@ export class ReadRespondComponent implements OnInit {
   earnedPoints: any;
   emailVerification = false;
   profaneWords = [];
+  //Changes for profane resposne nudge
+  isConfirmModal = false;
+  confirmMessage = {
+    msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
+    title: ''
+  };
+  profanity_count_changed: boolean=false;
+  short_response_count_changed: boolean=false;
+  responseMessage = {
+    msg: 'Are you sure?',
+    title: ''
+  };
+  isResponseShort = false;
 
   @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
@@ -231,16 +244,23 @@ export class ReadRespondComponent implements OnInit {
     return true;
   }
 
-
-  submitResponse(consultationResponse) {
-    localStorage.removeItem('consultationResponse');
-
-    // if the response is profane then we discard the draft, otherwise it is submitted
-    var Filter = require('bad-words'),
-    filter = new Filter({list: this.profaneWords});
-    if(filter.isProfane(consultationResponse.responseText.replace(/(<([^>]+)>)/gi, ""))){
-      return;
+  confirmed(event) {
+    if ( this.isConfirmModal ) {
+      this.isConfirmModal = false;
+      this.submitConsultationResponse(null,true);
+    } else {
+      this.isResponseShort = false;
+      this.submitConsultationResponse(null,false);
     }
+  }
+
+  submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
+    if(!consultationResponse){
+      consultationResponse=JSON.parse(localStorage.getItem('consultationResponse'));
+      localStorage.removeItem('consultationResponse');
+    }
+
+    consultationResponse.responseStatus = isProfane ? 1:0;
 
     this.apollo.mutate({
       mutation: SubmitResponseQuery,
@@ -266,9 +286,147 @@ export class ReadRespondComponent implements OnInit {
     .subscribe((res) => {
         this.earnedPoints = res.points;
         this.showThankYouModal = true;
+        this.profanity_count_changed=true;
+        this.short_response_count_changed=true;
     }, err => {
       this.errorService.showErrorModal(err);
     });
+  }
+
+  updateProfanityCountRecord(profanityCount,shortResponseCount, isProfanity){
+    this.apollo.mutate({
+      mutation: UpdateUserCountRecord,
+      variables:{
+        userCount:{
+          userId: this.currentUser.id,
+          profanityCount: profanityCount,
+          shortResponseCount: shortResponseCount
+        }
+       },
+    })
+    .subscribe((data) => {
+      if(isProfanity){
+        this.isConfirmModal = true;
+      }
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+  }
+
+  createProfanityCountRecord(profanityCount,shortResponseCount, isProfanity){
+    this.apollo.mutate({
+      mutation: CreateUserCountRecord,
+      variables:{
+        userCount:{
+          userId: this.currentUser.id,
+          profanityCount: profanityCount,
+          shortResponseCount: shortResponseCount
+        }
+      },
+    })
+    .subscribe((data) => {
+      if(isProfanity){
+        this.isConfirmModal = true;
+      }
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+  }
+
+  submitResponse(consultationResponse) {
+
+    // if the response is profane then we discard the draft, otherwise it is submitted
+    var Filter = require('bad-words'),
+    filter = new Filter({list: this.profaneWords});
+    if(filter.isProfane(consultationResponse.responseText.replace(/(<([^>]+)>)/gi, ""))){
+      this.apollo.watchQuery({
+        query: UserCountUser,
+        variables: {userId:this.currentUser.id},
+        fetchPolicy:'no-cache'
+      })
+      .valueChanges
+      .pipe (
+        map((res: any) => res.data.userCountUser)
+      )
+      .subscribe(data => {
+        // here this check ensures that this query doesn't runs again when we update the record
+        if(!this.profanity_count_changed){
+          let profanityCount=0;
+          if(data){
+            if(data.profanityCount>=2){
+              this.confirmMessage.msg = 'We detected that your response may contain harmful language. This response will be moderated and sent to the Government at our moderator\'s discretion.'
+            }
+            else{
+              this.confirmMessage.msg = 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.'
+            }
+            profanityCount=data.profanityCount+1;
+            this.updateProfanityCountRecord(profanityCount,data.shortResponseCount, true);
+          }
+          else{
+            this.createProfanityCountRecord(1, 0, true);
+          }
+        }
+      }, err => {
+        const e = new Error(err);
+        this.errorService.showErrorModal(err);
+      });
+    } else if ( ( consultationResponse.responseText.length - 8 ) <= 50 ) {
+      this.apollo.watchQuery({
+        query: UserCountUser,
+        variables: {userId:this.currentUser.id},
+        fetchPolicy:'no-cache'
+      })
+      .valueChanges
+      .pipe (
+        map((res: any) => res.data.userCountUser)
+      )
+      .subscribe(data => {
+        // here this check ensures that this query doesn't runs again when we update the record
+        if(!this.short_response_count_changed){
+          let shortResponseCount=0;
+          if(data) {
+            if(data.shortResponseCount > 2) {
+              this.isResponseShort = true;
+            }
+            else {
+              localStorage.removeItem('consultationResponse');
+              this.submitConsultationResponse(consultationResponse);
+            }
+            shortResponseCount=data.shortResponseCount+1;
+            this.updateProfanityCountRecord(data.profanityCount,shortResponseCount, false);
+          }
+          else{
+            this.createProfanityCountRecord(0, 1, false);
+            localStorage.removeItem('consultationResponse');
+            this.submitConsultationResponse(consultationResponse, false);
+          }
+        }
+      }, err => {
+        const e = new Error(err);
+        this.errorService.showErrorModal(err);
+      });
+    }
+    else{
+      this.apollo.watchQuery({
+        query: UserCountUser,
+        variables: {userId:this.currentUser.id},
+        fetchPolicy:'no-cache'
+      })
+      .valueChanges
+      .pipe (
+        map((res: any) => res.data.userCountUser)
+      )
+      .subscribe(data => {
+        if(data) {
+          this.updateProfanityCountRecord(data.profanityCount,0, false);
+        }
+      }, err => {
+        const e = new Error(err);
+        this.errorService.showErrorModal(err);
+      });
+      localStorage.removeItem('consultationResponse');
+      this.submitConsultationResponse(consultationResponse);
+    }
   }
 
   onCloseThanksModal() {

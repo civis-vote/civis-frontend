@@ -20,7 +20,8 @@ export class ConsultationCardComponent implements OnInit {
       if (this.consultation.status === 'expired') {
         return 'Closed';
       }
-      const diff_in_days = this.getDifferenceInDays(deadline);
+      let diff_in_days = this.getDifferenceInDays(deadline);
+      diff_in_days = Math.floor(diff_in_days );
       if (diff_in_days <= 0) {
         return diff_in_days === 0 ? 'Last day to respond' : 'Closed';
       } else {

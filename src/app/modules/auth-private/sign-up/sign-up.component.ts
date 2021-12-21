@@ -202,7 +202,9 @@ export class SignUpComponent implements OnInit {
           .subscribe((exists: boolean) => {
             if (exists) {
               this.currentUser = this.userService.currentUser;
-              this.sendEmailVerification();
+              if (this.currentUser) {
+                this.sendEmailVerification();
+              }
             }
           },
           err => {

@@ -75,6 +75,7 @@ export const ConsultationProfileQuery = gql`
             }
             templatesCount
             upVoteCount
+            visibility
             user {
               id
               firstName

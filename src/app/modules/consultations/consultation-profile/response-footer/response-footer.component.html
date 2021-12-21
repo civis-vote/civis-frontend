@@ -31,6 +31,7 @@
       </span>
     </div>
     <div
+      tooltip="{{ 'Share' }}"
       class="share-block"
       (click)="toggleShareBlock(response?.node?.id); shareBtnClicked = true"
       *ngIf="profileData?.visibility === 'public_consultation'"

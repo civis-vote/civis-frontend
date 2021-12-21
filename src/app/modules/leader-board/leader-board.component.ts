@@ -110,7 +110,6 @@ export class LeaderBoardComponent implements OnInit {
   }
 
   fetchUserList() {
-    console.log('seee');
 
     this.userListQuery = this.getQuery();
     this.loadingElements.userList = true;

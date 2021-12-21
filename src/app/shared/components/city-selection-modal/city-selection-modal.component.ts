@@ -90,8 +90,8 @@ export class CitySelectionModalComponent implements OnInit {
     this.apollo.mutate({ mutation: UpdateCity, variables,
       update: (store, {data: currentUserUpdate}) => {
         const data: any = store.readQuery({query: CurrentUser, variables: {}});
-        data.userCurrent = currentUserUpdate;
-        this.userService.currentUser = currentUserUpdate;
+        data.userCurrent = {...data.userCurrent, ...currentUserUpdate};
+        this.userService.currentUser = {...data.userCurrent, ...currentUserUpdate};
         store.writeQuery({query: CurrentUser, variables: {}, data});
       } })
       .pipe(

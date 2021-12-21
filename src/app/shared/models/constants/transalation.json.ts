@@ -276,8 +276,8 @@ export const HindiLang = [
     "translation": "सिविक इनोवेशन फाउंडेशन (\"Civis\") गोपनीयता नीति"
   },
   {
-    "text": "Civic Innovation Foundation 2019. Unless otherwise mentioned, all content is licensed under",
-    "translation": "Civis इनोवेशन फाउंडेशन 2019।यहां प्रस्तुत हर सामग्री क्रिएटिव कॉमन्स ऐट्रिब्यूशन-नो डेरिवेटिव्स 4.0 अंतरराष्ट्रीय लाइसेन्स के तहत है।"
+    "text": "Civic Innovation Foundation 2021. Unless otherwise mentioned, all content is licensed under",
+    "translation": "Civis इनोवेशन फाउंडेशन 2021।यहां प्रस्तुत हर सामग्री क्रिएटिव कॉमन्स ऐट्रिब्यूशन-नो डेरिवेटिव्स 4.0 अंतरराष्ट्रीय लाइसेन्स के तहत है।"
   },
   {
     "text": "Civic Innovation Foundation is a non-profit organisation whose aim is to generate public awareness and provide education on issues of civic importance.",
@@ -1064,7 +1064,11 @@ export const HindiLang = [
     "translation": "धारा 15 - विच्छेदता"
   },
   {
-    "text": "SECTION 16 - TERMINATION",
+    "text": "SECTION 16 - ONLINE DONATION TERMS AND CONDITIONS",
+    "translation": "धारा  16 - ऑनलाइन दान नियम और शर्तें"
+  },
+  {
+    "text": "SECTION 17 - TERMINATION",
     "translation": "धारा 16 - समाप्ति"
   },
   {
@@ -1330,6 +1334,30 @@ export const HindiLang = [
   {
     "text": "The Information you submit and that is automatically collected by us is governed by our Privacy Policy. To view our Privacy Policy click here:",
     "translation": "आपके द्वारा यहां जमा करायी औश्र हमारे द्वारा संग्रहित की गयी सूवना हमारी प्राइवेसी पॉलिसी के अधीन आती है। हमारी प्राइवेसी पॉलिसी देखने के लिए https://www.civis.vote/privacy-policy पर क्लिक करें। प्राइवेसी पॉलिसी इन्‍हीं शर्तों का हिस्‍सा मानी जाती है।"
+  },
+  {
+    "text": "The donation made will be received in the name of Civic Innovation Foundation which is the registered entity for the brand ‘Civis’.",
+    "translation": "किया गया दान सिविक इनोवेशन फाउंडेशन के नाम से प्राप्त किया जाएगा जो कि ब्रांड 'सिविस' के लिए पंजीकृत इकाई है।"
+  },
+  {
+    "text": "We only accept donations from Indian citizens, through an Indian bank or card.",
+    "translation": "हम केवल भारतीय नागरिकों से भारतीय बैंक या कार्ड के माध्यम से दान स्वीकार करते हैं।"
+  },
+  {
+    "text": "Your personal payment-related information will be governed by our Privacy Policy. In particular, we will not disclose this information to anyone except where required by law. You will receive an 80 G certificate specifying the donation made by you, within 10 business days of making the donation, to the email address shared by you.",
+    "translation": "आपकी व्यक्तिगत भुगतान संबंधी जानकारी हमारी गोपनीयता नीति द्वारा नियंत्रित होगी।विशेष रूप से, हम इस जानकारी को कानून द्वारा आवश्यक होने के अलावा किसी को भी प्रकट नहीं करेंगे।आपके द्वारा किए गए दान को निर्दिष्ट करते हुए आपको एक 80 जी प्रमाणपत्र प्राप्त होगा।आपके द्वारा साझा किए गए ईमेल पते पर, दान करने के 10 व्यावसायिक दिनों के भीतर, आपके द्वारा किए गए दान को निर्दिष्ट करते हुए, आपको एक 80 जी प्रमाणपत्र प्राप्त होगा।"
+  },
+  {
+    "text": "Donations cannot be refunded except in case of credit card fraud or duplicate transactions. Please email info@civis.vote within 14 days of payment to request a refund.",
+    "translation": "क्रेडिट कार्ड धोखाधड़ी या डुप्लिकेट लेनदेन के मामले को छोड़कर दान वापस नहीं किया जा सकता है।धनवापसी का अनुरोध करने के लिए कृपया भुगतान के 14 दिनों के भीतर info@civis.vote ईमेल करें।"
+  },
+  {
+    "text": "Donation to Civic Innovation Foundation does not entitle you to any goods, services, positions at Civic Innovation Foundation or any other consideration.",
+    "translation": "सिविक इनोवेशन फ़ाउंडेशन को दान आपको सिविक इनोवेशन फ़ाउंडेशन में किसी भी सामान, सेवाओं, पदों या किसी अन्य विचार के लिए पात्र नहीं बनाता है।"
+  },
+  {
+    "text": "Funds are used in accordance with our goals as decided by us.",
+    "translation": "फंड का उपयोग हमारे द्वारा तय किए गए लक्ष्यों के अनुसार किया जाता है।"
   },
   {
     "text": "The obligations and liabilities of the parties incurred prior to the termination date shall survive the termination of this agreement for all purposes.",

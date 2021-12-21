@@ -59,7 +59,7 @@ export class ConsultationPublicResponsesComponent implements OnInit, AfterViewCh
       if (questions && questions.length > 0) {
         longTextQue = questions.find((ques) => ques.questionType === 'long_text');
       }
-      if (res.node.answers) {
+      if (longTextQue && res.node.answers) {
         const answers = res.node.answers.map(ans =>  +ans.question_id);
         if (answers.includes(longTextQue.id) && res.node.isVerified) {
           return true;

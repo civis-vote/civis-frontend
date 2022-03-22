@@ -256,7 +256,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     filter = new Filter({list: this.profaneWords});
 
     this.isUserResponseProfane=filter.isProfane(this.userResponse);
-    
+
     if (this.userData!==null){
       this.profanityCount=this.userData.profanityCount;
     }
@@ -307,7 +307,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
       this.invokeSubmitResponse();
       return;
     }
-    
+
     this.apollo.mutate({
       mutation: UpdateUserCountRecord,
         variables:{
@@ -318,7 +318,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
         }
       },
     })
-    .subscribe((data) => {   
+    .subscribe((data) => {
       this.invokeSubmitResponse();
     }, err => {
       this.errorService.showErrorModal(err);
@@ -413,7 +413,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     const consultationResponse =  {
       consultationId: this.profileData.id,
       satisfactionRating : this.responseFeedback,
-      visibility: this.responseVisibility ? 'shared' : 'anonymous',
+      visibility: this.responseVisibility && this.currentUser?.isVerfified ? "shared" : "anonymous",
       responseStatus: this.responseStatus,
     };
     if (checkPropertiesPresence(consultationResponse)) {

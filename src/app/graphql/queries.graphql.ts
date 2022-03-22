@@ -22,6 +22,7 @@ query userCurrent {
     email
     firstName
     lastName
+    isVerified
     notifyForNewConsultation
     phoneNumber
     profilePicture(resolution: "") {

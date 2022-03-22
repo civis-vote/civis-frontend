@@ -152,7 +152,7 @@ export class ConsultationResponseTextComponent
   getConsultationResponse() {
     const consultationResponse = {
       consultationId: this.consultationId,
-      visibility: this.responseVisibility ? 'shared' : 'anonymous',
+      visibility: this.responseVisibility && this.currentUser?.isVerfified ? "shared" : "anonymous",
       responseText: this.responseText,
       responseStatus: this.responseStatus,
       satisfactionRating: this.responseFeedback,
@@ -372,7 +372,7 @@ export class ConsultationResponseTextComponent
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
-          // this query fetches the data for the user 
+          // this query fetches the data for the user
           this.apollo.watchQuery({
             query: UserCountUser,
             variables: {userId:this.currentUser.id},
@@ -471,7 +471,7 @@ export class ConsultationResponseTextComponent
     var Filter = require('bad-words'),
     filter = new Filter({list: this.profaneWords});
     this.isUserResponseProfane=filter.isProfane(this.responseText);
-    
+
     //if we have no record for the user then we will create one
     //if response is profane then we will if display the nudge first, and then only proceed further
     //if response is not profane, then only we will check for the short response count, otherwise we will submit the response

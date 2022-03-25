@@ -92,7 +92,7 @@
                     color: $black;
                     margin-bottom: 0;
                 }
-                
+
                 .auth-btn {
                     background-color: transparent;
                     font-size: 12px;
@@ -160,7 +160,7 @@
             max-width: 600px;
             margin: 0 auto;
             &__left {
-                
+
                 .input-box {
                     margin-bottom: 15px;
 
@@ -170,7 +170,7 @@
                                 box-sizing: border-box;
                         border-radius: 3px;
 
-                        input { 
+                        input {
                             width: 100%;
                             font-weight: 500;
                             font-size: 15px;
@@ -194,14 +194,14 @@
                     }
                 }
 
-                .required-field { 
+                .required-field {
                     label {
                         &::after {
                             content: "*";
                             color: #F0653A;
                         }
                     }
-                 
+
                 }
 
                 .input-checbox {
@@ -252,7 +252,7 @@
                     -webkit-box-align: center;
                         -ms-flex-align: center;
                             align-items: center;
-                    width: 100%; 
+                    width: 100%;
                     padding: 12px 20px;
 
                     @media screen and (max-width: 991px) {
@@ -268,6 +268,12 @@
                     margin: 10px 0;
                     color: #F0653A;
                     font-size: 14px;
+
+                    .password-validation-error {
+                      ul {
+                        padding-left: 1em;
+                      }
+                    }
                 }
             }
 
@@ -360,7 +366,7 @@
             //             -ms-flex-pack: center;
             //                 justify-content: center;
             //         width: 100%;
-                    
+
             //         .facebook {
             //             margin-left: 0 !important;
             //         }

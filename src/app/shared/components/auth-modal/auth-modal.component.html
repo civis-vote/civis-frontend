@@ -55,7 +55,7 @@
             autocomplete="off"
           >
             <div class="input-box required-field">
-              <label for="fname">{{ 'First name' | translate }}</label>
+              <label for="fname">{{ "First name" | translate }}</label>
               <div class="input-box__border">
                 <input
                   placeholder="First Name"
@@ -71,12 +71,12 @@
                 *ngIf="fname.invalid && (fname.touched || signupForm.submitted)"
                 class="error-msg"
               >
-                {{ 'First name is Required' | translate }}
+                {{ "First name is Required" | translate }}
               </div>
             </div>
 
             <div class="input-box required-field">
-              <label for="efname">{{ 'Email' | translate }}</label>
+              <label for="efname">{{ "Email" | translate }}</label>
               <div class="input-box__border">
                 <input
                   placeholder="Email"
@@ -94,16 +94,16 @@
                 class="error-msg"
               >
                 <div *ngIf="email.errors.required">
-                  {{ 'Email is Required' | translate }}
+                  {{ "Email is Required" | translate }}
                 </div>
                 <div *ngIf="email.errors.email">
-                  {{ 'Email must be a valid email address' | translate }}
+                  {{ "Email must be a valid email address" | translate }}
                 </div>
               </div>
             </div>
 
             <div class="input-box required-field">
-              <label for="password">{{ 'Password' | translate }}</label>
+              <label for="password">{{ "Password" | translate }}</label>
               <div class="input-box__border">
                 <input
                   placeholder="At least 8 characters"
@@ -122,7 +122,28 @@
                 "
                 class="error-msg"
               >
-                {{ signupObject.password ? 'Password must be at least 8 characters long, must have 1 uppercase 1 lowercase letter must have 1 special character and 1 numeric character' : ('Password is Required' | translate) }}
+                <span
+                  class="password-validation-error"
+                  *ngIf="signupObject.password"
+                >
+                  <ul>
+                    <li>At least <strong> 8 characters </strong> long</li>
+                    <li>
+                      Contain an <strong> uppercase letter </strong> (A, B, C,
+                      …)
+                    </li>
+                    <li>
+                      Contain a <strong>lowercase letter</strong> (a, b, c, …)
+                    </li>
+                    <li>Contain a <strong>symbol</strong> (!, @, #, ...)</li>
+                    <li>Contain a <strong>number</strong> (1, 2, 3, …)</li>
+                  </ul>
+                </span>
+                {{
+                  signupObject.password
+                    ? ""
+                    : ("Password is Required" | translate)
+                }}
               </div>
             </div>
 
@@ -174,15 +195,15 @@
               <label for="agreedForTermsCondition" class="d-flex">
                 I agree to the <br />
                 <a href="/terms" class="policy-link">{{
-                  'Terms of Service,' | translate
+                  "Terms of Service," | translate
                 }}</a>
                 &nbsp;
                 <a href="/privacy" class="policy-link">{{
-                  'Privacy Policy' | translate
+                  "Privacy Policy" | translate
                 }}</a>
                 &nbsp;&&nbsp;
                 <a href="/content-policy" class="policy-link">{{
-                  'Content Policy.' | translate
+                  "Content Policy." | translate
                 }}</a>
               </label>
             </div>
@@ -194,7 +215,7 @@
               "
             >
               {{
-                'Please accept our Terms of Service & Privacy Policy to continue.'
+                "Please accept our Terms of Service & Privacy Policy to continue."
                   | translate
               }}
             </div>
@@ -209,8 +230,8 @@
                 [(ngModel)]="signupObject.notifyForNewConsultation"
               />
               <label for="notifyMe"
-                >{{ 'Notify me when an open consultation' | translate
-                }}<br />&nbsp; {{ 'is created on Civis.' | translate }}</label
+                >{{ "Notify me when an open consultation" | translate
+                }}<br />&nbsp; {{ "is created on Civis." | translate }}</label
               >
             </div>
 
@@ -309,7 +330,7 @@
               {{
                 signin
                   ? "Don'\t have an existing account?"
-                  : 'Already have an account?'
+                  : "Already have an account?"
               }}
             </p>
             <p

@@ -67,7 +67,7 @@
             background-color: #8A8A8A !important;
             width: 100%;
             justify-content: center;
-            margin-top: 16px; 
+            margin-top: 16px;
         }
     }
     .app-hr {
@@ -88,7 +88,7 @@
         box-sizing: border-box;
         border-radius: 3px;
 
-        input { 
+        input {
             width: 100%;
             font-weight: 500;
             font-size: 15px;
@@ -112,14 +112,14 @@
     }
 }
 
-.required-field { 
+.required-field {
     label {
         &::after {
             content: "*";
             color: #F0653A;
         }
     }
-    
+
 }
 
 .input-checbox {
@@ -162,7 +162,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%; 
+    width: 100%;
     padding: 12px 20px;
 
     @media screen and (max-width: 991px) {
@@ -178,6 +178,12 @@
     margin: 10px 0;
     color: #F0653A;
     font-size: 14px;
+
+    .password-validation-error {
+      ul {
+        padding-left: 1em;
+      }
+    }
 }
 
 .phone {
@@ -278,4 +284,4 @@
         width: 100%;
     }
 }
-  
+

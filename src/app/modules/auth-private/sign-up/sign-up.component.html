@@ -226,9 +226,26 @@
                 "
                 class="error-msg"
               >
+                <span
+                  class="password-validation-error"
+                  *ngIf="signupObject.password"
+                >
+                  <ul>
+                    <li>At least <strong> 8 characters </strong> long</li>
+                    <li>
+                      Contain an <strong> uppercase letter </strong> (A, B, C,
+                      …)
+                    </li>
+                    <li>
+                      Contain a <strong>lowercase letter</strong> (a, b, c, …)
+                    </li>
+                    <li>Contain a <strong>symbol</strong> (!, @, #, ...)</li>
+                    <li>Contain a <strong>number</strong> (1, 2, 3, …)</li>
+                  </ul>
+                </span>
                 {{
                   signupObject.password
-                    ? "Password must be at least 8 characters long, must have 1 special character and 1 numeric character"
+                    ? ""
                     : ("Password is Required" | translate)
                 }}
               </div>

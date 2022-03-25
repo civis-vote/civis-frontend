@@ -4,7 +4,7 @@
     <div class="cover-detail">
       <button class="back-btn" [routerLink]="['/']">
         <span><i class="fa fa-angle-left back-arrow"></i></span>
-        {{ 'Back' | translate }}
+        {{ "Back" | translate }}
       </button>
       <app-case-studies-list></app-case-studies-list>
     </div>
@@ -21,13 +21,13 @@
       </div>
       <div class="login-container">
         <p class="auth-text">
-          {{ 'Already have an account with Civis?' | translate }}
+          {{ "Already have an account with Civis?" | translate }}
         </p>
         <button
           class="app-btn circular auth-btn"
           [routerLink]="['/auth', 'login']"
         >
-          {{ 'Sign In' | translate }}
+          {{ "Sign In" | translate }}
         </button>
       </div>
       <div class="login-mobile-container">
@@ -36,14 +36,14 @@
             class="app-btn primary sign-in-btn"
             [routerLink]="['/auth', 'login']"
           >
-            {{ 'Sign In' | translate }}
+            {{ "Sign In" | translate }}
           </button>
         </div>
       </div>
     </div>
     <p class="logo-heading">
-      {{ 'Sign up as a Citizen Leader.' | translate }}<br />
-      {{ 'Join the movement towards citizen-led governance.' | translate }}
+      {{ "Sign up as a Citizen Leader." | translate }}<br />
+      {{ "Join the movement towards citizen-led governance." | translate }}
     </p>
 
     <div class="form-space no-gutters mt-md-5 mt-2">
@@ -57,7 +57,7 @@
                 <img src="assets/images/Gmail.jpg" alt="Gmail logo" />
               </picture>
             </div>
-            <p class="mb-0 ml-4">{{ 'Sign up with Google' | translate }}</p>
+            <p class="mb-0 ml-4">{{ "Sign up with Google" | translate }}</p>
           </button>
           <button class="app-btn facebook" (click)="redirectTo('facebook')">
             <div class="social-img">
@@ -70,14 +70,14 @@
                 <img src="assets/images/Facebook.jpg" alt="Facebook logo" />
               </picture>
             </div>
-            <p class="mb-0 ml-4">{{ 'Sign up with Facebook' | translate }}</p>
+            <p class="mb-0 ml-4">{{ "Sign up with Facebook" | translate }}</p>
           </button>
         </div>
       </div>
 
       <div class="row">
         <div class="form-space-middle col-md-5">
-          <div class="or-text">{{ 'OR' | translate }}</div>
+          <div class="or-text">{{ "OR" | translate }}</div>
           <!-- horizontal-divider for mobile -->
           <hr class="horizontal-divider" data-content="OR" />
         </div>
@@ -87,7 +87,7 @@
         <div class="form-space__left col-md-5">
           <form #signupForm="ngForm" autocomplete="off">
             <div class="input-box required-field">
-              <label for="fname">{{ 'First name' | translate }}</label>
+              <label for="fname">{{ "First name" | translate }}</label>
               <div class="input-box__border">
                 <input
                   placeholder="First Name"
@@ -103,12 +103,12 @@
                 *ngIf="fname.invalid && (fname.touched || signupForm.submitted)"
                 class="error-msg"
               >
-                {{ 'First name is Required' | translate }}
+                {{ "First name is Required" | translate }}
               </div>
             </div>
 
             <div class="input-box required-field">
-              <label for="efname">{{ 'Email' | translate }}</label>
+              <label for="efname">{{ "Email" | translate }}</label>
               <div class="input-box__border">
                 <input
                   placeholder="Email"
@@ -126,16 +126,16 @@
                 class="error-msg"
               >
                 <div *ngIf="email.errors.required">
-                  {{ 'Email is Required' | translate }}
+                  {{ "Email is Required" | translate }}
                 </div>
                 <div *ngIf="email.errors.email">
-                  {{ 'Email must be a valid email address' | translate }}
+                  {{ "Email must be a valid email address" | translate }}
                 </div>
               </div>
             </div>
 
             <div class="input-box required-field">
-              <label for="password">{{ 'Password' | translate }}</label>
+              <label for="password">{{ "Password" | translate }}</label>
               <div class="input-box__border">
                 <input
                   placeholder="At least 8 characters"
@@ -143,7 +143,7 @@
                   id="password"
                   #password="ngModel"
                   name="password"
-                  pattern='(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$#@$!%*?&])[A-Za-z\d$@#$!%*?&].{8,}'
+                  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$#@$!%*?&])[A-Za-z\d$@#$!%*?&].{8,}"
                   [(ngModel)]="signupObject.password"
                   required
                 />
@@ -154,7 +154,28 @@
                 "
                 class="error-msg"
               >
-                {{ signupObject.password ? 'Password must be at least 8 characters long, must have 1 special character and 1 numeric character' : ('Password is Required' | translate) }}
+                <span
+                  class="password-validation-error"
+                  *ngIf="signupObject.password"
+                >
+                  <ul>
+                    <li>At least <strong> 8 characters </strong> long</li>
+                    <li>
+                      Contain an <strong> uppercase letter </strong> (A, B, C,
+                      …)
+                    </li>
+                    <li>
+                      Contain a <strong>lowercase letter</strong> (a, b, c, …)
+                    </li>
+                    <li>Contain a <strong>symbol</strong> (!, @, #, ...)</li>
+                    <li>Contain a <strong>number</strong> (1, 2, 3, …)</li>
+                  </ul>
+                </span>
+                {{
+                  signupObject.password
+                    ? ""
+                    : ("Password is Required" | translate)
+                }}
               </div>
             </div>
 
@@ -171,15 +192,15 @@
               <label for="agreedForTermsCondition">
                 {{ "I'm good with the Civis" | translate }}<br />
                 <a href="/terms" class="policy-link">{{
-                  'Terms of Service,' | translate
+                  "Terms of Service," | translate
                 }}</a>
                 &nbsp;
                 <a href="/privacy" class="policy-link">{{
-                  'Privacy Policy' | translate
+                  "Privacy Policy" | translate
                 }}</a>
                 &
                 <a href="/content-policy" class="policy-link">{{
-                  'Content Policy.' | translate
+                  "Content Policy." | translate
                 }}</a>
               </label>
             </div>
@@ -191,7 +212,7 @@
               "
             >
               {{
-                'Please accept our Terms of Service & Privacy Policy to continue.'
+                "Please accept our Terms of Service & Privacy Policy to continue."
                   | translate
               }}
             </div>
@@ -206,8 +227,8 @@
                 [(ngModel)]="signupObject.notifyForNewConsultation"
               />
               <label for="notifyMe"
-                >{{ 'Notify me when an open consultation' | translate
-                }}<br />&nbsp; {{ 'is created on Civis.' | translate }}</label
+                >{{ "Notify me when an open consultation" | translate
+                }}<br />&nbsp; {{ "is created on Civis." | translate }}</label
               >
             </div>
 
@@ -222,7 +243,7 @@
                 class="app-btn secondary get-start-btn"
                 (click)="checkForCaptcha()"
               >
-                <p class="m-0">{{ 'GET WORKING' | translate }}</p>
+                <p class="m-0">{{ "GET WORKING" | translate }}</p>
                 <i class="fa fa-angle-right"></i>
               </button>
             </div>

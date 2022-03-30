@@ -35,6 +35,18 @@ query userCurrent {
         node {
           id
           points
+          responseText
+          roundNumber
+          answers
+          isVerified
+          user {
+            id
+            firstName
+            profilePicture {
+              id
+              url
+            }
+          }
           consultation {
             id
              title
@@ -44,6 +56,22 @@ query userCurrent {
               logo (resolution : "") {
                 url
               }
+            }
+            responseRounds {
+              active
+              id
+              questions {
+                id
+                questionText
+                isOptional
+                questionType
+                subQuestions {
+                  id
+                  questionText
+                }
+                supportsOther
+              }
+              roundNumber
             }
             responseDeadline
           }

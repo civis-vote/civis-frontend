@@ -1,16 +1,25 @@
-import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
-import { ConsultationsService } from 'src/app/shared/services/consultations.service';
-import { ActivatedRoute } from '@angular/router';
-import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
+import { UserService } from "./../../../../shared/services/user.service";
+import {
+  Component,
+  OnInit,
+  AfterViewChecked,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
+import { ConsultationsService } from "src/app/shared/services/consultations.service";
+import { ActivatedRoute } from "@angular/router";
+import { isObjectEmpty } from "src/app/shared/functions/modular.functions";
 
 @Component({
-  selector: 'app-consultation-public-responses',
-  templateUrl: './consultation-public-responses.component.html',
-  styleUrls: ['./consultation-public-responses.component.scss']
+  selector: "app-consultation-public-responses",
+  templateUrl: "./consultation-public-responses.component.html",
+  styleUrls: ["./consultation-public-responses.component.scss"],
 })
-export class ConsultationPublicResponsesComponent implements OnInit, AfterViewChecked {
-
-  @ViewChild('responsesListContainer', { read: ElementRef , static: false }) responsesListContainer: ElementRef<any>;
+export class ConsultationPublicResponsesComponent
+  implements OnInit, AfterViewChecked
+{
+  @ViewChild("responsesListContainer", { read: ElementRef, static: false })
+  responsesListContainer: ElementRef<any>;
 
   profileData: any;
   responseList: any;
@@ -22,12 +31,26 @@ export class ConsultationPublicResponsesComponent implements OnInit, AfterViewCh
   publicResponsesLength: any;
   roundNumberExist: any;
   activeRoundNumber: any;
+  currentUser: any;
 
-  constructor(private consultationService: ConsultationsService, private route: ActivatedRoute) { }
+  constructor(
+    private consultationService: ConsultationsService,
+    private route: ActivatedRoute,
+    private userService: UserService,
+  ) {}
 
   ngOnInit(): void {
-    this.subscribeToProfileData();
-    this.scrollToResponses();
+    this.subscribeToUserService();
+  }
+
+  subscribeToUserService() {
+    this.userService.userLoaded$.subscribe((exists) => {
+      if (exists) {
+        this.currentUser = this.userService.currentUser;
+        this.subscribeToProfileData();
+        this.scrollToResponses();
+      }
+    });
   }
 
   ngAfterViewChecked() {
@@ -44,23 +67,45 @@ export class ConsultationPublicResponsesComponent implements OnInit, AfterViewCh
         this.responseRounds = this.profileData.responseRounds;
         this.activeRoundNumber = this.getActiveRound(this.responseRounds);
         this.responseList = this.filterResponseData(data);
-        this.publicResponsesLength = this.responseList.filter((response) => response.node.roundNumber === this.activeRoundNumber).length;
-        this.roundNumberExist = this.responseList.filter((response) => response.node.roundNumber).length;
+        if (this.currentUser) {
+          const userCurrentProfileResponse = this.fetchCurrentUserResponse();
+          const isCurrentUserResponseAvailable = this.responseList.find((r) => {
+            return r.node.user.id === this.currentUser.id;
+          });
+
+            isObjectEmpty(isCurrentUserResponseAvailable) &&
+            !isObjectEmpty(userCurrentProfileResponse)
+            ? this.responseList.unshift(userCurrentProfileResponse)
+            : "";
+        }
+        this.publicResponsesLength = this.responseList.filter(
+          (response) => response.node.roundNumber === this.activeRoundNumber,
+        ).length;
+        this.roundNumberExist = this.responseList.filter(
+          (response) => response.node.roundNumber,
+        ).length;
         this.checkForFragments = true;
       }
     });
   }
 
+  fetchCurrentUserResponse() {
+    return this.currentUser.responses.edges.find(
+      (n) => n.node.consultation.id === this.profileData.id,
+    );
+  }
 
   filterResponseData(data) {
     return data.sharedResponses.edges.filter((res) => {
       const questions = this.getQuestions(res, res.node.roundNumber);
       let longTextQue: any;
       if (questions && questions.length > 0) {
-        longTextQue = questions.find((ques) => ques.questionType === 'long_text');
+        longTextQue = questions.find(
+          (ques) => ques.questionType === "long_text",
+        );
       }
       if (longTextQue && res.node.answers) {
-        const answers = res.node.answers.map(ans =>  +ans.question_id);
+        const answers = res.node.answers.map((ans) => +ans.question_id);
         if (answers.includes(longTextQue.id) && res.node.isVerified) {
           return true;
         }
@@ -70,12 +115,13 @@ export class ConsultationPublicResponsesComponent implements OnInit, AfterViewCh
     });
   }
 
-
   getQuestions(res, roundNumber) {
     let questions;
     if (roundNumber) {
-      questions =
-      this.consultationService.getQuestions(res.node.consultation, roundNumber);
+      questions = this.consultationService.getQuestions(
+        res.node.consultation,
+        roundNumber,
+      );
     } else {
       questions = this.consultationService.getQuestions(res.node.consultation);
     }
@@ -88,14 +134,14 @@ export class ConsultationPublicResponsesComponent implements OnInit, AfterViewCh
   }
 
   subscribeToFragment() {
-    this.route.fragment.subscribe(fragment => {
+    this.route.fragment.subscribe((fragment) => {
       this.fragment = fragment;
       if (this.fragment) {
         const element = document.getElementById(this.fragment);
         if (element) {
           window.scrollTo({
             top: element.getBoundingClientRect().top - 80,
-            behavior: 'smooth',
+            behavior: "smooth",
           });
         }
       }
@@ -103,12 +149,11 @@ export class ConsultationPublicResponsesComponent implements OnInit, AfterViewCh
   }
 
   scrollToResponses() {
-    this.consultationService.scrollToPublicResponse
-    .subscribe((scrollTo) => {
+    this.consultationService.scrollToPublicResponse.subscribe((scrollTo) => {
       if (scrollTo) {
         window.scrollTo({
           top: this.responsesListContainer.nativeElement.offsetTop - 80,
-          behavior: 'smooth',
+          behavior: "smooth",
         });
         this.consultationService.scrollToPublicResponse.next(false);
       }
@@ -116,18 +161,19 @@ export class ConsultationPublicResponsesComponent implements OnInit, AfterViewCh
   }
 
   getActiveRound(responseRounds) {
-      if (responseRounds && responseRounds.length) {
-        const activeRound  = responseRounds.find((round) => round.active);
-        if (!isObjectEmpty(activeRound)) {
-          return activeRound.roundNumber;
-        }
+    if (responseRounds && responseRounds.length) {
+      const activeRound = responseRounds.find((round) => round.active);
+      if (!isObjectEmpty(activeRound)) {
+        return activeRound.roundNumber;
       }
+    }
     return;
   }
 
   setActiveRound(roundNumber) {
     this.activeRoundNumber = roundNumber;
-    this.publicResponsesLength = this.responseList.filter((response) => response.node.roundNumber === this.activeRoundNumber).length;
+    this.publicResponsesLength = this.responseList.filter(
+      (response) => response.node.roundNumber === this.activeRoundNumber,
+    ).length;
   }
-
 }

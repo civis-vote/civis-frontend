@@ -6,3 +6,14 @@
 <app-city-selection-modal *ngIf="showCitySelection" [isPrivate]="isPrivate">
 </app-city-selection-modal>
 
+<div class="app-notification-icon-wrapper" (click)="openNotificationDrawer()">
+    <i class="fa fa-bell app-notification-icon"></i>
+</div>
+
+<ng-container *ngIf="showDrawer">
+  <app-notification-drawer ></app-notification-drawer>
+</ng-container>
+
+
+
+

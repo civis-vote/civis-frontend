@@ -21,6 +21,7 @@ import { ResponseAnswersComponent } from './response-answers/response-answers.co
 import { ResendVerificationComponent } from './resendVerification/resendVerification.component';
 import { CaseStudiesListComponent } from './case-studies-list/case-studies-list.component';
 import { AuthModalComponent } from './auth-modal/auth-modal.component';
+import { NotificationDrawerComponent } from './notification-drawer/notification-drawer.component';
 import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
@@ -36,8 +37,10 @@ import { ModalModule } from 'ngx-bootstrap';
     ResponseAnswersComponent,
     ResendVerificationComponent,
     CaseStudiesListComponent,
-    AuthModalComponent
-  ],
+    AuthModalComponent,
+    CaseStudiesListComponent,
+    NotificationDrawerComponent
+],
   imports: [
     CommonModule,
     LinearLoaderModule,
@@ -63,7 +66,8 @@ import { ModalModule } from 'ngx-bootstrap';
     ResponseAnswersComponent,
     ResendVerificationComponent,
     CaseStudiesListComponent,
-    AuthModalComponent
+    AuthModalComponent,
+    NotificationDrawerComponent
   ],
   providers: [
     LinearLoaderService

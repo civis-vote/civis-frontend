@@ -1,0 +1,40 @@
+.notification-drawer {
+    width: 330px;
+    height: 100%;
+    position: fixed;
+    background: #fff!important;
+    overflow: hidden!important;
+    bottom: 28px!important;
+    z-index: 1;
+    border-radius: 3px!important;
+    top: 4.8rem;
+    border: 3px solid lightblue;
+    border-left: none;
+    box-shadow: 0px 1px 5px 1px lightgrey;
+
+    @media screen and (max-width: 991px) {
+      top: 3.6rem;
+      width: 250px;
+    }
+
+  .header {
+    padding: 10px;
+    border-bottom: 1px solid lightblue;
+    background: rgba(14, 115, 185, 0.7) !important;
+    color: white;
+  }
+
+  .notification-list {
+    list-style-type: none;
+    background: whitesmoke;
+    padding: 0px;
+    color: #0052cc;
+
+    li {
+      border-bottom: 1px solid lightgrey;
+      padding: 8px;
+    }
+  }
+}
+
+

@@ -18,6 +18,7 @@ query{
     }
     cityRank
     confirmedAt
+    isVerified
     createdAt
     email
     firstName

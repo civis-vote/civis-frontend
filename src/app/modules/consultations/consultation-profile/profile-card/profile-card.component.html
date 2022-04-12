@@ -108,7 +108,10 @@
         {{profile?.consultationResponsesCount ? profile?.consultationResponsesCount : 0}}
       </p>
     </div>
-    <!-- <div class="d-flex justify-content-between mb-3">
+    <div
+      class="d-flex justify-content-between mb-3"
+      *ngIf="profile?.reviewType && profile?.reviewType !== 'policy'"
+    >
       <p class="count-text m-0">{{'TOTAL PUBLIC RESPONSES' | translate}}</p>
       <p class="count-number bold-text text-right m-0" *ngIf="!summaryData; else summaryDataCount">
         {{profile?.sharedResponses?.totalCount ? profile?.sharedResponses?.totalCount : 0 }}
@@ -118,7 +121,7 @@
           {{summaryData?.publicResponseCount ? summaryData?.publicResponseCount : 0}}
         </p>
       </ng-template>
-    </div> -->
+    </div>
     <div class="d-flex justify-content-between">
       <p class="count-text m-0">{{profile?.visibility === 'public_consultation' ?  'DRAFT MADE PUBLIC ON'  : 'CONSULTATION PUBLISHED ON' | translate}}</p>
       <p class="count-number bold-text text-right m-0">{{convertDateFormat(profile?.publishedAt)}}</p>

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-notification-drawer',
@@ -7,13 +7,15 @@ import { UserService } from '../../services/user.service';
   styleUrls: ['./notification-drawer.component.scss']
 })
 export class NotificationDrawerComponent implements OnInit {
-
-  constructor( private userService: UserService) { }
+  @Output() close: EventEmitter<any> = new EventEmitter();
+  @ViewChild('notificationModal', { static: false }) notificationModal: ModalDirective;
+  constructor() { }
 
   ngOnInit() {
   }
 
-  closeDrawer() {
-    this.userService.setNotificationDrawerStatus(false);
+  closeModal() {
+    this.notificationModal.hide();
+    this.close.emit(true);
   }
 }

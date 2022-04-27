@@ -17,7 +17,7 @@
 
     <div class="app-navbar__center-item" *ngIf="currentUrl === 'consultations-profile'">
       <div class="profile-tab-wrapper">
-        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.--> 
+        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.-->
           <a class="profile-tab px-3" [ngClass]="activeTab === 'read & respond' ? 'active-tab' : ''"
           (click)="routeToConsultation('read')">
           <p>{{'Read & Respond' | translate}}</p>
@@ -81,12 +81,18 @@
         <img class="avatar avatar--42" appDefaultImage [type]="'user'" [src]="currentUser?.profilePicture?.url" />
         <span class="clr-black"><i class="fa fa-angle-down ml-2"></i></span>
 
+        <div class="notification-count-wrapper" aria-hidden="true">
+            <span class="notification-count">2</span>
+        </div>
         <div class="profile-popup" *ngIf="profilePopup">
           <p [routerLink]="['/profile']">{{'Profile' | translate}}</p>
           <p (click)="logout($event)">{{'Logout' | translate}}</p>
+          <p (click)="openNotificationDrawer()">{{'Notifications' | translate}}
+            <span class="notification-count">2</span>
+          </p>
         </div>
       </div>
-      
+
       <div class="mobile-space">
         <div class="mobile-space__auth" *ngIf="!currentUser">
           <button class="nav-btn" (click)="onSignUp()">{{'Sign Up' | translate}}</button>
@@ -95,9 +101,16 @@
           <img class="avatar avatar--32" appDefaultImage [type]="'user'" [src]="currentUser?.profilePicture?.url" />
           <span (click)="$event.preventDefault();$event.stopPropagation(); showProfilePopup()" class="clr-black"><i class="fa fa-angle-down ml-2 mr-3"></i></span>
 
+          <div class="notification-count-wrapper" aria-hidden="true">
+            <span class="notification-count">2</span>
+          </div>
+
           <div class="profile-popup" *ngIf="profilePopup">
             <p [routerLink]="['/profile']" (click)="showProfilePopup()">{{'Profile' | translate}}</p>
             <p (click)="logout($event)">{{'Logout' | translate}}</p>
+            <p (click)="openNotificationDrawer()">{{'Notifications' | translate}}
+                <span class="notification-count">2</span>
+            </p>
           </div>
         </div>
         <div class="mobile-space__menu">
@@ -154,3 +167,7 @@
 
 <app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
 </app-confirm-email-modal>
+
+<div *ngIf="showDrawer">
+  <app-notification-drawer (close)="showDrawer = false"></app-notification-drawer>
+</div>

@@ -31,7 +31,6 @@ export class AppComponent implements OnInit, OnDestroy {
       name: "Hindi",
     },
   ];
-  showDrawer = false;
   constructor(
     private userService: UserService,
     private router: Router,
@@ -54,10 +53,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
     this.checkCityPresent();
     this.checkLang();
-
-    this.userService.drawerStatus$.subscribe(value => {
-      this.showDrawer = value;
-    })
   }
 
   translate(selected: boolean) {
@@ -100,10 +95,6 @@ export class AppComponent implements OnInit, OnDestroy {
           this.showCitySelection = true;
         }
       });
-  }
-
-  openNotificationDrawer() {
-    this.showDrawer = !this.showDrawer;
   }
 
 ngOnDestroy() {

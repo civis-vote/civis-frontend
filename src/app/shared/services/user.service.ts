@@ -13,7 +13,6 @@ export class UserService {
   userLoaded$ = new BehaviorSubject(null);
   forceCitySelection$ = new BehaviorSubject(null);
   currentUser: any;
-  drawerStatus$ = new BehaviorSubject(false);
 
 constructor(
   private apollo: Apollo,
@@ -60,10 +59,6 @@ constructor(
       }, (err: any) => {
         this.userLoaded$.next(false);
       });
-  }
-
-  setNotificationDrawerStatus(value) {
-    this.drawerStatus$.next(value);
   }
 }
 

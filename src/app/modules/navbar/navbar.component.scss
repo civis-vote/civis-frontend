@@ -373,3 +373,23 @@
   -webkit-transform: translate3d(125%, 0, 0);
   transform: translate3d(125%, 0, 0);
 }
+
+.notification-count-wrapper {
+    pointer-events: none;
+    position: absolute;
+    top: -8px;
+    right: 14px;
+}
+
+.notification-count {
+    display: inline-block;
+    min-width: 1px;
+    padding: 3px 7px;
+    border-radius: 20px;
+    font-size: 12px !important;
+    font-weight: bold;
+    line-height: 1 !important;
+    text-align: center;
+    background-color: #de350b;
+    color: white;
+}

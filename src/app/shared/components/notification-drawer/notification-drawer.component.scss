@@ -1,40 +1,57 @@
+@import './src/assets/styles/app';
+
+
+//modal-styles
+
 .notification-drawer {
-    width: 330px;
-    height: 100%;
-    position: fixed;
-    background: #fff!important;
-    overflow: hidden!important;
-    bottom: 28px!important;
-    z-index: 1;
-    border-radius: 3px!important;
-    top: 4.8rem;
-    border: 3px solid lightblue;
-    border-left: none;
-    box-shadow: 0px 1px 5px 1px lightgrey;
+    background: rgba(14, 115, 185, 0.6) !important;
 
-    @media screen and (max-width: 991px) {
-      top: 3.6rem;
-      width: 250px;
+    .modal-dialog {
+      margin: 0 0 0 auto;
+      max-width: 600px !important;
+
+      .modal-content {
+        height: 100vh !important;
+        padding: 0 0 10px 0;
+        border: none;
+        border-radius: 0;
+        overflow-y: auto;
+      }
+
+      .modal-body {
+        padding: 0;
+      }
+
+      .header {
+        padding: 10px;
+        border-bottom: 1px solid lightblue;
+        background: rgba(14, 115, 185, 0.7) !important;
+        color: white;
+      }
+
+      .notification-list {
+        list-style-type: none;
+        background: whitesmoke;
+        padding: 0px;
+        color: #0052cc;
+
+        li {
+          border-bottom: 1px solid lightgrey;
+          padding: 8px;
+        }
+      }
+
+      .modal-close-btn {
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+      }
     }
-
-  .header {
-    padding: 10px;
-    border-bottom: 1px solid lightblue;
-    background: rgba(14, 115, 185, 0.7) !important;
-    color: white;
   }
 
-  .notification-list {
-    list-style-type: none;
-    background: whitesmoke;
-    padding: 0px;
-    color: #0052cc;
-
-    li {
-      border-bottom: 1px solid lightgrey;
-      padding: 8px;
-    }
+  .modal.fade:not(.in) .modal-dialog {
+    -webkit-transform: translate3d(125%, 0, 0);
+    transform: translate3d(125%, 0, 0);
   }
-}
 
 

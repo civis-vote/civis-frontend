@@ -17,6 +17,7 @@ import { CookieService } from 'ngx-cookie';
 })
 export class NavbarComponent implements OnInit {
 
+  showDrawer = false;
   @ViewChild('menuModal', { static: false }) menuModal;
   @ViewChild('userProfileElement', { static: false }) userProfileElement: ElementRef;
   showNav = true;
@@ -46,7 +47,6 @@ export class NavbarComponent implements OnInit {
   activeTab: string;
   showConfirmEmailModal: boolean;
   consultationStatus: any;
-
   constructor(
     private router: Router,
     private userService: UserService,
@@ -194,7 +194,7 @@ export class NavbarComponent implements OnInit {
       this.transparentNav = true;
     }
   }
-  
+
   @HostListener('document:click', ['$event']) clickedOutside(event) {
     this.profilePopup = false;
   }
@@ -264,5 +264,9 @@ export class NavbarComponent implements OnInit {
     this.consultationService.consultationStatus.subscribe((status) => {
       this.consultationStatus = status;
     });
+  }
+
+  openNotificationDrawer() {
+    this.showDrawer = !this.showDrawer;
   }
 }

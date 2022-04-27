@@ -1,22 +1,24 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import { isObjectEmpty } from '../functions/modular.functions';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConsultationsService {
 
-    enableSubmitResponse =  new BehaviorSubject(null);
     consultationId$ = new BehaviorSubject(null);
-    openFeedbackModal = new BehaviorSubject (null);
-    scrollToCreateResponse = new BehaviorSubject (null);
     activeTab = new BehaviorSubject (null);
     validateAnswers = new BehaviorSubject (null);
     consultationProfileData = new BehaviorSubject (null);
     useThisResponseAnswer = new BehaviorSubject(null);
     useThisResponseText = new BehaviorSubject(null);
     scrollToPublicResponse = new BehaviorSubject(null);
+    submitResponseText = new BehaviorSubject(null);
+    satisfactionRatingError = new BehaviorSubject(null);
+    consultationStatus = new BehaviorSubject(null);
+    submitResponseActiveRoundEnabled = new BehaviorSubject(null);
 
   constructor() {
   }
@@ -40,6 +42,19 @@ export class ConsultationsService {
       }
     }
     return;
+  }
+
+  checkClosed(deadline) {
+    if (deadline) {
+      const today = moment();
+      const lastDate = moment(deadline);
+      const difference = lastDate.diff(today, 'days');
+      if (difference <= 0) {
+        return difference === 0 ? 'Last day to respond' : 'Closed';
+      } else {
+        return `Active`;
+      }
+    }
   }
 
 }

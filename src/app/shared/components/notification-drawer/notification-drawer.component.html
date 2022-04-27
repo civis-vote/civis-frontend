@@ -1,0 +1,27 @@
+<div
+  bsModal #notificationModal="bs-modal" class="modal fade notification-drawer" tabindex="-1"
+  [config]="{show: true}"
+  (onHidden)="closeModal()"
+  role="dialog" aria-labelledby="notificationModal"
+>
+<div class="modal-dialog">
+  <div class="modal-content ">
+
+    <div class="modal-header header">
+      <h4>Notifications</h4>
+      <div class="modal-close-btn" (click)="closeModal()"><i class="fa fa-times"></i></div>
+    </div>
+
+    <div class="modal-body">
+      <ul class="notification-list">
+        <li>
+          You just got promoted to rank 5 in your state
+        </li>
+        <li>
+         Your consultation just got approved. Click to view details
+       </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>

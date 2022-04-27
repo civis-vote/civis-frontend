@@ -8,6 +8,8 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
 import { UserService } from 'src/app/shared/services/user.service';
 import { GraphqlService } from 'src/app/graphql/graphql.service';
 import { CookieService } from 'ngx-cookie-service';
+import { AuthService } from 'src/app/shared/services/auth.service';
+import { interval } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +24,7 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(private apollo: Apollo,
+              private authService: AuthService,
               private userService: UserService,
               private tokenService: TokenService,
               private errorService: ErrorService,
@@ -30,8 +33,7 @@ export class LoginComponent implements OnInit {
               private graphqlService: GraphqlService,
               ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   submit(isValid: boolean) {
     if (!isValid) {

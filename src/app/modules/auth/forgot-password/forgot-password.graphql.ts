@@ -3,9 +3,7 @@ import gql from 'graphql-tag';
 
 export const ForgotPasswordMutation = gql`
   mutation authForgotPassword ($email: String!) {
-    authForgotPassword (email : $email) {
-        accessToken
-    }
+    authForgotPassword (email : $email)
   }`;
 
   export const ResetPasswordMutation = gql`

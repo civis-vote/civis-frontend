@@ -26,7 +26,7 @@ const fragments = {
 
 export const ConsultationProfileQuery = gql`
   query consultationProfile($id: Int!, $responseToken: String!) {
-    consultationProfile(id: $id) {
+    consultationProfile(id: $id, responseToken: $responseToken) {
       id
       title
       summary
@@ -40,6 +40,7 @@ export const ConsultationProfileQuery = gql`
       }
       responseDeadline
       url
+      visibility
       consultationResponsesCount
       ministry {
         id
@@ -66,6 +67,7 @@ export const ConsultationProfileQuery = gql`
             answers
             downVoteCount
             responseText
+            isVerified
             roundNumber
             consultation {
               id
@@ -73,6 +75,7 @@ export const ConsultationProfileQuery = gql`
             }
             templatesCount
             upVoteCount
+            visibility
             user {
               id
               firstName

@@ -56,7 +56,7 @@ export const ConsultationProfile = gql`
       reviewType
       satisfactionRatingDistribution
       status
-      sharedResponses(sort: created_at, sortDirection: desc) {
+      sharedResponses(sort: templates_count, sortDirection: desc) {
         edges {
           node {
             id
@@ -83,6 +83,7 @@ export const ConsultationProfile = gql`
             }
             downVoteCount
             responseText
+            isVerified
             roundNumber
             templatesCount
             upVoteCount
@@ -99,6 +100,7 @@ export const ConsultationProfile = gql`
         totalCount
       }
       updatedAt
+      publishedAt
       visibility
     }
   }
@@ -107,6 +109,18 @@ export const ConsultationProfile = gql`
 export const ConsultationProfileCurrentUser = gql`
   query consultationProfileCurrentUser($id: Int!) {
     consultationProfile(id: $id) {
+      anonymousResponses {
+        edges {
+          node {
+            id
+            roundNumber
+            user {
+              id
+            }
+          }
+        }
+      }
+      enforcePrivateResponse
       id
       title
       summary
@@ -189,6 +203,7 @@ export const ConsultationProfileCurrentUser = gql`
             }
             downVoteCount
             responseText
+            isVerified
             roundNumber
             templatesCount
             upVoteCount
@@ -209,6 +224,7 @@ export const ConsultationProfileCurrentUser = gql`
         totalCount
       }
       updatedAt
+      publishedAt
       visibility
     }
   }
@@ -239,6 +255,7 @@ export const SubmitResponseQuery = gql`
         firstName
       }
       consultation {
+        enforcePrivateResponse
         id
         title
         respondedOn
@@ -288,6 +305,7 @@ export const SubmitResponseQuery = gql`
               }
               downVoteCount
               responseText
+              isVerified
               roundNumber
               templatesCount
               upVoteCount

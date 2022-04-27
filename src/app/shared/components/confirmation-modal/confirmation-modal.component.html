@@ -1,3 +1,10 @@
-<p>
-  confirmation-modal works!
-</p>
+<div class="backdrop">
+  <div class="conf-modal">
+    <div class="conf-modal--header">{{message.title}}</div>
+    <div class="conf-modal--message">{{message.msg}}</div>
+    <div class="conf-modal--buttons float-right">
+      <button style="background: #1894EA; color: white;" (click)="selectOpt('ok')">Ok</button>
+      <button (click)="selectOpt('cancel')" class="ml-2">Cancel</button>
+ </div>
+  </div>
+</div>

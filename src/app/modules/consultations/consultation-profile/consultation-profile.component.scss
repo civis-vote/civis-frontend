@@ -16,7 +16,10 @@
   }
   z-index: -1;
   &.private-bg {
-    background-image: url('../../../../assets/images/private-consultation-bg.jpg') !important;
+    background-image: url('../../../../assets/images/private-consultation-bg.png') !important;
+    background-repeat: repeat !important;
+    background-position: 0% 0% !important;
+    background-size: auto !important;
   }
 }
 
@@ -28,7 +31,7 @@
   min-height: calc(100vh - 77px);
   margin: 77px auto;
   padding: 25px 0;
-  
+
   @media screen and (max-width: 991px) {
     margin-top: 57px;
     grid-template-columns: auto;

@@ -1,7 +1,11 @@
+<app-confirmation-modal *ngIf="confirmModalOpen" [message]='confirmMessage' (close)='optionTranslate($event)'></app-confirmation-modal>
 <app-toast></app-toast>
 <app-navbar></app-navbar>
 <app-error></app-error>
 <router-outlet></router-outlet>
-<app-city-selection-modal *ngIf="showCitySelection">
+<app-city-selection-modal *ngIf="showCitySelection" [isPrivate]="isPrivate">
 </app-city-selection-modal>
+
+
+
 

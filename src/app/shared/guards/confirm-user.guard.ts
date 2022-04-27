@@ -7,6 +7,7 @@ import { Apollo } from 'apollo-angular';
 import { ErrorService } from '../components/error-modal/error.service';
 import { TokenService } from '../services/token.service';
 import { map } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie';
 
 
 const ConfirmEmailMutation = gql`
@@ -28,6 +29,7 @@ export class ConfirmUserGuard implements CanActivate {
     private apollo: Apollo,
     private errorService: ErrorService,
     private tokenService: TokenService,
+    private cookieService: CookieService,
   ) {
   }
 
@@ -60,11 +62,16 @@ export class ConfirmUserGuard implements CanActivate {
       .subscribe((exists: boolean) => {
         if (exists) {
           this.currentUser = this.userService.currentUser;
+          const loginCallbackUrl = this.cookieService.get('loginCallbackUrl');
+          if (loginCallbackUrl) {
+            this.router.navigateByUrl(loginCallbackUrl);
+            return;
+          }
           if (this.currentUser.callbackUrl) {
             this.router.navigateByUrl(this.currentUser.callbackUrl);
-          } else {
-            this.router.navigateByUrl('/profile');
+            return;
           }
+          this.router.navigateByUrl('/profile');
         }
       },
         err => {

@@ -11,6 +11,7 @@ import { FailureComponent } from './failure/failure.component';
 import { RecaptchaModule } from 'ng-recaptcha';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { SharedComponentsModule } from 'src/app/shared/components/shared-components.module';
 
 @NgModule({
     declarations: [
@@ -28,6 +29,7 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
         FormsModule,
         RecaptchaModule,
         PipesModule,
+        SharedComponentsModule,
     ],
     exports: []
 })

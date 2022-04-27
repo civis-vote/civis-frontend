@@ -1,0 +1,43 @@
+<section>
+    <ng-container *ngIf="caseStudyList && caseStudyList.length; else defaultCaseStudy">
+        <div *ngFor="let caseStudy of caseStudyList; let i = index">
+            <div class="info-box" *ngIf="i === activeCaseStudy">
+            <p class="info-box__title">
+                {{'IN THE PAST' | translate}}
+            </p>
+            <p class="info-box__heading">
+                {{caseStudy?.name + ', ' | translate}}
+                <span *ngIf="caseStudy?.createdAt">
+                {{caseStudy?.createdAt | date: 'yyyy' }}
+                </span>
+            </p>
+            <p class="info-box__sub-heading">
+                {{caseStudy?.ministryName | translate}}
+            </p>
+            <p class="info-box__message mb-4" *ngIf="caseStudy?.noOfCitizens">
+                <span><i class="fa fa-line-chart mr-2"></i></span>{{ caseStudy?.noOfCitizens + ' citizen leaders participated' | translate}}
+            </p>
+            <a class="app-btn circular read-case-btn"
+                [href]="caseStudy?.url">{{'READ CASE STUDY' | translate}}</a>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #defaultCaseStudy> 
+        <div class="info-box">
+            <p class="info-box__title">
+            {{'IN THE PAST' | translate}}
+            </p>
+            <p class="info-box__heading">
+            {{'Bengaluru Revised Master Plan, 2031' | translate}}
+            </p>
+            <p class="info-box__sub-heading">
+            {{'Bengaluru Development Authority' | translate}}
+            </p>
+            <p class="info-box__message mb-4">
+            <span><i class="fa fa-line-chart mr-2"></i></span>{{'1,096 citizen leaders participated' | translate}}
+            </p>
+            <a class="app-btn circular read-case-btn"
+            href="https://medium.com/civis-vote/case-study-bengaluru-master-plan-2031-7131687468f2">{{'READ CASE STUDY' | translate}}</a>
+        </div>
+    </ng-template>
+</section>

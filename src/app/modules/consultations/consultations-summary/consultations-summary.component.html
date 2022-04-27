@@ -25,19 +25,23 @@
                 <!-- <p class="text-16 m-0 bold-text">{{'Consultation satisfication' | translate}}</p> -->
                 <div class="d-flex mt-3 mb-3">
                     <div class="satisfication-response">
-                        <img src="assets/images/dissatisfied.svg" />
+                        <img *ngIf="profileData?.visibility !== 'private_consultation'" src="assets/images/dissatisfied.svg" />
+                        <img *ngIf="profileData?.visibility === 'private_consultation'"  class="s-32" src="assets/images/private_dissatisfied.png" />
                         <p class="text-16 m-0 bold-text pl-2">{{satisfactionRatingDistribution?.dissatisfied ? satisfactionRatingDistribution?.dissatisfied : '0'}}</p>
                     </div>
                     <div class="satisfication-response">
-                        <img src="assets/images/somewhat_dissatisfied.svg" />
+                        <img *ngIf="profileData?.visibility !== 'private_consultation'" src="assets/images/somewhat_dissatisfied.svg" />
+                        <img *ngIf="profileData?.visibility === 'private_consultation'" class="s-32" src="assets/images/private_somewhat_dissatisfied.png" />
                         <p class="text-16 m-0 bold-text pl-2">{{satisfactionRatingDistribution?.somewhat_dissatisfied ? satisfactionRatingDistribution?.somewhat_dissatisfied : '0'}}</p>
                     </div>
                     <div class="satisfication-response">
-                        <img src="assets/images/somewhat_satisfied.svg" />
+                        <img *ngIf="profileData?.visibility !== 'private_consultation'" src="assets/images/somewhat_satisfied.svg" />
+                        <img *ngIf="profileData?.visibility === 'private_consultation'" class="s-32" src="assets/images/private_somewhat_satisfied.png" />
                         <p class="text-16 m-0 bold-text pl-2">{{satisfactionRatingDistribution?.somewhat_satisfied ? satisfactionRatingDistribution?.somewhat_satisfied : '0'}}</p>
                     </div>
                     <div class="satisfication-response">
-                        <img src="assets/images/satisfied.svg" />
+                        <img *ngIf="profileData?.visibility !== 'private_consultation'" src="assets/images/satisfied.svg" />
+                        <img *ngIf="profileData?.visibility === 'private_consultation'" class="s-32" src="assets/images/private_satisfied.png" />
                         <p class="text-16 m-0 bold-text pl-2">{{satisfactionRatingDistribution?.satisfied ? satisfactionRatingDistribution?.satisfied : '0'}}</p>
                     </div>
                 </div>

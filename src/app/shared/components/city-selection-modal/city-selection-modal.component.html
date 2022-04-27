@@ -13,7 +13,7 @@
         {{'We have noticed that your account does not have a city associated with it.
           To help us serve you better, please select a city from the dropdown below.' | translate}}
         </p>
-        <div class="d-flex">
+        <div class="d-flex city-selector">
             <ng-select class="w-50" id="locations" #city="ngModel" name="city" [loading]="loading" [clearable]="false"
             [items]="cities" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom" 
             bindValue="id" [notFoundText]="dropdownText" [clearable]="true" loadingText="Searching..."

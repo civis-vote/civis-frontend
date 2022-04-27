@@ -15,6 +15,7 @@
             <p class="regular-text bold-text m-0 ml-2">
               {{'Citizen Leader [Name undisclosed]' | translate}}
             </p>
+            <p class="unverified-text"  *ngIf="!response?.node?.isVerified" tooltip="The person who made this response has not verified their email address yet." >(Unverified)</p>
           </div>
     </ng-template>
     <p class="text-16" *ngIf="!response?.node?.answers" [innerHTML]="response.node?.responseText"></p>

@@ -12,6 +12,7 @@ export class ThankYouModalComponent implements OnInit {
   @ViewChild('thankyouModal', { static: false }) thankyouModal: ModalDirective;
   @Output() closeThankYouModal: EventEmitter<any> = new EventEmitter();
   @Input() profileData;
+  @Input() points;
   showThankYouModal = true;
   copyStatus: boolean;
   currentUrl: string;
@@ -24,6 +25,7 @@ export class ThankYouModalComponent implements OnInit {
   }
 
   closeModal() {
+    this.thankyouModal.hide();
     this.closeThankYouModal.emit();
     this.showThankYouModal = false;
   }

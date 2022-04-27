@@ -97,7 +97,6 @@ constructor( private apollo: Apollo, private errorService: ErrorService) { }
       }
     }, err => {
       this.loadingCard = false;
-      console.log('err', err);
       this.errorService.showErrorModal(err);
     });
   }
@@ -140,7 +139,6 @@ constructor( private apollo: Apollo, private errorService: ErrorService) { }
       }
       this.currentReponseData = this.latestResponse[this.current_response_index];
     }, err => {
-        console.log('err', err);
         this.errorService.showErrorModal(err);
     });
   }

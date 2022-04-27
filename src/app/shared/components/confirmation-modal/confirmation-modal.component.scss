@@ -1,0 +1,43 @@
+.backdrop {
+  position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #00000096;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: top;
+  .conf-modal {
+    margin-top: 10px;
+    width: 380px;
+    height: 150px;
+    background: white;
+    border-radius: 8px;
+    border: none;
+    padding: 10px 15px;
+
+    .conf-modal--header {
+      height: 35px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .conf-modal--message {
+      font-size: 14px;
+      text-align: left;
+      height: 50px;
+    }
+
+    .conf-modal--buttons {
+      button {
+        border: none;
+        outline: none;
+        padding: 6px 20px;
+      }
+    }
+
+  }
+}

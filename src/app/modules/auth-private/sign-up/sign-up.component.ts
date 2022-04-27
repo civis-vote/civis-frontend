@@ -36,7 +36,7 @@ export class SignUpComponent implements OnInit {
     password: '',
     cityId: null,
     agreedForTermsCondition: false,
-    company: '',
+    organization: '',
     designation: '',
     callbackUrl: ''
   };
@@ -51,7 +51,6 @@ export class SignUpComponent implements OnInit {
   consultationId: any;
   invitationToken: any;
   showLogoutModal: boolean;
-
 
   constructor(private apollo: Apollo,
               private tokenService: TokenService,
@@ -74,10 +73,6 @@ export class SignUpComponent implements OnInit {
     if (!this.signupForm.valid) {
       return;
     } else {
-      if (this.invitationToken) {
-        this.submitAuthAcceptInvite();
-        return;
-      }
       this.signupObject.callbackUrl = this.cookieService.get('loginCallbackUrl');
       this.nextScreen = true;
     }
@@ -131,7 +126,8 @@ export class SignUpComponent implements OnInit {
           query: CitiesSearchQuery,
           variables: {
             q: name,
-            type: 'city'
+            type: 'city',
+            isInternationalCity: true
           }
         })
         .pipe(
@@ -142,11 +138,14 @@ export class SignUpComponent implements OnInit {
   }
 
   submitAuthAcceptInvite() {
-    const {firstName, lastName, password} = this.signupObject;
+    const {firstName, lastName, password, organization, designation, phoneNumber} = this.signupObject;
     const authVariables = {
-      firstName: firstName,
-      lastName: lastName,
-      password: password,
+      firstName,
+      lastName,
+      password,
+      phoneNumber,
+      organization,
+      designation,
       invitationToken: this.invitationToken,
       consultationId: +this.consultationId
     };
@@ -179,12 +178,13 @@ export class SignUpComponent implements OnInit {
 
     if (!this.signupForm.valid || !this.isCaptchaResolved) {
       return;
+    } else if (this.invitationToken) {
+      this.submitAuthAcceptInvite();
+      return;
     } else {
 
       const signupObject = {...this.signupObject};
       delete signupObject['agreedForTermsCondition'];
-      delete signupObject['designation'];
-      delete signupObject['company'];
       // signupObject['callbackUrl'] = this.cookieService.get('loginCallbackUrl');
       // console.log(this.signupObject.callbackUrl);
       const variables = {
@@ -203,7 +203,9 @@ export class SignUpComponent implements OnInit {
           .subscribe((exists: boolean) => {
             if (exists) {
               this.currentUser = this.userService.currentUser;
-              this.sendEmailVerification();
+              if (this.currentUser) {
+                this.sendEmailVerification();
+              }
             }
           },
           err => {
@@ -261,7 +263,8 @@ export class SignUpComponent implements OnInit {
     this.apollo.query({
       query: LocationListQuery,
       variables: {
-        type: 'city'
+        type: 'city',
+        isInternationalCity: true
       }
     })
     .pipe(

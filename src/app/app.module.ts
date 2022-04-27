@@ -18,6 +18,7 @@ import { ConfirmUserGuard } from './shared/guards/confirm-user.guard';
 import { UnsubscribeUserGuard } from './shared/guards/unsubscribe-user.guard';
 import { CookieModule, CookieService } from 'ngx-cookie';
 import { NgxWebstorageModule } from 'ngx-webstorage';
+import { StarterService } from './shared/services/starter.service';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
     ConfirmUserGuard,
     UnsubscribeUserGuard,
     CookieService,
+    StarterService,
   ],
   bootstrap: [AppComponent]
 })

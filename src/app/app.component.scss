@@ -1,0 +1,22 @@
+.app-notification-icon-wrapper {
+  background-color: #007bff;
+  border-radius: 35px;
+  position: fixed;
+  bottom: 1.5rem;
+  left: 0.5rem;
+  display: flex;
+  width: 55px;
+  height: 55px;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  @media screen and (max-width: 991px) {
+    bottom: 0.8rem;
+  }
+
+  .app-notification-icon {
+      font-size: 1.8rem;
+      color: white;
+  }
+}

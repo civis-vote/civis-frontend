@@ -2,7 +2,7 @@
   <div class="consultation-index row align-items-center" *ngIf="step == 1">
     <div class="consultation-index__left col-5">
       <div class="heading-text">
-        {{'  Somebody’s taking initiative!' | translate}}
+        {{'Somebody’s taking initiative!' | translate}}
       </div>
       <div class="heading-tips">
         {{"Discovered a consultation draft? Tell us and we’ll put it up here for citizens to participate." | translate}}
@@ -18,10 +18,10 @@
                   <input type="text" placeholder="Enter Title" name="title" #title="ngModel" id="title" [(ngModel)]="consultationInfo.title" required />
               </div>
               <div *ngIf="title.invalid && (title.touched || consultationForm1.submitted)" class="error-msg">
-                {{'  Title is Required' | translate}}
+                {{'Title is Required' | translate}}
               </div>
               <div class="input-block__tips">
-                {{'  The title has to match the title of the consultation as used by the department' | translate}}
+                {{'The title has to match the title of the consultation as used by the department' | translate}}
               </div>
             </div>
           <div class="input-block">
@@ -32,19 +32,19 @@
                   '+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9]\.[^\s]{2,}" />
               </div>
               <div *ngIf="url.invalid && (url.touched || consultationForm1.submitted)" class="error-msg">
-                {{'  Url is invalid' | translate}}
+                {{'Url is invalid' | translate}}
               </div>
               <div class="input-block__tips">
                 {{"This is the URL of the PDF or any other document on the department's website" | translate}}
               </div>
           </div>
           <div class="input-block">
-              <label for="deadline">{{' Response submission deadline' | translate}}</label>
+              <label for="deadline">{{'Response submission deadline' | translate}}</label>
               <div class="input-block__border">
                   <input placeholder="dd / mm / yyyy" name="deadline" #deadline="ngModel" id="deadline" [(ngModel)]="consultationInfo.responseDeadline" bsDatepicker [bsConfig]="bsConfig" required />
               </div>
               <div *ngIf="deadline.invalid && (deadline.touched || consultationForm1.submitted)" class="error-msg">
-                {{'  Deadline is Required' | translate}}
+                {{'Deadline is Required' | translate}}
               </div>
           </div>
           <div class="input-block">
@@ -65,7 +65,7 @@
           </div>
           <div class="query-block">
             <p class="query-heading">{{'Get Queries?' | translate}}</p>
-            <p class="query-content">{{'If you may need any kind of help with the upload of the consultation, please ' | translate}}<a href="mailto:info@civis.vote" class="clr-blue">{{'get in touch' | translate}}</a>{{' with us.' | translate}}</p>
+            <p class="query-content">{{'If you may need any kind of help with the upload of the consultation, please' | translate}}&nbsp;<a href="mailto:info@civis.vote" class="clr-blue">{{'get in touch' | translate}}</a>&nbsp;{{'with us.' | translate}}</p>
           </div>
         </form>
       </div>
@@ -75,10 +75,10 @@
   <div class="ministry-index row" *ngIf="step == 2">
     <div class="ministry-index__left col-6">
       <div class="heading-text">
-        {{' Which ministry is this consultation by? ' | translate}}
+        {{'Which ministry is this consultation by?' | translate}}
       </div>
       <div class="heading-tips">
-        {{' To publish the consultation, help us with the name of the corresponding department' | translate}}
+        {{'To publish the consultation, help us with the name of the corresponding department' | translate}}
       </div>
     </div>
     <div class="ministry-index__right offset-2 col-4">
@@ -113,8 +113,8 @@
           <span><i class="fa fa-angle-left"></i></span>{{' BACK TO CONSULTATION INFO' | translate}}
         </div>
         <div class="query-block">
-            <p class="query-heading">{{' Get Queries?' | translate}}</p>
-            <p class="query-content">{{' If you need any kind of help with creating a consultation, please' | translate}} <a href="mailto:info@civis.vote" class="clr-blue">{{'get in touch' | translate}}</a> {{' with us.' | translate}}</p>
+            <p class="query-heading">{{'Get Queries?' | translate}}</p>
+            <p class="query-content">{{'If you need any kind of help with creating a consultation, please' | translate}} <a href="mailto:info@civis.vote" class="clr-blue">{{'get in touch' | translate}}</a> {{' with us.' | translate}}</p>
           </div>
     </div>
   </div>
@@ -122,16 +122,16 @@
   <div class="consultation-success-index" *ngIf="step === 3">
       <div class="success-message">
         <div class="heading">
-          {{' Hooraah!' | translate}}
+          {{'Hooraah!' | translate}}
         </div>
         <div class="text">
-          {{' Thank you for submitting the consultation.' | translate}}
+          {{'Thank you for submitting the consultation.' | translate}}
         </div>
         <div class="text">
-          {{'  We’ll notify and post your draft within 24-36 hours    ' | translate}}
+          {{'We’ll notify and post your draft within 24-36 hours    ' | translate}}
         </div>
         <div class="link">
-          {{'  You’ve been mailed the draft. Preview it here' | translate}}
+          {{'You’ve been mailed the draft. Preview it here' | translate}}
         </div>
       </div>
       <div class="succes-image">
@@ -151,9 +151,9 @@
       <div class="space-around">
           <div class="modal-header">
               <p class="subheader-text">
-                {{' ADD A MINISTRY' | translate}}
+                {{'ADD A MINISTRY' | translate}}
                   <br>
-                  <span class="light-text">{{' Or, ' | translate}}</span>
+                  <span class="light-text">{{'Or,' | translate}}</span>
                   <span class="link-text" (click)="hideAddMinistryModal()"  >{{'Select an existing department' | translate}}</span>
               </p>
               <div class="modal-close-btn" (click)="hideAddMinistryModal()"><i class="fa fa-times"></i></div>
@@ -168,22 +168,22 @@
                           <input type="text" placeholder="Ministry Name" name="name" #name="ngModel" id="name" [(ngModel)]="ministryObject.name" required />
                       </div>
                       <div *ngIf="name.invalid && (name.touched || ministryForm.submitted)" class="error-msg">
-                        {{'  Ministry Name is Required' | translate}}
+                        {{'Ministry Name is Required' | translate}}
                       </div>
                     </div>
                   <div class="input-block">
-                      <label for="category">{{' Category' | translate}}</label>
+                      <label for="category">{{'Category' | translate}}</label>
                         <ng-select id="category" #category="ngModel" name="category" 
                         [items]="categoriesList" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom" 
                         bindValue="id" [searchable]="false"
                         [(ngModel)]="ministryObject.categoryId" required> 
                         </ng-select> 
                         <div *ngIf="category.invalid && (category.touched || ministryForm.submitted)" class="error-msg">
-                          {{'  Category is Required' | translate}}
+                          {{'Category is Required' | translate}}
                         </div>
                   </div>
                   <div class="input-block">
-                      <label for="deadline">{{' Department Logo' | translate}}</label>   
+                      <label for="deadline">{{'Department Logo' | translate}}</label>   
                       <div class="input-block__upload-field">
                         <label class="w-100 m-0">
                           <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" hidden required /> 
@@ -193,38 +193,38 @@
                     </div>     
                   </div>
                   <div class="input-block">
-                    <label for="level">{{' Level*' | translate}}</label>
+                    <label for="level">{{'Level*' | translate}}</label>
                       <ng-select id="level" #level="ngModel" name="level"  
                       [items]="levels" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom" 
                       bindValue="name" [searchable]="false"
                       [(ngModel)]="ministryObject.level" required> 
                       </ng-select>  
                       <div *ngIf="level.invalid && (level.touched || ministryForm.submitted)" class="error-msg">
-                        {{'  Level is Required' | translate}}
+                        {{'Level is Required' | translate}}
                       </div>
                 </div>
                   <div class="input-block">
-                      <label for="category">{{' Primary email address of the ministry POC' | translate}}</label>
+                      <label for="category">{{'Primary email address of the ministry POC' | translate}}</label>
                       <div class="input-block__border">
                           <input type="text" placeholder="Enter email" name="primaryEmail" #primaryEmail="ngModel" id="primary_email" [(ngModel)]="ministryObject.pocEmailPrimary" required email/>
                       </div>
                       <div *ngIf="primaryEmail.invalid && (primaryEmail.touched || ministryForm.submitted)" class="error-msg">
-                          <div *ngIf="primaryEmail.errors.required">{{' Primary Email is Required' | translate}}</div>
-                          <div *ngIf="primaryEmail.errors.email">{{' Primary Email must be a valid email address' | translate}}</div>
+                          <div *ngIf="primaryEmail.errors.required">{{'Primary Email is Required' | translate}}</div>
+                          <div *ngIf="primaryEmail.errors.email">{{'Primary Email must be a valid email address' | translate}}</div>
                       </div>
                       <div class="input-block__tips">
-                        {{' This is the point-of-contact or person who will be sent the responses' | translate}}
+                        {{'This is the point-of-contact or person who will be sent the responses' | translate}}
                     </div>
                   </div>
                   <div class="input-block">
-                      <label for="category">{{' Secondary email address of the ministry POC' | translate}}</label>
+                      <label for="category">{{'Secondary email address of the ministry POC' | translate}}</label>
                       <div class="input-block__border">
                           <input type="text" placeholder="Enter email" name="secondaryEmail" #secondaryEmail="ngModel" id="secondary_email" [(ngModel)]="ministryObject.pocEmailSecondary" />
                       </div>
                   </div>
                   <div>
                     <button type="submit" class="btn submit-btn d-flex justify-content-between">
-                      <p class="m-0">{{' Add Ministry' | translate}}</p>
+                      <p class="m-0">{{'Add Ministry' | translate}}</p>
                       <span><i class="fa fa-angle-right"></i></span>
                     </button>
                   </div>

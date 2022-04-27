@@ -1,67 +1,112 @@
-<div class="vote-section" *ngIf="currentUser">
-    <div class="vote-count">
-      <div class="vote-item"  
-      (click)="vote('up', response?.node)" 
-      tooltip="{{'Upvote'}}" 
-      [ngClass]="response?.node?.votedAs?.voteDirection === 'up'  ? 'vote-item-active' : ''">
-        <span><i class="fa fa-thumbs-up"></i></span>
-        <span>
-          {{response.node?.upVoteCount ? response.node?.upVoteCount : '' }}
-        </span>
-      </div>
-      <div class="vote-item" 
-      (click)="vote('down', response?.node)" 
-      tooltip="{{'Downvote'}}"
-      [ngClass]="response?.node?.votedAs?.voteDirection === 'down'  ? 'vote-item-active' : ''">
-        <span><i class="fa fa-thumbs-down"></i></span>
-        <span>
-          {{ response.node?.downVoteCount ? response.node?.downVoteCount : ''}}
-        </span>
-      </div>
-      <div class="share-block"  (click)="toggleShareBlock(response?.node?.id); shareBtnClicked = true">
-          <div class="share-block__position">
-            <div #shareBlockElement *ngIf="showShareBlock && (responseId && responseId === response?.node?.id)" class="share-pop-up">
-                <a  class="share-btn"
-                [href]="getSocialLink('facebook', currentUrl, profileData?.title)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-facebook"></i>
-                  </span>
-                </a>
-                <a  class="share-btn"
-                [href]="getSocialLink('twitter', currentUrl, profileData?.title,  response?.node?.id)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-twitter"></i>
-                  </span>
-                </a>
-                <a  class="share-btn"
-                [href]="getSocialLink('whatsapp', currentUrl, profileData?.title)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-whatsapp"></i>
-                  </span>
-                </a>
-                <a  class="share-btn"
-                [href]="getSocialLink('linkedin', currentUrl, profileData?.title)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-linkedin"></i>
-                  </span>
-                </a>
-            </div>
-          </div>
-          <span  
-          class="fs-20">
-          <i class="fa fa-share"></i>
-        </span>
-        <span *ngIf="response.node?.templatesCount">
-          {{response.node?.templatesCount ? response.node?.templatesCount : '' }}
-        </span>
-      </div>
+<div class="vote-section">
+  <div *ngIf="currentUser" class="vote-count">
+    <div
+      class="vote-item"
+      (click)="vote('up', response?.node)"
+      tooltip="{{ 'Upvote' }}"
+      [ngClass]="
+        response?.node?.votedAs?.voteDirection === 'up'
+          ? 'vote-item-active'
+          : ''
+      "
+    >
+      <span><i class="fa fa-thumbs-up"></i></span>
+      <span>
+        {{ response.node?.upVoteCount ? response.node?.upVoteCount : '' }}
+      </span>
     </div>
-    <div *ngIf="showCreateResponse()">
-      <button class="app-btn response-btn"
-        (click)="useThisResponse(response?.node)">{{'Use this response' | translate}}</button>
+    <div
+      class="vote-item"
+      (click)="vote('down', response?.node)"
+      tooltip="{{ 'Downvote' }}"
+      [ngClass]="
+        response?.node?.votedAs?.voteDirection === 'down'
+          ? 'vote-item-active'
+          : ''
+      "
+    >
+      <span><i class="fa fa-thumbs-down"></i></span>
+      <span>
+        {{ response.node?.downVoteCount ? response.node?.downVoteCount : '' }}
+      </span>
+    </div>
+    <div
+      tooltip="{{ 'Share' }}"
+      class="share-block"
+      (click)="toggleShareBlock(response?.node?.id); shareBtnClicked = true"
+      *ngIf="profileData?.visibility === 'public_consultation'"
+    >
+      <div class="share-block__position">
+        <div
+          #shareBlockElement
+          *ngIf="
+            showShareBlock && responseId && responseId === response?.node?.id
+          "
+          class="share-pop-up"
+        >
+          <a
+            class="share-btn"
+            [href]="getSocialLink('facebook', currentUrl, profileData?.title)"
+            target="_blank"
+          >
+            <span>
+              <i class="fa fa-facebook"></i>
+            </span>
+          </a>
+          <a
+            class="share-btn"
+            [href]="
+              getSocialLink(
+                'twitter',
+                currentUrl,
+                profileData?.title,
+                response?.node?.id
+              )
+            "
+            target="_blank"
+          >
+            <span>
+              <i class="fa fa-twitter"></i>
+            </span>
+          </a>
+          <a
+            class="share-btn"
+            [href]="getSocialLink('whatsapp', currentUrl, profileData?.title)"
+            target="_blank"
+          >
+            <span>
+              <i class="fa fa-whatsapp"></i>
+            </span>
+          </a>
+          <a
+            class="share-btn"
+            [href]="getSocialLink('linkedin', currentUrl, profileData?.title)"
+            target="_blank"
+          >
+            <span>
+              <i class="fa fa-linkedin"></i>
+            </span>
+          </a>
+        </div>
+      </div>
+      <span class="fs-20">
+        <i class="fa fa-share"></i>
+      </span>
+      <span *ngIf="response.node?.templatesCount">
+        {{ response.node?.templatesCount ? response.node?.templatesCount : '' }}
+      </span>
     </div>
   </div>
+  <div
+    *ngIf="
+      showCreateResponse() && activeRoundNumber === response?.node?.roundNumber
+    "
+  >
+    <button
+      class="app-btn response-btn"
+      (click)="useThisResponse(response?.node)"
+    >
+      {{ 'Use this response' | translate }}
+    </button>
+  </div>
+</div>

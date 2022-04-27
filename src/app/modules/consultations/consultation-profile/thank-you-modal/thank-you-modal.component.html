@@ -10,7 +10,12 @@
               <div class="thankyou-inner__top">
                 <img class="thankyou-img" src="assets/images/thankyou.png" />
                 <div class="thankyou-content">
-                  <p>Thank you for your response</p>
+                  <p>
+                    Thank you for your response.
+                    <span *ngIf="profileData?.visibility === 'public_consultation'">
+                    You have scored {{points | number:'1.0-0'}} points for your response!
+                    </span>
+                  </p>
                   <p *ngIf="profileData?.responseSubmissionMessage ; else defaultContent"
                    [innerHTML]="profileData?.responseSubmissionMessage"></p>
                   <ng-template #defaultContent>

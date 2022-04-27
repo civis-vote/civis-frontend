@@ -46,6 +46,15 @@
         }
       }
     }
+    .middle-item {
+      max-width: 300px;
+      .address-text {
+        font-size: 15px;
+        color: #767676;
+        line-height: 22.7px;
+        font-weight: 400;
+      }
+    }
 
     .right-item {
       display: flex;
@@ -134,9 +143,10 @@
         margin-top: 15px;
       }
       .policy-text {
-        margin-left: 53px;
+        // margin-left: 53px;
         font-size: 12px;
         color: #767676;
+        max-width: 315px;
         @media screen and (max-width: 991px) {
           margin: 15px 0;
         }

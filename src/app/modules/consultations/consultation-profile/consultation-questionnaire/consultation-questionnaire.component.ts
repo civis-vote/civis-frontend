@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
-import { isObjectEmpty, checkPropertiesPresence } from '../../../../shared/functions/modular.functions';
+import { isObjectEmpty, checkPropertiesPresence, scrollToFirstError } from '../../../../shared/functions/modular.functions';
 import { atLeastOneCheckboxCheckedValidator } from 'src/app/shared/validators/checkbox-validator';
 import { Apollo } from 'apollo-angular';
 import { SubmitResponseQuery, ConsultationProfileCurrentUser } from '../consultation-profile.graphql';
@@ -15,7 +15,7 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
   templateUrl: './consultation-questionnaire.component.html',
   styleUrls: ['./consultation-questionnaire.component.scss']
 })
-export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit {
+export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit, AfterViewChecked {
 
   @Input() profileData;
   @Output() openThankYouModal: EventEmitter<any> = new EventEmitter();
@@ -34,12 +34,17 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   consultationId: any;
   showConfirmEmailModal: boolean;
   questions: any;
-
+  scrollToError: boolean;
+  activeRoundNumber: any;
+  respondedRounds = [];
+  responseCreated: boolean;
+  authModal = false;
   constructor(private _fb: FormBuilder,
     private userService: UserService,
     private consultationService: ConsultationsService,
     private apollo: Apollo,
-    private errorService: ErrorService) {
+    private errorService: ErrorService,
+    private el: ElementRef) {
     this.questionnaireForm = this._fb.group({});
     this.consultationService.consultationId$
     .pipe(
@@ -60,6 +65,13 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     this.subscribeUseTheResponseAnswer();
   }
 
+  ngAfterViewChecked() {
+    if (this.scrollToError) {
+      scrollToFirstError('.error-msg', this.el.nativeElement);
+      this.scrollToError = false;
+    }
+  }
+
   setSatisfactoryRating(value) {
     this.responseFeedback = value;
   }
@@ -78,11 +90,46 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   subscribeProfileData() {
     this.consultationService.consultationProfileData.subscribe((data) => {
       this.profileData = data;
-      this.questionnaireForm = this.makeQuestionnaireModal();
+      this.activeRoundNumber = this.getActiveRound(this.profileData.responseRounds);
+      this.respondedRounds = this.getRespondedRounds();
+      if (this.respondedRounds.includes(this.activeRoundNumber)) {
+        this.responseCreated = true;
+        return;
+      } else {
+        if (this.profileData && this.profileData.respondedOn) {
+          this.consultationService.submitResponseActiveRoundEnabled.next(true);
+        }
+      }
+      this.questionnaireForm = this.makeQuestionnaireModal();
     });
   }
 
-  makeQuestionnaireModal() {
+  getRespondedRounds() {
+    const respondedRounds = [];
+    if (this.profileData) {
+      const anonymousResponses = this.profileData.anonymousResponses && this.profileData.anonymousResponses.edges;
+      const sharedResponses = this.profileData.sharedResponses  && this.profileData.sharedResponses.edges;
+      if (anonymousResponses && anonymousResponses.length) {
+        anonymousResponses.map((response: any) => {
+          if (response && response.node && response.node.user) {
+            respondedRounds.push(response.node.roundNumber);
+          }
+        });
+      }
+      if (sharedResponses && sharedResponses.length) {
+        sharedResponses.map((response: any) => {
+          if (response && response.node && response.node.user) {
+            if (this.currentUser && (this.currentUser.id === response.node.user.id)) {
+              respondedRounds.push(response.node.roundNumber);
+            }
+          }
+        });
+      }
+    }
+    return respondedRounds;
+  }
+
+  makeQuestionnaireModal(roundNumber?) {
     const responseRounds = this.profileData.responseRounds;
     if (responseRounds && responseRounds.length) {
       const activeRound  = responseRounds.find((round) => round.active);
@@ -133,18 +180,27 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   }
 
   submitAnswer() {
-    if (!this.validCurrentUser()) {
+    if (this.responseSubmitLoading) {
       return;
     }
     if (this.questionnaireForm.valid && this.responseFeedback) {
       this.responseAnswers = this.getResponseAnswers();
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
-        this.submitResponse(consultationResponse);
-        this.showError = false;
+        if (this.currentUser) {
+          this.submitResponse(consultationResponse);
+          this.showError = false;
+        } else {
+          this.authModal = true;
+          localStorage.setItem('consultationResponse', JSON.stringify(consultationResponse));
+        }
       }
     } else {
+      if (!this.responseFeedback) {
+        this.consultationService.satisfactionRatingError.next(true);
+      }
       this.showError = true;
+      this.scrollToError = true;
     }
   }
 
@@ -308,12 +364,36 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     .pipe (
       map((res: any) => res.data.consultationResponseCreate)
     )
-    .subscribe(() => {
-      this.openThankYouModal.emit();
+    .subscribe((res) => {
+      this.openThankYouModal.emit(res.points);
+      this.responseSubmitLoading = false;
+      this.responseCreated = true;
+      this.consultationService.submitResponseActiveRoundEnabled.next(false);
     }, err => {
       this.responseSubmitLoading = false;
       this.errorService.showErrorModal(err);
     });
   }
+
+  showPublicResponseOption() {
+    if (this.profileData && this.profileData.enforcePrivateResponse) {
+      return false;
+    }
+    if (this.longTextAnswer && this.templateText) {
+      return this.longTextAnswer !== this.templateText;
+    }
+    return true;
+  }
+
+  getActiveRound(responseRounds) {
+    if (responseRounds && responseRounds.length) {
+      const activeRound  = responseRounds.find((round) => round.active);
+      if (!isObjectEmpty(activeRound)) {
+        return activeRound.roundNumber;
+      }
+    }
+  return;
+  }
+
 
 }

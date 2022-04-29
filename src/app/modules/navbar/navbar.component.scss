@@ -216,6 +216,7 @@
   @media screen and (max-width: 991px) {
     width: 110px;
     right: 45px;
+    padding: 10px 0px;
   }
   p {
     font-size: 14px;
@@ -379,6 +380,11 @@
     position: absolute;
     top: -8px;
     right: 14px;
+
+    @media screen and (max-width: 991px) {
+      top: 4px;
+      right: 54px;
+    }
 }
 
 .notification-count {
@@ -392,4 +398,8 @@
     text-align: center;
     background-color: #de350b;
     color: white;
+
+    @media screen and (max-width: 991px) {
+      padding: 3px 5px;
+    }
 }

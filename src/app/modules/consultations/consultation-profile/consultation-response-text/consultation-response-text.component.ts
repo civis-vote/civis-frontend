@@ -124,6 +124,7 @@ export class ConsultationResponseTextComponent
       visibility: this.responseVisibility && this.currentUser?.isVerfified ? "shared" : "anonymous",
       responseText: this.responseText,
       satisfactionRating: this.responseFeedback,
+      responseStatus: 0,
     };
     if (checkPropertiesPresence(consultationResponse)) {
       consultationResponse['templateId'] = this.templateId

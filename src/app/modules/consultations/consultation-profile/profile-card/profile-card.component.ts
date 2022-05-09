@@ -5,6 +5,7 @@ import { ConsultationsService } from 'src/app/shared/services/consultations.serv
 import { UserService } from 'src/app/shared/services/user.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
+
 @Component({
   selector: 'app-profile-card',
   templateUrl: './profile-card.component.html',
@@ -26,11 +27,13 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   showConfirmEmailModal: boolean;
   consultationStatus: any;
   showResponseCreation: boolean;
+  showGlossaryModal: boolean;
 
   constructor(private consultationsService: ConsultationsService,
               private userService: UserService,
               private cookieService: CookieService,
-              private router: Router ) { }
+              private router: Router
+              ){}
 
   ngOnInit() {
       this.currentUrl = window.location.href;
@@ -192,4 +195,7 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     });
   }
 
+  openDialog() {
+    this.showGlossaryModal = true;
+  }
 }

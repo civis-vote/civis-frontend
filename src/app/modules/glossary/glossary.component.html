@@ -1,0 +1,29 @@
+<div bsModal #glossaryModal="bs-modal" class="modal fade"
+  [config]="{show: true, backdrop: 'static', ignoreBackdropClick: true}" [ngClass]="showModal ? 'align-center' : ''">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="title">{{'Legal Terms Simplified' | translate}}</h1>
+        <div class="pointer" (click)="closeModal()"><img src="assets/images/close.svg" alt="close"></div>
+      </div>
+      <div class="modal-body">
+        <div class="glossary-wrapper">
+          <ng-container *ngFor="let item of glossaryWordArray">
+            <div class="glossary-wrapper__item mb-2">
+              <span class="legal-title">{{item?.wordindex.word}}</span>
+              <span class="legal-description">{{item?.wordindex.description}}
+              </span>
+            </div>
+          </ng-container>
+          <button (click)="closeModal()" class="glossary-wrapper__btn">
+            RETURN TO SUMMARY
+          </button>
+          <div class="glossary-wrapper__icon">
+            Powered By:
+            <a href="https://bit.ly/33rz72e" target="_blank"><img src="assets/images/nyaaya.svg" alt="nyaaya" class="mt-2"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -82,14 +82,14 @@
         <span class="clr-black"><i class="fa fa-angle-down ml-2"></i></span>
 
         <div class="notification-count-wrapper" aria-hidden="true">
-            <span class="notification-count">2</span>
+            <span class="notification-count">{{ notifications.length }}</span>
         </div>
         <div class="profile-popup" *ngIf="profilePopup">
           <p [routerLink]="['/profile']">{{'Profile' | translate}}</p>
-          <p (click)="logout($event)">{{'Logout' | translate}}</p>
           <p (click)="openNotificationDrawer()">{{'Notifications' | translate}}
-            <span class="notification-count">2</span>
+            <span class="notification-count">{{ notifications.length }}</span>
           </p>
+          <p (click)="logout($event)">{{'Logout' | translate}}</p>
         </div>
       </div>
 
@@ -102,15 +102,15 @@
           <span (click)="$event.preventDefault();$event.stopPropagation(); showProfilePopup()" class="clr-black"><i class="fa fa-angle-down ml-2 mr-3"></i></span>
 
           <div class="notification-count-wrapper" aria-hidden="true">
-            <span class="notification-count">2</span>
+            <span class="notification-count">{{ notifications.length }}</span>
           </div>
 
           <div class="profile-popup" *ngIf="profilePopup">
             <p [routerLink]="['/profile']" (click)="showProfilePopup()">{{'Profile' | translate}}</p>
-            <p (click)="logout($event)">{{'Logout' | translate}}</p>
             <p (click)="openNotificationDrawer()">{{'Notifications' | translate}}
-                <span class="notification-count">2</span>
-            </p>
+              <span class="notification-count">{{ notifications.length }}</span>
+          </p>
+            <p (click)="logout($event)">{{'Logout' | translate}}</p>
           </div>
         </div>
         <div class="mobile-space__menu">
@@ -169,5 +169,5 @@
 </app-confirm-email-modal>
 
 <div *ngIf="showDrawer">
-  <app-notification-drawer (close)="showDrawer = false"></app-notification-drawer>
+  <app-notification-drawer [notifications]="notifications" (close)="showDrawer = false"></app-notification-drawer>
 </div>

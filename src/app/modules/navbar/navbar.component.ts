@@ -8,6 +8,9 @@ import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consulta
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
+import {
+  isObjectEmpty,
+} from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-navbar',
@@ -47,6 +50,8 @@ export class NavbarComponent implements OnInit {
   activeTab: string;
   showConfirmEmailModal: boolean;
   consultationStatus: any;
+
+  notifications = [];
   constructor(
     private router: Router,
     private userService: UserService,
@@ -78,6 +83,34 @@ export class NavbarComponent implements OnInit {
     this.getActiveConsulationCount();
     this.getActiveTab();
     this.watchConsultationStatus();
+    this.setNotifications();
+  }
+
+  setNotifications() {
+    this.notifications = [];
+    const draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length) {
+        const notificationObj = {
+          type: 'DRAFT',
+          hyperlink: true,
+          mainText: 'Did you forget something?',
+          subText: 'Did you forget to submit your response on these consultations? Your response is lying in the drafts! Click here to submit it to the government',
+          consultations: currentUser.consultations
+        }
+
+        this.notifications.push(notificationObj);
+      }
+    }
   }
 
   openMenu() {

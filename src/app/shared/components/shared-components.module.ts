@@ -13,6 +13,7 @@ import { FooterComponent } from './footer/footer.component';
 import { ToastComponent } from './toast/toast.component';
 import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { FormsModule } from '@angular/forms';
 import { CookieModule } from 'ngx-cookie';
 import { PipesModule } from '../pipes/pipes.module';
@@ -48,6 +49,7 @@ import { ModalModule } from 'ngx-bootstrap';
     SharedDirectivesModule,
     FormsModule,
     NgSelectModule,
+    AccordionModule.forRoot(),
     CookieModule.forRoot(),
     PipesModule,
     ModalModule

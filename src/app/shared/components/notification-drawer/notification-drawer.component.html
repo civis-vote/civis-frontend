@@ -14,12 +14,18 @@
 
     <div class="modal-body">
       <ul class="notification-list">
-        <li>
-          You just got promoted to rank 5 in your state
-        </li>
-        <li>
-         Your consultation just got approved. Click to view details
-       </li>
+        <ng-container *ngFor="let notify of notifications">
+          <accordion [isAnimated]="true">
+            <accordion-group heading="{{ notify.mainText }}">
+              <div class="notification-sub-header">
+                {{ notify.subText }}
+              </div>
+              <li class="cursor-pointer" *ngFor="let subNotify of notify.consultations" (click)="navigateToConsultations(subNotify.id)">
+                {{ subNotify.id }}
+              </li>
+            </accordion-group>
+          </accordion>
+        </ng-container>
       </ul>
     </div>
   </div>

@@ -25,26 +25,40 @@
       .header {
         padding: 10px;
         border-bottom: 1px solid lightblue;
-        background: rgba(14, 115, 185, 0.7) !important;
-        color: white;
+        color: rgba(14, 115, 185, 0.7) !important;
+        border-radius: 0 !important;
       }
 
       .notification-list {
-        list-style-type: none;
-        background: whitesmoke;
         padding: 0px;
-        color: #0052cc;
-
-        li {
-          border-bottom: 1px solid lightgrey;
-          padding: 8px;
-        }
+        color: #0E73B9;
+        list-style-type: square;
       }
 
       .modal-close-btn {
-        font-size: 24px;
-        color: white;
+        font-size: 22px;
+        color: rgba(14, 115, 185, 0.7) !important;
         cursor: pointer;
+      }
+    }
+  }
+
+  ::ng-deep {
+    .panel-group .panel {
+      margin-bottom: 5px;
+      .card {
+        background-color: #E5F4FF !important;
+        border-bottom: 2px solid #BFE4FF;
+        border-radius: 0 !important;
+
+        .panel-heading {
+          border-bottom: none !important;
+          padding: 0.2rem !important;
+
+          .btn-link {
+            color: #0E73B9 !important;
+          }
+        }
       }
     }
   }

@@ -102,7 +102,6 @@ export class NavbarComponent implements OnInit {
       if (currentUser && currentUser.consultations.length) {
         const notificationObj = {
           type: 'DRAFT',
-          hyperlink: true,
           mainText: 'Did you forget something?',
           subText: 'Did you forget to submit your response on these consultations? Your response is lying in the drafts! Click here to submit it to the government',
           consultations: currentUser.consultations
@@ -110,6 +109,24 @@ export class NavbarComponent implements OnInit {
 
         this.notifications.push(notificationObj);
       }
+
+      const notificationObj1 = {
+        type: 'RANK',
+        mainText: `Congratulations! Thanks to your active partIcipation, your Rank in (city) has increased by (2) notches!!  You now stand at 3 position! Keep it up and see your Rank scale up!`,
+        subText: '',
+        consultations: []
+      }
+
+      this.notifications.push(notificationObj1);
+
+      const notificationObj2 = {
+        type: 'RANK',
+        mainText: `Deadline approaching!!`,
+        subText: 'The clock is ticking and these consultations await your attention. Click on the link below and submit your response to the government',
+        consultations: currentUser.consultations
+      }
+
+      this.notifications.push(notificationObj2);
     }
   }
 

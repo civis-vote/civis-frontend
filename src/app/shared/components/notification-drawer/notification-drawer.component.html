@@ -15,16 +15,19 @@
     <div class="modal-body">
       <ul class="notification-list">
         <ng-container *ngFor="let notify of notifications">
-          <accordion [isAnimated]="true">
-            <accordion-group heading="{{ notify.mainText }}">
-              <div class="notification-sub-header">
-                {{ notify.subText }}
-              </div>
-              <li class="cursor-pointer" *ngFor="let subNotify of notify.consultations" (click)="navigateToConsultations(subNotify.id)">
-                {{ subNotify.id }}
-              </li>
+          <accordion [isAnimated]="true" class="notification-accordion">
+            <accordion-group heading="{{ notify.mainText }}" [isDisabled]="!notify.consultations.length">
+              <ng-container *ngIf="notify.consultations.length">
+                <div class="notification-sub-header" >
+                  {{ notify.subText }}
+                </div>
+                <li class="cursor-pointer" *ngFor="let subNotify of notify.consultations" (click)="navigateToConsultations(subNotify.id)">
+                  {{ subNotify.id }}
+                </li>
+              </ng-container>
             </accordion-group>
           </accordion>
+
         </ng-container>
       </ul>
     </div>

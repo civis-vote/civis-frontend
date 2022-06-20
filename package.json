@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
+    "create404": "node create404.js",
     "start": "node server.js",
     "serve:staging": "ng serve --configuration=dev-staging",
     "serve:prod": "ng serve --configuration=dev-production",

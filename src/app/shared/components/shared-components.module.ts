@@ -13,12 +13,17 @@ import { FooterComponent } from './footer/footer.component';
 import { ToastComponent } from './toast/toast.component';
 import { SharedDirectivesModule } from '../directives/shared-directives.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { FormsModule } from '@angular/forms';
 import { CookieModule } from 'ngx-cookie';
 import { PipesModule } from '../pipes/pipes.module';
 import { PageContentRendererComponent } from './page-content-renderer/page-content-renderer.component';
 import { ResponseAnswersComponent } from './response-answers/response-answers.component';
-
+import { ResendVerificationComponent } from './resendVerification/resendVerification.component';
+import { CaseStudiesListComponent } from './case-studies-list/case-studies-list.component';
+import { AuthModalComponent } from './auth-modal/auth-modal.component';
+import { NotificationDrawerComponent } from './notification-drawer/notification-drawer.component';
+import { ModalModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -30,8 +35,13 @@ import { ResponseAnswersComponent } from './response-answers/response-answers.co
     FooterComponent,
     ToastComponent,
     PageContentRendererComponent,
-    ResponseAnswersComponent
-  ],
+    ResponseAnswersComponent,
+    ResendVerificationComponent,
+    CaseStudiesListComponent,
+    AuthModalComponent,
+    CaseStudiesListComponent,
+    NotificationDrawerComponent
+],
   imports: [
     CommonModule,
     LinearLoaderModule,
@@ -39,8 +49,10 @@ import { ResponseAnswersComponent } from './response-answers/response-answers.co
     SharedDirectivesModule,
     FormsModule,
     NgSelectModule,
+    AccordionModule.forRoot(),
     CookieModule.forRoot(),
     PipesModule,
+    ModalModule
   ],
   exports: [
     ActionButtonComponent,
@@ -53,7 +65,11 @@ import { ResponseAnswersComponent } from './response-answers/response-answers.co
     FooterComponent,
     ToastComponent,
     PageContentRendererComponent,
-    ResponseAnswersComponent
+    ResponseAnswersComponent,
+    ResendVerificationComponent,
+    CaseStudiesListComponent,
+    AuthModalComponent,
+    NotificationDrawerComponent
   ],
   providers: [
     LinearLoaderService

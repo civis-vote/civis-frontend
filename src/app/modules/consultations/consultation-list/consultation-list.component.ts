@@ -86,7 +86,6 @@ export class ConsultationListComponent implements OnInit {
             this.loadingElements.consultationList = false;
             this.loader.hide();
             this.errorService.showErrorModal(err);
-            console.log('error', err);
         });
   }
 

@@ -6,11 +6,11 @@
         <p>{{'Everyday citizens who’re taking initiative and making sure our voices reach the government' | translate}}</p>
       </div>
       <div class="header-right">
-        <form #locationForm="ngForm">
-          <ng-select id="location" #location="ngModel" name="location"  
-          [items]="locations" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom" 
-          bindValue="name" [searchable]="false" [clearable]="false" (change)="changeLocatioFilter($event)"
-          [(ngModel)]="locationObject.name"> 
+        <form #locationForm="ngForm" *ngIf="currentUser">
+          <ng-select id="location" #location="ngModel" name="location"
+          [items]="locations" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom"
+          bindValue="name" [searchable]="false" [clearable]="false" (change)="changeLocationFilter($event)"
+          [(ngModel)]="locationObject.name">
           </ng-select>
         </form>
       </div>
@@ -19,9 +19,9 @@
       <div class="container-body__data-row pointer" *ngFor="let item of userListData?.data; let i = index" (click)="openLeaderModal(item)">
         <div class="row-left-item">
           <p class="row-num"># {{i + 1}}</p>
-          <img 
+          <img
             appDefaultImage [type]="'user'"
-            [src]="item?.profilePicture?.url" 
+            [src]="item?.profilePicture?.url"
             class="avatar avatar--56 profile-pic"
             alt="profile Picture"
           />
@@ -33,9 +33,9 @@
       <!-- data-row-mobile-layout -->
       <div class="container-body__data-row-xs" *ngFor="let item of userListData?.data; let i = index" (click)="openLeaderModal(item)">
         <p class="row-num"># {{i + 1}}</p>
-        <img 
+        <img
             appDefaultImage [type]="'user'"
-            [src]="item?.profilePicture?.url" 
+            [src]="item?.profilePicture?.url"
             class="avatar avatar--42 profile-pic"
             alt="profile Picture"
           />

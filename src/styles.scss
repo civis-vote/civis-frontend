@@ -17,7 +17,7 @@
 }
 
 *::-webkit-scrollbar {
-  width: 3px;
+  width: 10px;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -47,4 +47,16 @@ body {
   font-size: 14px;
   margin: 0;
   font-family: 'Encode Sans', sans-serif !important;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.mr-auto {
+  margin-right: auto;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

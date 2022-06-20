@@ -1,0 +1,334 @@
+<div
+  bsModal
+  #authModal="bs-modal"
+  class="modal fade logout-confirm-modal"
+  tabindex="-1"
+  [config]="{
+    show: true,
+    backdrop: false,
+    ignoreBackdropClick: true,
+    keyboard: false
+  }"
+  role="dialog"
+  aria-labelledby="authModal"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <button class="close-btn">
+          <img src="assets/images/close.png" (click)="onClose()" />
+        </button>
+        <div class="auth-modal">
+          <img class="modal-img mb-3" src="assets/images/signup-modal.png" />
+          <p class="heading-text mb-2">Just one more step!</p>
+          <p class="sub-heading-text mb-4 text-center">
+            Your response will be submitted as soon as you create an account for
+            verification
+          </p>
+          <div class="d-flex">
+            <div class="login-btn mr-3" (click)="redirectTo('google')">
+              <img class="icon-img" src="assets/images/auth-google.png" />
+              <p class="login-btn-text" *ngIf="!signin">Sign up with google</p>
+              <p class="login-btn-text" *ngIf="signin">Sign in with google</p>
+            </div>
+            <div class="login-btn" (click)="redirectTo('facebook')">
+              <img class="icon-img" src="assets/images/auth-fb.png" />
+              <p class="login-btn-text" *ngIf="!signin">
+                Sign up with Facebook
+              </p>
+              <p class="login-btn-text" *ngIf="signin">Sign in with Facebook</p>
+            </div>
+          </div>
+          <div
+            class="login-btn login-btn-email"
+            *ngIf="!signup && !signin"
+            (click)="signup = true"
+          >
+            <img class="icon-img" src="assets/images/auth-email.png" />
+            <p class="login-btn-text">Sign up with Email</p>
+          </div>
+          <p class="signup-text" *ngIf="signup">Sign up with Email</p>
+          <form
+            #signupForm="ngForm"
+            *ngIf="signup"
+            class="signup-form"
+            autocomplete="off"
+          >
+            <div class="input-box required-field">
+              <label for="fname">{{ 'First name' | translate }}</label>
+              <div class="input-box__border">
+                <input
+                  placeholder="First Name"
+                  type="text"
+                  id="fname"
+                  #fname="ngModel"
+                  name="fname"
+                  [(ngModel)]="signupObject.firstName"
+                  required
+                />
+              </div>
+              <div
+                *ngIf="fname.invalid && (fname.touched || signupForm.submitted)"
+                class="error-msg"
+              >
+                {{ 'First name is Required' | translate }}
+              </div>
+            </div>
+
+            <div class="input-box required-field">
+              <label for="efname">{{ 'Email' | translate }}</label>
+              <div class="input-box__border">
+                <input
+                  placeholder="Email"
+                  type="email"
+                  id="email"
+                  #email="ngModel"
+                  name="email"
+                  [(ngModel)]="signupObject.email"
+                  required
+                  email
+                />
+              </div>
+              <div
+                *ngIf="email.invalid && (email.touched || signupForm.submitted)"
+                class="error-msg"
+              >
+                <div *ngIf="email.errors.required">
+                  {{ 'Email is Required' | translate }}
+                </div>
+                <div *ngIf="email.errors.email">
+                  {{ 'Email must be a valid email address' | translate }}
+                </div>
+              </div>
+            </div>
+
+            <div class="input-box required-field">
+              <label for="password">{{ 'Password' | translate }}</label>
+              <div class="input-box__border">
+                <input
+                  placeholder="At least 8 characters"
+                  type="password"
+                  id="password"
+                  #password="ngModel"
+                  name="password"
+                  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$#@$!%*?&])[A-Za-z\d$@#$!%*?&].{8,}"
+                  [(ngModel)]="signupObject.password"
+                  required
+                />
+              </div>
+              <div
+                *ngIf="
+                  password.invalid && (password.touched || signupForm.submitted)
+                "
+                class="error-msg"
+              >
+                {{ signupObject.password ? 'Password must be at least 8 characters long, must have 1 special character and 1 numeric character' : ('Password is Required' | translate) }}
+              </div>
+            </div>
+
+            <div
+              class="location-box required-field col-12"
+              *ngIf="!invitationToken"
+            >
+              <label for="locations"> City </label>
+              <div class="location-box__border">
+                <ng-select
+                  id="locations"
+                  #city="ngModel"
+                  name="city"
+                  [loading]="loadingCities"
+                  [items]="cities"
+                  bindLabel="name"
+                  [virtualScroll]="true"
+                  dropdownPosition="bottom"
+                  bindValue="id"
+                  [notFoundText]="dropdownText"
+                  [clearable]="true"
+                  loadingText="Searching..."
+                  (search)="onSearch($event)"
+                  (open)="loadCities()"
+                  [(ngModel)]="signupObject.cityId"
+                  placeholder="City"
+                  required
+                >
+                </ng-select>
+              </div>
+              <div
+                *ngIf="city.invalid && (city.touched || signupForm.submitted)"
+                class="error-msg"
+              >
+                Location is Required
+              </div>
+            </div>
+
+            <div class="input-checbox">
+              <input
+                class="cm-checkbox"
+                type="checkbox"
+                #agreedForTermsCondition="ngModel"
+                id="agreedForTermsCondition"
+                name="agreedForTermsCondition"
+                [(ngModel)]="signupObject.agreedForTermsCondition"
+                required
+              />
+              <label for="agreedForTermsCondition" class="d-flex">
+                I agree to the <br />
+                <a href="/terms" class="policy-link">{{
+                  'Terms of Service,' | translate
+                }}</a>
+                &nbsp;
+                <a href="/privacy" class="policy-link">{{
+                  'Privacy Policy' | translate
+                }}</a>
+                &nbsp;&&nbsp;
+                <a href="/content-policy" class="policy-link">{{
+                  'Content Policy.' | translate
+                }}</a>
+              </label>
+            </div>
+            <div
+              class="error-msg"
+              *ngIf="
+                agreedForTermsCondition.invalid &&
+                (agreedForTermsCondition.touched || signupForm.submitted)
+              "
+            >
+              {{
+                'Please accept our Terms of Service & Privacy Policy to continue.'
+                  | translate
+              }}
+            </div>
+
+            <div class="input-checbox">
+              <input
+                class="cm-checkbox"
+                type="checkbox"
+                id="notifyMe"
+                #notifyMe="ngModel"
+                name="notifyMe"
+                [(ngModel)]="signupObject.notifyForNewConsultation"
+              />
+              <label for="notifyMe"
+                >{{ 'Notify me when an open consultation' | translate
+                }}<br />&nbsp; {{ 'is created on Civis.' | translate }}</label
+              >
+            </div>
+
+            <div>
+              <button
+                class="app-btn secondary get-start-btn"
+                (click)="submit()"
+              >
+                <p class="m-0">Create my account</p>
+              </button>
+            </div>
+          </form>
+          <div class="hline" *ngIf="signin"><span>Or</span></div>
+          <form
+            #loginForm="ngForm"
+            *ngIf="signin"
+            (ngSubmit)="submitLogin(loginForm.valid)"
+            autocomplete="off"
+          >
+            <div class="row">
+              <div class="input-box col-12">
+                <label for="email">Email</label>
+                <div class="input-box__border">
+                  <input
+                    placeholder="Email"
+                    type="email"
+                    id="email"
+                    #email="ngModel"
+                    name="email"
+                    [(ngModel)]="loginObject.email"
+                    required
+                    email
+                  />
+                </div>
+                <div
+                  *ngIf="
+                    email.invalid && (email.touched || loginForm.submitted)
+                  "
+                  class="error-msg"
+                >
+                  <div *ngIf="email.errors.required">Email is Required</div>
+                  <div *ngIf="email.errors.email">
+                    Email must be a valid email address
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-box col-12">
+                <div class="d-flex justify-content-between">
+                  <label for="password">Password</label>
+                </div>
+                <div class="input-box__border">
+                  <input
+                    placeholder="Password"
+                    type="password"
+                    id="password"
+                    #password="ngModel"
+                    name="password"
+                    [(ngModel)]="loginObject.password"
+                    required
+                  />
+                </div>
+                <div
+                  *ngIf="
+                    password.invalid &&
+                    (password.touched || loginForm.submitted)
+                  "
+                  class="error-msg"
+                >
+                  Password is Required
+                </div>
+              </div>
+
+              <div class="col-12">
+                <button
+                  class="app-btn secondary get-start-btn mt-1"
+                  type="submit"
+                >
+                  <p class="m-auto">Sign into my account</p>
+                </button>
+
+                <div>
+                  <p
+                    class="normal-text mt-4 mb-0 pointer"
+                    [routerLink]="['/auth', 'forgot-password']"
+                  >
+                    Forgot Password?
+                  </p>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="app-hr"></div>
+          <div class="d-flex">
+            <p class="normal-text mb-2">
+              {{
+                signin
+                  ? "Don'\t have an existing account?"
+                  : 'Already have an account?'
+              }}
+            </p>
+            <p
+              class="normal-text normal-text-link mb-2"
+              *ngIf="(!signin && signup) || (!signup && !signin)"
+              (click)="signup = false; signin = true"
+            >
+              Sign in
+            </p>
+            <p
+              class="normal-text normal-text-link mb-2"
+              *ngIf="signin"
+              (click)="signup = false; signin = false"
+            >
+              Sign Up
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

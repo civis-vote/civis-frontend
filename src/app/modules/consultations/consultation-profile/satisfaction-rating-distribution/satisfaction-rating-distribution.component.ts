@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-satisfaction-rating-distribution',
@@ -7,6 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class SatisfactionRatingDistributionComponent implements OnInit {
   @Input() satisfactionRatingDistribution: any;
+  @Input() profileData: any;
 
   constructor() { }
 

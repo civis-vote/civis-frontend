@@ -7,7 +7,7 @@
           {{'Simple thing is, the bodies that create laws, rules and regulations seek feedback from us, the citizens, to finalise them. What are we waiting for?' | translate}}
         </p>
         <div class="d-flex align-items-center mt-4 cover-btn-section">
-          <button class="app-btn secondary circular participate-btn" [routerLink]="['/auth', 'sign-up']">{{'Start participating' | translate}}</button>
+          <button class="app-btn secondary circular participate-btn" [routerLink]="['/consultations/list']">{{'Start participating' | translate}}</button>
           <p class="civis-works-link pointer" [routerLink]="['/how-civis-works']">{{'How Civis Works' | translate}}</p>
         </div>
       </div>
@@ -16,7 +16,7 @@
           <p class="card-carousel__carouse-title">{{'IN FOCUS' | translate}}</p>
           <div class="card-carousel__inner">
             <div *ngIf='coverCardData?.length && coverCardData[current_card_index]'>
-              <app-consultation-card [consultation]="coverCardData[current_card_index]"></app-consultation-card> 
+              <app-consultation-card [consultation]="coverCardData[current_card_index]"></app-consultation-card>
             </div>
             <div class="loading-card" *ngIf="loadingCard">
               <div class="loading-wave image-space"></div>
@@ -29,24 +29,24 @@
             </div>
           </div>
           <div class="card-carousel__carousel-indicators">
-            <span 
-              class="dot" 
-              [ngStyle]="{'background-color': current_card_index == 0 ? '#A6DAFF' : 'rgba(24, 148, 234, 0.7)'}" 
+            <span
+              class="dot"
+              [ngStyle]="{'background-color': current_card_index == 0 ? '#A6DAFF' : 'rgba(24, 148, 234, 0.7)'}"
               (click)="changeCard(0)">
             </span>
-            <span 
-              class="dot" 
-              [ngStyle]="{'background-color': current_card_index == 1 ? '#A6DAFF' : 'rgba(24, 148, 234, 0.7)'}" 
+            <span
+              class="dot"
+              [ngStyle]="{'background-color': current_card_index == 1 ? '#A6DAFF' : 'rgba(24, 148, 234, 0.7)'}"
               (click)="changeCard(1)">
             </span>
-            <span 
-              class="dot" 
-              [ngStyle]="{'background-color': current_card_index == 2 ? '#A6DAFF' : 'rgba(24, 148, 234, 0.7)'}" 
+            <span
+              class="dot"
+              [ngStyle]="{'background-color': current_card_index == 2 ? '#A6DAFF' : 'rgba(24, 148, 234, 0.7)'}"
               (click)="changeCard(2)">
             </span>
           </div>
         </div>
-        
+
       </div>
     </div>
   </section>
@@ -66,10 +66,10 @@
           <p class="response-content italic truncate" [innerHTML]="currentReponseData?.responseText"></p>
         </div>
         <div class="carousel-indicator">
-          <span 
-          class="dot" 
+          <span
+          class="dot"
           *ngFor="let response of latestResponse; let i = index"
-          [ngStyle]="{'background-color': current_response_index == i ? '#67B3E8' : 'rgba(172, 221, 255, 0.7)'}" 
+          [ngStyle]="{'background-color': current_response_index == i ? '#67B3E8' : 'rgba(172, 221, 255, 0.7)'}"
           (click)="changeSlider(i)">
         </span>
         </div>
@@ -93,7 +93,7 @@
           <div class="leader-detail">
             <p class="leader-name">{{item?.firstName}}</p>
             <p class="leader-stats">
-              <span class="bold-text mr-1">{{item?.points}}</span>{{' Points <span class="seprator-dot"></span> {{item?.points > 500 ? 'SuperLeader' : 'ActiveLeader'}}
+              <span class="bold-text mr-1">{{item?.points}}</span>Points <span class="seprator-dot"></span> {{item?.points > 500 ? 'SuperLeader' : 'ActiveLeader'}}
             </p>
           </div>
         </div>
@@ -107,16 +107,16 @@
     <div class="civis-work-section">
       <p class="section-heading">{{'HOW CIVIS WORKS' | translate}}</p>
       <div class="d-flex justify-content-center mt-5">
-        <button 
-          class="app-btn circular landing-btn" 
+        <button
+          class="app-btn circular landing-btn"
           [ngClass]="activeTab == 'submit-response' ? 'primary' : 'blue-light'"
           (click)="submitResponse('submit-response')">
           {{'Submit a Response' | translate}}
           <span class="btn-arrow"><i class="fa fa-angle-right"></i></span>
         </button>
-        <button 
+        <button
           class="app-btn circular ml-4 landing-btn"
-          [ngClass]="activeTab == 'add-consultation' ? 'primary' : 'blue-light'" 
+          [ngClass]="activeTab == 'add-consultation' ? 'primary' : 'blue-light'"
           (click)="addConsultation('add-consultation')">
           {{'Add a Consultation' | translate}}
           <span class="btn-arrow"><i class="fa fa-angle-right"></i></span>
@@ -139,7 +139,7 @@
         </div>
         <div class="count-item">
           <p>{{'Total Number of Citizens Engaged' | translate}}</p>
-          <p>{{numberWithCommas(impactStats?.consultation_response_distinct_users + 3057)}}</p>
+          <p>{{numberWithCommas(impactStats?.total_registered_users + 3057)}}</p>
         </div>
       </div>
     </div>
@@ -154,20 +154,20 @@
             <img appLazyLoad src="assets/images/RedFM_Logo.jpg" alt="Red FM logo" />
           </picture>
         </a>
-        <a 
-          href="https://www.financialexpress.com/industry/technology/bridging-the-gap-apps-that-are-bringing-voters-closer-to-their-leaders/1540300/" 
+        <a
+          href="https://www.financialexpress.com/industry/technology/bridging-the-gap-apps-that-are-bringing-voters-closer-to-their-leaders/1540300/"
           class="grid-item"
           target="_blank"
           >
-          <picture> 
+          <picture>
             <source srcset="assets/images/Financial-Express-Logo.webp" type="image/webp">
             <source srcset="assets/images/Financial-Express-Logo.jpg" type="image/jpeg">
             <img appLazyLoad src="assets/images/Financial-Express-Logo.jpg" alt="Financial-Express-Logo" />
           </picture>
         </a>
-        <a 
-          href="http://www.forbesindia.com/article/poll-vault/poll-apps-giving-power-to-the-people/52303/1" 
-          class="grid-item" 
+        <a
+          href="http://www.forbesindia.com/article/poll-vault/poll-apps-giving-power-to-the-people/52303/1"
+          class="grid-item"
           target="_blank"
         >
           <picture>
@@ -183,9 +183,9 @@
             <img appLazyLoad src="assets/images/TOI.jpg" alt="TOI logo" />
           </picture>
         </a>
-        <a 
-          href="https://www.livemint.com/Technology/hJ85warpy0LPmiimg3HhvJ/Civic-technology-apps-are-giving-voters-a-voice.html" 
-          class="grid-item" 
+        <a
+          href="https://www.livemint.com/Technology/hJ85warpy0LPmiimg3HhvJ/Civic-technology-apps-are-giving-voters-a-voice.html"
+          class="grid-item"
           target="_blank"
         >
           <picture>

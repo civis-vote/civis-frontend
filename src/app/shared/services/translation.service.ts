@@ -53,7 +53,6 @@ constructor(
 }
 
 canActivate() {
-    console.log('can active');
     return this.loading;
 }
 

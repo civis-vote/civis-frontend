@@ -1,0 +1,281 @@
+@import './src/assets/styles/app';
+.close-btn {
+    position: absolute;
+    right: 24px;
+    background-color: transparent;
+    border: none;
+}
+
+.auth-modal {
+    margin: 40px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    .modal-img {
+        width: 64px;
+        height: 64px;
+    }
+    .heading-text {
+        font-family: Encode Sans;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .sub-heading-text {
+        font-family: Encode Sans;
+        font-size: 16px;
+        color: rgba(21, 21, 21, 0.5);
+    }
+
+    .normal-text {
+        font-size: 14px;
+        font-weight: 500;
+        &-link {
+            color: #1894EA;
+            cursor: pointer;
+        }
+    }
+
+    .signup-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #151515;
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+
+    .login-btn {
+        display: flex;
+        align-items: center;
+        padding: 9px 33px;
+        background-color: #4285F4;
+        border-radius: 3px;
+        cursor: pointer;
+        .icon-img {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+        }
+        &-text {
+            font-size: 14px;
+            font-weight: 500px;
+            color: #ffffff;
+            margin-bottom: 0;
+        }
+        &-email {
+            background-color: #8A8A8A !important;
+            width: 100%;
+            justify-content: center;
+            margin-top: 16px; 
+        }
+    }
+    .app-hr {
+        border: 1px solid #D5DBE2;
+        margin-top: 24px;
+        margin-bottom: 24px;
+        width: 100%;
+    }
+}
+
+
+.input-box {
+    margin-bottom: 15px;
+
+    &__border {
+        width: 100%;
+        border: 1px solid $input-border;
+        box-sizing: border-box;
+        border-radius: 3px;
+
+        input { 
+            width: 100%;
+            font-weight: 500;
+            font-size: 15px;
+            background: $white;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+        }
+
+        @media screen and (max-width: 991px) {
+            width: 100%;
+        }
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: $black;
+        margin-bottom: 10px;
+    }
+}
+
+.required-field { 
+    label {
+        &::after {
+            content: "*";
+            color: #F0653A;
+        }
+    }
+    
+}
+
+.input-checbox {
+    display: flex;
+    margin-bottom: 15px;
+
+    label {
+        margin-left: 12px;
+        font-size: 14px;
+        color: $black;
+    }
+
+    .policy-link {
+        color: $black;
+        text-decoration: underline;
+        &:hover {
+            color: $black;
+        }
+    }
+}
+
+.location-box {
+    width: 90%;
+    margin-bottom: 15px;
+
+    label {
+        display: block;
+        font-weight: 500;
+        font-size: 15px;
+        color: #151515;
+        margin-bottom: 5px;
+    }
+
+    @media screen and (max-width: 991px) {
+        width: 100%;
+    }
+}
+
+.get-start-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; 
+    padding: 12px 20px;
+
+    @media screen and (max-width: 991px) {
+        width: 100%;
+    }
+
+    i {
+        font-size: 24px;
+    }
+}
+
+.error-msg {
+    margin: 10px 0;
+    color: #F0653A;
+    font-size: 14px;
+}
+
+.phone {
+    position: relative;
+
+    input {
+        padding-left: 35px !important;
+
+        &:focus {
+            padding-top: 9px !important;
+        }
+    }
+}
+
+.country-code {
+    position: absolute;
+    top:0;
+    left:0;
+    font-weight: 500;
+    font-size: 15px;
+    background: $white;
+    padding: 9px 0  9px 9px;
+    border: none;
+    border-radius: 3px;
+    margin: 1px;
+}
+
+.signup-form {
+    width: 100%;
+}
+
+
+.forgot-link {
+    font-size: 14px;
+    letter-spacing: 0.045em;
+    -webkit-text-decoration-line: none;
+            text-decoration-line: none;
+    color:rgba(21, 21, 21, 0.5);
+    margin-bottom: 15px;
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.modal-content {
+    border: 1px solid #EBECF0;
+    border-radius: 4px;
+}
+
+.hline {
+    margin-top: 24px;
+    margin-bottom: 24px;
+    width: 100%;
+    border: 1px solid #E0E0E0;
+    color: #000000;
+    letter-spacing: .1em;
+    line-height: 0px;
+    text-align: center;
+    font-size: 14px;
+    span {
+        background-color: #FFF;
+        padding: 0px 1em;
+    }
+}
+
+
+.location-box {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 0;
+
+    label {
+        display: block;
+        font-weight: 500;
+        font-size: 15px;
+        color: #151515;
+        margin-bottom: 5px;
+
+    }
+    &__border {
+        .ng-select {
+            .ng-input {
+                input {
+                    &:focus {
+                        box-shadow: none !important;
+                        border: none !important;
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+    @media screen and (max-width: 991px) {
+        width: 100%;
+    }
+}
+  

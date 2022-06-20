@@ -28,11 +28,17 @@ import { ConsultationQuestionnaireComponent } from './consultation-profile/consu
 import { ResponseFooterComponent } from './consultation-profile/response-footer/response-footer.component';
 import { ThankYouModalComponent } from './consultation-profile/thank-you-modal/thank-you-modal.component';
 import { ConsultationResponseTextComponent } from './consultation-profile/consultation-response-text/consultation-response-text.component';
-import { FeedbackModalComponent } from './consultation-profile/feedback-modal/feedback-modal.component';
-import { ConsultationPublicResponsesComponent } from './consultation-profile/consultation-public-responses/consultation-public-responses.component';
-import { SatisfactionRatingDistributionComponent } from './consultation-profile/satisfaction-rating-distribution/satisfaction-rating-distribution.component';
+import {
+    ConsultationPublicResponsesComponent
+ } from './consultation-profile/consultation-public-responses/consultation-public-responses.component';
+import {
+    SatisfactionRatingDistributionComponent
+ } from './consultation-profile/satisfaction-rating-distribution/satisfaction-rating-distribution.component';
 import { ResponseContainerComponent } from './consultation-profile/response-container/response-container.component';
 import { SummaryResponseContainerComponent } from './consultation-profile/summary-response-container/summary-response-container.component';
+import {
+    SatisfactionRatingSelectionComponent
+ } from './consultation-profile/satisfaction-rating-selection/satisfaction-rating-selection.component';
 
 @NgModule({
     imports: [
@@ -69,11 +75,11 @@ import { SummaryResponseContainerComponent } from './consultation-profile/summar
         ResponseFooterComponent,
         ThankYouModalComponent,
         ConsultationResponseTextComponent,
-        FeedbackModalComponent,
         ConsultationPublicResponsesComponent,
         SatisfactionRatingDistributionComponent,
         ResponseContainerComponent,
         SummaryResponseContainerComponent,
+        SatisfactionRatingSelectionComponent,
     ],
     providers: [CookieService]
 })

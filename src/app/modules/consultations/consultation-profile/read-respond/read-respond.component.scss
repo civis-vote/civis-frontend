@@ -74,6 +74,10 @@
           margin-right: 8px;
         }
       }
+       @media screen and (max-width: 991px) {
+         margin-bottom: 10px;
+         min-width: 220px;
+       }
     }
 
     .dis-satisfied-bg {
@@ -93,6 +97,9 @@
       background: rgba(14, 115, 185, 0.1);
       color: #0E73B9;
     }
+     @media screen and (max-width: 991px) {
+       flex-wrap: wrap;
+     }
   }
 
   .hr-line {
@@ -124,7 +131,7 @@
       .vote-count {
         display: flex;
         align-items: center;
-        
+
         .vote-item {
           margin-right: 24px;
           padding: 8px 16px;
@@ -351,7 +358,7 @@
     }
     .answer {
       padding: 0 20px;
-      
+
       ng-select {
         max-width: 400px;
       }
@@ -365,7 +372,7 @@
         color: rgba(21, 21, 21, 0.5);
       }
 
-      .option-box { 
+      .option-box {
         background: #F2F2F2;
         border-radius: 4px;
         padding: 10px;
@@ -411,7 +418,7 @@
           margin-left: 20px;
           margin-top: 16px;
 
-          input { 
+          input {
               width: 100%;
               font-weight: 500;
               font-size: 15px;
@@ -449,4 +456,38 @@
 .trix-container {
     white-space: pre-wrap;
     word-break: break-all;
+}
+
+.cls-btn {
+  position: absolute;
+  right: 24px;
+  background-color: transparent;
+  border: none;
+}
+
+.email-modal {
+  margin: 30px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+  .modal-img {
+      width: 64px;
+      height: 64px;
+  }
+  .heading-text {
+    font-family: Encode Sans;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .sub-heading-text {
+      font-family: Encode Sans;
+      font-size: 16px;
+      color: rgba(21, 21, 21, 0.5);
+  }
+}
+.modal-content {
+  border: 1px solid #EBECF0;
+  border-radius: 4px;
 }

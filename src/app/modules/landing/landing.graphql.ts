@@ -6,6 +6,7 @@ export const ConsultationResponseList = gql`
       data {
         id
         responseText
+        isVerified
         consultation {
           id
           title
@@ -26,12 +27,13 @@ export const ConsultationResponseList = gql`
       }
     }
   }
-`
+`;
+
 export const ImpactStats = gql`
   query ImpactStats {
     impactStats
   }
-`
+`;
 
 
 export const LeaderListQuery = gql`

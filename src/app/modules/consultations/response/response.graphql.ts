@@ -6,6 +6,7 @@ export const ResponseProfileQuery = gql`
             id
             answers
             responseText
+            isVerified
             createdAt
             updatedAt
             consultation {
@@ -37,15 +38,7 @@ export const ResponseProfileQuery = gql`
                   totalCount
                 }
                 updatedAt
-                questions {
-                  id
-                  questionText
-                  questionType
-                  subQuestions {
-                    id
-                    questionText
-                  }
-                }
+                publishedAt
             }
         }
     }

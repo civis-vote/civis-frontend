@@ -25,8 +25,6 @@ export class SuccessComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       if (params.access_token) {
-        console.log("old success");
-
         const accessToken = params.access_token;
         this.tokenService.storeToken({
           accessToken

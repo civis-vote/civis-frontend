@@ -56,7 +56,7 @@ export class LeaderBoardComponent implements OnInit {
     this.getCurrentUser();
   }
 
-  changeLocatioFilter(event) {
+  changeLocationFilter(event) {
     if (this.currentUser) {
       switch (event.name) {
         case 'Local':
@@ -110,6 +110,7 @@ export class LeaderBoardComponent implements OnInit {
   }
 
   fetchUserList() {
+
     this.userListQuery = this.getQuery();
     this.loadingElements.userList = true;
     this.userListQuery
@@ -122,7 +123,6 @@ export class LeaderBoardComponent implements OnInit {
           this.userListData = item;
         }, err => {
           this.errorService.showErrorModal(err);
-          console.log('error', err);
         });
   }
 

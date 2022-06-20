@@ -1,0 +1,13 @@
+.city-selector {
+    ng-select {
+        .ng-select-container {
+            .ng-value-container {
+                .ng-value {
+                    .ng-value-label {
+                        visibility: visible!important;
+                    }
+                }
+            }
+        }
+    }
+}

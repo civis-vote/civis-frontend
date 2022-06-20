@@ -10,9 +10,9 @@ import { SignUpComponent } from './sign-up/sign-up.component';
 import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { CookieService } from 'ngx-cookie-service';
-import { ResendVerificationComponent } from './resendVerification/resendVerification.component';
 import { LogoutConfirmationComponent } from './logout-confirmation/logout-confirmation.component';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { SharedComponentsModule } from 'src/app/shared/components/shared-components.module';
 
 @NgModule({
   imports: [
@@ -24,12 +24,12 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
     RecaptchaModule,
     ModalModule,
     PipesModule,
+    SharedComponentsModule,
   ],
   declarations: [
     SignUpComponent,
     LoginComponent,
     ForgotPasswordComponent,
-    ResendVerificationComponent,
     LogoutConfirmationComponent
   ],
   providers: [CookieService]

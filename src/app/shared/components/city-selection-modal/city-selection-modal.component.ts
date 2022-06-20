@@ -1,18 +1,21 @@
-import { Component, OnInit, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, EventEmitter, ViewEncapsulation, Input } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { distinctUntilChanged, debounceTime, takeWhile, switchMap, map, tap } from 'rxjs/operators';
 import { CitiesSearchQuery, UpdateCity } from './city-selection-modal.graphql';
 import { Apollo } from 'apollo-angular';
 import { UserService } from '../../services/user.service';
 import { ErrorService } from '../error-modal/error.service';
+import { CurrentUser } from 'src/app/graphql/queries.graphql';
 
 @Component({
   selector: 'app-city-selection-modal',
   templateUrl: './city-selection-modal.component.html',
-  styleUrls: ['./city-selection-modal.component.scss']
+  styleUrls: ['./city-selection-modal.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class CitySelectionModalComponent implements OnInit {
 
+  @Input() isPrivate = false;
   @ViewChild('citySelectionModal', { static: false }) citySelectionModal: ModalDirective;
   searchEmitter: EventEmitter<any> = new EventEmitter();
   loading: boolean;
@@ -70,7 +73,8 @@ export class CitySelectionModalComponent implements OnInit {
           query: CitiesSearchQuery,
           variables: {
             q: name,
-            type: 'city'
+            type: 'city',
+            isInternationalCity: this.isPrivate
           }
         })
         .pipe(
@@ -85,11 +89,18 @@ export class CitySelectionModalComponent implements OnInit {
     const variables = {
       user
     };
-    this.apollo.mutate({ mutation: UpdateCity, variables })
+    this.apollo.mutate({ mutation: UpdateCity, variables,
+      update: (store, {data: currentUserUpdate}) => {
+        const data: any = store.readQuery({query: CurrentUser, variables: {}});
+        data.userCurrent = {...data.userCurrent, ...currentUserUpdate};
+        this.userService.currentUser = {...data.userCurrent, ...currentUserUpdate};
+        store.writeQuery({query: CurrentUser, variables: {}, data});
+      } })
       .pipe(
         map((res: any) => res.data.currentUserUpdate)
       )
       .subscribe((res) => {
+        this.userService.userLoaded$.next(true);
         this.close();
       }, err => {
         this.close();

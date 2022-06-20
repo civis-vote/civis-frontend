@@ -7,6 +7,10 @@ import { ConsultationList } from './navbar.graphql';
 import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consultations/consultation-profile/consultation-profile.graphql';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
+import { CookieService } from 'ngx-cookie';
+import {
+  isObjectEmpty,
+} from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +20,7 @@ import { ConsultationsService } from 'src/app/shared/services/consultations.serv
 })
 export class NavbarComponent implements OnInit {
 
+  showDrawer = false;
   @ViewChild('menuModal', { static: false }) menuModal;
   @ViewChild('userProfileElement', { static: false }) userProfileElement: ElementRef;
   showNav = true;
@@ -44,6 +49,9 @@ export class NavbarComponent implements OnInit {
   ];
   activeTab: string;
   showConfirmEmailModal: boolean;
+  consultationStatus: any;
+
+  notifications = [];
   constructor(
     private router: Router,
     private userService: UserService,
@@ -51,6 +59,7 @@ export class NavbarComponent implements OnInit {
     private route: ActivatedRoute,
     private consultationService: ConsultationsService,
     private errorService: ErrorService,
+    private cookieService: CookieService,
     ) {
         this.consultationService.consultationId$
         .pipe(
@@ -73,6 +82,52 @@ export class NavbarComponent implements OnInit {
     this.getCurrentUser();
     this.getActiveConsulationCount();
     this.getActiveTab();
+    this.watchConsultationStatus();
+    this.setNotifications();
+  }
+
+  setNotifications() {
+    this.notifications = [];
+    const draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length) {
+        const notificationObj = {
+          type: 'DRAFT',
+          mainText: 'Did you forget something?',
+          subText: 'Did you forget to submit your response on these consultations? Your response is lying in the drafts! Click here to submit it to the government',
+          consultations: currentUser.consultations
+        }
+
+        this.notifications.push(notificationObj);
+      }
+
+      const notificationObj1 = {
+        type: 'RANK',
+        mainText: `Congratulations! Thanks to your active partIcipation, your Rank in (city) has increased by (2) notches!!  You now stand at 3 position! Keep it up and see your Rank scale up!`,
+        subText: '',
+        consultations: []
+      }
+
+      this.notifications.push(notificationObj1);
+
+      const notificationObj2 = {
+        type: 'RANK',
+        mainText: `Deadline approaching!!`,
+        subText: 'The clock is ticking and these consultations await your attention. Click on the link below and submit your response to the government',
+        consultations: currentUser.consultations
+      }
+
+      this.notifications.push(notificationObj2);
+    }
   }
 
   openMenu() {
@@ -189,7 +244,7 @@ export class NavbarComponent implements OnInit {
       this.transparentNav = true;
     }
   }
-  
+
   @HostListener('document:click', ['$event']) clickedOutside(event) {
     this.profilePopup = false;
   }
@@ -233,18 +288,35 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  onSignUp() {
+    if (this.currentUrl === 'consultations-profile') {
+      this.router.navigateByUrl('/auth');
+      return;
+    }
+    this.router.navigateByUrl('/auth');
+  }
 
 
   changeMenu(event) {
-      switch (event.name) {
-        case 'Read & Respond':
-            this.routeToConsultation('read');
-          break;
-        case 'Discuss & Engage':
-            this.routeToConsultation('discuss');
-          break;
-        default:
-          break;
-      }
+    switch (event.name) {
+      case 'Read & Respond':
+          this.routeToConsultation('read');
+        break;
+      case 'Discuss & Engage':
+          this.routeToConsultation('discuss');
+        break;
+      default:
+        break;
     }
+  }
+
+  watchConsultationStatus() {
+    this.consultationService.consultationStatus.subscribe((status) => {
+      this.consultationStatus = status;
+    });
+  }
+
+  openNotificationDrawer() {
+    this.showDrawer = !this.showDrawer;
+  }
 }

@@ -47,52 +47,6 @@
             }
         }
 
-        .info-box {
-            margin-top: 95px;
-
-            &__title {
-                font-size: 12px;
-                font-weight: bold;
-                letter-spacing: 0.165em;
-                color: $white;
-                opacity: 0.5;
-                margin-bottom: 10px;
-            }
-
-            &__heading {
-                width: 300px;
-                font-weight: bold;
-                font-size: 24px;
-                line-height: 28px;
-                color: $white;
-                margin-bottom: 5px;
-            }
-
-            &__sub-heading {
-                font-size: 14px;
-                color: $white;
-            }
-
-            &__message {
-                font-size: 14px;
-                font-weight: bold;
-                color: $white;
-                margin: 14px 0;
-            }
-
-            .read-case-btn {
-                font-size: 9px;
-                letter-spacing: 0.1em;
-                color: $white;
-                padding: 7px 20px;
-                background-color: transparent;
-                border: 1px solid $white;
-                &:focus {
-                    outline: none;
-                }
-            }
-        }
-
         @media screen and (max-width: 991px) {
             display: none;
         }

@@ -6,9 +6,9 @@ STEPS TO GET STARTED:
 1. Clone this repo.
 2. git checkout staging
 3. npm install
-4. Get environment files from your colleagues and paste them in the root directory as an env folder
-5. For staging api - npm run start:staging
-6. For prod api - npm run start:prod
+5. For staging api - npm run serve:staging
+6. For prod api - npm run serve:prod
+7. The app should be running on, `localhost:3400`
 
 DEPLOYMENT:
 This app is configured to auto trigger deployment on master and staging branches configuration of which can be found in travis.yml

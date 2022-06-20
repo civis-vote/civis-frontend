@@ -30,8 +30,7 @@ export class LoginComponent implements OnInit {
               private graphqlService: GraphqlService,
               ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   submit(isValid: boolean) {
     if (!isValid) {

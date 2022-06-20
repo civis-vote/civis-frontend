@@ -1,0 +1,36 @@
+<div
+  bsModal #notificationModal="bs-modal" class="modal fade notification-drawer" tabindex="-1"
+  [config]="{show: true}"
+  (onHidden)="closeModal()"
+  role="dialog" aria-labelledby="notificationModal"
+>
+<div class="modal-dialog">
+  <div class="modal-content ">
+
+    <div class="modal-header header">
+      <h4>Notifications</h4>
+      <div class="modal-close-btn" (click)="closeModal()"><i class="fa fa-times"></i></div>
+    </div>
+
+    <div class="modal-body">
+      <ul class="notification-list">
+        <ng-container *ngFor="let notify of notifications">
+          <accordion [isAnimated]="true" class="notification-accordion">
+            <accordion-group heading="{{ notify.mainText }}" [isDisabled]="!notify.consultations.length">
+              <ng-container *ngIf="notify.consultations.length">
+                <div class="notification-sub-header" >
+                  {{ notify.subText }}
+                </div>
+                <li class="cursor-pointer" *ngFor="let subNotify of notify.consultations" (click)="navigateToConsultations(subNotify.id)">
+                  {{ subNotify.id }}
+                </li>
+              </ng-container>
+            </accordion-group>
+          </accordion>
+
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>

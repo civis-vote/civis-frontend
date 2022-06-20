@@ -1,12 +1,15 @@
-<div class="response-index mt-4" ngResizable [rzHandles]="'s'"
-#responseIndex>
+<div class="paper-effect  mt-4 m-0-sm" *ngIf="profileData && !profileData.respondedOn" #responseIndex>
+    <app-satisfaction-rating-selection (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
+    <div class="response-index mt-4" ngResizable [rzHandles]="'s'"
+    >
     <div class="response-index__nav">
-        <div class="w-50">
+        <div>
         <div class="heading">{{'Your response' | translate}}</div>
         </div>
-        <div class="w-50 row no-gutters justify-content-end align-items-center"
+        <div class="row no-gutters justify-content-end align-items-center"
+        style="max-width: 55%;"
         *ngIf="profileData?.reviewType !== 'policy'">
-        <div (click)="scrollToResponses()" class="link mr-3">{{'or, select a public response' | translate}}</div>
+        <div (click)="scrollToResponses()" class="link" [ngClass]="{'w-75 mr-1': isMobile, 'mr-3': !isMobile}">{{'or, select a public response' | translate}}</div>
         <div class="info-mark"><i class="fa fa-question-circle"></i></div>
         </div>
     </div>
@@ -14,17 +17,19 @@
         <ckeditor
         [(ngModel)]="responseText"
         [config]="ckeConfig"
-        (change)="enableSubmitResponse($event)"
+        (change)="onResponseTextChange($event)"
         (blur)="autoSave(responseText)"
         debounce="0">
         </ckeditor>
     </div>
     <div class="response-index__footer" *ngIf="profileData?.reviewType !== 'policy'">
-        <div class="checkbox-area" *ngIf="showPublicResponseOption">
+        <div class="checkbox-area" *ngIf="showPublicResponseOption && !profileData?.enforcePrivateResponse">
         <div class="input-checbox">
             <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" />
             <label class="m-0">{{'Make my response public' | translate}}</label>
-            <span class="link">{{'What does this mean?' | translate}}</span>
+            <span class="link" tooltip="If you feel passionately about this Consultation, you can make your response public,
+            for others to use as a template. Your first name is shared with the Government if you make your response public.
+            If you’re not sure what to write, you can choose other people’s responses to send as your own.">{{'What does this mean?' | translate}}</span>
         </div>
         <div class="d-flex">
             <p class="auto-save-text mr-2" *ngIf="showAutoSaved">{{'Draft autosaved' | translate}}</p>
@@ -36,4 +41,18 @@
         <span class="drag-bars"></span>
         </div>
     </div>
+    </div>
+    <p class="error-msg" *ngIf="showError && !responseText">Please enter your response</p>
+    <div class="hr-line"></div>
+    <div class="py-3">
+        <button  class="btn-submit active" (click)="submitAnswer()" [tooltip]="(showError && !responseText) ? 'Please fill all the answers to submit response.' : ''" data-event="purchase">
+          <p class="m-0">
+            SUBMIT RESPONSE
+          </p>
+          <span class="ml-2"><i class="fa fa-angle-right"></i></span>
+        </button>
+      </div>
 </div>
+<app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
+</app-confirm-email-modal>
+<app-auth-modal *ngIf="authModal" [consultationId]="consultationId" (close)="authModal = false"></app-auth-modal>

@@ -18,7 +18,7 @@
         </div>
         <div class="profile-details">
           <p class="profile-details__name">
-            {{currentUser?.firstName + ' ' + currentUser?.lastName}}
+            {{currentUser?.firstName}} {{currentUser?.lastName ? ' ' + currentUser?.lastName  : ''}}
           </p>
           <p class="profile-details__active">
             {{'Citizen Leader since' | translate}} {{currentUser?.createdAt | date}}
@@ -216,7 +216,7 @@
             </div>
             <div class="consultation-info__right">
               <div class="deadline">
-                {{'Ended on' | translate}}{{item?.node?.consultation?.responseDeadline | date}}
+                {{'Ended on ' | translate}}{{item?.node?.consultation?.responseDeadline | date}}
               </div>
               <div class="rewards">
                 {{item?.node?.points}} &nbsp;{{'points earnt' | translate}}

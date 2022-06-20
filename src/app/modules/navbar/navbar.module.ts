@@ -8,8 +8,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { ConfirmEmailModule } from 'src/app/shared/confirm-email-modal/confirm-email.module';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
-
-
+import { NotificationDrawerComponent } from 'src/app/shared/components/notification-drawer/notification-drawer.component';
+import { SharedComponentsModule } from 'src/app/shared/components/shared-components.module';
 
 @NgModule({
     imports: [
@@ -20,7 +20,8 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
         NgSelectModule,
         FormsModule,
         ConfirmEmailModule,
-        PipesModule
+        PipesModule,
+        SharedComponentsModule
     ],
     exports: [
         NavbarComponent

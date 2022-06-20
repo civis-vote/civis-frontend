@@ -1,11 +1,10 @@
-import { Component, OnInit, Input, HostListener, ViewChild, ElementRef, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, HostListener, ViewChild, ElementRef, ViewEncapsulation,
+  OnChanges, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
-
 @Component({
   selector: 'app-profile-card',
   templateUrl: './profile-card.component.html',
@@ -13,7 +12,7 @@ import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
   encapsulation: ViewEncapsulation.None,
 
 })
-export class ProfileCardComponent implements OnInit, OnDestroy {
+export class ProfileCardComponent implements OnInit, OnChanges {
 
   @ViewChild('shareOptionsElement', { static: false }) shareOptionsElement: ElementRef;
   @ViewChild('spreadButtonElement', { static: false }) spreadButtonElement: ElementRef;
@@ -21,11 +20,12 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
   @Input() profile: any;
   @Input() summaryData: any;
 
-  enableSubmitResponse: boolean;
   currentUser: any;
   showShareOptions: boolean;
   currentUrl = '';
   showConfirmEmailModal: boolean;
+  consultationStatus: any;
+  showResponseCreation: boolean;
 
   constructor(private consultationsService: ConsultationsService,
               private userService: UserService,
@@ -34,12 +34,23 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
       this.currentUrl = window.location.href;
-      this.CheckSubmitResponseEnabled();
       this.getCurrentUser();
+      this.watchConsultationStatus();
+      this.enableSubmitResponse();
   }
 
-  ngOnDestroy() {
-    this.consultationsService.enableSubmitResponse.next(false);
+  ngOnChanges(changes: SimpleChanges) {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        switch (propName) {
+          case 'profile': {
+            if (changes[propName].currentValue) {
+              this.profile = changes[propName].currentValue;
+            }
+          }
+        }
+      }
+    }
   }
 
   downloadReport() {
@@ -57,6 +68,17 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
     });
   }
 
+  enableSubmitResponse() {
+    this.consultationsService.submitResponseActiveRoundEnabled
+      .subscribe((value) => {
+        if (value) {
+          this.showResponseCreation = true;
+        } else {
+          this.showResponseCreation = false;
+        }
+      });
+  }
+
   @HostListener('document:click', ['$event.target'])
   onClick(targetElement) {
     if (this.showShareOptions) {
@@ -71,7 +93,8 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
 
   getRemainigDays(deadline) {
     if (deadline) {
-      const diff_in_days = this.getDifferenceInDays(deadline);
+      let diff_in_days = this.getDifferenceInDays(deadline);
+      diff_in_days = Math.floor(diff_in_days );
       if (diff_in_days <= 0) {
         return diff_in_days === 0 ? 'Last day to respond' : 'Closed';
       } else {
@@ -81,7 +104,9 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
   }
 
   convertDateFormat(date) {
-    return moment(date).format('Do MMM YY');
+    if (date) {
+      return moment(date).format('Do MMM YY');
+    }
   }
 
   getDifferenceInDays(deadline) {
@@ -96,7 +121,8 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
   }
 
   getTwitterUrl(link) {
-      const diff_in_days = this.getDifferenceInDays(this.profile.responseDeadline);
+      let diff_in_days = this.getDifferenceInDays(this.profile.responseDeadline);
+      diff_in_days = Math.floor(diff_in_days );
       let remainingDays = '';
       if (diff_in_days <= 0) {
         remainingDays =  diff_in_days === 0 ? ', last day for you to share your feedback too!' : '.';
@@ -148,41 +174,22 @@ export class ProfileCardComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  CheckSubmitResponseEnabled() {
-    this.consultationsService.enableSubmitResponse
-    .subscribe((value) => {
-      if (value) {
-        this.enableSubmitResponse = true;
-      } else {
-        this.enableSubmitResponse = false;
-      }
-    });
-  }
-
   stepNext(hasResponseSubmited) {
-    if (!this.currentUser) {
-      this.router.navigateByUrl('/auth');
-      this.cookieService.put('loginCallbackUrl', this.router.url);
-      return;
-    }
 
-    if (this.currentUser && !this.currentUser.confirmedAt) {
-      this.showConfirmEmailModal = true;
-      return;
-    }
-
-    if (!hasResponseSubmited) {
+    if (!hasResponseSubmited || this.showResponseCreation) {
       const questions = this.consultationsService.getQuestions(this.profile);
       if (questions && questions.length) {
         this.consultationsService.validateAnswers.next(true);
         return;
       }
-      this.consultationsService.scrollToCreateResponse.next(true);
     }
+    this.consultationsService.submitResponseText.next(true);
+  }
 
-    if (this.enableSubmitResponse) {
-      this.consultationsService.openFeedbackModal.next(true);
-    }
+  watchConsultationStatus() {
+    this.consultationsService.consultationStatus.subscribe((status) => {
+      this.consultationStatus = status;
+    });
   }
 
 }

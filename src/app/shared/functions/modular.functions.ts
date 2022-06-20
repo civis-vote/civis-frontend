@@ -197,3 +197,11 @@ export function isMobile() {
         return false;
     }
 }
+
+export const scrollToFirstError = (selector, element) => {
+    const firstErrorElement: HTMLElement = element.querySelector(selector);
+    if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+};
+

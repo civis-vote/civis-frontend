@@ -9,7 +9,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie';
 
 
 
@@ -43,6 +43,7 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCurrentUser();
+    this.cookieService.put('loginCallbackUrl', this.router.url === '/' ? '' : this.router.url);
   }
 
   getConsultationProfile() {
@@ -56,16 +57,25 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
       map((res: any) => res.data.consultationProfile)
     )
     .subscribe((data: any) => {
-        this.profileData = data;
+      this.profileData = data;
+      this.updateConsultationStatus();
     }, err => {
       const e = new Error(err);
-      if (e.message.includes('Invalid Access Token')) {
-        this.cookieService.set('loginCallbackUrl', this.router.url);
+        if (e.message.includes('Invalid Access Token')) {
+        this.cookieService.put('loginCallbackUrl', this.router.url === '/' ? '' : this.router.url);
         this.router.navigate(['/auth-private']);
       } else {
         this.errorService.showErrorModal(err);
       }
     });
+  }
+
+  updateConsultationStatus() {
+    if ((this.consultationsService.checkClosed(this.profileData ? this.profileData.responseDeadline : null) === 'Closed')) {
+      this.consultationsService.consultationStatus.next('closed');
+      return;
+    }
+    this.consultationsService.consultationStatus.next('active');
   }
 
   getCurrentUser() {

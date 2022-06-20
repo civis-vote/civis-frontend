@@ -1,15 +1,17 @@
-import { Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, ChangeDetectorRef, ViewChild} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import * as moment from 'moment';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationProfileCurrentUser,
-         ConsultationProfile} from '../consultation-profile.graphql';
+         ConsultationProfile,
+         SubmitResponseQuery} from '../consultation-profile.graphql';
 import { Apollo } from 'apollo-angular';
 import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
 import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-read-respond',
@@ -30,6 +32,10 @@ export class ReadRespondComponent implements OnInit {
   satisfactionRatingDistribution: any;
   loading: boolean;
   questionnaireExist: boolean;
+  earnedPoints: any;
+  emailVerification = false;
+
+  @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
   constructor(
     private userService: UserService,
@@ -37,7 +43,7 @@ export class ReadRespondComponent implements OnInit {
     private errorService: ErrorService,
     private consultationService: ConsultationsService,
     private title: Title,
-    private _cookieService: CookieService,
+    private _cookieService: CookieService
   ) {
     this.consultationService.consultationId$
     .pipe(
@@ -178,10 +184,19 @@ export class ReadRespondComponent implements OnInit {
   getCurrentUser() {
     this.userService.userLoaded$
     .subscribe((data) => {
+      const consultationResponseData = localStorage.getItem('consultationResponse');
+
       if (data) {
         this.currentUser = this.userService.currentUser;
         if (this.consultationId) {
           this.getConsultationProfile();
+        }
+        if (consultationResponseData && this.currentUser.city && this.currentUser.city.id) {
+          const resData = JSON.parse(consultationResponseData);
+          if (!this.currentUser.confirmedAt) {
+            resData.visibility = 'anonymous';
+          }
+          this.submitResponse(resData);
         }
       } else {
         this.currentUser = null;
@@ -189,27 +204,60 @@ export class ReadRespondComponent implements OnInit {
           this.getConsultationProfile();
         }
       }
+
     });
   }
 
   showCreateResponse() {
-    if ((this.checkClosed(this.profileData ? this.profileData.responseDeadline : null) === 'Closed')
-        || !this.currentUser || (this.profileData && this.profileData.respondedOn)) {
+    if ((this.consultationService.checkClosed(this.profileData ? this.profileData.responseDeadline : null) === 'Closed')
+        ) {
         return false;
     }
     return true;
   }
 
-  checkClosed(deadline) {
-    if (deadline) {
-      const today = moment();
-      const lastDate = moment(deadline);
-      const difference = lastDate.diff(today, 'days');
-      if (difference <= 0) {
-        return difference === 0 ? 'Last day to respond' : 'Closed';
-      } else {
-        return `Active`;
+
+  submitResponse(consultationResponse) {
+    localStorage.removeItem('consultationResponse');
+    this.apollo.mutate({
+      mutation: SubmitResponseQuery,
+      variables: {
+        consultationResponse: consultationResponse
+      },
+      update: (store, {data: res}) => {
+        const variables = {id: this.consultationId};
+        const resp: any = store.readQuery({query: ConsultationProfileCurrentUser, variables});
+        if (res) {
+          resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
+          resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
+          resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
+          resp.consultationProfile.satisfactionRatingDistribution =
+            res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
+        }
+        store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resp});
       }
+    })
+    .pipe (
+      map((res: any) => res.data.consultationResponseCreate)
+    )
+    .subscribe((res) => {
+        this.earnedPoints = res.points;
+        this.showThankYouModal = true;
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+  }
+
+  onCloseThanksModal() {
+    this.showThankYouModal = false;
+    if (!this.currentUser.confirmedAt) {
+      this.emailVerification = true;
     }
   }
+
+  onCloseEmailModal() {
+    this.emailVerificationModal.hide();
+    this.emailVerification = false;
+  }
+
 }

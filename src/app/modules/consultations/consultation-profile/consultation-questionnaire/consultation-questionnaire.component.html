@@ -1,53 +1,8 @@
-<div class="paper-effect  mt-4 m-0-sm" #questionnaireContainer>
-  <p class="satisfactory-heading">
-    <p class="satisfactory-heading">
-      {{'How satisfied are you with this Consultation' | translate}}
-    </p>
-    <p class="satisfactory-tip">
-      {{'Choose an option to submit your feedback' | translate}}
-    </p>
-    <div class="options-block">
-      <button 
-        class="grey-bg"
-        [ngClass]="{'active': (responseFeedback === 'dissatisfied')}"
-        (click)="setSatisfactoryRating('dissatisfied')">
-        <span>
-          <img src="assets/images/dissatisfied.svg" />
-          Dissatisfied
-        </span>
-      </button>
-      <button 
-        class="grey-bg"
-        [ngClass]="{'active': (responseFeedback === 'somewhat_dissatisfied')}"
-        (click)="setSatisfactoryRating('somewhat_dissatisfied')">
-        <span>
-          <img src="assets/images/somewhat_dissatisfied.svg" />
-          Somewhat Dissatisfied
-        </span>
-      </button>
-      <button 
-        class="grey-bg"
-        [ngClass]="{'active': (responseFeedback === 'somewhat_satisfied')}"
-        (click)="setSatisfactoryRating('somewhat_satisfied')">
-        <span>
-          <img src="assets/images/somewhat_satisfied.svg" />
-          Somewhat Satisfied
-        </span>
-      </button>
-      <button 
-        class="grey-bg"
-        [ngClass]="{'active': (responseFeedback === 'satisfied')}"
-        (click)="setSatisfactoryRating('satisfied')">
-        <span>
-          <img src="assets/images/satisfied.svg" />
-          Satisfied
-        </span>
-      </button>
-    </div>
-    <p class="error-msg" *ngIf="showError && !responseFeedback">Please select a Satisfaction Rating to submit the response</p>
-    <div class="hr-line"></div>
+<div #questionnaireContainer>
+  <div class="paper-effect  mt-4 m-0-sm" *ngIf="!responseCreated">
+    <app-satisfaction-rating-selection (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
     <div class="question-box">
-      <form [formGroup]="questionnaireForm">
+      <form [formGroup]="questionnaireForm"  #f="ngForm">
         <div class="questions-container">
           <div class="question-index" *ngFor="let question of questions; let i = index">
               <div class="question">
@@ -99,15 +54,17 @@
               </div>
             </div>
           </div>
-          <div class="checkbox-area" *ngIf="longTextAnswer !== templateText">
+          <div class="checkbox-area" *ngIf="showPublicResponseOption()">
             <div class="input-checbox" >
               <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" [ngModelOptions]="{standalone: true}"/> 
               <label class="m-0">{{'Make my response public' | translate}}</label>
-              <span class="link">{{'What does this mean?' | translate}}</span>
+              <span class="link" tooltip="If you feel passionately about this Consultation, you can make your response public, 
+              for others to use as a template. Your first name is shared with the Government if you make your response public.
+              If you’re not sure what to write, you can choose other people’s responses to send as your own.">{{'What does this mean?' | translate}}</span>
             </div>
           </div>
           <div class="py-3">
-            <button  class="btn-submit active" (click)='submitAnswer()' [tooltip]="showError ? 'Please fill all the answers to submit response.' : ''" data-event="purchase">
+            <button  class="btn-submit active" (click)='submitAnswer()' [tooltip]="(showError && !f.valid)  ? 'Please fill all the answers to submit response.' : ''" data-event="purchase">
               <p class="m-0">
                 SUBMIT RESPONSE
               </p>
@@ -117,5 +74,8 @@
       </form>
     </div>
   </div>
-  <app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
-  </app-confirm-email-modal>
+</div>
+<app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
+</app-confirm-email-modal>
+
+<app-auth-modal *ngIf="authModal" [consultationId]="consultationId" (close)="authModal = false"></app-auth-modal>

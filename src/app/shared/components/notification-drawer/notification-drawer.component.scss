@@ -1,0 +1,71 @@
+@import './src/assets/styles/app';
+
+
+//modal-styles
+
+.notification-drawer {
+    background: rgba(14, 115, 185, 0.6) !important;
+
+    .modal-dialog {
+      margin: 0 0 0 auto;
+      max-width: 600px !important;
+
+      .modal-content {
+        height: 100vh !important;
+        padding: 0 0 10px 0;
+        border: none;
+        border-radius: 0;
+        overflow-y: auto;
+      }
+
+      .modal-body {
+        padding: 0;
+      }
+
+      .header {
+        padding: 10px;
+        border-bottom: 1px solid lightblue;
+        color: rgba(14, 115, 185, 0.7) !important;
+        border-radius: 0 !important;
+      }
+
+      .notification-list {
+        padding: 0px;
+        color: #0E73B9;
+        list-style-type: square;
+      }
+
+      .modal-close-btn {
+        font-size: 22px;
+        color: rgba(14, 115, 185, 0.7) !important;
+        cursor: pointer;
+      }
+    }
+  }
+
+  ::ng-deep {
+    .panel-group .panel {
+      margin-bottom: 5px;
+      .card {
+        background-color: #E5F4FF !important;
+        border-bottom: 2px solid #BFE4FF;
+        border-radius: 0 !important;
+
+        .panel-heading {
+          border-bottom: none !important;
+          padding: 0.2rem !important;
+
+          .btn-link {
+            color: #0E73B9 !important;
+          }
+        }
+      }
+    }
+  }
+
+  .modal.fade:not(.in) .modal-dialog {
+    -webkit-transform: translate3d(125%, 0, 0);
+    transform: translate3d(125%, 0, 0);
+  }
+
+

@@ -52,7 +52,7 @@
         <div class="mt-4 invitation-block">
           <span>
             {{
-              "You have been invited to this consultation and logged in as "
+              'You have been invited to this consultation and logged in as '
                 | translate
             }}
           </span>
@@ -60,10 +60,10 @@
             <b>
               {{ signupObject.email }}
             </b>
-            {{ " - " }}
+            {{ ' - ' }}
           </span>
           <span (click)="showLogoutModal = true">
-            <b>{{ "Not you?" | translate }}</b>
+            <b>{{ 'Not you?' | translate }}</b>
           </span>
         </div>
       </ng-template>
@@ -327,8 +327,7 @@
               </div>
               <div
                 *ngIf="
-                  organization.invalid &&
-                  (organization.touched || signupForm.submitted)
+                  organization.invalid && (organization.touched || signupForm.submitted)
                 "
                 class="error-msg"
               >

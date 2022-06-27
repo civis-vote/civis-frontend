@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {CookieService} from 'ngx-cookie'
 @Component({
   selector: 'app-terms-of-service',
   templateUrl: './terms-of-service.component.html',
@@ -7,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TermsOfServiceComponent implements OnInit {
 
-  constructor() { }
+  currentLanguage: string;
+
+  constructor(
+    private _cookieService: CookieService,
+  ) {
+    this.currentLanguage = this._cookieService.get('civisLang');
+   }
 
   ngOnInit() {
   }

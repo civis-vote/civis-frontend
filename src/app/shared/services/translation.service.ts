@@ -8,7 +8,7 @@ import {CookieService} from 'ngx-cookie';
 import {LocalStorageService} from 'ngx-webstorage';
 import {HttpClient} from '@angular/common/http';
 import {Resolve, ActivatedRouteSnapshot, CanActivate} from '@angular/router';
-import { HindiLang } from '../../shared/models/constants/transalation.json';
+import HindiLang from '../../shared/models/constants/translation.json';
 
 interface Dictionary {
 text: string;

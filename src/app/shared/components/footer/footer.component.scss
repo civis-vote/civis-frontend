@@ -21,9 +21,9 @@
 
     .left-item {
       display: flex;
-      width: 345px;
+      width: 27%;
       @media screen and (max-width: 991px) {
-        justify-content: flex-start;
+        justify-content: center;
         width: 100%;
       }
 
@@ -31,7 +31,7 @@
         list-style-type: none;
         padding: 0;
         &:nth-child(2) {
-          margin-left: 10rem;
+          margin-left: 8rem;
           @media screen and (max-width: 991px) {
            margin-left: 5rem;
           }
@@ -48,7 +48,10 @@
       }
     }
     .middle-item {
-      max-width: 300px;
+      max-width: 27%;
+      @media screen and (max-width: 991px) {
+        max-width: 100%;
+      }
       .address-text {
         font-size: 15px;
         color: #767676;
@@ -61,10 +64,11 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      width: 340px;
+      width: 27%;
       @media screen and (max-width: 991px) {
-        align-items: flex-start;
+        align-items: center;
         text-align: left;
+        width: 100%;
       }
       .social-icons {
         display: flex;
@@ -136,10 +140,11 @@
     .logo-container {
       display: flex;
       align-items: center;
-      width: 345px;
+      width: 27%;
       @media screen and (max-width: 991px) {
-        justify-content: flex-start;
+        justify-content: center;
         flex-wrap: wrap;
+        width: 100%;
       }
       .logo-2 {
         margin-left: 30px;
@@ -156,7 +161,7 @@
       }
     }
     .stripo-logo-container {
-      width: 300px;
+      width: 27%;
       text-align: center;
       .title-text {
         font-size: 14px;
@@ -170,16 +175,17 @@
       }
       @media screen and (max-width: 991px) {
         margin-bottom: 15px;
+        width: 100%;
       }
     }
     .logo-right {
       display: flex;
-      width: 340px;
+      width: 27%;
       justify-content: flex-end;
       @media screen and (max-width: 991px) {
         width: 100%;
         text-align: left; 
-        justify-content: flex-start;
+        justify-content: center;
       }
     }
     .language-box {

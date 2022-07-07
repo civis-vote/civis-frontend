@@ -54,7 +54,7 @@
     "graphql-tag": "^2.10.0",
     "highcharts": "^9.0.0",
     "hmr-enabled": "^0.1.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "ng-recaptcha": "^5.0.0",
     "ng2-ckeditor": "1.2.6",
     "ngx-bootstrap": "^5.1.0",

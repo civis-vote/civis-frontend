@@ -2,7 +2,7 @@
 
 .footer-bg {
   width: 100%;
-   background-color: $white;
+  background-color: $white;
 }
 
 .footer-wrapper {
@@ -12,30 +12,23 @@
   background-color: $white;
 
   &__top-section {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 27%);
     justify-content: space-between;
     @media screen and (max-width: 991px) {
-      justify-content: flex-start;
-      flex-wrap: wrap;
+      grid-template-columns: 100%;
     }
 
     .left-item {
       display: flex;
-      width: 27%;
+      justify-content: space-between;
       @media screen and (max-width: 991px) {
-        justify-content: center;
-        width: 100%;
+        justify-content: space-evenly;
       }
 
       .item-list {
         list-style-type: none;
         padding: 0;
-        &:nth-child(2) {
-          margin-left: 8rem;
-          @media screen and (max-width: 991px) {
-           margin-left: 5rem;
-          }
-        }
         li {
           color: #757575;
           margin-bottom: 10px;
@@ -47,11 +40,8 @@
         }
       }
     }
+
     .middle-item {
-      max-width: 27%;
-      @media screen and (max-width: 991px) {
-        max-width: 100%;
-      }
       .address-text {
         font-size: 15px;
         color: #767676;
@@ -64,11 +54,10 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      width: 27%;
+      
       @media screen and (max-width: 991px) {
         align-items: center;
         text-align: left;
-        width: 100%;
       }
       .social-icons {
         display: flex;
@@ -131,27 +120,25 @@
   }
 
   &__bottom-section {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 27%);
     justify-content: space-between;
     align-items: center;
     @media screen and (max-width: 991px) {
-      flex-wrap: wrap;
+      grid-template-columns: 100%;
     }
+
     .logo-container {
       display: flex;
       align-items: center;
-      width: 27%;
       @media screen and (max-width: 991px) {
         justify-content: center;
-        flex-wrap: wrap;
-        width: 100%;
       }
       .logo-2 {
         margin-left: 30px;
         margin-top: 15px;
       }
       .policy-text {
-        // margin-left: 53px;
         font-size: 12px;
         color: #767676;
         max-width: 315px;
@@ -161,7 +148,6 @@
       }
     }
     .stripo-logo-container {
-      width: 27%;
       text-align: center;
       .title-text {
         font-size: 14px;
@@ -175,15 +161,12 @@
       }
       @media screen and (max-width: 991px) {
         margin-bottom: 15px;
-        width: 100%;
       }
     }
     .logo-right {
       display: flex;
-      width: 27%;
       justify-content: flex-end;
       @media screen and (max-width: 991px) {
-        width: 100%;
         text-align: left; 
         justify-content: center;
       }

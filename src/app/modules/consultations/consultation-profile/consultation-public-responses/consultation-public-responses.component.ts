@@ -1,4 +1,3 @@
-import { UserService } from "./../../../../shared/services/user.service";
 import {
   Component,
   OnInit,
@@ -31,26 +30,15 @@ export class ConsultationPublicResponsesComponent
   publicResponsesLength: any;
   roundNumberExist: any;
   activeRoundNumber: any;
-  currentUser: any;
 
   constructor(
     private consultationService: ConsultationsService,
     private route: ActivatedRoute,
-    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
-    this.subscribeToUserService();
-  }
-
-  subscribeToUserService() {
-    this.userService.userLoaded$.subscribe((exists) => {
-      if (exists) {
-        this.currentUser = this.userService.currentUser;
-        this.subscribeToProfileData();
-        this.scrollToResponses();
-      }
-    });
+    this.subscribeToProfileData();
+    this.scrollToResponses();
   }
 
   ngAfterViewChecked() {
@@ -67,17 +55,6 @@ export class ConsultationPublicResponsesComponent
         this.responseRounds = this.profileData.responseRounds;
         this.activeRoundNumber = this.getActiveRound(this.responseRounds);
         this.responseList = this.filterResponseData(data);
-        if (this.currentUser) {
-          const userCurrentProfileResponse = this.fetchCurrentUserResponse();
-          const isCurrentUserResponseAvailable = this.responseList.find((r) => {
-            return r.node.user.id === this.currentUser.id;
-          });
-
-            isObjectEmpty(isCurrentUserResponseAvailable) &&
-            !isObjectEmpty(userCurrentProfileResponse)
-            ? this.responseList.unshift(userCurrentProfileResponse)
-            : "";
-        }
         this.publicResponsesLength = this.responseList.filter(
           (response) => response.node.roundNumber === this.activeRoundNumber,
         ).length;
@@ -87,12 +64,6 @@ export class ConsultationPublicResponsesComponent
         this.checkForFragments = true;
       }
     });
-  }
-
-  fetchCurrentUserResponse() {
-    return this.currentUser.responses.edges.find(
-      (n) => n.node.consultation.id === this.profileData.id,
-    );
   }
 
   filterResponseData(data) {

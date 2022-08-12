@@ -55,6 +55,7 @@
     "razorpay": "^2.0.6",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.0",
+    "helmet-csp": "^3.4.0",
     "highcharts": "^9.0.0",
     "hmr-enabled": "^0.1.4",
     "moment": "^2.24.0",

@@ -1,5 +1,6 @@
 const express = require('express');
-const app = express()
+const app = express();
+const contentSecurityPolicy = require('helmet-csp');
 const path = require('path');
 // const secure = require('ssl-express-www');
 const compression = require('compression');
@@ -11,6 +12,60 @@ if(!process.env.APP_ENVIRONMENT) {
 }
 
 // app.use(secure);
+
+app.use(function (req, res, next) {
+  if (!req.secure && process.env.APP_ENVIRONMENT === "production") {
+    res.redirect("https://" + req.headers.host + req.url);
+  } else return next();
+});
+
+app.use(
+  contentSecurityPolicy({
+    useDefaults: true,
+    directives: {
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "https://unpkg.com",
+        "https://cdn.ckeditor.com",
+        "https://edge.fullstory.com",
+        "https://client.crisp.chat",
+        "https://cdn.ckeditor.com",
+      ],
+      baseUri: ["'self'"],
+      objectSrc: ["'self'"],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.googleapis.com",
+        "https://client.crisp.chat",
+        "https://unpkg.com",
+      ],
+      fontSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://fonts.gstatic.com",
+        "https://client.crisp.chat",
+      ],
+      frameAncestors: ["'self'"],
+      defaultSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      connectSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        "https://rs.fullstory.com",
+        "https://api-staging.civis.vote",
+        "wss://client.relay.crisp.chat",
+        "sentry.io",
+        "https://*.sentry.io",
+        "*.sentry.io",
+      ],
+      imgSrc: ["'self'", "https://*", "data:", "https://storage.googleapis.com"],
+      formAction: ["'self'"],
+    },
+    reportOnly: false,
+  })
+);
 
 const PORT = process.env.PORT || 3401;
 app.listen(PORT);

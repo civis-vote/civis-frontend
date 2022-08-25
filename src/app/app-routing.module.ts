@@ -7,6 +7,8 @@ import { ContentPolicyComponent } from './modules/policy/content-policy/content-
 import { PrivacyPolicyComponent } from './modules/policy/privacy-policy/privacy-policy.component';
 import { ConfirmUserGuard } from './shared/guards/confirm-user.guard';
 import { UnsubscribeUserGuard } from './shared/guards/unsubscribe-user.guard';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { environment } from '../environments/environment';
 
 const routes: Routes = [
   {
@@ -14,7 +16,8 @@ const routes: Routes = [
     loadChildren: () => import('./modules/landing/landing.module').then(m => m.LandingModule)
   },
   {
-    path: 'donate',
+    //TODO: Donate feature, remove condition when ready fo deployment to production
+    path: !environment.production ? 'donate':'',
     loadChildren: () => import('./modules/donate/donate.module').then(m => m.DonateModule)
   },
   {
@@ -76,6 +79,11 @@ const routes: Routes = [
     path: 'citizens-report-on-mumbai-open-spaces',
     loadChildren: () => import('./modules/mumbai-open-spaces/mumbai-open-spaces.module').then(m => m.MumbaiOpenSpacesModule)
   },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: PageNotFoundComponent
+  }
 ];
 
 @NgModule({

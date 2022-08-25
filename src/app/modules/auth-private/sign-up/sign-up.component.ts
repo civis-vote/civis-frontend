@@ -185,8 +185,6 @@ export class SignUpComponent implements OnInit {
 
       const signupObject = {...this.signupObject};
       delete signupObject['agreedForTermsCondition'];
-      // signupObject['callbackUrl'] = this.cookieService.get('loginCallbackUrl');
-      // console.log(this.signupObject.callbackUrl);
       const variables = {
         auth: signupObject
       };

@@ -1,0 +1,60 @@
+<div>
+  <div class="donate-container">
+    <div class="donate-index row align-items-center" >
+      <div class="donate-index__left col-5">
+        <div class="heading-text">
+          {{'Why Donate to civis?' | translate}}
+        </div>
+        <div class="heading-tips">
+          {{"To make more people aware about legal consultation" | translate}}
+        </div>
+      </div>
+      <div class="donate-index__right offset-3 col-4">
+        <div class="form-space">
+            <form #donationForm="ngForm" (ngSubmit)="payWithRazor(donationForm)" autocomplete="off">
+              <div class="input-block">
+                <label for="name">{{'Name' | translate}}</label>
+                <div class="input-block__border">
+                    <input type="text" placeholder="Enter name" name="name" #name="ngModel" id="name" [(ngModel)]="order.name" required />
+                </div>
+              </div>
+            <div class="input-block">
+                <label for="contact">{{'Contact Number' | translate}}</label>
+                <div class="input-block__border">
+                    <input type="tel" placeholder="Contact No." name="contact" #contact="ngModel" id="contact" pattern="[0-9]{10}" [(ngModel)]="order.contact" required/>
+                </div>
+                <div *ngIf="contact.invalid && (contact.touched || donationForm.submitted)" class="error-msg">
+                  {{'Contact is invalid' | translate}}
+                </div>
+            </div>
+            <div class="input-block">
+                <label for="amount">{{'Amount' | translate}}</label>
+                <div class="input-block__border">
+                    <input type="number" placeholder="Amount" name="amount" #amount="ngModel" id="amount" [(ngModel)]="order.amount" required />
+                </div>
+                <div *ngIf="amount.invalid && (amount.touched || donationForm.submitted)" class="error-msg">
+                  {{'Amount is Required' | translate}}
+                </div>
+            </div>
+            <div class="input-block">
+              <label for="email">{{'Email' | translate}}</label>
+              <div class="input-block__border">
+                  <input type="email" placeholder="Enter Email" name="email" #email="ngModel" id="email" [(ngModel)]="order.email" email />
+              </div>
+              <div *ngIf="email.invalid && (email.touched || donationForm.submitted)" class="error-msg">
+                <div *ngIf="email.errors.required">{{'Email is Required' | translate}}</div>
+                <div *ngIf="email.errors.email">{{'Email must be a valid email address' | translate}}</div>
+            </div>
+            </div>
+            <div>
+                <button type="submit" class="btn submit-btn">
+                  <p class="m-0">{{'Submit' | translate}}</p>
+                </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

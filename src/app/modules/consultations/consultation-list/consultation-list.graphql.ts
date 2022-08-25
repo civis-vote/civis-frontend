@@ -1,4 +1,18 @@
 import gql from 'graphql-tag';
+import { environment } from '../../../../environments/environment';
+//TODO: Profanity filter feature, remove condition when ready fo deployment to production
+const fragments = {
+  locationId: !environment.production ? gql `
+    fragment locationId on Ministry {
+      name
+      locationId
+    }
+  `: gql `
+    fragment locationId on Ministry {
+      name
+    }
+  `
+}
 
 export const ConsultationList = gql`
   query consultationList($perPage: Int, $page: Int, $statusFilter: String, $featuredFilter: Boolean, $sort: ConsultationSorts, $sortDirection: SortDirections ) {
@@ -20,7 +34,7 @@ export const ConsultationList = gql`
               url
             }
           }
-          name
+          ... locationId
         }
         status
       }
@@ -31,4 +45,5 @@ export const ConsultationList = gql`
       }
     }
   }
+  ${fragments.locationId}
 `

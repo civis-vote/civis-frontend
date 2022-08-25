@@ -20,12 +20,11 @@ import {
 } from 'src/app/shared/functions/modular.functions';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
-import {
-  ConsultationProfileCurrentUser,
-  SubmitResponseQuery,
-} from '../consultation-profile.graphql';
+import { ConsultationProfileCurrentUser, SubmitResponseQuery, CreateUserCountRecord, UpdateUserCountRecord,UserCountUser } from '../consultation-profile.graphql';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { profanityList } from 'src/app/graphql/queries.graphql';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-consultation-response-text',
@@ -63,6 +62,27 @@ export class ConsultationResponseTextComponent
   responseSubmitLoading: boolean;
   scrollToError: any;
   authModal = false;
+  isConfirmModal = false;
+  isResponseShort = false;
+  confirmMessage = {
+    msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
+    title: ''
+  };
+  responseMessage = {
+      msg: 'Are you sure?',
+      title: ''
+    };
+  nudgeMessageDisplayed = false;
+  nudgeShortMessageDisplayed = false;
+  profanityCount: any;
+  shortResponseCount: any;
+  userData:any;
+  profanity_count_changed: boolean=false;
+  short_response_count_changed: boolean=false;
+  isUserResponseProfane: boolean=false;
+  responseStatus = 0;
+  profaneWords = [];
+  environment: any = environment;
 
   constructor(
     private userService: UserService,
@@ -78,6 +98,21 @@ export class ConsultationResponseTextComponent
       .subscribe((consulationId: any) => {
         this.consultationId = consulationId;
       });
+      //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+      if(!environment.production){
+        this.apollo.watchQuery({
+          query: profanityList,
+          fetchPolicy: 'network-only'
+        })
+        .valueChanges
+        .pipe(
+          map((res: any) => res.data)
+        )
+        .subscribe((response: any) => {
+          this.profaneWords = response.profanityList.data.map((profane) => profane.profaneWord);
+        }, (err: any) => {
+        });
+      }
   }
 
   ngOnInit(): void {
@@ -105,7 +140,6 @@ export class ConsultationResponseTextComponent
             behavior: 'smooth',
           });
         }
-
       }
     });
   }
@@ -123,8 +157,9 @@ export class ConsultationResponseTextComponent
       consultationId: this.consultationId,
       visibility: this.responseVisibility && this.currentUser?.isVerified ? "shared" : "anonymous",
       responseText: this.responseText,
+      //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+      responseStatus: !environment.production ? this.responseStatus : 0,
       satisfactionRating: this.responseFeedback,
-      responseStatus: 0,
     };
     if (checkPropertiesPresence(consultationResponse)) {
       consultationResponse['templateId'] = this.templateId
@@ -341,8 +376,32 @@ export class ConsultationResponseTextComponent
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
-          this.submitResponse(consultationResponse);
-          this.showError = false;
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          if(!environment.production){
+            // this query fetches the data for the user
+            this.apollo.watchQuery({
+              query: UserCountUser,
+              variables: {userId:this.currentUser.id},
+              fetchPolicy:'no-cache'
+            })
+            .valueChanges
+            .pipe (
+              map((res: any) => res.data.userCountUser)
+            )
+            .subscribe(data => {
+              // here this check ensures that this query doesn't runs again when we update the record
+              if(!this.profanity_count_changed && !this.short_response_count_changed){
+                this.userData=data;
+                this.checkAndUpdateProfanityCount();
+              }
+            }, err => {
+              const e = new Error(err);
+              this.errorService.showErrorModal(err);
+            });
+          } else {
+            this.submitResponse(consultationResponse);
+            this.showError = false;
+          }
         } else {
           this.authModal = true;
           localStorage.setItem(
@@ -358,6 +417,160 @@ export class ConsultationResponseTextComponent
       this.showError = true;
       this.scrollToError = true;
     }
+  }
+
+  updateResponseCount(){
+    if (this.userData!==null){
+      this.shortResponseCount=this.userData.shortResponseCount;
+    }
+    else{
+      this.shortResponseCount=0;
+      if((this.responseText.length - 8) <= 50){
+        this.shortResponseCount+=1;
+        this.apollo.mutate({
+          mutation: UpdateUserCountRecord,
+          variables:{
+            userCount:{
+              userId: this.currentUser.id,
+              profanityCount: 0,
+              shortResponseCount: this.shortResponseCount
+            }
+          },
+        })
+        .subscribe((data) => {
+           this.invokeSubmitResponse();
+        }, err => {
+          this.errorService.showErrorModal(err);
+        });
+        this.short_response_count_changed=true;
+        return;
+      }
+    }
+
+    if((this.responseText.length - 8) <= 50) {
+      if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
+        this.isResponseShort = true;
+        this.nudgeShortMessageDisplayed=true;
+        return;
+      }
+      this.shortResponseCount+=1;
+    } else {
+      this.shortResponseCount=0;
+    }
+
+    this.apollo.mutate({
+      mutation: UpdateUserCountRecord,
+      variables:{
+        userCount:{
+          userId: this.currentUser.id,
+          profanityCount: this.userData.profanityCount,
+          shortResponseCount: this.shortResponseCount
+        }
+      },
+    })
+    .subscribe((data) => {
+      this.invokeSubmitResponse();
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+    this.short_response_count_changed=true;
+    return;
+  }
+
+  checkAndUpdateProfanityCount(){
+    var Filter = require('bad-words'),
+    filter = new Filter({list: this.profaneWords});
+    this.isUserResponseProfane=filter.isProfane(this.responseText);
+
+    //if we have no record for the user then we will create one
+    //if response is profane then we will if display the nudge first, and then only proceed further
+    //if response is not profane, then only we will check for the short response count, otherwise we will submit the response
+    if (this.userData!==null){
+      this.profanityCount=this.userData.profanityCount;
+    }
+    else{
+      this.profanityCount=0;
+      if(this.isUserResponseProfane){
+        if (!this.nudgeMessageDisplayed) {
+          this.isConfirmModal = true;
+          this.nudgeMessageDisplayed=true;
+          return;
+        }
+        this.profanityCount+=1;
+        this.responseStatus=+1;
+      }
+      this.apollo.mutate({
+        mutation: CreateUserCountRecord,
+        variables:{
+          userCount:{
+            userId: this.currentUser.id,
+            profanityCount: this.profanityCount,
+            shortResponseCount: 0
+          }
+        },
+      })
+      .subscribe((data) => {
+        if(this.profanityCount == 0 ){
+          this.updateResponseCount();
+        } else {
+          this.invokeSubmitResponse();
+        }
+      }, err => {
+        this.errorService.showErrorModal(err);
+      });
+      this.profanity_count_changed=true;
+      return;
+    }
+
+    //if we have a record for the user in our table
+    // if profane then display nudge, if the profanity count > 3, then submit the response with the second nudge
+    // if not profane then proceed with the short response count check
+    if(this.isUserResponseProfane){
+      if (!this.nudgeMessageDisplayed) {
+        this.isConfirmModal = true;
+        this.nudgeMessageDisplayed=true;
+        return;
+      }
+      this.profanityCount+=1;
+      this.responseStatus=+1;
+      if(this.profanityCount>=3){
+        this.confirmMessage.msg = 'We detected that your response may contain harmful language. This response will be moderated and sent to the Government at our moderator\'s discretion.'
+        this.isConfirmModal = true;
+      }
+    }
+    else{
+      this.updateResponseCount();
+      return;
+    }
+
+    //update the existing record to reflect new profanity count
+    this.apollo.mutate({
+      mutation: UpdateUserCountRecord,
+      variables:{
+        userCount:{
+          userId: this.currentUser.id,
+          profanityCount: this.profanityCount,
+          shortResponseCount: this.userData.shortResponseCount
+        }
+       },
+    })
+    .subscribe((data) => {
+      this.invokeSubmitResponse();
+    }, err => {
+      this.errorService.showErrorModal(err);
+    });
+    this.profanity_count_changed=true;
+  }
+
+  confirmed(event) {
+    this.isConfirmModal = false;
+    this.isResponseShort = false;
+  }
+
+  invokeSubmitResponse(){
+    const consultationResponse = this.getConsultationResponse();
+    this.submitResponse(consultationResponse);
+    this.showError = false;
   }
 
   submitResponse(consultationResponse) {

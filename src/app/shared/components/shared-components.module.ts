@@ -22,6 +22,7 @@ import { ResendVerificationComponent } from './resendVerification/resendVerifica
 import { CaseStudiesListComponent } from './case-studies-list/case-studies-list.component';
 import { AuthModalComponent } from './auth-modal/auth-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
+import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { ModalModule } from 'ngx-bootstrap';
     ResponseAnswersComponent,
     ResendVerificationComponent,
     CaseStudiesListComponent,
-    AuthModalComponent
+    AuthModalComponent,
+    ProfaneModalComponent
   ],
   imports: [
     CommonModule,
@@ -63,7 +65,8 @@ import { ModalModule } from 'ngx-bootstrap';
     ResponseAnswersComponent,
     ResendVerificationComponent,
     CaseStudiesListComponent,
-    AuthModalComponent
+    AuthModalComponent,
+    ProfaneModalComponent
   ],
   providers: [
     LinearLoaderService

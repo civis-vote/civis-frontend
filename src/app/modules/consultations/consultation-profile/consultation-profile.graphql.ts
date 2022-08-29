@@ -245,6 +245,36 @@ export const VoteDeleteQuery = gql `
   }
 `;
 
+export const CreateUserCountRecord = gql`
+  mutation userCountCreate($userCount:UserCountInput!){
+    userCountCreate(userCount: $userCount){
+      userId
+      profanityCount
+      shortResponseCount
+    }
+  }
+`;
+
+export const UpdateUserCountRecord = gql`
+  mutation userCountUpdate($userCount:UserCountInput!){
+    userCountUpdate(userCount: $userCount){
+      userId
+      profanityCount
+      shortResponseCount
+    }
+  }
+`;
+
+export const UserCountUser = gql`
+  query userCountUser($userId: Int!){
+    userCountUser(userId: $userId){
+      userId
+      profanityCount
+      shortResponseCount
+    }
+  }
+`;
+
 export const SubmitResponseQuery = gql`
   mutation consultationResponseCreate($consultationResponse: ConsultationResponseCreateInput!){
     consultationResponseCreate(consultationResponse: $consultationResponse){
@@ -305,6 +335,7 @@ export const SubmitResponseQuery = gql`
               }
               downVoteCount
               responseText
+              responseStatus
               isVerified
               roundNumber
               templatesCount

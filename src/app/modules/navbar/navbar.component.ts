@@ -8,6 +8,7 @@ import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consulta
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -28,6 +29,7 @@ export class NavbarComponent implements OnInit {
   activeCount: any;
   consultationId: number;
   reviewType: any;
+  environment: any = environment;
 
   menuObject = {
     name: 'Read & Respond'
@@ -223,6 +225,10 @@ export class NavbarComponent implements OnInit {
       const consulationId = urlArray[consultationIndex];
       this.router.navigateByUrl(`/consultations/${consulationId}/${subRoute}`);
     }
+  }
+
+  donate() {
+    this.router.navigateByUrl('/donate');
   }
 
   submitConsultation() {

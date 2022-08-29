@@ -26,6 +26,9 @@
 </section>
 <app-thank-you-modal *ngIf="showThankYouModal" [points]="earnedPoints" [profileData]="profileData" (closeThankYouModal)="onCloseThanksModal()">
 </app-thank-you-modal>
+<!-- TODO: Profanity filter feature, remove condition when ready fo deployment to production -->
+<app-profane-modal *ngIf="isConfirmModal && !environment.production" [message]='confirmMessage' [showCancel]=false (close)='confirmed($event)'></app-profane-modal>
+<app-profane-modal *ngIf="isResponseShort && !environment.production" [message]='responseMessage' [showCancel]=false (close)='confirmed($event)'></app-profane-modal>
 
 
 <div bsModal #emailVerificationModal="bs-modal" *ngIf="emailVerification" class="modal fade logout-confirm-modal" tabindex="-1"

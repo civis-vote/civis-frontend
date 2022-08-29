@@ -23,6 +23,7 @@ import { CaseStudiesListComponent } from './case-studies-list/case-studies-list.
 import { AuthModalComponent } from './auth-modal/auth-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
+import { ConfirmEmailModule } from '../confirm-email-modal/confirm-email.module';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
     ProfaneModalComponent
   ],
   imports: [
+    ConfirmEmailModule,
     CommonModule,
     LinearLoaderModule,
     RouterModule,

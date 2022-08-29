@@ -69,14 +69,11 @@
 
     <div class="app-navbar__right-item">
       <div class="nav-btns" *ngIf="currentUrl !== 'consultations-profile'">
-        <button class="btn btn-oval" (click)="donate()">
-          {{'Donate' | translate}}
-        </button>
-      </div>
-      <div class="nav-btns" *ngIf="currentUrl !== 'consultations-profile'">
-        <button class="btn btn-oval" (click)="submitConsultation()">
-          {{'Submit a Consultation' | translate}}
-        </button>
+        <a href="https://pages.razorpay.com/Civis">
+          <button class="btn btn-oval">
+            {{'Donate' | translate}}
+          </button>
+        </a>
       </div>
       <div class="nav-btns" *ngIf="!currentUser">
         <button class="btn btn-transparent auth-btn" (click)="onSignUp()">{{'Log In / Sign Up' | translate}}</button>
@@ -143,12 +140,11 @@
               {{'How Civis Works' | translate}}
             </button>
           <div class="nav-btn">
-            <button class="btn-oval" (click)="closeMenu(); donate()">
-              {{'Donate' | translate}}
-            </button>
-          </div>
-          <div class="nav-btn">
-            <button class="btn-oval" (click)="closeMenu(); submitConsultation()">{{'Submit a Consultation' | translate}}</button>
+            <a href="https://pages.razorpay.com/Civis">
+              <button class="btn-oval" (click)="closeMenu()">
+                {{'Donate' | translate}}
+              </button>
+            </a>
           </div>
           <div class="nav-btn" *ngIf="!currentUser">
             <button class="close-btn btn btn-transparent" (click)="closeMenu(); onSignUp()">
@@ -160,6 +156,3 @@
     </div>
   </div>
 </div>
-
-<app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
-</app-confirm-email-modal>

@@ -4,6 +4,7 @@
       <div class="left-item">
         <ul class="item-list">
           <li [routerLink]="['/about-us']">{{'About Us' | translate}}</li>
+          <li (click)="submitConsultation()">{{'Submit a Consultation' | translate}}</li>
           <a data-event="click-blog" href="https://medium.com/civis-vote" target="_blank" class="text-decoration-none">
             <li>{{'Blog' | translate}}</li>
           </a>
@@ -79,3 +80,6 @@
     </div>
   </footer>
 </div>
+
+<app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
+</app-confirm-email-modal>

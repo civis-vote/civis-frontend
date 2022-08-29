@@ -192,11 +192,15 @@
         color: rgba(255, 255, 255, 0.7);
       }
 
-      @media screen and (max-width: 991px) {
-        display: none;
+        @media screen and (max-width: 991px) {
+          display: none;
+        }
       }
     }
-  }
+
+    .nav-btns:first-child {
+      display: block;
+    }
 
   .xs-logo {
     @media screen and (max-width: 991px) {
@@ -255,7 +259,7 @@
     .btn-oval {
       font-size: 14px;
       font-weight: bold;
-      background: rgba(14, 115, 185, 0.7) !important;
+      background: #F0653A !important;
       border-radius: 33px;
       color: #ffffff !important;
       margin-right: 15px;

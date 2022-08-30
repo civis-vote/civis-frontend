@@ -54,7 +54,6 @@ export class FooterComponent implements OnInit {
       this.router.navigateByUrl('/auth');
       return;
     } else {
-      console.log(this.currentUser, this.currentUser.confirmedAt);
       if (this.currentUser && this.currentUser.confirmedAt) {
         this.router.navigateByUrl('/consultations/new');
       } else {

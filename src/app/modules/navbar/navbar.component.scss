@@ -196,6 +196,10 @@
         display: none;
       }
     }
+
+    .donate-btn {
+      display: block;
+    }
   }
 
   .xs-logo {
@@ -255,7 +259,7 @@
     .btn-oval {
       font-size: 14px;
       font-weight: bold;
-      background: rgba(14, 115, 185, 0.7) !important;
+      background: #f0653a !important;
       border-radius: 33px;
       color: #ffffff !important;
       margin-right: 15px;

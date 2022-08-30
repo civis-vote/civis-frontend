@@ -46,7 +46,6 @@ export class NavbarComponent implements OnInit {
     },
   ];
   activeTab: string;
-  showConfirmEmailModal: boolean;
   consultationStatus: any;
 
   constructor(
@@ -224,23 +223,6 @@ export class NavbarComponent implements OnInit {
     if (consultationIndex > 0) {
       const consulationId = urlArray[consultationIndex];
       this.router.navigateByUrl(`/consultations/${consulationId}/${subRoute}`);
-    }
-  }
-
-  donate() {
-    this.router.navigateByUrl('/donate');
-  }
-
-  submitConsultation() {
-    if (!this.currentUser) {
-      this.router.navigateByUrl('/auth');
-      return;
-    } else {
-      if (this.currentUser && this.currentUser.confirmedAt) {
-        this.router.navigateByUrl('/consultations/new');
-      } else {
-        this.showConfirmEmailModal = true;
-      }
     }
   }
 

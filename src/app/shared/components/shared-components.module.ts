@@ -21,8 +21,9 @@ import { ResponseAnswersComponent } from './response-answers/response-answers.co
 import { ResendVerificationComponent } from './resendVerification/resendVerification.component';
 import { CaseStudiesListComponent } from './case-studies-list/case-studies-list.component';
 import { AuthModalComponent } from './auth-modal/auth-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { AccordionModule, ModalModule } from 'ngx-bootstrap';
 import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
+import { NotificationDrawerComponent } from './notification-drawer/notification-drawer.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
     ResendVerificationComponent,
     CaseStudiesListComponent,
     AuthModalComponent,
-    ProfaneModalComponent
+    ProfaneModalComponent,
+    NotificationDrawerComponent
   ],
   imports: [
     CommonModule,
@@ -48,6 +50,7 @@ import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
     FormsModule,
     NgSelectModule,
     CookieModule.forRoot(),
+    AccordionModule.forRoot(),
     PipesModule,
     ModalModule
   ],
@@ -66,7 +69,8 @@ import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
     ResendVerificationComponent,
     CaseStudiesListComponent,
     AuthModalComponent,
-    ProfaneModalComponent
+    ProfaneModalComponent,
+    NotificationDrawerComponent
   ],
   providers: [
     LinearLoaderService

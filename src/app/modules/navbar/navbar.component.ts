@@ -8,6 +8,10 @@ import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consulta
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
+import { UserNotificationAnalysisQuery } from '../landing/landing.graphql';
+import {
+  isObjectEmpty,
+} from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-navbar',
@@ -16,7 +20,7 @@ import { CookieService } from 'ngx-cookie';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarComponent implements OnInit {
-
+  showDrawer = false;
   @ViewChild('menuModal', { static: false }) menuModal;
   @ViewChild('userProfileElement', { static: false }) userProfileElement: ElementRef;
   showNav = true;
@@ -47,6 +51,7 @@ export class NavbarComponent implements OnInit {
   showConfirmEmailModal: boolean;
   consultationStatus: any;
 
+  notifications: any;
   constructor(
     private router: Router,
     private userService: UserService,
@@ -78,6 +83,56 @@ export class NavbarComponent implements OnInit {
     this.getActiveConsulationCount();
     this.getActiveTab();
     this.watchConsultationStatus();
+  }
+
+  setNotifications() {
+    this.notifications = [];
+    this.apollo.query({
+      query: UserNotificationAnalysisQuery,
+      variables: {userId: 2},
+      fetchPolicy:'no-cache'
+    })
+    .subscribe((uan: any) => {
+      if(uan.data.userNotificationAnalysis.all.length) {
+        this.notifications = uan.data.userNotificationAnalysis.all.filter(currNot => currNot !== null);
+      };
+
+      this.checkForDraftNotifications();
+    });
+  }
+
+  checkForDraftNotifications() {
+    const draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length && !currentUser.notificationSeen) {
+        const notificationObj = {
+          type: 'DRAFT',
+          main_text: 'Did you forget something?',
+          sub_text: 'Did you forget to submit your response on these consultations? Your response is lying in the drafts! Click here to submit it to the government',
+          consultation_list: currentUser.consultations.filter(currConsult => currConsult.responseDeadline > new Date().toISOString())
+        }
+
+        this.notifications.push(notificationObj);
+      }
+    }
+  }
+
+  openNotificationDrawer() {
+    this.showDrawer = !this.showDrawer;
+  }
+
+  closeModal(event) {
+    this.showDrawer = false;
+    this.notifications = event;
   }
 
   openMenu() {
@@ -120,6 +175,7 @@ export class NavbarComponent implements OnInit {
     .subscribe((data) => {
       if (data) {
         this.currentUser = this.userService.currentUser;
+        this.setNotifications();
         if (this.consultationId) {
           this.getConsultationProfile();
         }

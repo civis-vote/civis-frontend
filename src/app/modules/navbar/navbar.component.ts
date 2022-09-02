@@ -89,7 +89,7 @@ export class NavbarComponent implements OnInit {
     this.notifications = [];
     this.apollo.query({
       query: UserNotificationAnalysisQuery,
-      variables: {userId: this.currentUser.id},
+      variables: {userId: 2},
       fetchPolicy:'no-cache'
     })
     .subscribe((uan: any) => {
@@ -132,7 +132,7 @@ export class NavbarComponent implements OnInit {
 
   closeModal(event) {
     this.showDrawer = false;
-    this.notifications = event;
+    !event && this.setNotifications();
   }
 
   openMenu() {

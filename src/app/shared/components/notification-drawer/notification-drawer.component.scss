@@ -44,7 +44,7 @@
   }
 
   ::ng-deep {
-    .panel-group .notification-ready {
+    .panel-group {
       margin-bottom: 5px;
       .card {
         background-color: #BFE4FF !important;
@@ -62,43 +62,7 @@
           overflow: auto !important;
         }
 
-        .li-notification-ready {
-          color: #0e73b9;
-          font-weight: bolder;
-        }
-
-        .panel-heading {
-          border-bottom: none !important;
-          padding: 0.2rem !important;
-
-          .btn-link {
-            color: #0E73B9 !important;
-            text-align: start !important
-          }
-        }
-      }
-    }
-
-
-    .panel-group .notification-seen {
-      margin-bottom: 5px;
-      .card {
-        background-color: #E5F4FF !important;
-        border-bottom: 2px solid #BFE4FF;
-        border-radius: 0 !important;
-
-        // &:hover {
-        //   background-color: #BFE4FF !important;
-        //   box-shadow: 0px 0px 3px #a0d4f8 !important;
-        // }
-
-        .card-body {
-          padding: 1rem 0rem 1rem 2rem !important;
-          max-height: 25rem !important;
-          overflow: auto !important;
-        }
-
-        .li-notification-ready {
+        li {
           color: #0e73b9;
           font-weight: bolder;
         }

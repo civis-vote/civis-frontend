@@ -18,8 +18,8 @@
         <ng-container *ngFor="let notify of notifications">
         <ng-container *ngIf="!notify.notificationSeen">
           <accordion [isAnimated]="true" class="notification-accordion">
-            <accordion-group [class.notification-ready]="!notify.notificationSeen"
-            [class.notification-seen]="notify.notificationSeen" heading="{{ notify.main_text }}" [isDisabled]="!notify?.consultation_list.length"
+            <accordion-group
+            heading="{{ notify.main_text }}" [isDisabled]="!notify?.consultation_list.length"
             (click)="notificationClicked(notify)">
               <ng-container *ngIf="notify?.consultation_list.length">
                 <div class="notification-sub-header pb-2" >
@@ -29,8 +29,6 @@
                   <ng-container *ngFor="let subNotify of notify?.consultation_list">
                     <li class="cursor-pointer"
                         *ngIf="!subNotify.notificationSeen"
-                        [class.li-notification-ready]="!subNotify.notificationSeen"
-                        [class.li-notification-seen]="subNotify.notificationSeen"
                         (click)="navigateToConsultations(notify, subNotify, notify.type !== 'DRAFT' ? subNotify.consultation_id : subNotify.id)">
                           {{ subNotify.consultation_title }}
                     </li>

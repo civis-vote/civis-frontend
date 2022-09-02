@@ -22,6 +22,7 @@ mutation userNotification($notificationId: Int!){
 })
 export class NotificationDrawerComponent implements OnInit {
   @Input() notifications = [];
+  reload = false;
   @Output() close: EventEmitter<any> = new EventEmitter();
   @ViewChild('notificationModal', { static: false }) notificationModal: ModalDirective;
 
@@ -62,14 +63,14 @@ export class NotificationDrawerComponent implements OnInit {
   }
 
   updateNotification(notify, subNotify, consulationId) {
+    this.reload = false;
     if (notify.type === 'LEADERBOARD_UPDATE') {
       this.router.navigateByUrl(`/leader-board`);
-      subNotify.notificationSeen = true;
       this.closeModal();
     } else {
-      const reload  = (this.router.url.indexOf('consultations') !== -1);
+      this.reload  = (this.router.url.indexOf('consultations') !== -1);
       this.router.navigateByUrl(`/consultations/${consulationId}/read`);
-      if (reload) {
+      if (this.reload) {
         setTimeout(() => {
           window.location.reload();
           window.scrollTo(0, 0);
@@ -77,16 +78,9 @@ export class NotificationDrawerComponent implements OnInit {
       }
 
       this.closeModal();
-      subNotify.notificationSeen = true;
-      const isNotificationReadyPresent = notify?.consultation_list.some(currNoty => !currNoty.notificationSeen);
-
-      if (!isNotificationReadyPresent) {
-        notify.notificationSeen = true;
-
         if (notify.type === 'DRAFT') {
           this.updateDraftNotifications();
         }
-      }
     }
   }
 
@@ -108,7 +102,7 @@ export class NotificationDrawerComponent implements OnInit {
 
   closeModal() {
     this.notificationModal.hide();
-    this.close.emit(this.notifications);
+    this.close.emit(this.reload);
   }
 
   notificationClicked(notify) {

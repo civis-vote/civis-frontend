@@ -89,7 +89,7 @@ export class NavbarComponent implements OnInit {
     this.notifications = [];
     this.apollo.query({
       query: UserNotificationAnalysisQuery,
-      variables: {userId: 2},
+      variables: {userId: this.currentUser.id},
       fetchPolicy:'no-cache'
     })
     .subscribe((uan: any) => {

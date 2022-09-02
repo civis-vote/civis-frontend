@@ -50,37 +50,35 @@ export class NotificationDrawerComponent implements OnInit {
       this.apollo.mutate({
         mutation: UpdateNotificationStatus,
         variables:{
-            notificationId: subNotify.id
+            notificationId: subNotify.notification_id ? subNotify.notification_id : subNotify.id
         },
         })
         .subscribe((data) => {
           this.updateNotification(notify, subNotify, consulationId)
         }, err => {
-        this.errorService.showErrorModal(err);
+          this.errorService.showErrorModal(err);
         });
     }
   }
 
   updateNotification(notify, subNotify, consulationId) {
-    const reload  = (this.router.url.indexOf('consultations') !== -1);
-    if (notify.type === 'RANK') {
+    if (notify.type === 'LEADERBOARD_UPDATE') {
       this.router.navigateByUrl(`/leader-board`);
+      subNotify.notificationSeen = true;
+      this.closeModal();
     } else {
+      const reload  = (this.router.url.indexOf('consultations') !== -1);
       this.router.navigateByUrl(`/consultations/${consulationId}/read`);
-    }
-
-    if (reload) {
-      setTimeout(() => {
-        window.location.reload();
-        window.scrollTo(0, 0);
-      })
-    }
+      if (reload) {
+        setTimeout(() => {
+          window.location.reload();
+          window.scrollTo(0, 0);
+        })
+      }
 
       this.closeModal();
-
       subNotify.notificationSeen = true;
-
-      const isNotificationReadyPresent = notify.consultation_list.some(currNoty => !currNoty.notificationSeen);
+      const isNotificationReadyPresent = notify?.consultation_list.some(currNoty => !currNoty.notificationSeen);
 
       if (!isNotificationReadyPresent) {
         notify.notificationSeen = true;
@@ -88,9 +86,8 @@ export class NotificationDrawerComponent implements OnInit {
         if (notify.type === 'DRAFT') {
           this.updateDraftNotifications();
         }
-      } else {
-
       }
+    }
   }
 
   updateDraftNotifications() {
@@ -115,8 +112,8 @@ export class NotificationDrawerComponent implements OnInit {
   }
 
   notificationClicked(notify) {
-    if (!notify.consultation_list.length) {
-      notify.notificationSeen = true
+    if (notify.type === 'LEADERBOARD_UPDATE') {
+      this.navigateToConsultations(notify, notify, null)
     }
   }
 }

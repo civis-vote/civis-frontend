@@ -7,9 +7,9 @@
     "sort-translations": "node sortTranslation.js",
     "serve:staging": "ng serve --configuration=dev-staging",
     "serve:prod": "ng serve --configuration=dev-production",
-    "build": "sort-translations && ng build --configuration=production",
-    "build:production": "sort-translations && ng build --configuration=production",
-    "build:staging": "sort-translations && ng build --configuration=staging",
+    "build": "npm run sort-translations && ng build --configuration=production",
+    "build:production": "npm run sort-translations && ng build --configuration=production",
+    "build:staging": "npm run sort-translations && ng build --configuration=staging",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -118,7 +118,7 @@ export class NavbarComponent implements OnInit {
           type: 'DRAFT',
           main_text: 'Did you forget something?',
           sub_text: 'Did you forget to submit your response on these consultations? Your response is lying in the drafts! Click here to submit it to the government',
-          consultation_list: currentUser.consultations.filter(currConsult => currConsult.responseDeadline >= new Date().toISOString())
+          consultation_list: currentUser.consultations.filter(currConsult => new Date(currConsult.responseDeadline).toDateString() >= new Date().toDateString())
         }
 
         this.notifications.push(notificationObj);

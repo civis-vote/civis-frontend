@@ -99,8 +99,8 @@ export class ConsultationsSummaryComponent implements OnInit {
 
   splitResponses(responsesList) {
     if (responsesList.length) {
-      this.annonymousResponses = responsesList.filter(response => (response.node.user === null || response.node.user === undefined));
-      this.publicResponses = responsesList.filter(response => response.node.user !== null);
+      this.annonymousResponses = responsesList.filter(response => !response.node.user);
+      this.publicResponses = responsesList.filter(response => response.node.user);
       this.publicResponsesLength = this.publicResponses.filter((response) => response.node.roundNumber === this.activeRoundNumber).length;
       this.annonymousResponsesLength =
       this.annonymousResponses.filter((response) => response.node.roundNumber === this.activeRoundNumber).length;

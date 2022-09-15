@@ -94,10 +94,9 @@ export class NotificationDrawerComponent implements OnInit {
 
     if (currentUser) {
      currentUser.notificationSeen = true;
-    }
-
-    localStorage.removeItem('responseDraft');
+     localStorage.removeItem('responseDraft');
     localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+    }
   }
 
   closeModal() {

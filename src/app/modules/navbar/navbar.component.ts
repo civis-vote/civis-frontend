@@ -12,6 +12,7 @@ import { UserNotificationAnalysisQuery } from '../landing/landing.graphql';
 import {
   isObjectEmpty,
 } from 'src/app/shared/functions/modular.functions';
+import moment from 'moment';
 
 @Component({
   selector: 'app-navbar',
@@ -118,7 +119,7 @@ export class NavbarComponent implements OnInit {
           type: 'DRAFT',
           main_text: 'Did you forget something?',
           sub_text: 'Did you forget to submit your response on these consultations? Your response is lying in the drafts! Click here to submit it to the government',
-          consultation_list: currentUser.consultations.filter(currConsult => new Date(currConsult.responseDeadline).toDateString() >= new Date().toDateString())
+          consultation_list: currentUser.consultations.filter(currConsult => moment(new Date(currConsult.responseDeadline)).isSameOrAfter(moment(new Date())))
         }
 
         this.notifications.push(notificationObj);

@@ -6,6 +6,7 @@ import { LinearLoaderService } from '../../../shared/components/linear-loader/li
 import * as moment from 'moment';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { UserService } from 'src/app/shared/services/user.service';
+import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-consultation-list',
@@ -76,6 +77,9 @@ export class ConsultationListComponent implements OnInit {
             this.consultationListData = item;
             this.consultationListArray = item.data;
             this.consultationListArray = this.sortConsulationList(item.data);
+
+            this.updateDraftNotifications();
+
             this.consultationListPaging = item.paging;
             if (!this.consultationListArray.length || 
               (this.consultationListPaging.currentPage === this.consultationListPaging.totalPages)) {
@@ -88,6 +92,35 @@ export class ConsultationListComponent implements OnInit {
             this.loader.hide();
             this.errorService.showErrorModal(err);
         });
+  }
+
+  updateDraftNotifications() {
+    let draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length) {
+        
+        this.consultationListArray.forEach(allConsult => {
+          currentUser.consultations.forEach(draftConsult => {
+            if (allConsult.id === draftConsult.id) {
+              draftConsult.responseDeadline = allConsult.responseDeadline;
+              draftConsult.consultation_title = allConsult.title;
+            }
+          })
+        })
+
+        localStorage.removeItem('responseDraft');
+        localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+      }
+    }
   }
 
   sortConsulationList(list) {

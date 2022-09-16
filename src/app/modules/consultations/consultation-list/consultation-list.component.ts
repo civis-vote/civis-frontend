@@ -28,7 +28,7 @@ export class ConsultationListComponent implements OnInit {
   loadClosedConsultation = false;
   loadingCard = false;
   currentUser: any;
-  
+
   @HostListener('document:scroll', ['$event'])
   onScroll(event: any) {
     const boundingBox = document.documentElement.getBoundingClientRect();
@@ -38,8 +38,8 @@ export class ConsultationListComponent implements OnInit {
   }
 
   constructor(
-    private apollo: Apollo, 
-    private loader: LinearLoaderService, 
+    private apollo: Apollo,
+    private loader: LinearLoaderService,
     private errorService: ErrorService,
     private userService: UserService
     ) { }
@@ -67,7 +67,7 @@ export class ConsultationListComponent implements OnInit {
     this.loader.show();
     this.loadingElements.consultationList = true;
     this.consultationListQuery
-      .valueChanges 
+      .valueChanges
         .pipe (
           map((res: any) => res.data.consultationList)
         )
@@ -81,7 +81,7 @@ export class ConsultationListComponent implements OnInit {
             this.updateDraftNotifications();
 
             this.consultationListPaging = item.paging;
-            if (!this.consultationListArray.length || 
+            if (!this.consultationListArray.length ||
               (this.consultationListPaging.currentPage === this.consultationListPaging.totalPages)) {
                 this.loadClosedConsultation = true;
                 this.fetchClosedConsultationList();
@@ -107,10 +107,11 @@ export class ConsultationListComponent implements OnInit {
       }
 
       if (currentUser && currentUser.consultations.length) {
-        
+
         this.consultationListArray.forEach(allConsult => {
           currentUser.consultations.forEach(draftConsult => {
             if (allConsult.id === draftConsult.id) {
+
               draftConsult.responseDeadline = allConsult.responseDeadline;
               draftConsult.consultation_title = allConsult.title;
             }
@@ -133,7 +134,7 @@ export class ConsultationListComponent implements OnInit {
     }
     return list;
   }
-  
+
   loadMoreCard() {
     if (this.loadingElements.consultationListMore || this.loadingElements.consultationList) {
       return;
@@ -170,7 +171,7 @@ export class ConsultationListComponent implements OnInit {
         }
       });
     }
-  }  
+  }
 
   getQuery(status) {
     const variables = {
@@ -183,13 +184,13 @@ export class ConsultationListComponent implements OnInit {
     };
     return this.apollo.watchQuery({query: ConsultationList, variables});
   }
-  
+
   fetchClosedConsultationList() {
     this.consultationListQuery = this.getQuery('expired');
     this.loader.show();
     this.loadingElements.consultationList = true;
     this.consultationListQuery
-      .valueChanges 
+      .valueChanges
         .pipe (
           map((res: any) => res.data.consultationList)
         )
@@ -204,9 +205,9 @@ export class ConsultationListComponent implements OnInit {
             console.log('error', err);
         });
   }
-  
+
   convertDateType(date) {
     return moment(date).format("Do MMM YY");
   }
-  
+
 }

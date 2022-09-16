@@ -249,6 +249,7 @@ export class ConsultationResponseTextComponent
         draftObj['users'] = [
           {
             id: this.currentUser ? this.currentUser.id : 'guest',
+            notificationSeen: false,
             consultations: [
               {
                 id: this.consultationId,
@@ -270,6 +271,7 @@ export class ConsultationResponseTextComponent
           );
         }
         if (currentUser) {
+          currentUser.notificationSeen= false;
           const consultation = currentUser.consultations.find(
             (item) => item.id === this.consultationId
           );
@@ -288,7 +290,7 @@ export class ConsultationResponseTextComponent
               responseText: text,
               templatesText: this.showPublicResponseOption ? false : true,
               consultation_title: this.profileData.title,
-              responseDeadline: this.profileData.responseDeadline
+              responseDeadline: this.profileData.responseDeadline,
             });
           }
           draftObj.users.forEach((item) => {
@@ -302,13 +304,14 @@ export class ConsultationResponseTextComponent
           if (draftObj.users) {
             draftObj.users.push({
               id: this.currentUser ? this.currentUser.id : 'guest',
+              notificationSeen: false,
               consultations: [
                 {
                   id: this.consultationId,
                   responseText: text,
                   templatesText: this.showPublicResponseOption ? false : true,
                   consultation_title: this.profileData.title,
-                  responseDeadline: this.profileData.responseDeadline
+                  responseDeadline: this.profileData.responseDeadline,
                 },
               ],
             });

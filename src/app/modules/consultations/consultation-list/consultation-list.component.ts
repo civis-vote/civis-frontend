@@ -107,13 +107,32 @@ export class ConsultationListComponent implements OnInit {
       }
 
       if (currentUser && currentUser.consultations.length) {
+        let responsesArray = [];
+        if (this.currentUser.responses && this.currentUser.responses.edges.length) {
+          responsesArray = this.currentUser.responses.edges.map(res => res.node.consulation.id);
+        }
 
         this.consultationListArray.forEach(allConsult => {
           currentUser.consultations.forEach(draftConsult => {
             if (allConsult.id === draftConsult.id) {
-
               draftConsult.responseDeadline = allConsult.responseDeadline;
               draftConsult.consultation_title = allConsult.title;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (moment(new Date(draftConsult.responseDeadline)).isBefore(moment(new Date()))) {
+              draftConsult.notificationSeen = true;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (responsesArray.indexOf(+(draftConsult.id)) !== -1) {
+              draftConsult.notificationSeen = true;
             }
           })
         })

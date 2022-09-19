@@ -79,12 +79,12 @@ export class NotificationDrawerComponent implements OnInit {
 
       this.closeModal();
         if (notify.type === 'DRAFT') {
-          this.updateDraftNotifications();
+          this.updateDraftNotifications(consulationId);
         }
     }
   }
 
-  updateDraftNotifications() {
+  updateDraftNotifications(consulationId = null) {
     let draftObj: any = JSON.parse(localStorage.getItem('responseDraft'));
 
     let currentUser = draftObj.users.find(
@@ -92,10 +92,21 @@ export class NotificationDrawerComponent implements OnInit {
         user.id === this.currentUser.id
     );
 
-    if (currentUser) {
-     currentUser.notificationSeen = true;
+    if (currentUser && currentUser.consultations.length) {
+      let draftConsult = currentUser.consultations.find(currConsult => consulationId === currConsult.id);
+
+      if (draftConsult) {
+          draftConsult.notificationSeen = true;
+      }
+
+      const isNotificationReadyPresent = currentUser.consultations.some(currNoty => !currNoty.notificationSeen);
+
+      if (!isNotificationReadyPresent) {
+        currentUser.notificationSeen = true;
+      }
+
      localStorage.removeItem('responseDraft');
-    localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+     localStorage.setItem('responseDraft', JSON.stringify(draftObj));
     }
   }
 

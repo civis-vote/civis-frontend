@@ -392,11 +392,16 @@ export class ConsultationResponseTextComponent
             map((res: any) => res.data.userCountUser)
           )
           .subscribe(data => {
+            // to update response submitted status for consultations stored in draft
+            this.updateDraftNotifications(consultationResponse.consultationId);
+
             // here this check ensures that this query doesn't runs again when we update the record
             if(!this.profanity_count_changed && !this.short_response_count_changed){
               this.userData=data;
               this.checkAndUpdateProfanityCount();
             }
+
+
           }, err => {
             const e = new Error(err);
             this.errorService.showErrorModal(err);
@@ -415,6 +420,37 @@ export class ConsultationResponseTextComponent
       }
       this.showError = true;
       this.scrollToError = true;
+    }
+  }
+
+  updateDraftNotifications(consulationId) {
+    let draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length) {
+          let draftConsult = currentUser.consultations.find(currConsult => consulationId === currConsult.id);
+
+          if (draftConsult) {
+              draftConsult.notificationSeen = true;
+          }
+
+          const isNotificationReadyPresent = currentUser.consultations.some(currNoty => !currNoty.notificationSeen);
+
+          if (!isNotificationReadyPresent) {
+            currentUser.notificationSeen = true;
+          }
+
+          localStorage.removeItem('responseDraft');
+          localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+      }
     }
   }
 

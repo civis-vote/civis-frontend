@@ -7,7 +7,6 @@ import * as moment from 'moment';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
-import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 
 @Component({
   selector: 'app-consultation-list',
@@ -42,8 +41,7 @@ export class ConsultationListComponent implements OnInit {
     private apollo: Apollo,
     private loader: LinearLoaderService,
     private errorService: ErrorService,
-    private userService: UserService,
-    private consultationService: ConsultationsService
+    private userService: UserService
     ) { }
 
   ngOnInit() {
@@ -79,8 +77,6 @@ export class ConsultationListComponent implements OnInit {
             this.consultationListData = item;
             this.consultationListArray = item.data;
             this.consultationListArray = this.sortConsulationList(item.data);
-
-            this.consultationService.storeConsultationList.next(this.consultationListArray);
 
             this.consultationListPaging = item.paging;
             if (!this.consultationListArray.length ||

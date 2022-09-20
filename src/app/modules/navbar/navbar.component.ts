@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, HostListener, ViewEncapsulation, ElementRef } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
-import { Apollo } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 import { map, filter } from 'rxjs/operators';
-import { ConsultationList, UserNotificationAnalysisQuery } from './navbar.graphql';
+import { ConsultationList, UserNotificationAnalysisQuery, ConsultationListAllData } from './navbar.graphql';
 import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consultations/consultation-profile/consultation-profile.graphql';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
@@ -50,7 +50,7 @@ export class NavbarComponent implements OnInit {
   activeTab: string;
   showConfirmEmailModal: boolean;
   consultationStatus: any;
-
+  consultationListQuery: QueryRef<any>;
   notifications: any;
   constructor(
     private router: Router,
@@ -87,16 +87,37 @@ export class NavbarComponent implements OnInit {
       }
     });
 
-    this.consultationService.storeConsultationList.subscribe(value => {
-      if (value && value.length) {
-        this.updateDraftNotifications(value);
-      }
-    });
-
     this.getCurrentUser();
     this.getActiveConsulationCount();
     this.getActiveTab();
     this.watchConsultationStatus();
+    this.fetchActiveConsultationList();
+  }
+
+  getQuery(status) {
+    const variables = {
+      perPage: 200,
+      page: 1,
+      statusFilter: status,
+      featuredFilter: false,
+      sort: 'response_deadline',
+      sortDirection: status === 'published' ? 'asc' : 'desc',
+    };
+    return this.apollo.watchQuery({query: ConsultationListAllData, variables});
+  }
+
+  fetchActiveConsultationList() {
+    this.consultationListQuery = this.getQuery('published');
+    this.consultationListQuery
+    .valueChanges
+      .pipe (
+        map((res: any) => res.data.consultationList)
+      )
+      .subscribe(item => {
+        this.updateDraftNotifications(item.data);
+      }, err => {
+            this.errorService.showErrorModal(err);
+        });
   }
 
   updateDraftNotifications(value) {

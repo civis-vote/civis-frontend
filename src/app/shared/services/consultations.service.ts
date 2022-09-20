@@ -20,7 +20,6 @@ export class ConsultationsService {
     consultationStatus = new BehaviorSubject(null);
     submitResponseActiveRoundEnabled = new BehaviorSubject(null);
     setNotificationsCall = new BehaviorSubject(false);
-    storeConsultationList = new BehaviorSubject([]);
 
   constructor() {
   }

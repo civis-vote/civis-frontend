@@ -256,7 +256,8 @@ export class ConsultationResponseTextComponent
                 responseText: text,
                 templatesText: this.showPublicResponseOption ? false : true,
                 consultation_title: this.profileData.title,
-                responseDeadline: this.profileData.responseDeadline
+                responseDeadline: this.profileData.responseDeadline,
+                notificationSeen: false
               },
             ],
           },
@@ -279,6 +280,7 @@ export class ConsultationResponseTextComponent
             currentUser.consultations.forEach((item) => {
               if (+item.id === +this.consultationId) {
                 item.responseText = text;
+                item.notificationSeen = false;
                 item['templatesText'] = this.showPublicResponseOption
                   ? false
                   : true;
@@ -291,6 +293,7 @@ export class ConsultationResponseTextComponent
               templatesText: this.showPublicResponseOption ? false : true,
               consultation_title: this.profileData.title,
               responseDeadline: this.profileData.responseDeadline,
+              notificationSeen: false
             });
           }
           draftObj.users.forEach((item) => {
@@ -312,6 +315,7 @@ export class ConsultationResponseTextComponent
                   templatesText: this.showPublicResponseOption ? false : true,
                   consultation_title: this.profileData.title,
                   responseDeadline: this.profileData.responseDeadline,
+                  notificationSeen: false
                 },
               ],
             });

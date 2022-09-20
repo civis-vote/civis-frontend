@@ -99,6 +99,7 @@ export class ConsultationListComponent implements OnInit {
 
     if (draftObj && !isObjectEmpty(draftObj)) {
       let currentUser: any;
+      let responsesArray = [];
       if (draftObj.users && draftObj.users.length > 0) {
         currentUser = draftObj.users.find(
           (user) =>
@@ -107,9 +108,8 @@ export class ConsultationListComponent implements OnInit {
       }
 
       if (currentUser && currentUser.consultations.length) {
-        let responsesArray = [];
         if (this.currentUser.responses && this.currentUser.responses.edges.length) {
-          responsesArray = this.currentUser.responses.edges.map(res => res.node.consulation.id);
+          responsesArray = this.currentUser.responses.edges.map(res => res.node.consultation.id);
         }
 
         this.consultationListArray.forEach(allConsult => {
@@ -123,7 +123,7 @@ export class ConsultationListComponent implements OnInit {
               }
             }
 
-            if (moment(new Date(draftConsult.responseDeadline)).isBefore(moment(new Date()))) {
+            if (moment(new Date(draftConsult.responseDeadline)).endOf('day').isBefore(moment(new Date()).endOf('day'))) {
               draftConsult.notificationSeen = true;
             } else {
               if (!draftConsult.notificationSeen) {
@@ -136,6 +136,12 @@ export class ConsultationListComponent implements OnInit {
             }
           })
         })
+
+        const isNotificationReadyPresent = currentUser.consultations.some(currNoty => !currNoty.notificationSeen);
+
+        if (!isNotificationReadyPresent) {
+          currentUser.notificationSeen = true;
+        }
 
         localStorage.removeItem('responseDraft');
         localStorage.setItem('responseDraft', JSON.stringify(draftObj));

@@ -8,4 +8,10 @@ export const ConsultationList = gql`
       }
     }
   }
-`
+`;
+
+export const UserNotificationAnalysisQuery = gql`
+  query userNotificationAnalysis($userId: Int!){
+    userNotificationAnalysis(userId: $userId)
+  }
+`;

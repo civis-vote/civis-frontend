@@ -19,6 +19,8 @@ export class ConsultationsService {
     satisfactionRatingError = new BehaviorSubject(null);
     consultationStatus = new BehaviorSubject(null);
     submitResponseActiveRoundEnabled = new BehaviorSubject(null);
+    setNotificationsCall = new BehaviorSubject(false);
+    storeConsultationList = new BehaviorSubject([]);
 
   constructor() {
   }

@@ -35,12 +35,6 @@ export const ImpactStats = gql`
   }
 `;
 
-export const UserNotificationAnalysisQuery = gql`
-  query userNotificationAnalysis($userId: Int!){
-    userNotificationAnalysis(userId: $userId)
-  }
-`;
-
 export const LeaderListQuery = gql`
   query userList($roleFilter: [UserRoles!], $sort: UserSorts, $sortDirection: SortDirections) {
     userList(roleFilter: $roleFilter, sort: $sort, sortDirection: $sortDirection) {

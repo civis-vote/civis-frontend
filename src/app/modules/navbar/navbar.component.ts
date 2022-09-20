@@ -3,12 +3,11 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
 import { Apollo } from 'apollo-angular';
 import { map, filter } from 'rxjs/operators';
-import { ConsultationList } from './navbar.graphql';
+import { ConsultationList, UserNotificationAnalysisQuery } from './navbar.graphql';
 import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consultations/consultation-profile/consultation-profile.graphql';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
-import { UserNotificationAnalysisQuery } from '../landing/landing.graphql';
 import {
   isObjectEmpty,
 } from 'src/app/shared/functions/modular.functions';
@@ -80,10 +79,81 @@ export class NavbarComponent implements OnInit {
         this.currentUrl = this.findUrl(event.url);
       }
     });
+
+    this.consultationService.setNotificationsCall
+    .subscribe((value) => {
+      if (value) {
+        this.setNotifications();
+      }
+    });
+
+    this.consultationService.storeConsultationList.subscribe(value => {
+      if (value && value.length) {
+        this.updateDraftNotifications(value);
+      }
+    });
+
     this.getCurrentUser();
     this.getActiveConsulationCount();
     this.getActiveTab();
     this.watchConsultationStatus();
+  }
+
+  updateDraftNotifications(value) {
+    let draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      let responsesArray = [];
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length) {
+        if (this.currentUser.responses && this.currentUser.responses.edges.length) {
+          responsesArray = this.currentUser.responses.edges.map(res => res.node.consultation.id);
+        }
+
+        value.forEach(allConsult => {
+          currentUser.consultations.forEach(draftConsult => {
+            if (allConsult.id === draftConsult.id) {
+              draftConsult.responseDeadline = allConsult.responseDeadline;
+              draftConsult.consultation_title = allConsult.title;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (moment(new Date(draftConsult.responseDeadline)).endOf('day').isBefore(moment(new Date()).endOf('day'))) {
+              draftConsult.notificationSeen = true;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (responsesArray.indexOf(+(draftConsult.id)) !== -1) {
+              draftConsult.notificationSeen = true;
+            }
+          })
+        })
+
+        const isNotificationReadyPresent = currentUser.consultations.some(currNoty => !currNoty.notificationSeen);
+
+        if (!isNotificationReadyPresent) {
+          currentUser.notificationSeen = true;
+        }
+
+        localStorage.removeItem('responseDraft');
+        localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+
+        this.consultationService.setNotificationsCall.next(true);
+      }
+    }
   }
 
   setNotifications() {
@@ -99,6 +169,9 @@ export class NavbarComponent implements OnInit {
       };
 
       this.checkForDraftNotifications();
+      this.consultationService.setNotificationsCall.next(false);
+    }, error => {
+      this.consultationService.setNotificationsCall.next(false);
     });
   }
 
@@ -129,11 +202,11 @@ export class NavbarComponent implements OnInit {
 
   openNotificationDrawer() {
     this.showDrawer = !this.showDrawer;
+    this.consultationService.setNotificationsCall.next(true);
   }
 
   closeModal(event) {
     this.showDrawer = false;
-    !event && this.setNotifications();
   }
 
   openMenu() {
@@ -176,7 +249,7 @@ export class NavbarComponent implements OnInit {
     .subscribe((data) => {
       if (data) {
         this.currentUser = this.userService.currentUser;
-        this.setNotifications();
+        this.consultationService.setNotificationsCall.next(true);
         if (this.consultationId) {
           this.getConsultationProfile();
         }

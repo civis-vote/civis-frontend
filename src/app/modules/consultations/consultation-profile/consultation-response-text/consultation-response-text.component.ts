@@ -325,6 +325,7 @@ export class ConsultationResponseTextComponent
       localStorage.setItem('responseDraft', JSON.stringify(draftObj || ''));
       setTimeout(() => {
         this.showAutoSaved = false;
+        this.consultationService.setNotificationsCall.next(true);
       }, 1250);
     }
   }
@@ -454,6 +455,8 @@ export class ConsultationResponseTextComponent
 
           localStorage.removeItem('responseDraft');
           localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+
+          this.consultationService.setNotificationsCall.next(true);
       }
     }
   }

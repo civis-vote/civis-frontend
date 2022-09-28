@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
+import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 
 @Component({
   selector: 'app-consultation-list',
@@ -40,6 +41,7 @@ export class ConsultationListComponent implements OnInit {
   constructor(
     private apollo: Apollo,
     private loader: LinearLoaderService,
+    private consultationService: ConsultationsService,
     private errorService: ErrorService,
     private userService: UserService
     ) { }
@@ -76,6 +78,9 @@ export class ConsultationListComponent implements OnInit {
             this.loadingElements.consultationList = false;
             this.consultationListData = item;
             this.consultationListArray = item.data;
+
+            this.updateDraftNotifications(item.data);
+
             this.consultationListArray = this.sortConsulationList(item.data);
 
             this.consultationListPaging = item.paging;
@@ -92,6 +97,62 @@ export class ConsultationListComponent implements OnInit {
         });
   }
 
+updateDraftNotifications(value) {
+    let draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      let responsesArray = [];
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length) {
+        if (this.currentUser.responses && this.currentUser.responses.edges.length) {
+          responsesArray = this.currentUser.responses.edges.map(res => res.node.consultation.id);
+        }
+
+        value.forEach(allConsult => {
+          currentUser.consultations.forEach(draftConsult => {
+            if (allConsult.id === draftConsult.id) {
+              draftConsult.responseDeadline = allConsult.responseDeadline;
+              draftConsult.consultation_title = allConsult.title;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (moment(new Date(draftConsult.responseDeadline)).endOf('day').isBefore(moment(new Date()).endOf('day'))) {
+              draftConsult.notificationSeen = true;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (responsesArray.indexOf(+(draftConsult.id)) !== -1) {
+              draftConsult.notificationSeen = true;
+            }
+          })
+        })
+
+        const isNotificationReadyPresent = currentUser.consultations.some(currNoty => !currNoty.notificationSeen);
+
+        if (!isNotificationReadyPresent) {
+          currentUser.notificationSeen = true;
+        }
+
+        localStorage.removeItem('responseDraft');
+        localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+
+        this.consultationService.setNotificationsCall.next(true);
+      }
+    }
+  }
 
   sortConsulationList(list) {
     const city = (this.currentUser && this.currentUser.city)  ?  this.currentUser.city.id : undefined;

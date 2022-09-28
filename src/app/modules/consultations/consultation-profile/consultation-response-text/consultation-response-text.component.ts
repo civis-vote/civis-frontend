@@ -19,11 +19,13 @@ import {
   scrollToFirstError,
 } from 'src/app/shared/functions/modular.functions';
 import { Router } from '@angular/router';
-import { Apollo } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 import { ConsultationProfileCurrentUser, SubmitResponseQuery, CreateUserCountRecord, UpdateUserCountRecord,UserCountUser } from '../consultation-profile.graphql';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { profanityList } from 'src/app/graphql/queries.graphql';
+import { ConsultationListAllData } from 'src/app/modules/navbar/navbar.graphql';
+import moment from 'moment';
 
 @Component({
   selector: 'app-consultation-response-text',
@@ -81,7 +83,7 @@ export class ConsultationResponseTextComponent
   isUserResponseProfane: boolean=false;
   responseStatus = 0;
   profaneWords = [];
-
+  consultationListQuery: QueryRef<any>;
   constructor(
     private userService: UserService,
     private consultationService: ConsultationsService,
@@ -117,6 +119,7 @@ export class ConsultationResponseTextComponent
     this.subscribeUseTheResponseText();
     this.getResponseText();
     this.createResponse();
+    this.fetchActiveConsultationList();
   }
 
   ngAfterViewChecked() {
@@ -124,6 +127,89 @@ export class ConsultationResponseTextComponent
     if (this.scrollToError) {
       scrollToFirstError('.error-msg', this.el.nativeElement);
       this.scrollToError = false;
+    }
+  }
+
+  getQuery(status) {
+    const variables = {
+      perPage: 200,
+      page: 1,
+      statusFilter: status,
+      featuredFilter: false,
+      sort: 'response_deadline',
+      sortDirection: status === 'published' ? 'asc' : 'desc',
+    };
+    return this.apollo.watchQuery({query: ConsultationListAllData, variables});
+  }
+
+  fetchActiveConsultationList() {
+    this.consultationListQuery = this.getQuery('published');
+    this.consultationListQuery
+    .valueChanges
+      .pipe (
+        map((res: any) => res.data.consultationList)
+      )
+      .subscribe(item => {
+        this.updateDraftNotificationsAtStart(item.data);
+      }, err => {
+            this.errorService.showErrorModal(err);
+        });
+  }
+
+  updateDraftNotificationsAtStart(value) {
+    let draftObj = JSON.parse(localStorage.getItem('responseDraft'));
+
+    if (draftObj && !isObjectEmpty(draftObj)) {
+      let currentUser: any;
+      let responsesArray = [];
+      if (draftObj.users && draftObj.users.length > 0) {
+        currentUser = draftObj.users.find(
+          (user) =>
+            user.id === (this.currentUser ? this.currentUser.id : 'guest')
+        );
+      }
+
+      if (currentUser && currentUser.consultations.length) {
+        if (this.currentUser.responses && this.currentUser.responses.edges.length) {
+          responsesArray = this.currentUser.responses.edges.map(res => res.node.consultation.id);
+        }
+
+        value.forEach(allConsult => {
+          currentUser.consultations.forEach(draftConsult => {
+            if (allConsult.id === draftConsult.id) {
+              draftConsult.responseDeadline = allConsult.responseDeadline;
+              draftConsult.consultation_title = allConsult.title;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (moment(new Date(draftConsult.responseDeadline)).endOf('day').isBefore(moment(new Date()).endOf('day'))) {
+              draftConsult.notificationSeen = true;
+            } else {
+              if (!draftConsult.notificationSeen) {
+                draftConsult.notificationSeen = false;
+              }
+            }
+
+            if (responsesArray.indexOf(+(draftConsult.id)) !== -1) {
+              draftConsult.notificationSeen = true;
+            }
+          })
+        })
+
+        const isNotificationReadyPresent = currentUser.consultations.some(currNoty => !currNoty.notificationSeen);
+
+        if (!isNotificationReadyPresent) {
+          currentUser.notificationSeen = true;
+        }
+
+        localStorage.removeItem('responseDraft');
+        localStorage.setItem('responseDraft', JSON.stringify(draftObj));
+
+        this.consultationService.setNotificationsCall.next(true);
+      }
     }
   }
 

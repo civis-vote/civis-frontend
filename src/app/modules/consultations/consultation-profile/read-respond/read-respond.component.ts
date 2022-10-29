@@ -265,6 +265,7 @@ export class ReadRespondComponent implements OnInit {
     }
 
     consultationResponse.responseStatus = isProfane ? 1:0;
+    consultationResponse.visibility = consultationResponse.visibility && this.currentUser?.isVerified ? "shared" : "anonymous",
 
     this.apollo.mutate({
       mutation: SubmitResponseQuery,

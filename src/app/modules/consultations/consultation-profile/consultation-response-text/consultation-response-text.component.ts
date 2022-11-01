@@ -17,6 +17,7 @@ import {
   isObjectEmpty,
   checkPropertiesPresence,
   scrollToFirstError,
+  setResponseVisibility
 } from 'src/app/shared/functions/modular.functions';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';
@@ -155,7 +156,7 @@ export class ConsultationResponseTextComponent
   getConsultationResponse() {
     const consultationResponse = {
       consultationId: this.consultationId,
-      visibility: this.responseVisibility && this.currentUser?.isVerified ? "shared" : "anonymous",
+      visibility: this.responseVisibility,
       responseText: this.responseText,
       //TODO: Profanity filter feature, remove condition when ready fo deployment to production
       responseStatus: !environment.production ? this.responseStatus : 0,
@@ -575,6 +576,7 @@ export class ConsultationResponseTextComponent
 
   submitResponse(consultationResponse) {
     this.responseSubmitLoading = true;
+    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)    
     this.apollo
       .mutate({
         mutation: SubmitResponseQuery,

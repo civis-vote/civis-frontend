@@ -1,0 +1,54 @@
+<div
+  bsModal #notificationModal="bs-modal" class="modal fade notification-drawer" tabindex="-1"
+  [config]="{show: true}"
+  (onHidden)="closeModal()"
+  role="dialog" aria-labelledby="notificationModal"
+>
+<div class="modal-dialog">
+  <div class="modal-content ">
+
+    <div class="modal-header header">
+      <h4>Notifications</h4>
+      <div class="modal-close-btn" (click)="closeModal()"><i class="fa fa-times"></i></div>
+    </div>
+
+    <div class="modal-body">
+      <ul class="notification-list">
+        <ng-container *ngIf="notifications.length else zeroTemplate">
+        <ng-container *ngFor="let notify of notifications">
+        <ng-container *ngIf="!notify.notificationSeen">
+          <accordion [isAnimated]="true" class="notification-accordion">
+            <accordion-group
+            heading="{{ notify.main_text }}"
+            >
+              <ng-container>
+                <div class="notification-sub-header pb-2"
+                [class.selected-link]="notify.type === 'LEADERBOARD_UPDATE'" (click)="notificationClicked(notify)">
+                  {{ notify.sub_text }}
+                </div>
+                <ul *ngIf="notify?.consultation_list && notify?.consultation_list.length">
+
+                  <ng-container *ngFor="let subNotify of notify?.consultation_list">
+                    <li class="cursor-pointer"
+                        *ngIf="!subNotify.notificationSeen"
+                        (click)="navigateToConsultations(notify, subNotify, notify.type !== 'DRAFT' ? subNotify.consultation_id : subNotify.id)">
+                          {{ subNotify.consultation_title }}
+                    </li>
+                  </ng-container>
+                </ul>
+
+              </ng-container>
+            </accordion-group>
+          </accordion>
+</ng-container>
+        </ng-container>
+      </ng-container>
+
+      <ng-template #zeroTemplate>
+        <div class="m-4">Notifications not found</div>
+      </ng-template>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>

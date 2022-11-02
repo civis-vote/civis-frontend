@@ -21,9 +21,9 @@ import { ResponseAnswersComponent } from './response-answers/response-answers.co
 import { ResendVerificationComponent } from './resendVerification/resendVerification.component';
 import { CaseStudiesListComponent } from './case-studies-list/case-studies-list.component';
 import { AuthModalComponent } from './auth-modal/auth-modal.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { AccordionModule, ModalModule } from 'ngx-bootstrap';
 import { ProfaneModalComponent } from './profane-modal/profane-modal.component';
-import { ConfirmEmailModule } from '../confirm-email-modal/confirm-email.module';
+import { NotificationDrawerComponent } from './notification-drawer/notification-drawer.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +39,8 @@ import { ConfirmEmailModule } from '../confirm-email-modal/confirm-email.module'
     ResendVerificationComponent,
     CaseStudiesListComponent,
     AuthModalComponent,
-    ProfaneModalComponent
+    ProfaneModalComponent,
+    NotificationDrawerComponent
   ],
   imports: [
     CommonModule,
@@ -49,9 +50,9 @@ import { ConfirmEmailModule } from '../confirm-email-modal/confirm-email.module'
     FormsModule,
     NgSelectModule,
     CookieModule.forRoot(),
+    AccordionModule.forRoot(),
     PipesModule,
-    ModalModule,
-    ConfirmEmailModule
+    ModalModule
   ],
   exports: [
     ActionButtonComponent,
@@ -68,7 +69,8 @@ import { ConfirmEmailModule } from '../confirm-email-modal/confirm-email.module'
     ResendVerificationComponent,
     CaseStudiesListComponent,
     AuthModalComponent,
-    ProfaneModalComponent
+    ProfaneModalComponent,
+    NotificationDrawerComponent
   ],
   providers: [
     LinearLoaderService

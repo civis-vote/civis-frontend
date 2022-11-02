@@ -7,6 +7,7 @@ import { SharedDirectivesModule } from 'src/app/shared/directives/shared-directi
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
+import { SharedComponentsModule } from 'src/app/shared/components/shared-components.module';
 
 
 
@@ -18,7 +19,8 @@ import { PipesModule } from 'src/app/shared/pipes/pipes.module';
         ModalModule.forRoot(),
         NgSelectModule,
         FormsModule,
-        PipesModule
+        PipesModule,
+        SharedComponentsModule
     ],
     exports: [
         NavbarComponent

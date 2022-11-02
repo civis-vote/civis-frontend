@@ -156,7 +156,7 @@ export class ConsultationResponseTextComponent
   getConsultationResponse() {
     const consultationResponse = {
       consultationId: this.consultationId,
-      visibility: this.responseVisibility,
+      visibility: this.responseVisibility, // initial response visibility set by the user
       responseText: this.responseText,
       //TODO: Profanity filter feature, remove condition when ready fo deployment to production
       responseStatus: !environment.production ? this.responseStatus : 0,
@@ -404,6 +404,7 @@ export class ConsultationResponseTextComponent
             this.showError = false;
           }
         } else {
+          //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
           this.authModal = true;
           localStorage.setItem(
             'consultationResponse',

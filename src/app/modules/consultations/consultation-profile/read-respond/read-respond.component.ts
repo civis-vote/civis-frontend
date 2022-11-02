@@ -260,6 +260,7 @@ export class ReadRespondComponent implements OnInit {
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
     if(!consultationResponse){
+      //after user has completed authentication step
       consultationResponse=JSON.parse(localStorage.getItem('consultationResponse'));
       localStorage.removeItem('consultationResponse');
     }

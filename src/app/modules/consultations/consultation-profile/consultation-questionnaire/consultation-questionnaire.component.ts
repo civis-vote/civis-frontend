@@ -244,6 +244,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
             this.showError = false;
           }
         } else {
+          //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
           this.authModal = true;
           localStorage.setItem(
             'consultationResponse',
@@ -422,7 +423,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     const consultationResponse =  {
       consultationId: this.profileData.id,
       satisfactionRating : this.responseFeedback,
-      visibility: this.responseVisibility,
+      visibility: this.responseVisibility, // initial response visibility set by the user
       //TODO: Profanity filter feature, remove condition when ready fo deployment to production
       responseStatus: !environment.production ? this.responseStatus : 0,
     };

@@ -26,6 +26,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { ConsultationListAllData } from 'src/app/modules/navbar/navbar.graphql';
 import moment from 'moment';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-consultation-response-text',
@@ -84,6 +85,8 @@ export class ConsultationResponseTextComponent
   responseStatus = 0;
   profaneWords = [];
   consultationListQuery: QueryRef<any>;
+  environment: any = environment;
+
   constructor(
     private userService: UserService,
     private consultationService: ConsultationsService,
@@ -98,20 +101,21 @@ export class ConsultationResponseTextComponent
       .subscribe((consulationId: any) => {
         this.consultationId = consulationId;
       });
-
-      this.apollo.watchQuery({
-        query: profanityList,
-        fetchPolicy: 'network-only'
-      })
-      .valueChanges
-      .pipe(
-        map((res: any) => res.data)
-      )
-      .subscribe((response: any) => {
-        this.profaneWords = response.profanityList.data.map((profane) => profane.profaneWord);
-      }, (err: any) => {
-      });
-
+      //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+      if(!environment.production){
+        this.apollo.watchQuery({
+          query: profanityList,
+          fetchPolicy: 'network-only'
+        })
+        .valueChanges
+        .pipe(
+          map((res: any) => res.data)
+        )
+        .subscribe((response: any) => {
+          this.profaneWords = response.profanityList.data.map((profane) => profane.profaneWord);
+        }, (err: any) => {
+        });
+      }
   }
 
   ngOnInit(): void {
@@ -238,9 +242,10 @@ export class ConsultationResponseTextComponent
   getConsultationResponse() {
     const consultationResponse = {
       consultationId: this.consultationId,
-      visibility: this.responseVisibility ? 'shared' : 'anonymous',
+      visibility: this.responseVisibility && this.currentUser?.isVerified ? "shared" : "anonymous",
       responseText: this.responseText,
-      responseStatus: this.responseStatus,
+      //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+      responseStatus: !environment.production ? this.responseStatus : 0,
       satisfactionRating: this.responseFeedback,
     };
     if (checkPropertiesPresence(consultationResponse)) {
@@ -472,31 +477,35 @@ export class ConsultationResponseTextComponent
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
-          // this query fetches the data for the user
-          this.apollo.watchQuery({
-            query: UserCountUser,
-            variables: {userId:this.currentUser.id},
-            fetchPolicy:'no-cache'
-          })
-          .valueChanges
-          .pipe (
-            map((res: any) => res.data.userCountUser)
-          )
-          .subscribe(data => {
-            // to update response submitted status for consultations stored in draft
-            this.updateDraftNotifications(consultationResponse.consultationId);
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          if(!environment.production){
+            // this query fetches the data for the user
+            this.apollo.watchQuery({
+              query: UserCountUser,
+              variables: {userId:this.currentUser.id},
+              fetchPolicy:'no-cache'
+            })
+            .valueChanges
+            .pipe (
+              map((res: any) => res.data.userCountUser)
+            )
+            .subscribe(data => {
+              // to update response submitted status for consultations stored in draft
+              this.updateDraftNotifications(consultationResponse.consultationId);
 
-            // here this check ensures that this query doesn't runs again when we update the record
-            if(!this.profanity_count_changed && !this.short_response_count_changed){
-              this.userData=data;
-              this.checkAndUpdateProfanityCount();
-            }
-
-
-          }, err => {
-            const e = new Error(err);
-            this.errorService.showErrorModal(err);
-          });
+              // here this check ensures that this query doesn't runs again when we update the record
+              if(!this.profanity_count_changed && !this.short_response_count_changed){
+                this.userData=data;
+                this.checkAndUpdateProfanityCount();
+              }
+            }, err => {
+              const e = new Error(err);
+              this.errorService.showErrorModal(err);
+            });
+          } else {
+            this.submitResponse(consultationResponse);
+            this.showError = false;
+          }
         } else {
           this.authModal = true;
           localStorage.setItem(
@@ -546,7 +555,7 @@ export class ConsultationResponseTextComponent
       }
     }
   }
-
+  
   updateResponseCount(){
     if (this.userData!==null){
       this.shortResponseCount=this.userData.shortResponseCount;

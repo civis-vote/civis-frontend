@@ -11,9 +11,7 @@ export class ConfirmationModalComponent implements OnInit {
     msg: null
   };
   @Output() close = new EventEmitter<boolean>();
-
-  constructor() { 
-  }
+  constructor() { }
 
   ngOnInit() {
   }

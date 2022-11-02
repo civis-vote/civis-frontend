@@ -57,11 +57,8 @@ constructor(
           if (!this.currentUser.city || !this.currentUser.city.id) {
             this.forceCitySelection$.next(true);
           }
-        } else {
-          console.error('User not found');
         }
       }, (err: any) => {
-        console.error('Error fetching user', err);
         this.userLoaded$.next(false);
         this.toastService.displayToast('error', err);
       });

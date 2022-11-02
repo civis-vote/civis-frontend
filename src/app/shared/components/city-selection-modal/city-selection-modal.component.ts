@@ -15,8 +15,8 @@ import { CurrentUser } from 'src/app/graphql/queries.graphql';
 })
 export class CitySelectionModalComponent implements OnInit {
 
-  @ViewChild('citySelectionModal', { static: false }) citySelectionModal: ModalDirective;
   @Input() isPrivate = false;
+  @ViewChild('citySelectionModal', { static: false }) citySelectionModal: ModalDirective;
   searchEmitter: EventEmitter<any> = new EventEmitter();
   loading: boolean;
   cities: any;

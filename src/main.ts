@@ -43,3 +43,8 @@ if (environment.hmr) {
   bootstrap().catch(err => console.log(err));
 }
 
+if (!environment.production) {
+  var scriptFile = document.createElement('script');
+  scriptFile.setAttribute("src","https://checkout.razorpay.com/v1/checkout.js");
+  document.getElementsByTagName("body")[0].appendChild(scriptFile);
+}

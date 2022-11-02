@@ -8,10 +8,9 @@ import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consulta
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
-import {
-  isObjectEmpty,
-} from 'src/app/shared/functions/modular.functions';
+import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
 import moment from 'moment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -32,6 +31,7 @@ export class NavbarComponent implements OnInit {
   activeCount: any;
   consultationId: number;
   reviewType: any;
+  environment: any = environment;
 
   menuObject = {
     name: 'Read & Respond'

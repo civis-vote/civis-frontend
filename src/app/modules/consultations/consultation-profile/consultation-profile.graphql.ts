@@ -230,7 +230,7 @@ export const ConsultationProfileCurrentUser = gql`
   }
 `;
 
-export const VoteCreateQuery = gql`
+export const VoteCreateQuery = gql `
   mutation voteCreate($consultationResponseVote: VoteCreateInput!) {
     voteCreate(consultationResponseVote: $consultationResponseVote) {
       id
@@ -239,7 +239,7 @@ export const VoteCreateQuery = gql`
   }
 `
 
-export const VoteDeleteQuery = gql`
+export const VoteDeleteQuery = gql `
   mutation voteDelete($consultationResponseId : Int!) {
     voteDelete(consultationResponseId : $consultationResponseId )
   }

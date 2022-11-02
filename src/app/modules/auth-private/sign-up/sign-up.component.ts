@@ -138,16 +138,16 @@ export class SignUpComponent implements OnInit {
   }
 
   submitAuthAcceptInvite() {
-    const {firstName, lastName, password, organization, phoneNumber, designation} = this.signupObject;
+    const {firstName, lastName, password, organization, designation, phoneNumber} = this.signupObject;
     const authVariables = {
       firstName,
       lastName,
       password,
-      invitationToken: this.invitationToken,
-      consultationId: +this.consultationId,
       phoneNumber,
       organization,
-      designation
+      designation,
+      invitationToken: this.invitationToken,
+      consultationId: +this.consultationId
     };
     this.apollo.mutate({mutation: AuhtAcceptInviteMutation, variables: {auth: authVariables}})
     .pipe(
@@ -155,8 +155,6 @@ export class SignUpComponent implements OnInit {
     ).subscribe((token) => {
       if (token) {
         this.tokenService.storeToken(token);
-        this.signupObject.callbackUrl =
-          this.cookieService.get('loginCallbackUrl');
         this.getCurrentUser();
         this.onSignUp();
         this.userService.userLoaded$
@@ -177,6 +175,7 @@ export class SignUpComponent implements OnInit {
   }
 
   submit() {
+
     if (!this.signupForm.valid || !this.isCaptchaResolved) {
       return;
     } else if (this.invitationToken) {
@@ -263,7 +262,7 @@ export class SignUpComponent implements OnInit {
       query: LocationListQuery,
       variables: {
         type: 'city',
-        isInternational: true
+        isInternationalCity: true
       }
     })
     .pipe(

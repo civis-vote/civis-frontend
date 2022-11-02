@@ -52,7 +52,6 @@ constructor(
     }
 }
 
-
 canActivate() {
     return this.loading;
 }

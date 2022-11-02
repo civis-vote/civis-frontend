@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const CurrentUser = gql`
-query userCurrent {
+query{
   userCurrent {
     id
     bestRank
@@ -18,6 +18,7 @@ query userCurrent {
     }
     cityRank
     confirmedAt
+    isVerified
     createdAt
     email
     firstName

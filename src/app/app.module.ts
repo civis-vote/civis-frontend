@@ -19,10 +19,12 @@ import { UnsubscribeUserGuard } from './shared/guards/unsubscribe-user.guard';
 import { CookieModule, CookieService } from 'ngx-cookie';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { StarterService } from './shared/services/starter.service';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +40,7 @@ import { StarterService } from './shared/services/starter.service';
     PolicyModule,
     CitySelectionModalModule,
     CookieModule.forRoot(),
-    NgxWebstorageModule.forRoot()
+    NgxWebstorageModule.forRoot(),
   ],
   providers: [
     LandingGuard,

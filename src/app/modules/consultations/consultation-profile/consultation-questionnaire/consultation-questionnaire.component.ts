@@ -9,7 +9,7 @@ import { SubmitResponseQuery, ConsultationProfileCurrentUser, CreateUserCountRec
 import { filter, map } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { profanityList } from 'src/app/graphql/queries.graphql';
-
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-consultation-questionnaire',
@@ -53,6 +53,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   isUserResponseProfane: boolean=false;
   responseStatus = 0;
   profaneWords = [];
+  environment: any = environment;
 
   constructor(private _fb: FormBuilder,
     private userService: UserService,
@@ -68,19 +69,21 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     .subscribe((consulationId: any) => {
       this.consultationId = consulationId;
     });
-
-    this.apollo.watchQuery({
-      query: profanityList,
-      fetchPolicy: 'network-only'
-    })
-    .valueChanges
-    .pipe(
-      map((res: any) => res.data)
-    )
-    .subscribe((response: any) => {
-      this.profaneWords = response.profanityList.data.map((profane) => profane.profaneWord);
-    }, (err: any) => {
-    });
+    //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+    if(!environment.production){
+      this.apollo.watchQuery({
+        query: profanityList,
+        fetchPolicy: 'network-only'
+      })
+      .valueChanges
+      .pipe(
+        map((res: any) => res.data)
+      )
+      .subscribe((response: any) => {
+        this.profaneWords = response.profanityList.data.map((profane) => profane.profaneWord);
+      }, (err: any) => {
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -216,24 +219,30 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
-          this.apollo.watchQuery({
-            query: UserCountUser,
-            variables: {userId:this.currentUser.id},
-            fetchPolicy:'no-cache'
-          })
-          .valueChanges
-          .pipe (
-            map((res: any) => res.data.userCountUser)
-          )
-          .subscribe(data => {
-            if(!this.profanity_count_changed){
-              this.userData=data;
-              this.checkAndUpdateProfanityCount();
-            }
-          }, err => {
-            const e = new Error(err);
-              this.errorService.showErrorModal(err);
-          });
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          if(!environment.production){
+            this.apollo.watchQuery({
+              query: UserCountUser,
+              variables: {userId:this.currentUser.id},
+              fetchPolicy:'no-cache'
+            })
+            .valueChanges
+            .pipe (
+              map((res: any) => res.data.userCountUser)
+            )
+            .subscribe(data => {
+              if(!this.profanity_count_changed){
+                this.userData=data;
+                this.checkAndUpdateProfanityCount();
+              }
+            }, err => {
+              const e = new Error(err);
+                this.errorService.showErrorModal(err);
+            });
+          } else {
+            this.submitResponse(consultationResponse);
+            this.showError = false;
+          }
         } else {
           this.authModal = true;
           localStorage.setItem(
@@ -256,7 +265,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     filter = new Filter({list: this.profaneWords});
 
     this.isUserResponseProfane=filter.isProfane(this.userResponse);
-    
+
     if (this.userData!==null){
       this.profanityCount=this.userData.profanityCount;
     }
@@ -307,7 +316,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
       this.invokeSubmitResponse();
       return;
     }
-    
+
     this.apollo.mutate({
       mutation: UpdateUserCountRecord,
         variables:{
@@ -318,7 +327,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
         }
       },
     })
-    .subscribe((data) => {   
+    .subscribe((data) => {
       this.invokeSubmitResponse();
     }, err => {
       this.errorService.showErrorModal(err);
@@ -413,8 +422,9 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     const consultationResponse =  {
       consultationId: this.profileData.id,
       satisfactionRating : this.responseFeedback,
-      visibility: this.responseVisibility ? 'shared' : 'anonymous',
-      responseStatus: this.responseStatus,
+      visibility: this.responseVisibility && this.currentUser?.isVerified ? "shared" : "anonymous",
+      //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+      responseStatus: !environment.production ? this.responseStatus : 0,
     };
     if (checkPropertiesPresence(consultationResponse)) {
       consultationResponse['templateId'] = this.templateId;

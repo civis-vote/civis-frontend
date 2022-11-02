@@ -17,7 +17,7 @@
 
     <div class="app-navbar__center-item" *ngIf="currentUrl === 'consultations-profile'">
       <div class="profile-tab-wrapper">
-        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.-->
+        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.--> 
           <a class="profile-tab px-3" [ngClass]="activeTab === 'read & respond' ? 'active-tab' : ''"
           (click)="routeToConsultation('read')">
           <p>{{'Read & Respond' | translate}}</p>
@@ -68,15 +68,12 @@
     </div>
 
     <div class="app-navbar__right-item">
-      <div class="nav-btns" *ngIf="currentUrl !== 'consultations-profile'">
-        <button class="btn btn-oval" (click)="donate()">
-          {{'Donate' | translate}}
-        </button>
-      </div>
-      <div class="nav-btns" *ngIf="currentUrl !== 'consultations-profile'">
-        <button class="btn btn-oval" (click)="submitConsultation()">
-          {{'Submit a Consultation' | translate}}
-        </button>
+      <div class="nav-btns donate-btn" *ngIf="currentUrl !== 'consultations-profile'">
+        <a href="https://pages.razorpay.com/Civis">
+          <button class="btn btn-oval">
+            {{'Donate' | translate}}
+          </button>
+        </a>
       </div>
       <div class="nav-btns" *ngIf="!currentUser">
         <button class="btn btn-transparent auth-btn" (click)="onSignUp()">{{'Log In / Sign Up' | translate}}</button>
@@ -88,7 +85,7 @@
 
         <div class="notification-count-wrapper" aria-hidden="true" *ngIf="notifications.length">
           <span class="notification-count">{{ notifications.length | notificationFilter:notifications }}</span>
-      </div>
+        </div>
 
         <div class="profile-popup" *ngIf="profilePopup">
           <p [routerLink]="['/profile']">{{'Profile' | translate}}</p>
@@ -106,16 +103,14 @@
         <div *ngIf="currentUser">
           <img class="avatar avatar--32" appDefaultImage [type]="'user'" [src]="currentUser?.profilePicture?.url" />
           <span (click)="$event.preventDefault();$event.stopPropagation(); showProfilePopup()" class="clr-black"><i class="fa fa-angle-down ml-2 mr-3"></i></span>
-
           <div class="notification-count-wrapper" aria-hidden="true" *ngIf="notifications.length">
             <span class="notification-count">{{ notifications.length | notificationFilter:notifications }}</span>
           </div>
-
           <div class="profile-popup" *ngIf="profilePopup">
             <p [routerLink]="['/profile']" (click)="showProfilePopup()">{{'Profile' | translate}}</p>
             <p (click)="openNotificationDrawer()">{{'Notifications' | translate}}
               <span class="notification-count" *ngIf="notifications.length">{{ notifications.length | notificationFilter:notifications }}</span>
-          </p>
+            </p>
             <p (click)="logout($event)">{{'Logout' | translate}}</p>
           </div>
         </div>
@@ -156,13 +151,6 @@
             <button class="close-btn btn btn-transparent" [routerLink]="['/how-civis-works']" (click)="closeMenu()">
               {{'How Civis Works' | translate}}
             </button>
-          <div class="nav-btn">
-            <button class="btn-oval" (click)="closeMenu(); donate()">
-              {{'Donate' | translate}}
-            </button>
-          </div>
-          <div class="nav-btn">
-            <button class="btn-oval" (click)="closeMenu(); submitConsultation()">{{'Submit a Consultation' | translate}}</button>
           </div>
           <div class="nav-btn" *ngIf="!currentUser">
             <button class="close-btn btn btn-transparent" (click)="closeMenu(); onSignUp()">
@@ -174,9 +162,6 @@
     </div>
   </div>
 </div>
-
-<app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
-</app-confirm-email-modal>
 
 <div *ngIf="showDrawer">
   <app-notification-drawer [notifications]="notifications" (close)="closeModal($event)"></app-notification-drawer>

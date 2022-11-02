@@ -8,6 +8,7 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
 import { UserService } from 'src/app/shared/services/user.service';
 import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-consultation-list',
@@ -29,7 +30,7 @@ export class ConsultationListComponent implements OnInit {
   loadClosedConsultation = false;
   loadingCard = false;
   currentUser: any;
-
+  
   @HostListener('document:scroll', ['$event'])
   onScroll(event: any) {
     const boundingBox = document.documentElement.getBoundingClientRect();
@@ -39,9 +40,9 @@ export class ConsultationListComponent implements OnInit {
   }
 
   constructor(
-    private apollo: Apollo,
+    private apollo: Apollo, 
     private loader: LinearLoaderService,
-    private consultationService: ConsultationsService,
+    private consultationService: ConsultationsService, 
     private errorService: ErrorService,
     private userService: UserService
     ) { }
@@ -69,7 +70,7 @@ export class ConsultationListComponent implements OnInit {
     this.loader.show();
     this.loadingElements.consultationList = true;
     this.consultationListQuery
-      .valueChanges
+      .valueChanges 
         .pipe (
           map((res: any) => res.data.consultationList)
         )
@@ -78,13 +79,13 @@ export class ConsultationListComponent implements OnInit {
             this.loadingElements.consultationList = false;
             this.consultationListData = item;
             this.consultationListArray = item.data;
-
             this.updateDraftNotifications(item.data);
-
-            this.consultationListArray = this.sortConsulationList(item.data);
-
+            //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+            if(!environment.production) {
+              this.consultationListArray = this.sortConsulationList(item.data);
+            }
             this.consultationListPaging = item.paging;
-            if (!this.consultationListArray.length ||
+            if (!this.consultationListArray.length || 
               (this.consultationListPaging.currentPage === this.consultationListPaging.totalPages)) {
                 this.loadClosedConsultation = true;
                 this.fetchClosedConsultationList();
@@ -97,7 +98,7 @@ export class ConsultationListComponent implements OnInit {
         });
   }
 
-updateDraftNotifications(value) {
+  updateDraftNotifications(value) {
     let draftObj = JSON.parse(localStorage.getItem('responseDraft'));
 
     if (draftObj && !isObjectEmpty(draftObj)) {
@@ -153,7 +154,7 @@ updateDraftNotifications(value) {
       }
     }
   }
-
+  
   sortConsulationList(list) {
     const city = (this.currentUser && this.currentUser.city)  ?  this.currentUser.city.id : undefined;
     if (list && city) {
@@ -164,7 +165,7 @@ updateDraftNotifications(value) {
     }
     return list;
   }
-
+  
   loadMoreCard() {
     if (this.loadingElements.consultationListMore || this.loadingElements.consultationList) {
       return;
@@ -201,7 +202,7 @@ updateDraftNotifications(value) {
         }
       });
     }
-  }
+  }  
 
   getQuery(status) {
     const variables = {
@@ -214,13 +215,13 @@ updateDraftNotifications(value) {
     };
     return this.apollo.watchQuery({query: ConsultationList, variables});
   }
-
+  
   fetchClosedConsultationList() {
     this.consultationListQuery = this.getQuery('expired');
     this.loader.show();
     this.loadingElements.consultationList = true;
     this.consultationListQuery
-      .valueChanges
+      .valueChanges 
         .pipe (
           map((res: any) => res.data.consultationList)
         )
@@ -235,9 +236,9 @@ updateDraftNotifications(value) {
             console.log('error', err);
         });
   }
-
+  
   convertDateType(date) {
     return moment(date).format("Do MMM YY");
   }
-
+  
 }

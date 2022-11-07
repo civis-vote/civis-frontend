@@ -83,8 +83,15 @@
         <img class="avatar avatar--42" appDefaultImage [type]="'user'" [src]="currentUser?.profilePicture?.url" />
         <span class="clr-black"><i class="fa fa-angle-down ml-2"></i></span>
 
+        <div class="notification-count-wrapper" aria-hidden="true" *ngIf="notifications.length">
+          <span class="notification-count">{{ notifications.length | notificationFilter:notifications }}</span>
+        </div>
+
         <div class="profile-popup" *ngIf="profilePopup">
           <p [routerLink]="['/profile']">{{'Profile' | translate}}</p>
+          <p (click)="openNotificationDrawer()">{{'Notifications' | translate}}
+            <span class="notification-count" *ngIf="notifications.length">{{ notifications.length | notificationFilter:notifications }}</span>
+          </p>
           <p (click)="logout($event)">{{'Logout' | translate}}</p>
         </div>
       </div>
@@ -96,9 +103,14 @@
         <div *ngIf="currentUser">
           <img class="avatar avatar--32" appDefaultImage [type]="'user'" [src]="currentUser?.profilePicture?.url" />
           <span (click)="$event.preventDefault();$event.stopPropagation(); showProfilePopup()" class="clr-black"><i class="fa fa-angle-down ml-2 mr-3"></i></span>
-
+          <div class="notification-count-wrapper" aria-hidden="true" *ngIf="notifications.length">
+            <span class="notification-count">{{ notifications.length | notificationFilter:notifications }}</span>
+          </div>
           <div class="profile-popup" *ngIf="profilePopup">
             <p [routerLink]="['/profile']" (click)="showProfilePopup()">{{'Profile' | translate}}</p>
+            <p (click)="openNotificationDrawer()">{{'Notifications' | translate}}
+              <span class="notification-count" *ngIf="notifications.length">{{ notifications.length | notificationFilter:notifications }}</span>
+            </p>
             <p (click)="logout($event)">{{'Logout' | translate}}</p>
           </div>
         </div>
@@ -149,4 +161,8 @@
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="showDrawer">
+  <app-notification-drawer [notifications]="notifications" (close)="closeModal($event)"></app-notification-drawer>
 </div>

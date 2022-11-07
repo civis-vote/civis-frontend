@@ -10,7 +10,7 @@ import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
-import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
+import { isObjectEmpty, setResponseVisibility } from 'src/app/shared/functions/modular.functions';
 import { ModalDirective } from 'ngx-bootstrap';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
@@ -260,11 +260,13 @@ export class ReadRespondComponent implements OnInit {
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
     if(!consultationResponse){
+      //after user has completed authentication step
       consultationResponse=JSON.parse(localStorage.getItem('consultationResponse'));
       localStorage.removeItem('consultationResponse');
     }
 
     consultationResponse.responseStatus = isProfane ? 1:0;
+    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
 
     this.apollo.mutate({
       mutation: SubmitResponseQuery,
@@ -434,6 +436,7 @@ export class ReadRespondComponent implements OnInit {
       }
     } else {
       localStorage.removeItem('consultationResponse');
+      consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
       this.apollo.mutate({
         mutation: SubmitResponseQuery,
         variables: {

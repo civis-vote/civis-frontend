@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
-import { isObjectEmpty, checkPropertiesPresence, scrollToFirstError } from '../../../../shared/functions/modular.functions';
+import { isObjectEmpty, checkPropertiesPresence, scrollToFirstError, setResponseVisibility } from '../../../../shared/functions/modular.functions';
 import { atLeastOneCheckboxCheckedValidator } from 'src/app/shared/validators/checkbox-validator';
 import { Apollo } from 'apollo-angular';
 import { SubmitResponseQuery, ConsultationProfileCurrentUser, CreateUserCountRecord,UpdateUserCountRecord, UserCountUser } from '../consultation-profile.graphql';
@@ -244,6 +244,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
             this.showError = false;
           }
         } else {
+          //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
           this.authModal = true;
           localStorage.setItem(
             'consultationResponse',
@@ -422,7 +423,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     const consultationResponse =  {
       consultationId: this.profileData.id,
       satisfactionRating : this.responseFeedback,
-      visibility: this.responseVisibility && this.currentUser?.isVerified ? "shared" : "anonymous",
+      visibility: this.responseVisibility, // initial response visibility set by the user
       //TODO: Profanity filter feature, remove condition when ready fo deployment to production
       responseStatus: !environment.production ? this.responseStatus : 0,
     };
@@ -486,6 +487,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
 
   submitResponse(consultationResponse) {
     this.responseSubmitLoading = true;
+    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
     this.apollo.mutate({
       mutation: SubmitResponseQuery,
       variables: {

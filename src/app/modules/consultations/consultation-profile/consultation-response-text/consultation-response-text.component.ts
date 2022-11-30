@@ -55,7 +55,7 @@ export class ConsultationResponseTextComponent
   templateText: any;
   templateId: any;
   usingTemplate: boolean;
-  responseVisibility: any;
+  responseVisibility: boolean = false;
   customStyleAdded: any;
   responseFeedback: any;
   showConfirmEmailModal: boolean;

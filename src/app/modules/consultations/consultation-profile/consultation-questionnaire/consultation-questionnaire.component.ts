@@ -27,7 +27,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   currentUser: any;
   responseAnswers: any[];
   showError: boolean;
-  responseVisibility: any;
+  responseVisibility: boolean = false;
   longTextAnswer: any;
   templateText: any;
   templateId: any;

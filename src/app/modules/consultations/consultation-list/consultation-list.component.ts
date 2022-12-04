@@ -76,7 +76,7 @@ export class ConsultationListComponent implements OnInit {
             this.loadingElements.consultationList = false;
             this.consultationListData = item;
             this.consultationListArray = item.data;
-            //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+            //TODO: Sort consultations by city feature, remove condition when ready fo deployment to production
             if(!environment.production) {
               this.consultationListArray = this.sortConsulationList(item.data);
             }

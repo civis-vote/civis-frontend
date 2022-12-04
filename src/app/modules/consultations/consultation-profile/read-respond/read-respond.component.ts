@@ -249,13 +249,8 @@ export class ReadRespondComponent implements OnInit {
   }
 
   confirmed(event) {
-    if ( this.isConfirmModal ) {
-      this.isConfirmModal = false;
-      this.submitConsultationResponse(null,true);
-    } else {
-      this.isResponseShort = false;
-      this.submitConsultationResponse(null,false);
-    }
+    this.isConfirmModal = false;
+    this.isResponseShort = false;
   }
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
@@ -305,7 +300,8 @@ export class ReadRespondComponent implements OnInit {
       variables:{
         userCount:{
           userId: this.currentUser.id,
-          profanityCount: profanityCount,
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          profanityCount: !environment.production ? profanityCount: 0,
           shortResponseCount: shortResponseCount
         }
        },
@@ -325,7 +321,8 @@ export class ReadRespondComponent implements OnInit {
       variables:{
         userCount:{
           userId: this.currentUser.id,
-          profanityCount: profanityCount,
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          profanityCount: !environment.production ? profanityCount: 0,
           shortResponseCount: shortResponseCount
         }
       },
@@ -340,8 +337,6 @@ export class ReadRespondComponent implements OnInit {
   }
 
   submitResponse(consultationResponse) {
-    //TODO: Profanity filter feature, remove condition when ready fo deployment to production
-    if(!environment.production){
       // if the response is profane then we discard the draft, otherwise it is submitted
       var Filter = require('bad-words'),
       filter = new Filter({list: this.profaneWords});
@@ -434,37 +429,7 @@ export class ReadRespondComponent implements OnInit {
         localStorage.removeItem('consultationResponse');
         this.submitConsultationResponse(consultationResponse);
       }
-    } else {
-      localStorage.removeItem('consultationResponse');
-      consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
-      this.apollo.mutate({
-        mutation: SubmitResponseQuery,
-        variables: {
-          consultationResponse: consultationResponse
-        },
-        update: (store, {data: res}) => {
-          const variables = {id: this.consultationId};
-          const resp: any = store.readQuery({query: ConsultationProfileCurrentUser, variables});
-          if (res) {
-            resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
-            resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
-            resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
-            resp.consultationProfile.satisfactionRatingDistribution =
-              res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
-          }
-          store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resp});
-        }
-      })
-      .pipe (
-        map((res: any) => res.data.consultationResponseCreate)
-      )
-      .subscribe((res) => {
-          this.earnedPoints = res.points;
-          this.showThankYouModal = true;
-      }, err => {
-        this.errorService.showErrorModal(err);
-      });
-    }
+    
   }
 
   onCloseThanksModal() {

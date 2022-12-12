@@ -55,6 +55,11 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   profaneWords = [];
   environment: any = environment;
 
+  get profanityCountGetter() {
+  //TODO: Profanity filter feature, remove when ready for deployment to production
+    return environment.production ? 0 : this.profanityCount;
+  }
+  
   constructor(private _fb: FormBuilder,
     private userService: UserService,
     private consultationService: ConsultationsService,
@@ -281,7 +286,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
           userCount:{
             userId: this.currentUser.id,
             //TODO: Profanity filter feature, remove condition when ready fo deployment to production
-            profanityCount: !environment.production ? this.profanityCount: 0,
+            profanityCount: this.profanityCountGetter,
             shortResponseCount: 0
           }
          },
@@ -319,7 +324,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
           userCount:{
           userId: this.currentUser.id,
           //TODO: Profanity filter feature, remove condition when ready fo deployment to production
-          profanityCount: !environment.production ? this.profanityCount: 0,
+          profanityCount: this.profanityCountGetter,
           shortResponseCount: this.userData.shortResponseCount
         }
       },

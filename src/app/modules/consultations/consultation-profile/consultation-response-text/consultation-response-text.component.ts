@@ -36,6 +36,7 @@ import { environment } from '../../../../../environments/environment';
 export class ConsultationResponseTextComponent
   implements OnInit, AfterViewChecked {
   @Input() profileData;
+  @Input() responseText: any;
   @ViewChild('responseIndex', { read: ElementRef, static: false })
   responseIndex: ElementRef<any>;
   @ViewChild('responseContainer', { read: ElementRef, static: false })
@@ -49,7 +50,6 @@ export class ConsultationResponseTextComponent
   currentUser: any;
   consultationId: any;
   isMobile = window.innerWidth <= 768;
-  responseText: any;
   showPublicResponseOption: boolean;
   showAutoSaved: boolean;
   templateText: any;

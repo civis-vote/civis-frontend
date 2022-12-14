@@ -51,6 +51,7 @@ export class ReadRespondComponent implements OnInit {
   };
   isResponseShort = false;
   environment: any = environment;
+  responseText: any;
 
   @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
@@ -340,6 +341,7 @@ export class ReadRespondComponent implements OnInit {
       // if the response is profane then we discard the draft, otherwise it is submitted
       var Filter = require('bad-words'),
       filter = new Filter({list: this.profaneWords});
+      this.responseText = consultationResponse.responseText;
       if(filter.isProfane(consultationResponse.responseText.replace(/(<([^>]+)>)/gi, ""))){
         this.apollo.watchQuery({
           query: UserCountUser,

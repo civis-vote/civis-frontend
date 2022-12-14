@@ -16,7 +16,7 @@
       </app-consultation-questionnaire>
     </div>
     <ng-template #responseTextContainer>
-      <app-consultation-response-text [profileData]="profileData" (openThankYouModal)="showThankYouModal = true; earnedPoints = $event"></app-consultation-response-text>
+      <app-consultation-response-text [profileData]="profileData" (openThankYouModal)="showThankYouModal = true; earnedPoints = $event" [responseText]="responseText"></app-consultation-response-text>
     </ng-template>
   </div>
   <div *ngIf="profileData?.reviewType !== 'policy'">

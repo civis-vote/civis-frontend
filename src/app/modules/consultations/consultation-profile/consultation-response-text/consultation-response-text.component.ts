@@ -36,6 +36,7 @@ import { environment } from '../../../../../environments/environment';
 export class ConsultationResponseTextComponent
   implements OnInit, AfterViewChecked {
   @Input() profileData;
+  @Input() responseText: any;
   @ViewChild('responseIndex', { read: ElementRef, static: false })
   responseIndex: ElementRef<any>;
   @ViewChild('responseContainer', { read: ElementRef, static: false })
@@ -49,7 +50,6 @@ export class ConsultationResponseTextComponent
   currentUser: any;
   consultationId: any;
   isMobile = window.innerWidth <= 768;
-  responseText: any;
   showPublicResponseOption: boolean;
   showAutoSaved: boolean;
   templateText: any;
@@ -84,6 +84,11 @@ export class ConsultationResponseTextComponent
   responseStatus = 0;
   profaneWords = [];
   environment: any = environment;
+
+  get profanityCountGetter() {
+  //TODO: Profanity filter feature, remove when ready for deployment to production
+    return environment.production ? 0 : this.profanityCount;
+  }
 
   constructor(
     private userService: UserService,
@@ -158,8 +163,7 @@ export class ConsultationResponseTextComponent
       consultationId: this.consultationId,
       visibility: this.responseVisibility, // initial response visibility set by the user
       responseText: this.responseText,
-      //TODO: Profanity filter feature, remove condition when ready fo deployment to production
-      responseStatus: !environment.production ? this.responseStatus : 0,
+      responseStatus: this.responseStatus,
       satisfactionRating: this.responseFeedback,
     };
     if (checkPropertiesPresence(consultationResponse)) {
@@ -377,8 +381,6 @@ export class ConsultationResponseTextComponent
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
-          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
-          if(!environment.production){
             // this query fetches the data for the user
             this.apollo.watchQuery({
               query: UserCountUser,
@@ -399,10 +401,6 @@ export class ConsultationResponseTextComponent
               const e = new Error(err);
               this.errorService.showErrorModal(err);
             });
-          } else {
-            this.submitResponse(consultationResponse);
-            this.showError = false;
-          }
         } else {
           //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
           this.authModal = true;
@@ -465,7 +463,8 @@ export class ConsultationResponseTextComponent
       variables:{
         userCount:{
           userId: this.currentUser.id,
-          profanityCount: this.userData.profanityCount,
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          profanityCount: !environment.production ? this.userData.profanityCount: 0,
           shortResponseCount: this.shortResponseCount
         }
       },
@@ -506,7 +505,8 @@ export class ConsultationResponseTextComponent
         variables:{
           userCount:{
             userId: this.currentUser.id,
-            profanityCount: this.profanityCount,
+            //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+            profanityCount: this.profanityCountGetter,
             shortResponseCount: 0
           }
         },
@@ -551,7 +551,8 @@ export class ConsultationResponseTextComponent
       variables:{
         userCount:{
           userId: this.currentUser.id,
-          profanityCount: this.profanityCount,
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          profanityCount: this.profanityCountGetter,
           shortResponseCount: this.userData.shortResponseCount
         }
        },

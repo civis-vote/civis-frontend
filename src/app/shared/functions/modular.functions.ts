@@ -205,3 +205,7 @@ export const scrollToFirstError = (selector, element) => {
     }
 };
 
+export const setResponseVisibility = (responseVisibility, userVerificationStatus) => {
+    //set final response visibility based on initial response visibility set by the user and user verification status
+    return responseVisibility && userVerificationStatus ? "shared" : "anonymous";
+}

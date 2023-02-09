@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { environment } from '../../../../environments/environment';
-//TODO: Profanity filter feature, remove condition when ready fo deployment to production
+//TODO: Sort consultations by city feature, remove condition when ready fo deployment to production
 //name field is added here to amke sure that fragment is not empty
 const fragments = environment.production ? gql `
     fragment ministryFields on Ministry {

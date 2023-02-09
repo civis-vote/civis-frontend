@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, 
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
-import { isObjectEmpty, checkPropertiesPresence, scrollToFirstError } from '../../../../shared/functions/modular.functions';
+import { isObjectEmpty, checkPropertiesPresence, scrollToFirstError, setResponseVisibility } from '../../../../shared/functions/modular.functions';
 import { atLeastOneCheckboxCheckedValidator } from 'src/app/shared/validators/checkbox-validator';
 import { Apollo } from 'apollo-angular';
 import { SubmitResponseQuery, ConsultationProfileCurrentUser, CreateUserCountRecord,UpdateUserCountRecord, UserCountUser } from '../consultation-profile.graphql';
@@ -27,7 +27,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   currentUser: any;
   responseAnswers: any[];
   showError: boolean;
-  responseVisibility: any;
+  responseVisibility: boolean = false;
   longTextAnswer: any;
   templateText: any;
   templateId: any;
@@ -55,6 +55,11 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   profaneWords = [];
   environment: any = environment;
 
+  get profanityCountGetter() {
+  //TODO: Profanity filter feature, remove when ready for deployment to production
+    return environment.production ? 0 : this.profanityCount;
+  }
+  
   constructor(private _fb: FormBuilder,
     private userService: UserService,
     private consultationService: ConsultationsService,
@@ -219,8 +224,6 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
-          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
-          if(!environment.production){
             this.apollo.watchQuery({
               query: UserCountUser,
               variables: {userId:this.currentUser.id},
@@ -239,11 +242,8 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
               const e = new Error(err);
                 this.errorService.showErrorModal(err);
             });
-          } else {
-            this.submitResponse(consultationResponse);
-            this.showError = false;
-          }
         } else {
+          //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
           this.authModal = true;
           localStorage.setItem(
             'consultationResponse',
@@ -285,7 +285,8 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
         variables:{
           userCount:{
             userId: this.currentUser.id,
-            profanityCount: this.profanityCount,
+            //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+            profanityCount: this.profanityCountGetter,
             shortResponseCount: 0
           }
          },
@@ -322,7 +323,8 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
         variables:{
           userCount:{
           userId: this.currentUser.id,
-          profanityCount:this.profanityCount,
+          //TODO: Profanity filter feature, remove condition when ready fo deployment to production
+          profanityCount: this.profanityCountGetter,
           shortResponseCount: this.userData.shortResponseCount
         }
       },
@@ -422,9 +424,8 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     const consultationResponse =  {
       consultationId: this.profileData.id,
       satisfactionRating : this.responseFeedback,
-      visibility: this.responseVisibility && this.currentUser?.isVerified ? "shared" : "anonymous",
-      //TODO: Profanity filter feature, remove condition when ready fo deployment to production
-      responseStatus: !environment.production ? this.responseStatus : 0,
+      visibility: this.responseVisibility, // initial response visibility set by the user
+      responseStatus: this.responseStatus,
     };
     if (checkPropertiesPresence(consultationResponse)) {
       consultationResponse['templateId'] = this.templateId;
@@ -486,6 +487,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
 
   submitResponse(consultationResponse) {
     this.responseSubmitLoading = true;
+    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
     this.apollo.mutate({
       mutation: SubmitResponseQuery,
       variables: {

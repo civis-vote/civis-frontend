@@ -10,8 +10,8 @@ export class TokenService {
   hasToken$ = new BehaviorSubject(null);
 
   constructor() {
-    this.tokenHandler();
     this.checkTokenExpiration();
+    this.tokenHandler();
   }
 
   tokenHandler() {
@@ -30,15 +30,13 @@ export class TokenService {
 
   checkTokenExpiration() {
     const currentTime = new Date().toISOString();
-    const tokenExpirationTime = localStorage.getItem("civis-token_expires") ?? 0;
-    
+    const tokenExpirationTime = localStorage.getItem("civis-token_expires") ?? new Date(0).toISOString();
+   
+    // logout user if token expired
     if (currentTime > tokenExpirationTime) {
       localStorage.removeItem("civis-token");
       localStorage.removeItem("civis-token_expires");
     } 
-    if(!tokenExpirationTime && localStorage.getItem('civis-token')) {
-      localStorage.setItem("civis-token_expires", JSON.stringify(this.expiresAt));
-    }
   }
 
 

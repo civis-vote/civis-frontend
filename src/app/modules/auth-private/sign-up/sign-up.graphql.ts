@@ -4,6 +4,7 @@ export const SignUpMutation = gql`
 	mutation authSignUp($auth: SignUp!){
     authSignUp(auth: $auth){
       accessToken
+	  expiresAt
     }
   }
 `;
@@ -33,6 +34,7 @@ export const AuhtAcceptInviteMutation = gql`
 	mutation authAcceptInvite($auth: AcceptInvite!){
 		authAcceptInvite(auth: $auth){
       		accessToken
+			expiresAt
    		}
   	}
 `;

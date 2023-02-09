@@ -218,6 +218,7 @@ export class SignUpComponent implements OnInit {
 
   onSignUp() {
     this.tokenService.tokenHandler();
+    this.tokenService.checkTokenExpiration();
     this.userService.manageUserToken();
   }
 
@@ -302,6 +303,7 @@ export class SignUpComponent implements OnInit {
     this.showLogoutModal = false;
     this.invitationToken = null;
     localStorage.removeItem('civis-token');
+    localStorage.removeItem('civis-token_expires');
     this.userService.currentUser = null;
     this.userService.userLoaded$.next(false);
     this.router.navigateByUrl('/auth-private');

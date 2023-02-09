@@ -182,6 +182,7 @@ export class NavbarComponent implements OnInit {
     event.stopPropagation();
     this.profilePopup = false;
     localStorage.removeItem('civis-token');
+    localStorage.removeItem('civis-token_expires');
     this.userService.currentUser = null;
     this.userService.userLoaded$.next(false);
     this.router.navigate(['']);

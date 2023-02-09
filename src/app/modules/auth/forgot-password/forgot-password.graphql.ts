@@ -10,6 +10,7 @@ export const ForgotPasswordMutation = gql`
   mutation authResetPassword ($auth: ResetPassword!) {
     authResetPassword (auth : $auth) {
         accessToken
+        expiresAt
     }
   }`;
 

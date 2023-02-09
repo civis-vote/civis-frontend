@@ -4,6 +4,7 @@ export const SignUpMutation = gql`
 	mutation authSignUp($auth: SignUp!){
     authSignUp(auth: $auth){
       accessToken
+	  expiresAt
     }
   }
 `;

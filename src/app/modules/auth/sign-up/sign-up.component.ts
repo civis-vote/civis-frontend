@@ -133,7 +133,6 @@ export class SignUpComponent implements OnInit {
   }
 
   onSignUp() {
-    this.tokenService.checkTokenExpiration();
     this.tokenService.tokenHandler();
     this.userService.manageUserToken();
   }

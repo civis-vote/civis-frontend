@@ -10,11 +10,11 @@ export class TokenService {
   hasToken$ = new BehaviorSubject(null);
 
   constructor() {
-    this.checkTokenExpiration();
     this.tokenHandler();
   }
 
   tokenHandler() {
+    this.checkTokenExpiration();
     if (localStorage.getItem('civis-token') && localStorage.getItem("civis-token_expires")) {
       this.token = localStorage.getItem('civis-token');
       this.expiresAt = localStorage.getItem("civis-token_expires");

@@ -62,7 +62,6 @@ export class LoginComponent implements OnInit {
   }
 
   onLoggedIn() {
-    this.tokenService.checkTokenExpiration();
     this.tokenService.tokenHandler();
     this.userService.manageUserToken();
   }

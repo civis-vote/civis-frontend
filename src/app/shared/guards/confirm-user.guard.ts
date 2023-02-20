@@ -14,6 +14,7 @@ const ConfirmEmailMutation = gql`
     mutation confirmEmail($confirmationToken: String!) {
         authConfirmEmail (confirmationToken: $confirmationToken) {
             accessToken
+            expiresAt
         }
     }
 `;

@@ -23,6 +23,7 @@ export class StarterService {
         const GTMKey = environment.production ? 'GTM-5SHVQF8' : '';
         if (GTMKey) {
             const tagManagerScript = this.renderer.createElement('script');
+            tagManagerScript.setAttribute("nonce","6A576D5A7134743777217A25432A462D")
             tagManagerScript.innerHTML =
                 `(function (w, d, s, l, i) {
                     w[l] = w[l] || []; w[l].push({

@@ -1,124 +1,335 @@
 <div class="about-us-wrapper">
-  <div class="about-us-wrapper__quote-section">
-    <p class="quote-title">{{ '“No Office in this land is more important than that of being a citizen”' | translate}}</p>
-    <p class="quote-subtitle">Felix Frankfurter</p>
-    <p class="quote-content">
-      {{"At Civis, we believe it is you who know what's best for your community. 
-      We are building a bridge between citizens and Governments, to ensure that people's voice isn't just heard but 
-      acknowledged and acted upon by those in power." | translate }} <br /><br />
-      {{'We present various public policies being worked on by the government on our website, and allow you to share your feedback on them. This feedback gets passed on to the relevant authorities. 
-      We believe that it is essential that dialogue between citizens and government remains vibrant and thriving. 
-      Civis gives your opinion the ability to rise above the noise and be registered by your leaders.' | translate}} <br /><br />
-      {{'By facilitating this back and forth, we keep the spirit of democracy alive as we form a part of a billion-strong citizenry - working together to build this massive project that we call India.' | translate}}
-      <br /><br />
-      {{'Keen to implement Civis in your own country?' | translate}}
-    </p>
-    <a href="mailto:info@civis.vote" class="text-decoration-none">
-      <button class="app-btn abt-btn circular" >{{'Start A Chapter' | translate}} <span><i class="fa fa-angle-right"></i></span></button>
-    </a>
-  </div>
-
-  <hr class="content-divider" />
-
-  <div class="about-us-wrapper__content-section">
-    <p class="content-title"> {{'Why Participate, You Ask?' | translate}} </p>
-    <p class="content-detail">
-       {{"India has a population of 1.2 billion, and each one of us has an opinion. 
-       We argue about them over cups of chai, in our family Whatsapp groups, at our parlours and our barber's, 
-       on the news and in our living rooms, we scream them and we whisper them, we type them and we recite them. 
-       It's all a bit of chaos, really." | translate}}
-      <br /><br />
-     {{"Now, imagine a space that could filter out all of that noise, and give shape and direction to the countless 
-     conversations going on at any given time all over the country - imagine a space that could be a platform for you, 
-     the citizen's, voice to emerge front and center." | translate}}
-    </p>
-    <button class="app-btn abt-btn circular" [routerLink]="['/how-civis-works']">{{'Learn How Civis Works' | translate}} <span><i class="fa fa-angle-right"></i></span></button>
-  </div>
-
-  <hr class="content-divider" />
-
-  <div class="about-us-wrapper__people-section">
-    <p class="content-title"> {{'The people behind Civis' | translate}}</p>
-    <div class="people-list-wrapper">
-      <p class="list-title"> {{'THE TEAM' | translate}}</p>
-      <div class="people-list-grid">
-        <a class="people-profile text-decoration-none" href=" https://in.linkedin.com/in/antaraavasudev" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/antaraa.webp" type="image/webp">
-            <source srcset="assets/images/antaraa.jpg" type="image/jpeg">
-            <img src="assets/images/antaraa.jpg" alt="Antaraa image" />
-          </picture>
-          <p class="profile-name">Antaraa Vasudev</p>
-          <p class="profile-subtitle"> {{'Founder' | translate}}</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://www.linkedin.com/in/nitika-sangal" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/Nitika.webp" type="image/webp">
-            <source srcset="assets/images/Nitika.png" type="image/jpeg">
-            <img src="assets/images/Nitika.png" alt="Nitika image" style="width: 128px; height: 128px;" />
-          </picture>
-          <p class="profile-name">Nitika Sangal</p>
-          <p class="profile-subtitle"> {{'Marketing Manager' | translate}}</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://www.linkedin.com/in/divya-pinge-5504379" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/Divya.webp" type="image/webp">
-            <source srcset="assets/images/Divya.png" type="image/jpeg">
-            <img src="assets/images/Divya.png" alt="Divya image"  />
-          </picture>
-          <p class="profile-name">Divya Pinge</p>
-          <p class="profile-subtitle"> {{'Lead Product Manager' | translate}}</p>
-        </a>
-      </div>
-    </div>
-    <div class="people-list-wrapper">
-      <p class="list-title">{{'BOARD OF ADVISORS' | translate}}</p>
-      <div class="people-list-grid">
-        <a class="people-profile text-decoration-none" href="https://in.linkedin.com/in/starlenesharma" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/starlene.webp" type="image/webp">
-            <source srcset="assets/images/starlene.jpg" type="image/jpeg">
-            <img src="assets/images/starlene.jpg" alt="Starlene image" />
-          </picture>
-          <p class="profile-name">Starlene Sharma</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://in.linkedin.com/in/srikanth-viswanathan-087b2735" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/srikanth.webp" type="image/webp">
-            <source srcset="assets/images/srikanth.jpg" type="image/jpeg">
-            <img src="assets/images/srikanth.jpg" alt="Srikanth image" />
-          </picture>
-          <p class="profile-name">Srikanth Viswanathan</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://www.linkedin.com/in/deepa-iyer-62bb447" target="_blank">
-          <picture class="avatar avatar--128 d-image">
-            <source srcset="assets/images/deepa-iyer.webp" type="image/webp">
-            <source srcset="assets/images/deepa-iyer.jpg" type="image/jpeg">
-            <img src="assets/images/deepa-iyer.jpg" alt="Deepa Iyer image" />
-          </picture>
-          <p class="profile-name">Deepa Iyer</p>
-        </a>
+  <div class="section">
+    <div class="small-container">
+      <div class="content">
+        <div class="heading">About Us</div>
+        <div class="text">
+          Civis is a community-driven non-profit platform built and maintained
+          by Civic Innovation Foundation. It was founded in 2018 by Antaraa
+          Vasudev with an aim to increase citizen participation in the
+          lawmaking process, to generate public awareness and provide
+          education on issues of civic importance.
+        </div>
       </div>
     </div>
   </div>
-  <hr class="content-divider" />
-
-  <div class="about-us-wrapper__content-section">
-    <p class="content-title"> {{'Tell Me More…' | translate}}</p>
-    <p class="content-detail">
-       {{'Civis is a community driven platform, which is built and maintained by Civic Innovation Foundation.' | translate}}
-      <br /><br />
-       {{'Civic Innovation Foundation is a non-profit organisation whose aim is to generate public awareness and provide education on issues of civic importance.' | translate}}
-      <br /><br />
-      {{"The Foundation has worked in partnership with non-profit organisations and Government bodies to facilitate citizen’s participation in the law making process at a ward, city and state level." | translate}}
-      <br /><br />
-       {{"To enable other organisations to conduct citizen’s engagement, we have created open source toolkits on civic engagement, which can be implemented in low literacy areas, as well as the open source platform - Civis. " | translate}}
-    </p>
-    <a class="text-decoration-none" href="https://bit.ly/2GMvtSw" target="_blank">
-      <button class="app-btn abt-btn circular"> {{'Learn More' | translate}}<span><i class="fa fa-angle-right"></i></span></button>
-    </a>
+  <div class="quote-section">
+    <div class="small-container">
+      <div class="content-wrapper">
+        <div class="content">
+          <div class="quote">
+            “No office in this land is more important<br />than that of being
+            a citizen”
+          </div>
+          <div class="quote-name">Felix Frankfurter</div>
+        </div>
+      </div>
+    </div>
   </div>
-  
-  <hr class="content-divider" />
+  <div class="section">
+    <div class="container f2wf-columns">
+      <div class="content">
+        <h1 class="heading">What We Do</h1>
+        <div class="columns">
+          <p class="description">
+            Through this platform and many civic initiatives, the organisation
+            works to build effective dialogue between governments and citizens
+            on draft laws and policies at a national, state, city and ward
+            level.<br /><br />
+            The work done at Civis complements and furthers the
+            Pre-Legislative Consultation Policy 2014 - a measure of the Indian
+            government that encourages lawmakers to consult with citizens and
+            relevant stakeholders through public consultations before
+            finalising the draft law.
+          </p>
+          <div class="video-wrapper">
+            <a data-w-id="e91b1a6d-177c-029a-6eb4-8a69d4bd6436" class="uui-layout03_lightbox w-inline-block w-lightbox"
+              (click)="playVideo()">
+              <div class="lightbox_video-overlay-layer">
+                <img src="assets/about-us-images/play-icon.svg" loading="lazy" alt="Video play icon"
+                  class="uui-lightbox_play-icon" />
+              </div>
+              <img src="assets/about-us-images/Civis-Public-Constultants-1.png" loading="lazy" width="1440"
+                sizes="(max-width: 479px) 90vw, (max-width: 767px) 93vw, 46vw" alt="Dashboard mockup" srcset="
+                    assets/about-us-images/Civis-Public-Constultants-1-p-500.png   500w,
+                    assets/about-us-images/Civis-Public-Constultants-1-p-800.png   800w,
+                    assets/about-us-images/Civis-Public-Constultants-1-p-1080.png 1080w,
+                    assets/about-us-images/Civis-Public-Constultants-1.png        1160w
+                  " class="uui-layout03_image-2 shadow-xlarge" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="services-section">
+    <div class="heading">At Civis, We...</div>
+    <div class="small-container">
+      <div class="row">
+        <div class="title">Prepare Legal Materials</div>
+        <div class="small-columns">
+          <div class="custom-card fixed-width">
+            <img src="assets/about-us-images/Image.png" loading="lazy" alt="" class="services-image" />
+            <div class="fixed-text">
+              Aggregate all open laws<br />seeking feedback
+            </div>
+          </div>
+          <div class="custom-card fixed-width">
+            <img src="assets/about-us-images/Image_1.png" loading="lazy" alt="" class="services-image" />
+            <div class="fixed-text">
+              Simplify these laws in <br />easy to understand language
+            </div>
+          </div>
+          <div class="custom-card fixed-width">
+            <img src="assets/about-us-images/Image_2.png" loading="lazy" alt="" class="services-image" />
+            <div class="fixed-text">
+              Translate them<br />in local languages
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="services-divider-1"></div>
+      <div class="row">
+        <div class="title">Gather and Analyze Feedback</div>
+        <div class="small-columns">
+          <div class="custom-card fixed-width">
+            <img src="assets/about-us-images/Image_3.png" loading="lazy" alt="" class="services-image" />
+            <div class="fixed-text">
+              Reach out to individuals<br />and gather inputs on these laws
+            </div>
+          </div>
+          <div class="custom-card fixed-width">
+            <img src="assets/about-us-images/Image_4.png" loading="lazy" alt="" class="services-image" />
+            <div class="fixed-text">
+              Analyse and share citizen’s feedback<br />with the Government
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="services-divider-2"></div>
+      <div class="row">
+        <div class="title">Support Government</div>
+        <div class="small-columns">
+          <div class="custom-card">
+            <img src="assets/about-us-images/Image_5.png" loading="lazy" alt="" class="services-image" />
+            <div class="fixed-text">
+              Build Government capacity<br />to run effective Consultations<br />and
+              gather actionable insights
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="small-container">
+      <div class="heading">Why Participate, You Ask?</div>
+      <div class="columns">
+        <div class="column">
+          <div class="intro">
+            <div class="description">
+              India has a population of 1.2 billion, and each one of us has an
+              opinion. We argue about them over cups of chai, in our family
+              Whatsapp groups, at our parlours and our barber&#x27;s, on the
+              news and in our living rooms, we scream them and we whisper
+              them, we type them and we recite them. It&#x27;s all a bit of
+              chaos, really.
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="intro">
+            <div class="description">
+              <div class="description description">
+                <span class="description">Now, imagine a space that could filter out all of that
+                  noise, and give shape and direction to the countless
+                  conversations going on at any given time all over the
+                  country - imagine a space that could be a platform for you,
+                  the citizen&#x27;s, voice to emerge front and center.</span><span class="description-1">‍</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="services-divider-1"></div>
+      <div class="content">
+        <p>
+          <span class="description-1">Civis is that space</span><span class="description">, where you can voice your
+            opinions and help shape the laws that
+            impact you!</span>
+        </p>
+        <a href="https://www.civis.vote/how-civis-works" target="_blank" class="button w-button">How We Work</a>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="container">
+      <div class="title-section">
+        <div class="heading">The People Behind Civis</div>
+        <div class="title">THE TEAM</div>
+      </div>
+      <div class="f2wf-columns wrapper">
+        <a href="https://www.linkedin.com/in/adityatannu/" target="_blank" class="link-card w-inline-block">
+          <div class="custom-card">
+            <div class="image-wrapper">
+              <img src="assets/about-us-images/3-2.png" loading="lazy" alt="" class="image" />
+            </div>
+            <div class="content">
+              <div class="info">
+                <div class="person-name">Aditya Tannu</div>
+                <div class="text">Consultatio Fellow 2022-23</div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/antaraavasudev/" target="_blank" class="link-card w-inline-block">
+          <div class="custom-card">
+            <div class="image-wrapper">
+              <img src="assets/about-us-images/antaraa-1.png" loading="lazy" alt="" class="image" />
+            </div>
+            <div class="content">
+              <div class="info">
+                <div class="person-name">Antaraa Vasudev</div>
+                <div class="text">Founder &amp; CEO</div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/anusree-u-77295613a/" target="_blank" class="link-card w-inline-block">
+          <div class="custom-card">
+            <div class="image-wrapper">
+              <img src="assets/about-us-images/1-4.png" loading="lazy" alt="" class="image" />
+            </div>
+            <div class="content">
+              <div class="info">
+                <div class="person-name">Anusree U</div>
+                <div class="text">Associate, Communications</div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/shachinelli/" target="_blank" class="link-card w-inline-block">
+          <div class="custom-card">
+            <div class="image-wrapper">
+              <img src="assets/about-us-images/4-2.png" loading="lazy" alt="" class="image" />
+            </div>
+            <div class="content">
+              <div class="info">
+                <div class="person-name">Shachi Nelli</div>
+                <div class="text">Senior Associate, Governance</div>
+              </div>
+            </div>
+          </div>
+        </a>
+        <a href="https://www.linkedin.com/in/shonottrakumar/" target="_blank" class="link-card w-inline-block">
+          <div class="custom-card">
+            <div class="image-wrapper">
+              <img src="assets/about-us-images/5-2.png" loading="lazy" alt="" class="image" />
+            </div>
+            <div class="content">
+              <div class="info">
+                <div class="person-name">Shonottra Kumar</div>
+                <div class="text">Senior Associate, Outreach and Comms</div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="logo-section">
+    <div class="title">OUR SUPPORTERS</div>
+    <div class="content">
+      <div class="wrapper">
+        <div class="logo-wrapper">
+          <a href="https://godrejcp.com/" target="_blank" class="logo-link w-inline-block"><img
+              src="assets/about-us-images/godrej-1.png" loading="lazy" sizes="(max-width: 479px) 37vw, 176px" srcset="
+                  assets/about-us-images/godrej-1-p-500.png 500w,
+                  assets/about-us-images/godrej-1.png       528w
+                " alt="" class="logo" /></a>
+        </div>
+        <div class="logo-wrapper">
+          <img src="assets/about-us-images/ll-1.png" loading="lazy"
+            sizes="(max-width: 479px) 38vw, (max-width: 767px) 42vw, (max-width: 991px) 27vw, 241.25px" srcset="
+                assets/about-us-images/ll-1-p-500.png 500w,
+                assets/about-us-images/ll-1.png       561w
+              " alt="" class="logo" />
+        </div>
+        <div class="logo-wrapper">
+          <a href="https://rohininilekaniphilanthropies.org/" target="_blank" class="logo-link w-inline-block"><img
+              src="assets/about-us-images/rnp-1.png" loading="lazy"
+              sizes="(max-width: 479px) 38vw, (max-width: 767px) 39vw, (max-width: 991px) 27vw, 221.35000610351562px"
+              srcset="
+                  assets/about-us-images/rnp-1-p-500.png 500w,
+                  assets/about-us-images/rnp-1.png       641w
+                " alt="" class="logo" /></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="logo-section">
+    <div class="title">PAST CONSULTATION PARTNERS</div>
+    <div class="content">
+      <div class="wrapper">
+        <div class="logo-wrapper">
+          <a href="https://medium.com/civis-vote/engaging-communities-in-the-future-of-indias-cities-7b795ecb99a5"
+            target="_blank" class="logo-link w-inline-block"><img src="assets/about-us-images/NIUA_Logo_new-1.png"
+              loading="lazy"
+              sizes="(max-width: 479px) 38vw, (max-width: 767px) 40vw, (max-width: 991px) 27vw, 242.83750915527344px"
+              srcset="
+                  assets/about-us-images/NIUA_Logo_new-1-p-500.png 500w,
+                  assets/about-us-images/NIUA_Logo_new-1.png       640w
+                " alt="" class="logo" /></a>
+        </div>
+        <div class="logo-wrapper">
+          <a href="https://medium.com/civis-vote/enabling-educators-learnings-from-a-consultation-10b084fafba4"
+            target="_blank" class="logo-link w-inline-block"><img src="assets/about-us-images/logo-1-1.png"
+              loading="lazy" alt="" class="logo" /></a>
+        </div>
+        <div class="logo-wrapper">
+          <img src="assets/about-us-images/MSInS_Logo-1.png" loading="lazy"
+            sizes="(max-width: 479px) 38vw, (max-width: 767px) 42vw, 28vw" srcset="
+                assets/about-us-images/MSInS_Logo-1-p-500.png 500w,
+                assets/about-us-images/MSInS_Logo-1.png       700w
+              " alt="" class="logo" />
+        </div>
+        <div class="logo-wrapper">
+          <a href="https://medium.com/civis-vote/building-dialogue-a-new-beginning-for-citizens-engagement-6caff57672be"
+            target="_blank" class="logo-link w-inline-block"><img src="assets/about-us-images/gmda_logo_trans-1.png"
+              loading="lazy" alt="" class="logo" /></a>
+        </div>
+        <div class="logo-wrapper">
+          <a href="https://medium.com/civis-vote/justice-delivery-goes-digital-826938401e1" target="_blank"
+            class="logo-link w-inline-block"><img src="assets/about-us-images/NITI_Aayog_logo-1.png" loading="lazy"
+              alt="" class="logo" /></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>
+<div *ngIf="openVideoModal" class="w-lightbox-backdrop" style="transition: opacity 300ms ease 0s; opacity: 1;">
+  <div class="w-lightbox-container">
+    <div class="w-lightbox-content">
+      <div class="w-lightbox-view" tabindex="0" id="w-lightbox-view" style="opacity: 1;">
+        <div class="w-lightbox-frame">
+          <figure class="w-lightbox-figure"><img class="w-lightbox-img w-lightbox-image"
+              src="data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22940%22%20height=%22528%22/%3E"><iframe
+              class="embedly-embed w-lightbox-embed"
+              src="//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2FO20DsP3oWB0%3Ffeature%3Doembed&amp;display_name=YouTube&amp;url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DO20DsP3oWB0&amp;image=https%3A%2F%2Fi.ytimg.com%2Fvi%2FO20DsP3oWB0%2Fhqdefault.jpg&amp;key=96f1f04c5f4143bcb0f2e68c87d65feb&amp;type=text%2Fhtml&amp;schema=youtube"
+              width="940" height="528" scrolling="no" title="YouTube embed" frameborder="0" allow="autoplay; fullscreen"
+              allowfullscreen="true"></iframe></figure>
+        </div>
+      </div>
+      <div class="w-lightbox-spinner w-lightbox-hide" role="progressbar" aria-live="polite" aria-hidden="true"
+        aria-busy="false" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-valuetext="Loaded image"></div>
+      <div class="w-lightbox-control w-lightbox-left w-lightbox-inactive" role="button" aria-hidden="true"
+        aria-controls="w-lightbox-view" aria-label="previous image" tabindex="-1"></div>
+      <div class="w-lightbox-control w-lightbox-right w-lightbox-inactive" role="button" aria-hidden="true"
+        aria-controls="w-lightbox-view" aria-label="next image" tabindex="-1"></div>
+      <div class="w-lightbox-control w-lightbox-close close-button" role="button" aria-label="close lightbox"
+        tabindex="0" (click)="closeVideo()"></div>
+    </div>
+    <div class="w-lightbox-strip" role="tablist"></div>
+  </div>
+</div>

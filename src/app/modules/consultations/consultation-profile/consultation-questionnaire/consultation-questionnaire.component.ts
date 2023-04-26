@@ -46,7 +46,6 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     title: ''
   };
   nudgeMessageDisplayed= false;
-  userResponse='';
   profanityCount: any;
   userData:any;
   profanity_count_changed: boolean=false;
@@ -264,8 +263,7 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
     var Filter = require('bad-words'),
     filter = new Filter({list: this.profaneWords});
 
-    this.isUserResponseProfane=filter.isProfane(this.userResponse);
-
+    this.isUserResponseProfane=filter.isProfane(this.longTextAnswer);
     if (this.userData!==null){
       this.profanityCount=this.userData.profanityCount;
     }

@@ -40,7 +40,7 @@
                 </div>
                 <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
                   <div class="text-area" >
-                    <textarea (input)="longTextAnswer = $event.target.value" placeholder="Type your answer here, please refrain from using profane words" [formControlName]="question.id" [(ngModel)]='userResponse'></textarea>
+                    <textarea (input)="longTextAnswer = $event.target.value" placeholder="Type your answer here, please refrain from using profane words" [formControlName]="question.id" ></textarea>
                   </div>
                   <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div> 
                 </div>

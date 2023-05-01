@@ -2,6 +2,11 @@ import { Component, OnInit, ViewChild, Output, EventEmitter, Input, Renderer2, E
 import { ModalDirective } from 'ngx-bootstrap';
 import { getSocialLink } from '../socialLink.function';
 
+declare global {
+  interface Window {
+    fbq:any;
+  }
+}
 
 @Component({
   selector: 'app-thank-you-modal',

@@ -22,6 +22,10 @@ export class ThankYouModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUrl = window.location.href;
+    const pathName = window.location.pathname;
+    if(window.fbq && pathName === '/consultations/475/read'){
+      window.fbq('track', 'Lead');
+    }
   }
 
   closeModal() {

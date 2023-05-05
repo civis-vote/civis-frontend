@@ -26,6 +26,7 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
 import { DomSanitizer } from '@angular/platform-browser';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
+import { MetaPixelService } from 'src/app/shared/services/pixel.service';
 
 @Component({
   selector: 'app-consultation-response-text',
@@ -97,6 +98,7 @@ export class ConsultationResponseTextComponent
     private el: ElementRef,
     private apollo: Apollo,
     private sanitizer: DomSanitizer,
+    private metaPixelService: MetaPixelService,
     private errorService: ErrorService
   ) {
     this.consultationService.consultationId$
@@ -381,6 +383,8 @@ export class ConsultationResponseTextComponent
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
+            this.metaPixelService.trackSubmitResponse();
+
             // this query fetches the data for the user
             this.apollo.watchQuery({
               query: UserCountUser,
@@ -578,7 +582,7 @@ export class ConsultationResponseTextComponent
 
   submitResponse(consultationResponse) {
     this.responseSubmitLoading = true;
-    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)    
+    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
     this.apollo
       .mutate({
         mutation: SubmitResponseQuery,

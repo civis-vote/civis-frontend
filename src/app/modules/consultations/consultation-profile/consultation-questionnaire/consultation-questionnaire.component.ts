@@ -10,6 +10,7 @@ import { filter, map } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
+import { MetaPixelService } from 'src/app/shared/services/pixel.service';
 
 @Component({
   selector: 'app-consultation-questionnaire',
@@ -58,12 +59,13 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
   //TODO: Profanity filter feature, remove when ready for deployment to production
     return environment.production ? 0 : this.profanityCount;
   }
-  
+
   constructor(private _fb: FormBuilder,
     private userService: UserService,
     private consultationService: ConsultationsService,
     private apollo: Apollo,
     private errorService: ErrorService,
+    private metaPixelService: MetaPixelService,
     private el: ElementRef) {
     this.questionnaireForm = this._fb.group({});
     this.consultationService.consultationId$
@@ -223,6 +225,8 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
+            this.metaPixelService.trackSubmitResponse();
+
             this.apollo.watchQuery({
               query: UserCountUser,
               variables: {userId:this.currentUser.id},

@@ -459,6 +459,9 @@ export class ConsultationQuestionnaireComponent implements OnInit, AfterViewInit
         this.questions.forEach(ques => {
           if (question.id === ques.id) {
             ques.is_other = false;
+            if(this.questionnaireForm.controls['other_answer-'+ques.id]){
+              this.questionnaireForm.removeControl('other_answer-' + ques.id)
+            }
           }
         });
       }

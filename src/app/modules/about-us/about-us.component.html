@@ -1,124 +1,128 @@
 <div class="about-us-wrapper">
-  <div class="about-us-wrapper__quote-section">
-    <p class="quote-title">{{ '“No Office in this land is more important than that of being a citizen”' | translate}}</p>
-    <p class="quote-subtitle">Felix Frankfurter</p>
-    <p class="quote-content">
-      {{"At Civis, we believe it is you who know what's best for your community. 
-      We are building a bridge between citizens and Governments, to ensure that people's voice isn't just heard but 
-      acknowledged and acted upon by those in power." | translate }} <br /><br />
-      {{'We present various public policies being worked on by the government on our website, and allow you to share your feedback on them. This feedback gets passed on to the relevant authorities. 
-      We believe that it is essential that dialogue between citizens and government remains vibrant and thriving. 
-      Civis gives your opinion the ability to rise above the noise and be registered by your leaders.' | translate}} <br /><br />
-      {{'By facilitating this back and forth, we keep the spirit of democracy alive as we form a part of a billion-strong citizenry - working together to build this massive project that we call India.' | translate}}
-      <br /><br />
-      {{'Keen to implement Civis in your own country?' | translate}}
-    </p>
-    <a href="mailto:info@civis.vote" class="text-decoration-none">
-      <button class="app-btn abt-btn circular" >{{'Start A Chapter' | translate}} <span><i class="fa fa-angle-right"></i></span></button>
-    </a>
-  </div>
-
-  <hr class="content-divider" />
-
-  <div class="about-us-wrapper__content-section">
-    <p class="content-title"> {{'Why Participate, You Ask?' | translate}} </p>
-    <p class="content-detail">
-       {{"India has a population of 1.2 billion, and each one of us has an opinion. 
-       We argue about them over cups of chai, in our family Whatsapp groups, at our parlours and our barber's, 
-       on the news and in our living rooms, we scream them and we whisper them, we type them and we recite them. 
-       It's all a bit of chaos, really." | translate}}
-      <br /><br />
-     {{"Now, imagine a space that could filter out all of that noise, and give shape and direction to the countless 
-     conversations going on at any given time all over the country - imagine a space that could be a platform for you, 
-     the citizen's, voice to emerge front and center." | translate}}
-    </p>
-    <button class="app-btn abt-btn circular" [routerLink]="['/how-civis-works']">{{'Learn How Civis Works' | translate}} <span><i class="fa fa-angle-right"></i></span></button>
-  </div>
-
-  <hr class="content-divider" />
-
-  <div class="about-us-wrapper__people-section">
-    <p class="content-title"> {{'The people behind Civis' | translate}}</p>
-    <div class="people-list-wrapper">
-      <p class="list-title"> {{'THE TEAM' | translate}}</p>
-      <div class="people-list-grid">
-        <a class="people-profile text-decoration-none" href=" https://in.linkedin.com/in/antaraavasudev" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/antaraa.webp" type="image/webp">
-            <source srcset="assets/images/antaraa.jpg" type="image/jpeg">
-            <img src="assets/images/antaraa.jpg" alt="Antaraa image" />
-          </picture>
-          <p class="profile-name">Antaraa Vasudev</p>
-          <p class="profile-subtitle"> {{'Founder' | translate}}</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://www.linkedin.com/in/nitika-sangal" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/Nitika.webp" type="image/webp">
-            <source srcset="assets/images/Nitika.png" type="image/jpeg">
-            <img src="assets/images/Nitika.png" alt="Nitika image" style="width: 128px; height: 128px;" />
-          </picture>
-          <p class="profile-name">Nitika Sangal</p>
-          <p class="profile-subtitle"> {{'Marketing Manager' | translate}}</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://www.linkedin.com/in/divya-pinge-5504379" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/Divya.webp" type="image/webp">
-            <source srcset="assets/images/Divya.png" type="image/jpeg">
-            <img src="assets/images/Divya.png" alt="Divya image"  />
-          </picture>
-          <p class="profile-name">Divya Pinge</p>
-          <p class="profile-subtitle"> {{'Lead Product Manager' | translate}}</p>
-        </a>
+  <section>
+    <h1>About Us</h1>
+    <div class="first-para">
+      Civis is a community-driven non-profit platform built and maintained by Civic Innovation Foundation. It was
+      founded in 2018 by Antaraa Vasudev with an aim to increase citizen participation in the lawmaking process, to
+      generate public awareness and provide education on issues of civic importance.
+    </div>
+  </section>
+  <section class="quote-section">
+    <div class="quote-text">
+      <q>No office in this land is
+        <div class="sep-text">more important</div>
+        than that of being a citizen</q>
+    </div>
+    <div class="quotemaster">Felix Frankfurter</div>
+  </section>
+  <section class="what-we-do">
+    <h1>What We Do</h1>
+    <div class="section-content">
+      <div class="video-section">
+        <iframe src="https://www.youtube.com/embed/O20DsP3oWB0" title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <div>
+        <p>
+          Through this platform and many civic initiatives, the organisation works to build effective dialogue between
+          governments and citizens on draft laws and policies at a national, state, city and ward level.
+        </p>
+        <p>
+          The work done at Civis complements and furthers the <b>Pre-Legislative Consultation Policy 2014</b> - a
+          measure
+          of the
+          Indian government that encourages lawmakers to consult with citizens and relevant stakeholders through
+          public
+          consultations before finalising the draft law.
+        </p>
       </div>
     </div>
-    <div class="people-list-wrapper">
-      <p class="list-title">{{'BOARD OF ADVISORS' | translate}}</p>
-      <div class="people-list-grid">
-        <a class="people-profile text-decoration-none" href="https://in.linkedin.com/in/starlenesharma" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/starlene.webp" type="image/webp">
-            <source srcset="assets/images/starlene.jpg" type="image/jpeg">
-            <img src="assets/images/starlene.jpg" alt="Starlene image" />
-          </picture>
-          <p class="profile-name">Starlene Sharma</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://in.linkedin.com/in/srikanth-viswanathan-087b2735" target="_blank">
-          <picture class="avatar avatar--128">
-            <source srcset="assets/images/srikanth.webp" type="image/webp">
-            <source srcset="assets/images/srikanth.jpg" type="image/jpeg">
-            <img src="assets/images/srikanth.jpg" alt="Srikanth image" />
-          </picture>
-          <p class="profile-name">Srikanth Viswanathan</p>
-        </a>
-        <a class="people-profile text-decoration-none" href="https://www.linkedin.com/in/deepa-iyer-62bb447" target="_blank">
-          <picture class="avatar avatar--128 d-image">
-            <source srcset="assets/images/deepa-iyer.webp" type="image/webp">
-            <source srcset="assets/images/deepa-iyer.jpg" type="image/jpeg">
-            <img src="assets/images/deepa-iyer.jpg" alt="Deepa Iyer image" />
-          </picture>
-          <p class="profile-name">Deepa Iyer</p>
-        </a>
+  </section>
+  <section class="cards-section">
+    <h1>At Civis, We...</h1>
+    <div class="cards-list">
+      <div class="info-card-wrapper" *ngFor="let card of atCivisCards"
+        [ngClass]="card.isSpecialCard ? 'special-card' : ''">
+        <div class="info-card">
+          <div>
+            <img [src]="card.image" [alt]="card.text" />
+          </div>
+          <div class="text">
+            <span class="bolded">{{card.text}}</span>{{card.normalText}}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-  <hr class="content-divider" />
-
-  <div class="about-us-wrapper__content-section">
-    <p class="content-title"> {{'Tell Me More…' | translate}}</p>
-    <p class="content-detail">
-       {{'Civis is a community driven platform, which is built and maintained by Civic Innovation Foundation.' | translate}}
-      <br /><br />
-       {{'Civic Innovation Foundation is a non-profit organisation whose aim is to generate public awareness and provide education on issues of civic importance.' | translate}}
-      <br /><br />
-      {{"The Foundation has worked in partnership with non-profit organisations and Government bodies to facilitate citizen’s participation in the law making process at a ward, city and state level." | translate}}
-      <br /><br />
-       {{"To enable other organisations to conduct citizen’s engagement, we have created open source toolkits on civic engagement, which can be implemented in low literacy areas, as well as the open source platform - Civis. " | translate}}
-    </p>
-    <a class="text-decoration-none" href="https://bit.ly/2GMvtSw" target="_blank">
-      <button class="app-btn abt-btn circular"> {{'Learn More' | translate}}<span><i class="fa fa-angle-right"></i></span></button>
-    </a>
-  </div>
-  
-  <hr class="content-divider" />
+  </section>
+  <section class="why-participate">
+    <h1>Why Participate, You Ask?</h1>
+    <div class="paras">
+      <p>India has a population of 1.2 billion, and each one of us has an opinion. We argue about them over cups of
+        chai, in our family Whatsapp groups, at our parlours and our barber's, on the news and in our living rooms, we
+        scream them and we whisper them, we type them and we recite them. It's all a bit of chaos, really.
+      </p>
+      <p>Now, imagine a space that could filter out all of that noise, and give shape and direction to the countless
+        conversations going on at any given time all over the country - imagine a space that could be a platform for
+        you, the citizen's, voice to emerge front and center.
+      </p>
+    </div>
+    <div class="hr"></div>
+    <div class="text-center cta-text">
+      <b>Civis is that space</b>, where you can voice your opinions and help shape the laws that impact you!
+    </div>
+    <div class="text-center">
+      <button class="app-btn abt-btn circular" [routerLink]="['/how-civis-works']">How we work</button>
+    </div>
+  </section>
+  <section class="team-section">
+    <h1>The People Behind Civis</h1>
+    <div class="title">The Team</div>
+    <div class="members-list">
+      <ng-container *ngFor="let teamMember of teamMembers">
+        <a [href]="teamMember.href" target="_blank" class="member-link" [ngClass]="teamMember.class">
+          <div class="member-card">
+            <img [src]="teamMember.image" [alt]="teamMember.name" />
+            <div class="name">{{teamMember.name}}</div>
+            <div class="member-description">{{teamMember.description}}</div>
+          </div>
+        </a>
+      </ng-container>
+    </div>
+  </section>
+  <section class="supporters-section">
+    <div class="title">OUR SUPPORTERS</div>
+    <div class="img-list">
+      <ng-container *ngFor="let supporter of supporters">
+        <a [href]="supporter.href" target="_blank">
+          <img [src]="supporter.image" [alt]="supporter.alt" />
+        </a>
+      </ng-container>
+    </div>
+  </section>
+  <section class="partners-section">
+    <div class="title">PAST CONSULTATION PARTNERS</div>
+    <div class="img-list">
+      <ng-container *ngFor="let pastPartner of pastPartners">
+        <a [href]="pastPartner.href" target="_blank">
+          <img [src]="pastPartner.image" [alt]="pastPartner.alt" />
+        </a>
+      </ng-container>
+    </div>
+  </section>
+  <section class="resources-section">
+    <div class="title">RESOURCES <br /> AND SPECIAL PROJECTS</div>
+    <div class="resource-cards-container">
+      <div *ngFor="let resource of resources" class="resource-card">
+        <h2>{{resource.title}}</h2>
+        <div>{{resource.description}}</div>
+        <button class="app-btn abt-btn circular">
+          <a [href]="resource.href" target="_blank">{{resource.buttonText}}</a>
+        </button>
+      </div>
+    </div>
+  </section>
 </div>
+
 <app-footer></app-footer>

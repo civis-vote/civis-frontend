@@ -90,7 +90,6 @@ export class AboutUsComponent {
     {
       image: "assets/images/about-us/ll 1 1.png",
       alt: "LAL FAMILY FOUNDATION",
-      href: "https://civis.vote",
     },
     {
       image: "assets/images/about-us/Manuputra 1.png",

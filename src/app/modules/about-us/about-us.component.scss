@@ -140,8 +140,9 @@
   .cards-section {
     padding-left: 0;
     padding-right: 0;
+    $layout-shift-breakpoint: 710px;
 
-    @media screen and (min-width: $mobile-breakpoint) {
+    @media screen and (min-width: $layout-shift-breakpoint) {
       padding: 0 var(--side-padding);
       row-gap: 40px;
     }
@@ -153,7 +154,7 @@
       column-gap: 2px;
       overflow-x: scroll;
 
-      @media screen and (min-width: $mobile-breakpoint) {
+      @media screen and (min-width: $layout-shift-breakpoint) {
         padding: 0;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -169,8 +170,12 @@
           height: 296px;
           background: #eff8ff;
 
-          @media screen and (min-width: $mobile-breakpoint) {
+          @media screen and (min-width: $layout-shift-breakpoint) {
             width: unset;
+          }
+
+          @media screen and (min-width: 711px) and (max-width: 815px) {
+            height: 345px;
           }
 
           img {
@@ -193,7 +198,7 @@
       .special-card {
         order: 1;
 
-        @media screen and (min-width: $mobile-breakpoint) {
+        @media screen and (min-width: $layout-shift-breakpoint) {
           order: unset;
         }
 
@@ -282,7 +287,7 @@
       grid-template-columns: repeat(2, 1fr);
       row-gap: 40px;
 
-      @media screen and (min-width: $mobile-breakpoint) {
+      @media screen and (min-width: 710px) {
         grid-template-columns: repeat(3, 1fr);
         column-gap: 24px;
         row-gap: 64px;
@@ -325,7 +330,7 @@
           aspect-ratio: 1;
           margin-bottom: 16px;
 
-          @media screen and (min-width: $mobile-breakpoint) {
+          @media screen and (min-width: 470px) {
             height: 200px;
             margin-bottom: 24px;
           }
@@ -395,7 +400,7 @@
     }
 
     .resource-cards-container {
-      @media screen and (min-width: $mobile-breakpoint) {
+      @media screen and (min-width: 640px) {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
       }

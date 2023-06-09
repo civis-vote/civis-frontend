@@ -33,7 +33,6 @@
 
     .first-para {
       text-align: center;
-      padding-bottom: var(--vertical-padding);
 
       @media screen and (min-width: $desktop-breakpoint) {
         max-width: 960px;

@@ -1,141 +1,260 @@
-@import './src/assets/styles/app';
+@import "./src/assets/styles/app";
 
 .about-us-wrapper {
+  $mobile-breakpoint: 481px;
+  $desktop-breakpoint: 992px;
+  $desktop-large-size: 1440px;
+  background: #e5f4ff;
+  color: #010002;
+  --side-padding: 16px;
+  --vertical-padding: 40px;
   margin-top: 77px;
-  padding-top: 60px;
-  background-color: $blue-bg-light;
-  @media screen and (max-width: 991px) {
-    margin-top: 58px;
-    padding-top: 30px;
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    --side-padding: 24px;
+    --vertical-padding: 64px;
+    font-size: 18px;
   }
 
-  &__quote-section {
-    padding: 0 65px 30px 45px;
-    max-width: 900px;
-    @media screen and (max-width: 991px) {
+  @media screen and (min-width: $desktop-breakpoint) {
+    --side-padding: 120px;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+    padding: var(--vertical-padding) var(--side-padding);
+
+    @media screen and (min-width: $desktop-breakpoint) {
+      max-width: $desktop-large-size;
+      margin: 0 auto;
+    }
+
+    .first-para {
+      text-align: center;
+
+      @media screen and (min-width: $desktop-breakpoint) {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  h1 {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 120%;
+    text-align: center;
+    margin-bottom: 0;
+    color: #0e73b9;
+
+    @media screen and (min-width: $mobile-breakpoint) {
+      font-size: 32px;
+    }
+  }
+
+  .quote-section {
+    padding: 32px var(--side-padding);
+    background: #ffffff66;
+    font-family: "Vollkorn", serif;
+    text-align: center;
+
+    @media screen and (min-width: $desktop-large-size) {
       max-width: 100%;
-      padding: 0 30px 20px;
     }
 
-    .quote-title {
-      font-size: 47px;
-      color: $primary-color;
-      line-height: 54px;
-      margin-bottom: 10px;
-      @media screen and (max-width: 991px) {
-        font-size: 28px;
-        line-height: 32px;
+    @media screen and (min-width: $mobile-breakpoint) {
+      .sep-text {
+        display: inline;
       }
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-top: var(--vertical-padding);
+      padding-bottom: var(--vertical-padding);
     }
 
-    .quote-subtitle {
-      font-size: 18px;
-      font-weight: bold;
-      color: #1998F0;
-      margin-bottom: 20px;
-    }
+    .quote-text {
+      display: flex;
+      justify-content: center;
 
-    .quote-content {
-      font-size: 24px;
-      color: #000;
-      margin-bottom: 2rem;
-      line-height: 36px;
-      letter-spacing: 0.03em;
-      @media screen and (max-width: 991px) {
-        font-size: 18px;
-        line-height: 28px;
+      @media screen and (min-width: $mobile-breakpoint) {
+        max-width: 550px;
       }
-    }
-  }
 
-  &__content-section {
-    padding: 30px 65px;
-    max-width: 900px;
-    @media screen and (max-width: 991px) {
-      max-width: 100%;
-      padding: 30px;
-    }
-   
-    .content-detail {
-      font-size: 18px;
-      color: #000;
-      line-height: 27px;
-      letter-spacing: 0.03em;      
-      @media screen and (max-width: 991px) {
-       font-size: 14px;
-       line-height: 22px;
-      }
-    }
-  }
+      q {
+        font-size: 24px;
+        line-height: 140%;
+        text-align: center;
+        color: #0e73b9;
 
-  &__people-section {
-    padding: 30px 65px;
-    background-color: rgba(255, 255, 255, 0.6);
-    @media screen and (max-width: 991px) {
-      padding: 30px;
-    }
-    .people-list-wrapper {
-      padding-bottom: 35px;
-
-      .list-title {
-        font-size: 15px;
-        font-weight: 500;
-        color: #F0653A;
-        @media screen and (max-width: 500px) {
-          text-align: center;
+        @media screen and (min-width: $mobile-breakpoint) {
+          font-size: 32px;
         }
       }
+    }
 
-      .people-list-grid {
+    .quotemaster {
+      font-size: 18px;
+    }
+  }
+
+  .what-we-do {
+    @media screen and (min-width: $mobile-breakpoint) {
+      .section-content {
         display: grid;
-        grid-column-gap: 113px;
-        grid-template-columns: repeat(5, 1fr);
-        padding-top: 15px;
-        @media screen and (max-width: 500px) {
-          grid-template-columns: auto;
-          grid-column-gap: 0;
-          grid-row-gap: 25px;
-        }
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 48px;
+      }
 
-        .people-profile {
+      .video-section {
+        order: 1;
+      }
+
+      p {
+        padding-right: 5px;
+      }
+    }
+
+    h1 {
+      padding-top: 40px;
+    }
+
+    .video-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+
+      @media screen and (min-width: $mobile-breakpoint) {
+        margin-bottom: unset;
+      }
+
+      iframe {
+        width: 100%;
+        aspect-ratio: 1.78;
+        border: none;
+      }
+    }
+  }
+
+  .cards-section {
+    padding-left: 0;
+    padding-right: 0;
+    $layout-shift-breakpoint: 710px;
+
+    @media screen and (min-width: $layout-shift-breakpoint) {
+      padding: 0 var(--side-padding);
+      row-gap: 40px;
+    }
+
+    .cards-list {
+      padding-left: var(--side-padding);
+      padding-right: var(--side-padding);
+      display: flex;
+      column-gap: 2px;
+      overflow-x: scroll;
+
+      @media screen and (min-width: $layout-shift-breakpoint) {
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        row-gap: 2px;
+        overflow-x: unset;
+      }
+
+      .info-card-wrapper {
+        .info-card {
+          padding: 32px 32px 30px;
           text-align: center;
+          width: 264px;
+          height: 296px;
+          background: #eff8ff;
 
-          .profile-name {
-            font-size: 16px;
-            font-weight: bold;
-            color: $primary-color;
-            margin: 5px 0 0;
+          @media screen and (min-width: $layout-shift-breakpoint) {
+            width: unset;
           }
 
-          .profile-subtitle {
-            font-size: 16px;
-            color: $black;
+          @media screen and (min-width: 711px) and (max-width: 815px) {
+            height: 345px;
           }
 
-          .d-image {
-            img {
-              width: 128px;
-              height: 128px;
-              border-radius: 50%;
-              object-fit: cover;
+          img {
+            height: 150px;
+            aspect-ratio: 1;
+          }
+
+          .text {
+            margin-top: 24px;
+
+            .bolded {
+              color: #3691cf;
+              font-weight: 700;
+              display: inline;
             }
           }
         }
       }
+
+      .special-card {
+        order: 1;
+
+        @media screen and (min-width: $layout-shift-breakpoint) {
+          order: unset;
+        }
+
+        .info-card {
+          height: unset;
+          background: white;
+          padding-bottom: 34px;
+        }
+      }
     }
   }
 
-  .content-title {
-    font-size: 42px;
-    color: $primary-color;
-    @media screen and (max-width: 991px) {
-      font-size: 28px;
+  .why-participate,
+  .team-section {
+    @media screen and (min-width: $desktop-breakpoint) {
+      padding-left: calc(2 * var(--side-padding));
+      padding-right: calc(2 * var(--side-padding));
     }
   }
 
-  .content-divider {
-    border-bottom: 1px solid #A8DCFF;
-    margin: 0;
+  .why-participate {
+    .paras {
+      @media screen and (min-width: $mobile-breakpoint) {
+        display: grid;
+        column-gap: 48px;
+        grid-template-columns: repeat(2, 1fr);
+
+        p {
+          margin-bottom: 0;
+        }
+      }
+    }
+
+    .cta-text {
+      @media screen and (min-width: $mobile-breakpoint) {
+        max-width: 530px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .hr {
+    height: 1px;
+    background: #d9d9d9;
+  }
+
+  .title {
+    text-align: center;
+    color: #f0653a;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 18px;
   }
 
   .abt-btn {
@@ -145,13 +264,178 @@
     color: $primary-color;
     font-size: 13px;
     padding: 7px 21px;
+
+    @media screen and (min-width: $mobile-breakpoint) {
+      font-size: 14px;
+    }
+
     &:hover {
       background-color: darken($white, 2%);
     }
-    span {
-      margin-left: 15px;
-      font-size: 20px;
-      line-height: 0;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .team-section {
+    .title {
+      margin-bottom: 16px;
+
+      @media screen and (min-width: $mobile-breakpoint) {
+        margin-bottom: 40px;
+      }
+    }
+    .members-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: 40px;
+
+      @media screen and (min-width: 710px) {
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 24px;
+        row-gap: 64px;
+
+        .first {
+          order: 0;
+        }
+
+        .atharva {
+          order: 1;
+        }
+
+        .next {
+          order: 2;
+        }
+
+        .long-description {
+          .member-description {
+            max-width: 200px;
+            margin: 0 auto;
+          }
+        }
+      }
+
+      .member-card {
+        text-align: center;
+
+        .name {
+          color: #0e73b9;
+          font-weight: 700;
+          font-size: 18px;
+
+          @media screen and (min-width: $mobile-breakpoint) {
+            font-size: 20px;
+          }
+        }
+
+        img {
+          height: 144px;
+          aspect-ratio: 1;
+          margin-bottom: 16px;
+
+          @media screen and (min-width: 470px) {
+            height: 200px;
+            margin-bottom: 24px;
+          }
+        }
+      }
+
+      .member-link {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+  }
+
+  .supporters-section,
+  .partners-section {
+    row-gap: 32px;
+
+    .img-list {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      row-gap: 32px;
+      flex-wrap: wrap;
+
+      img {
+        height: 48px;
+
+        @media screen and (min-width: $mobile-breakpoint) {
+          height: 80px;
+        }
+      }
+    }
+  }
+
+  .supporters-section {
+    .img-list {
+      flex-direction: column;
+
+      @media screen and (min-width: $mobile-breakpoint) {
+        flex-direction: row;
+        column-gap: 32px;
+      }
+    }
+  }
+
+  .partners-section {
+    .img-list {
+      column-gap: 32px;
+      row-gap: 32px;
+
+      @media screen and (min-width: $mobile-breakpoint) {
+        column-gap: 64px;
+        row-gap: 64px;
+        max-width: 810px;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  .resources-section {
+    text-align: center;
+
+    @media screen and (min-width: $mobile-breakpoint) {
+      .title br {
+        display: none;
+      }
+    }
+
+    .resource-cards-container {
+      @media screen and (min-width: 640px) {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    h2 {
+      color: #0e73b9;
+      font-size: 18px;
+      margin-bottom: 16px;
+      font-weight: 700;
+
+      @media screen and (min-width: $mobile-breakpoint) {
+        font-size: 20px;
+      }
+    }
+
+    .resource-card {
+      padding: 24px;
+
+      @media screen and (min-width: $mobile-breakpoint) {
+        padding: 32px 40px;
+      }
+
+      button {
+        margin-top: 24px;
+
+        a {
+          text-decoration: inherit;
+          color: inherit;
+        }
+      }
     }
   }
 }

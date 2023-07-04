@@ -96,12 +96,19 @@ export class ProfileCardComponent implements OnInit, OnChanges {
 
   getRemainigDays(deadline) {
     if (deadline) {
-      let diff_in_days = this.getDifferenceInDays(deadline);
-      diff_in_days = Math.floor(diff_in_days );
-      if (diff_in_days <= 0) {
-        return diff_in_days === 0 ? 'Last day to respond' : 'Closed';
+      let { diffInDays, isSameDay } = this.getDifferenceInDays(deadline);
+      diffInDays = Math.floor(diffInDays);
+
+      if (diffInDays < 0) {
+        return "Closed";
+      } else if (diffInDays === 0) {
+        if (isSameDay) {
+          return "Last day to respond";
+        }
+
+        return "1 Day Remaining";
       } else {
-        return `${diff_in_days} Days Remaining`;
+        return `${diffInDays} Days Remaining`;
       }
     }
   }
@@ -115,27 +122,37 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   getDifferenceInDays(deadline) {
     if (deadline) {
       const today = new Date();
-      today.setUTCHours(0, 0, 0, 0);
       const lastDate = moment(deadline);
       const diff_in_time = lastDate.valueOf() - today.getTime();
-      const diff_in_days = diff_in_time / (1000 * 3600 * 24);
-      return diff_in_days;
+      const diffInDays = diff_in_time / (1000 * 3600 * 24);
+      const isSameDay = lastDate.isSame(moment(today), "day");
+      return { diffInDays, isSameDay };
     }
   }
 
   getTwitterUrl(link) {
-      let diff_in_days = this.getDifferenceInDays(this.profile.responseDeadline);
-      diff_in_days = Math.floor(diff_in_days );
-      let remainingDays = '';
-      if (diff_in_days <= 0) {
-        remainingDays =  diff_in_days === 0 ? ', last day for you to share your feedback too!' : '.';
+    let { diffInDays, isSameDay } = this.getDifferenceInDays(this.profile.responseDeadline);
+      diffInDays = Math.floor(diffInDays );
+    let remainingDays = '';
+
+    if (diffInDays < 0) {
+      remainingDays = '.'
+    } else if (diffInDays === 0) {
+      if (isSameDay) {
+        remainingDays = ', last day for you to share your feedback too!';
       } else {
-        remainingDays =  `, only ` + `${diff_in_days} Days Remaining for you to share your feedback too!`;
+        diffInDays = 1
       }
-      const text  = `It’s your turn citizen! I shared my feedback on ` +
-      `${this.profile.title}${remainingDays}`;
-      const url = `https://twitter.com/intent/tweet?text=${text}&url=${link}`;
-      return url;
+    }
+
+    if (diffInDays > 0) {
+      remainingDays = `, only ${diffInDays} Days Remaining for you to share your feedback too!`;
+    }
+
+    const text  = `It’s your turn citizen! I shared my feedback on ` +
+    `${this.profile.title}${remainingDays}`;
+    const url = `https://twitter.com/intent/tweet?text=${text}&url=${link}`;
+    return url;
   }
 
   getFbUrl(link) {

@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import { Component, Input, OnInit } from "@angular/core";
+import * as moment from "moment";
 
 @Component({
   selector: 'app-consultation-card',
@@ -20,12 +20,20 @@ export class ConsultationCardComponent implements OnInit {
       if (this.consultation.status === 'expired') {
         return 'Closed';
       }
-      let diff_in_days = this.getDifferenceInDays(deadline);
-      diff_in_days = Math.floor(diff_in_days );
-      if (diff_in_days <= 0) {
-        return diff_in_days === 0 ? 'Last day to respond' : 'Closed';
+
+      let { diffInDays, isSameDay } = this.getDifferenceInDays(deadline);
+      diffInDays = Math.floor(diffInDays);
+
+      if (diffInDays < 0) {
+        return 'Closed';
+      } else if (diffInDays === 0) {
+        if (isSameDay) {
+          return 'Last day to respond';
+        }
+
+        return '1 Day Remaining';
       } else {
-        return `${diff_in_days} Days Remaining`;
+        return `${diffInDays} Days Remaining`;
       }
     }
   }
@@ -33,12 +41,11 @@ export class ConsultationCardComponent implements OnInit {
   getDifferenceInDays(deadline) {
     if (deadline) {
       const today = new Date();
-      today.setUTCHours(0, 0, 0, 0);
       const lastDate = moment(deadline);
       const diff_in_time = lastDate.valueOf() - today.getTime();
-      const diff_in_days = diff_in_time / (1000 * 3600 * 24);
-      return diff_in_days;
+      const diffInDays = diff_in_time / (1000 * 3600 * 24);
+      const isSameDay = lastDate.isSame(moment(today), 'day');
+      return { diffInDays, isSameDay };
     }
   }
-
 }

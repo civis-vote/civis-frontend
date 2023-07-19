@@ -333,7 +333,7 @@
           width: 100%;
 
           .consultation-image {
-            width: 10%;
+            width: max(10%, 98px);
             padding: 20px 0;
 
             img {
@@ -359,6 +359,10 @@
                 letter-spacing: 0.035em;
                 color: #151515;
                 margin-bottom: 5px;
+                -webkit-box-orient: vertical;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                overflow: hidden;
               }
               .ministry-title {
                 font-weight: normal;

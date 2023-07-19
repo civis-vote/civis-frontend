@@ -436,8 +436,8 @@
     height: 100vh;
 
     .modal-dialog {
-      width: 30%;
-      max-width: 30% !important;
+      width: min(95%, 480px);
+      max-width: min(95%, 480px) !important;
       margin: 0 auto;
 
       .modal-header {

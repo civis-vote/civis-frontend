@@ -258,7 +258,7 @@
                 <div class="input-box">
                   <label for="firstName">{{'First name' | translate}}</label>
                   <div class="input-box__border">
-                    <input placeholder="Siddharth" type="text" id="firstName" #firstName="ngModel" name="firstName"
+                    <input placeholder="Enter first name" type="text" id="firstName" #firstName="ngModel" name="firstName"
                       [(ngModel)]="user.firstName" required />
                   </div>
                   <div *ngIf="firstName?.invalid && (firstName?.touched || userForm.submitted)" class="error-msg">{{'First
@@ -268,7 +268,7 @@
                 <div class="input-box">
                   <label for="lastName">{{'Last name' | translate}}</label>
                   <div class="input-box__border">
-                    <input placeholder="Gautam" type="text" id="lastName" #lastName="ngModel" name="lastName"
+                    <input placeholder="Enter last name" type="text" id="lastName" #lastName="ngModel" name="lastName"
                       [(ngModel)]="user.lastName" required />
                   </div>
                   <div *ngIf="lastName?.invalid && (lastName?.touched || userForm.submitted)" class="error-msg">{{'Last

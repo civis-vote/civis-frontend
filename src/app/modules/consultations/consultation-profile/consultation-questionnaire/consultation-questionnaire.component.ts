@@ -341,7 +341,7 @@ export class ConsultationQuestionnaireComponent
             );
         } else {
           //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
-          // this.authModal = true;
+          this.authModal = true;
           localStorage.setItem(
             "consultationResponse",
             JSON.stringify(consultationResponse)

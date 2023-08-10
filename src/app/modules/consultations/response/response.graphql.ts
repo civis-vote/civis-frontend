@@ -39,6 +39,15 @@ export const ResponseProfileQuery = gql`
                 }
                 updatedAt
                 publishedAt
+                questions {
+                  id
+                  questionText
+                  questionType
+                  subQuestions {
+                    id
+                    questionText
+                  }
+                }
             }
         }
     }

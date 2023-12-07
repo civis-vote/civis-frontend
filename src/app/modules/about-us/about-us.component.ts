@@ -79,6 +79,27 @@ export class AboutUsComponent {
       href: "https://www.linkedin.com/in/shonottrakumar/",
       class: "next long-description",
     },
+    {
+      name: "Mallika",
+      image: "assets/images/about-us/Mallika-Dandekar.png",
+      description: "Consultation Fellow at Civis",
+      href: "https://www.linkedin.com/in/mallikadandekar/",
+      class: "next long-description",
+    },
+    {
+      name: "Srushti",
+      image: "assets/images/about-us/Srushti-Punghera.png",
+      description: "Communication and Outreach Associate at Civis",
+      href: "https://www.linkedin.com/in/srushti-punghera/",
+      class: "next long-description",
+    },
+    {
+      name: "Riddhi",
+      image: "assets/images/about-us/Riddhi-Khandhar.png",
+      description: "Mental Health | Research",
+      href: "https://www.linkedin.com/in/riddhi-khandhar/",
+      class: "next long-description",
+    },
   ];
 
   supporters = [
@@ -100,6 +121,11 @@ export class AboutUsComponent {
       image: "assets/images/about-us/rnp 1 1.png",
       alt: "ROHINI NILEKANI PHILANTHROPIES",
       href: "https://rohininilekaniphilanthropies.org/",
+    },
+    {
+      image: "assets/images/about-us/SVP-India.png",
+      alt: "SVP INDIA",
+      href: "https://svpindia.org/",
     },
   ];
 

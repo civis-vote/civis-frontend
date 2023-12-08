@@ -292,7 +292,9 @@
       row-gap: 40px;
 
       @media screen and (min-width: 710px) {
-        grid-template-columns: repeat(3, 1fr);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         column-gap: 24px;
         row-gap: 64px;
 

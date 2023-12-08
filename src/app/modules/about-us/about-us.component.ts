@@ -38,25 +38,11 @@ export class AboutUsComponent {
 
   teamMembers = [
     {
-      name: "Aditya Tannu",
-      image: "assets/images/about-us/Image-5.png",
-      description: "Consultation Fellow 2022-23",
-      href: "https://www.linkedin.com/in/adityatannu/",
-      class: "first",
-    },
-    {
       name: "Antaraa Vasudev",
       image: "assets/images/about-us/Image-6.png",
       description: "Founder & CEO",
       href: "https://www.linkedin.com/in/antaraavasudev/",
       class: "first",
-    },
-    {
-      name: "Anusree U",
-      image: "assets/images/about-us/Image-8.png",
-      description: "Associate, Communications",
-      href: "https://www.linkedin.com/in/anusree-u-77295613a/",
-      class: "next",
     },
     {
       name: "Atharva Joshi",
@@ -77,6 +63,27 @@ export class AboutUsComponent {
       image: "assets/images/about-us/Image-10.png",
       description: "Senior Associate, Outreach and Comms",
       href: "https://www.linkedin.com/in/shonottrakumar/",
+      class: "next long-description",
+    },
+    {
+      name: "Mallika Dandekar",
+      image: "assets/images/about-us/Mallika-Dandekar.png",
+      description: "Consultation Fellow",
+      href: "https://www.linkedin.com/in/mallikadandekar/",
+      class: "next long-description",
+    },
+    {
+      name: "Srushti Punghera",
+      image: "assets/images/about-us/Srushti-Punghera.png",
+      description: "Associate, Communications",
+      href: "https://www.linkedin.com/in/srushti-punghera/",
+      class: "next long-description",
+    },
+    {
+      name: "Riddhi Khandhar",
+      image: "assets/images/about-us/Riddhi-Khandhar.png",
+      description: "Campaign Manager | ChooMacchar",
+      href: "https://www.linkedin.com/in/riddhi-khandhar/",
       class: "next long-description",
     },
   ];
@@ -100,6 +107,11 @@ export class AboutUsComponent {
       image: "assets/images/about-us/rnp 1 1.png",
       alt: "ROHINI NILEKANI PHILANTHROPIES",
       href: "https://rohininilekaniphilanthropies.org/",
+    },
+    {
+      image: "assets/images/about-us/SVP-India.png",
+      alt: "SVP INDIA",
+      href: "https://svpindia.org/",
     },
   ];
 

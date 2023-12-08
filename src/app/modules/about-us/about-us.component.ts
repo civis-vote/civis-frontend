@@ -38,25 +38,11 @@ export class AboutUsComponent {
 
   teamMembers = [
     {
-      name: "Aditya Tannu",
-      image: "assets/images/about-us/Image-5.png",
-      description: "Consultation Fellow 2022-23",
-      href: "https://www.linkedin.com/in/adityatannu/",
-      class: "first",
-    },
-    {
       name: "Antaraa Vasudev",
       image: "assets/images/about-us/Image-6.png",
       description: "Founder & CEO",
       href: "https://www.linkedin.com/in/antaraavasudev/",
       class: "first",
-    },
-    {
-      name: "Anusree U",
-      image: "assets/images/about-us/Image-8.png",
-      description: "Associate, Communications",
-      href: "https://www.linkedin.com/in/anusree-u-77295613a/",
-      class: "next",
     },
     {
       name: "Atharva Joshi",
@@ -82,21 +68,21 @@ export class AboutUsComponent {
     {
       name: "Mallika",
       image: "assets/images/about-us/Mallika-Dandekar.png",
-      description: "Consultation Fellow at Civis",
+      description: "Consultation Fellow",
       href: "https://www.linkedin.com/in/mallikadandekar/",
       class: "next long-description",
     },
     {
       name: "Srushti",
       image: "assets/images/about-us/Srushti-Punghera.png",
-      description: "Communication and Outreach Associate at Civis",
+      description: "Associate, Communications",
       href: "https://www.linkedin.com/in/srushti-punghera/",
       class: "next long-description",
     },
     {
       name: "Riddhi",
       image: "assets/images/about-us/Riddhi-Khandhar.png",
-      description: "Mental Health | Research",
+      description: "Campaign Manager | ChooMacchar",
       href: "https://www.linkedin.com/in/riddhi-khandhar/",
       class: "next long-description",
     },

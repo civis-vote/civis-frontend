@@ -1,5 +1,6 @@
 <div class="nav-container white-nav" *ngIf="currentUrl !== 'auth'">
   <nav class="app-navbar" [ngClass]="currentUrl == 'landing' ? 'landing-nav-spacer' : 'nav-spacer'">
+    <div style="position: absolute;top: 0px; left: 50%;transform: translate(-50%, 0);" id="google_translate_element"></div>
     <div class="app-navbar__left-item">
       <div class="logo-space pointer" [routerLink]="['/']">
         <img class="logo pointer" [src]="getLogoUrl()"

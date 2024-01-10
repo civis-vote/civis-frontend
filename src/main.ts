@@ -11,25 +11,6 @@ import './app/shared/icons';
 
 if (environment.production) {
   enableProdMode();
-
-  var googleTranslateScript = document.createElement('script');
-  googleTranslateScript.setAttribute('src','//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit&key=AIzaSyAdO8QLYV_rOrCcSs64KhGi4HuLi_HupWc')
-  googleTranslateScript.setAttribute('type','text/javascript')
-  document.getElementsByTagName("body")[0].appendChild(googleTranslateScript);
-
-
-  var googleTranslateFunction = document.createElement('script');
-  googleTranslateFunction.innerHTML = `function googleTranslateElementInit() {
-    new google.translate.TranslateElement(
-      {
-        pageLanguage: "en",
-        layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-      },
-      "google_translate_element"
-    );
-  }`
-  googleTranslateFunction.setAttribute('type','text/javascript')
-  document.getElementsByTagName("body")[0].appendChild(googleTranslateFunction);
 }
 
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
@@ -74,6 +55,7 @@ if (!environment.production) {
 
 
   var googleTranslateFunction = document.createElement('script');
+  googleTranslateFunction.setAttribute("nonce","HK0O08yJcxnAqWev")
   googleTranslateFunction.innerHTML = `function googleTranslateElementInit() {
     new google.translate.TranslateElement(
       {
@@ -84,6 +66,8 @@ if (!environment.production) {
     );
   }`
   googleTranslateFunction.setAttribute('type','text/javascript')
+
+
   document.getElementsByTagName("body")[0].appendChild(googleTranslateFunction);
 
 }

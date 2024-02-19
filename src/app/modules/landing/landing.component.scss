@@ -1,10 +1,9 @@
 @import "./src/assets/styles/app";
 
 .app-landing {
-  $mobile-breakpoint: 481px;
-  margin-top: 77px;
+  margin-top: 122px;
   @media screen and (max-width: 991px) {
-    margin-top: 57px;
+    margin-top: 102px;
   }
 
   &__cover-section {
@@ -72,6 +71,59 @@
           padding: 15px 0;
           background-color: #e5f4ff;
         }
+      }
+    }
+  }
+
+
+  // TODO: Temporary Awards section styles
+  &__award-section {
+    display: flex;
+    gap: 48px;
+    padding: 80px 120px;
+    background-color: #fcf9f2;
+    @media screen and (max-width: 1400px) and (min-width: 992px) {
+      padding: 80px 24px;
+    }
+    @media screen and (max-width: 991px) {
+      flex-direction: column;
+      padding: 80px 24px;
+    }
+    .image-container {
+      width: 50%;
+      @media screen and (max-width: 991px) {
+        width: 100%;
+      }
+      img {
+        width: 100%;
+      }
+    }
+    .info-container {
+      width: 50%;
+      @media screen and (max-width: 991px) {
+        width: 100%;
+      }
+      p {
+        font-size: 18px;
+        line-height: 1.5;
+        text-align: left;
+        color: #3a5f7a;
+      }
+      button {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 1.5;
+        padding: 7px 20px;
+        border-radius: 33px;
+      }
+      .seats-btn {
+        color: #fff;
+        background-color: #d4af37;
+      }
+      .about-awards-btn {
+        margin-left: 16px;
+        color: #d4af37;
+        background-color: rgba(212, 175, 55, 0.1);
       }
     }
   }

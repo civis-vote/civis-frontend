@@ -3,14 +3,12 @@
 .profile-index {
   position: relative;
   width: 100%;
-  // margin-top: 77px; TODO: Change back to 77 after awards section removed
-  margin-top: 122px;  // Temporary top value because of awards banner
+  margin-top: 122px;
   padding: 30px 45px;
   background-color: #e5f4ff;
 
   @media screen and (max-width: 991px) {
-    // margin-top: 57px; TODO: Change back to 57 after awards section removed
-    margin-top: 102px; // Temporary top value because of awards banner
+    margin-top: 102px;
     padding: 20px 0;
   }
 

@@ -2,7 +2,8 @@
 
 .nav-container {
   position: fixed;
-  top: 0;
+  // top: 0; TODO: Change back to 0 after awards section removed
+  top: 45px; // Temporary top value because of awards banner
   width: 100%;
   height: 77px;
   z-index: 999;

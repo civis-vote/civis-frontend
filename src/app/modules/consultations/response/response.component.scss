@@ -1,10 +1,12 @@
 @import './src/assets/styles/app';
 
 .response-index {
-    margin-top: 77px;
+  // margin-top: 77px; TODO: Change back to 77 after awards section removed
+   margin-top: 122px;  // Temporary top value because of awards banner
   
     @media screen and (max-width: 991px) {
-      margin-top: 57px;
+     // margin-top: 57px; TODO: Change back to 57 after awards section removed
+     margin-top: 102px; // Temporary top value because of awards banner
     }
     min-height: 100vh;
 

@@ -1,0 +1,30 @@
+// TODO: Remove the code after awards section removed
+.awards-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 45px;
+  padding: 8px 16px;
+  background-color: #fcf9f2;
+  z-index: 9999;
+  span {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5;
+    color: #3a5f7a;
+  }
+  .rsvp-btn {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #d4af37;
+    margin-left: 8px;
+    padding: 4px 20px;
+    border-radius: 33px;
+    background-color: rgba(212, 175, 55, 0.1);
+  }
+}

@@ -1,8 +1,14 @@
-<app-confirmation-modal *ngIf="confirmModalOpen" [message]='confirmMessage' (close)='optionTranslate($event)'></app-confirmation-modal>
+<app-confirmation-modal *ngIf="confirmModalOpen" [message]='confirmMessage'
+  (close)='optionTranslate($event)'></app-confirmation-modal>
 <app-toast></app-toast>
+<!-- TODO: start Temporary Awards section will be removed later -->
+<div class="awards-banner">
+  <span>India's Inaugural Public Consultation Awards</span>
+  <button class="app-btn rsvp-btn circular" (click)="scrollToAwards()">RSVP</button>
+</div>
+<!-- End Temporary Awards section will be removed later -->
 <app-navbar></app-navbar>
 <app-error></app-error>
 <router-outlet></router-outlet>
 <app-city-selection-modal *ngIf="showCitySelection" [isPrivate]="isPrivate">
 </app-city-selection-modal>
-

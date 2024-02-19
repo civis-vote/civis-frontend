@@ -8,7 +8,8 @@
   color: #010002;
   --side-padding: 16px;
   --vertical-padding: 40px;
-  margin-top: 77px;
+  // margin-top: 77px; TODO: Change back to 77 after awards section removed
+  margin-top: 122px;  // Temporary top value because of awards banner
 
   @media screen and (min-width: $mobile-breakpoint) {
     --side-padding: 24px;

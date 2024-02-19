@@ -4,7 +4,8 @@
   z-index: 10000;
 }
 .works-wrapper {
-  margin-top: 77px;
+  // margin-top: 77px; TODO: Change back to 77 after awards section removed
+  margin-top: 122px;  // Temporary top value because of awards banner
   padding: 60px 60px 60px 45px;
   background-color: $blue-bg-light;
   @media screen and (max-width: 991px) {
@@ -22,7 +23,8 @@
 }
 
 .donate-container {
-  margin-top: 77px;
+  // margin-top: 77px; TODO: Change back to 77 after awards section removed
+  margin-top: 122px;  // Temporary top value because of awards banner
   overflow: auto;
 
   @media screen and (max-width: 991px) {

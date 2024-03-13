@@ -350,7 +350,6 @@ export class ConsultationQuestionnaireComponent
               "consultationResponse",
               JSON.stringify(consultationResponse)
             );
-            console.log(consultationResponse);
           }
         }
       }

@@ -230,6 +230,119 @@ export const ConsultationProfileCurrentUser = gql`
   }
 `;
 
+
+
+export const ConsultationProfileUser = gql`
+  query consultationProfileCurrentUser($id: Int!) {
+    consultationProfile(id: $id) {
+      anonymousResponses {
+        edges {
+          node {
+            id
+            roundNumber
+            user {
+              id
+            }
+          }
+        }
+      }
+      enforcePrivateResponse
+      id
+      title
+      summary
+      summaryHindi {
+        id
+        components
+      }
+      page {
+        id
+        components
+      }
+      responseDeadline
+      readingTime
+      responsesReadingTimes
+      responseRounds{
+        active
+        id
+        questions {
+          id
+          isOptional
+          questionText
+          questionType
+          supportsOther
+          isOptional
+          subQuestions {
+            id
+            questionText
+          }
+        }
+        roundNumber
+      }
+      responseSubmissionMessage
+      url
+      consultationResponsesCount
+      ministry {
+        id
+        category {
+          id
+          coverPhoto {
+            id
+            filename
+            url
+          }
+        }
+        name
+        logo {
+          id
+          filename
+          url
+        }
+      }
+      reviewType
+      satisfactionRatingDistribution
+      status
+      sharedResponses(sort: templates_count, sortDirection: desc) {
+        edges {
+          node {
+            id
+            answers
+            consultation {
+              id
+              responseRounds{
+                active
+                id
+                questions {
+                  id
+                  isOptional
+                  questionText
+                  questionType
+                  supportsOther
+                  isOptional
+                  subQuestions {
+                    id
+                    questionText
+                  }
+                }
+                roundNumber
+              }
+            }
+            downVoteCount
+            responseText
+            isVerified
+            roundNumber
+            templatesCount
+            upVoteCount
+          }
+        }
+        totalCount
+      }
+      updatedAt
+      publishedAt
+      visibility
+    }
+  }
+`;
+
 export const VoteCreateQuery = gql `
   mutation voteCreate($consultationResponseVote: VoteCreateInput!) {
     voteCreate(consultationResponseVote: $consultationResponseVote) {
@@ -352,6 +465,77 @@ export const SubmitResponseQuery = gql`
                 id
                 voteDirection
               }
+            }
+          }
+          totalCount
+        }
+        visibility
+      }
+    }
+  }
+`;
+
+
+export const SubmitResponseGuestUser = gql`
+  mutation consultationResponseCreate($consultationResponse: ConsultationResponseCreateInput!){
+    consultationResponseCreate(consultationResponse: $consultationResponse){
+      id
+      points
+      consultation {
+        enforcePrivateResponse
+        id
+        title
+        responseSubmissionMessage
+        responseRounds{
+          active
+          id
+          questions {
+            id
+            isOptional
+            questionText
+            questionType
+            supportsOther
+            isOptional
+            subQuestions {
+              id
+              questionText
+            }
+          }
+          roundNumber
+        }
+        satisfactionRatingDistribution
+        sharedResponses(sort: templates_count, sortDirection: desc) {
+          edges {
+            node {
+              id
+              answers
+              consultation {
+                id
+                responseRounds{
+                  active
+                  id
+                  questions {
+                    id
+                    isOptional
+                    questionText
+                    questionType
+                    supportsOther
+                    isOptional
+                    subQuestions {
+                      id
+                      questionText
+                    }
+                  }
+                  roundNumber
+                }
+              }
+              downVoteCount
+              responseText
+              responseStatus
+              isVerified
+              roundNumber
+              templatesCount
+              upVoteCount
             }
           }
           totalCount

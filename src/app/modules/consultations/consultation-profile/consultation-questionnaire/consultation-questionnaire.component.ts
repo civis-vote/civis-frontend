@@ -31,6 +31,8 @@ import {
   CreateUserCountRecord,
   UpdateUserCountRecord,
   UserCountUser,
+  ConsultationProfileUser,
+  SubmitResponseGuestUser,
 } from "../consultation-profile.graphql";
 import { filter, map } from "rxjs/operators";
 import { ErrorService } from "src/app/shared/components/error-modal/error.service";
@@ -322,26 +324,25 @@ export class ConsultationQuestionnaireComponent
         if (!isObjectEmpty(consultationResponse)) {
           if (this.currentUser) {
             this.metaPixelService.trackSubmitResponse();
-  
             this.apollo
-              .watchQuery({
-                query: UserCountUser,
-                variables: { userId: this.currentUser.id },
-                fetchPolicy: "no-cache",
-              })
-              .valueChanges.pipe(map((res: any) => res.data.userCountUser))
-              .subscribe(
-                (data) => {
-                  if (!this.profanity_count_changed) {
-                    this.userData = data;
-                    this.checkAndUpdateProfanityCount();
-                  }
-                },
-                (err) => {
-                  const e = new Error(err);
-                  this.errorService.showErrorModal(err);
+            .watchQuery({
+              query: UserCountUser,
+              variables: { userId: this.currentUser.id },
+              fetchPolicy: "no-cache",
+            })
+            .valueChanges.pipe(map((res: any) => res.data.userCountUser))
+            .subscribe(
+              (data) => {
+                if (!this.profanity_count_changed) {
+                  this.userData = data;
+                  this.checkAndUpdateProfanityCount();
                 }
-              );
+              },
+              (err) => {
+                const e = new Error(err);
+                this.errorService.showErrorModal(err);
+              }
+            );
           } else {
             //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
             this.authModal = true;
@@ -352,7 +353,7 @@ export class ConsultationQuestionnaireComponent
             console.log(consultationResponse);
           }
         }
-      } 
+      }
     } else {
       if (!this.responseFeedback) {
         this.consultationService.satisfactionRatingError.next(true);
@@ -617,19 +618,21 @@ export class ConsultationQuestionnaireComponent
     );
     this.apollo
       .mutate({
-        mutation: SubmitResponseQuery,
+        mutation: this.currentUser ? SubmitResponseQuery : SubmitResponseGuestUser,
         variables: {
           consultationResponse: consultationResponse,
         },
         update: (store, { data: res }) => {
           const variables = { id: this.consultationId };
           const resp: any = store.readQuery({
-            query: ConsultationProfileCurrentUser,
+            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
             variables,
           });
           if (res) {
-            resp.consultationProfile.respondedOn =
+            if(this.currentUser?.id) {
+              resp.consultationProfile.respondedOn =
               res.consultationResponseCreate.consultation.respondedOn;
+            }
             resp.consultationProfile.sharedResponses =
               res.consultationResponseCreate.consultation.sharedResponses;
             resp.consultationProfile.responseSubmissionMessage =
@@ -638,7 +641,7 @@ export class ConsultationQuestionnaireComponent
               res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
           }
           store.writeQuery({
-            query: ConsultationProfileCurrentUser,
+            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
             variables,
             data: resp,
           });

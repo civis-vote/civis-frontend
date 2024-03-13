@@ -31,6 +31,8 @@ import {
   CreateUserCountRecord,
   UpdateUserCountRecord,
   UserCountUser,
+  ConsultationProfileUser,
+  SubmitResponseGuestUser,
 } from "../consultation-profile.graphql";
 import { filter, map } from "rxjs/operators";
 import { ErrorService } from "src/app/shared/components/error-modal/error.service";
@@ -349,7 +351,6 @@ export class ConsultationQuestionnaireComponent
               "consultationResponse",
               JSON.stringify(consultationResponse)
             );
-            console.log(consultationResponse);
           }
         }
       } 
@@ -617,19 +618,21 @@ export class ConsultationQuestionnaireComponent
     );
     this.apollo
       .mutate({
-        mutation: SubmitResponseQuery,
+        mutation: this.currentUser ? SubmitResponseQuery : SubmitResponseGuestUser,
         variables: {
           consultationResponse: consultationResponse,
         },
         update: (store, { data: res }) => {
           const variables = { id: this.consultationId };
           const resp: any = store.readQuery({
-            query: ConsultationProfileCurrentUser,
+            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
             variables,
           });
           if (res) {
-            resp.consultationProfile.respondedOn =
+            if(this.currentUser?.id) {
+              resp.consultationProfile.respondedOn =
               res.consultationResponseCreate.consultation.respondedOn;
+            }
             resp.consultationProfile.sharedResponses =
               res.consultationResponseCreate.consultation.sharedResponses;
             resp.consultationProfile.responseSubmissionMessage =
@@ -638,7 +641,7 @@ export class ConsultationQuestionnaireComponent
               res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
           }
           store.writeQuery({
-            query: ConsultationProfileCurrentUser,
+            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
             variables,
             data: resp,
           });

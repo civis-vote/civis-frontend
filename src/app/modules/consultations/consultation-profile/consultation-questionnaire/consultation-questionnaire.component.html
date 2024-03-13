@@ -54,7 +54,7 @@
               </div>
             </div>
           </div>
-          <div class="checkbox-area" *ngIf="showPublicResponseOption()">
+          <div class="checkbox-area" *ngIf="showPublicResponseOption() && consultationId !== 707 && consultationId !== 404">
             <div class="input-checbox" >
               <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" [ngModelOptions]="{standalone: true}"/> 
               <label class="m-0">{{'Make my response public' | translate}}</label>

@@ -359,7 +359,6 @@ export class ConsultationQuestionnaireComponent
     } else {
       if (!this.responseFeedback) {
         this.consultationService.satisfactionRatingError.next(true);
-        console.log("comes here")
       }
       this.showError = true;
       this.scrollToError = true;

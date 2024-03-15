@@ -99,20 +99,6 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
   }
-  
-  // TODO: Remove this after awards section removed
-  scrollToAwards() {
-    this.router.navigate(['/']).then(() => {
-      setTimeout(() => {
-        const yOffset = -122;
-        const element = document.getElementById('awards');
-        if (element) {
-          const yCoordinate = element.getBoundingClientRect().top + window.scrollY + yOffset;
-          window.scrollTo({ top: yCoordinate, behavior: 'smooth' });
-        }
-      }, 100); 
-    });
-  }
 
   ngOnDestroy() {
     this.paramsSubscription.unsubscribe();

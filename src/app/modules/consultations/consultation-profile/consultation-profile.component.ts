@@ -43,7 +43,6 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getCurrentUser();
-    this.cookieService.put('loginCallbackUrl', this.router.url === '/' ? '' : this.router.url);
   }
 
   getConsultationProfile() {
@@ -62,7 +61,6 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
     }, err => {
       const e = new Error(err);
         if (e.message.includes('Invalid Access Token')) {
-        this.cookieService.put('loginCallbackUrl', this.router.url === '/' ? '' : this.router.url);
         this.router.navigate(['/auth-private']);
       } else {
         this.errorService.showErrorModal(err);

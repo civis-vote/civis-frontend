@@ -30,6 +30,7 @@ export class NavbarComponent implements OnInit {
   consultationId: number;
   reviewType: any;
   environment: any = environment;
+  lastViewedUrl: any;
 
   menuObject = {
     name: 'Read & Respond'
@@ -73,6 +74,7 @@ export class NavbarComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentUrl = this.findUrl(event.url);
+        this.lastViewedUrl = event.url;
       }
     });
     this.getCurrentUser();
@@ -228,6 +230,7 @@ export class NavbarComponent implements OnInit {
   }
 
   onSignUp() {
+    this.cookieService.put('loginCallbackUrl', this.lastViewedUrl);
     if (this.currentUrl === 'consultations-profile') {
       this.router.navigateByUrl('/auth');
       return;

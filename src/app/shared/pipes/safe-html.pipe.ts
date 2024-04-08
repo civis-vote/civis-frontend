@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser'; 
+import createDOMPurify from 'dompurify';
 
 @Pipe({
   name: 'safeHtml'
@@ -10,7 +11,9 @@ export class SafeHtmlPipe implements PipeTransform {
   }
 
   transform(value: any, args?: any): any {
-    return this.sanitizer.bypassSecurityTrustHtml(value);
+    const DOMPurify = createDOMPurify(window);
+    const clean = DOMPurify.sanitize(value, { ADD_ATTR: ['style'] });
+    return this.sanitizer.bypassSecurityTrustHtml(clean);
   }
 
 }

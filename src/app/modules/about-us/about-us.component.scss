@@ -350,7 +350,6 @@
     }
   }
 
-  .supporters-section,
   .partners-section {
     row-gap: 32px;
 
@@ -367,17 +366,6 @@
         @media screen and (min-width: $mobile-breakpoint) {
           height: 80px;
         }
-      }
-    }
-  }
-
-  .supporters-section {
-    .img-list {
-      flex-direction: column;
-
-      @media screen and (min-width: $mobile-breakpoint) {
-        flex-direction: row;
-        column-gap: 32px;
       }
     }
   }

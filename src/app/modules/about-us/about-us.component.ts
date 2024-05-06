@@ -88,33 +88,6 @@ export class AboutUsComponent {
     },
   ];
 
-  supporters = [
-    {
-      image: "assets/images/about-us/godrej 1 1.png",
-      alt: "Godrej",
-      href: "https://godrejcp.com/",
-    },
-    {
-      image: "assets/images/about-us/ll 1 1.png",
-      alt: "LAL FAMILY FOUNDATION",
-    },
-    {
-      image: "assets/images/about-us/Manuputra 1.png",
-      alt: "Manupatra",
-      href: "https://www.manupatrafast.com/?t=desktop",
-    },
-    {
-      image: "assets/images/about-us/rnp 1 1.png",
-      alt: "ROHINI NILEKANI PHILANTHROPIES",
-      href: "https://rohininilekaniphilanthropies.org/",
-    },
-    {
-      image: "assets/images/about-us/SVP-India.png",
-      alt: "SVP INDIA",
-      href: "https://svpindia.org/",
-    },
-  ];
-
   pastPartners = [
     {
       image: "assets/images/about-us/NIUA_Logo_new 1 1.png",

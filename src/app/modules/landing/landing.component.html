@@ -196,9 +196,38 @@
         </a>
       </div>
     </div>
+
+    <section class="supporters-section">
+      <p class="section-heading">OUR SUPPORTERS</p>
+      <div class="img-list">
+        <ng-container *ngFor="let supporter of supporters">
+          <a
+            [href]="supporter.href"
+            target="_blank"
+            *ngIf="supporter.href !== undefined; else noLinkSupporterCard"
+          >
+            <ng-template
+              [ngTemplateOutlet]="supporterCard"
+              [ngTemplateOutletContext]="{ supporter: supporter }"
+            ></ng-template>
+          </a>
+          <ng-template #noLinkSupporterCard>
+            <ng-template
+              [ngTemplateOutlet]="supporterCard"
+              [ngTemplateOutletContext]="{ supporter: supporter }"
+            ></ng-template>
+          </ng-template>
+        </ng-container>
+      </div>
+    </section>
   </section>
+
   <div *ngIf="selectedUser && showLeaderProfileModal">
     <app-user-profile-modal (close)="closeModal($event)" [userId]="selectedUser"></app-user-profile-modal>
   </div>
   <app-footer></app-footer>
 </div>
+
+<ng-template #supporterCard let-supporter="supporter">
+  <img [src]="supporter.image" [alt]="supporter.alt" />
+</ng-template>

@@ -1,15 +1,17 @@
-import { Component, OnInit, Input, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, OnInit, Input, AfterViewChecked, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-page-content-renderer',
   templateUrl: './page-content-renderer.component.html',
-  styleUrls: ['./page-content-renderer.component.scss']
+  styleUrls: ['./page-content-renderer.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class PageContentRendererComponent implements OnInit, AfterViewChecked {
 
   @Input() page: any;
   finalHtml = '';
+  safePage: SafeHtml;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -18,22 +20,11 @@ export class PageContentRendererComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit() {
-    this.sanitizeUrl();
+    this.safePage = this.sanitizer.bypassSecurityTrustHtml(this.page);
   }
 
   ngAfterViewChecked() {
     this.addAttribute();
-  }
-
-  sanitizeUrl() {
-    if (this.page.components.length) {
-      this.page.components.forEach(component => {
-        if (component.componentType === 'Embed') {
-          component.sanitized_url = this.urlSanitizer(component.content);
-          this.cdRef.detectChanges();
-        }
-      });
-    }
   }
 
   urlSanitizer(url: string) {

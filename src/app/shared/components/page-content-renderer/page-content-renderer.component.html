@@ -1,43 +1,4 @@
 <section class="content-container">
-    <ng-container *ngFor="let component of page?.components; let i = index; trackBy: trackByFn">
-      <ng-container [ngSwitch]="component.componentType">
-        <ng-container *ngSwitchCase="'Text'">
-          <p class="para" [innerHTML]="component.content | safeHtml"></p>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Header1'">
-          <h1 [innerHTML]="component.content | safeHtml"></h1>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Header2'">
-          <h2 [innerHTML]="component.content | safeHtml"></h2>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Header3'">
-          <h3 [innerHTML]="component.content | safeHtml"></h3>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Olist'">
-          <ol class="ordered-list" [innerHTML]="getListItems(page?.components, i, 'Olist') | safeHtml">
-          </ol>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Ulist'">
-          <ul class="unordered-list" [innerHTML]="getListItems(page?.components, i, 'Ulist') | safeHtml">
-          </ul>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Divider'">
-          <hr>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Embed'">
-          <iframe class="video-frame" allowfullscreen frameborder="0" [src]="component?.sanitized_url"></iframe>
-        </ng-container>
-  
-        <ng-container *ngSwitchCase="'Upload'">
-          <img class="media-img" [src]="component.component_attachment?.url" [alt]="component.component_attachment?.filename">
-        </ng-container>
-      </ng-container>
-    </ng-container>
-  </section>
+  <div [innerHTML]="safePage">
+  </div>
+</section>

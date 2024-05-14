@@ -30,14 +30,8 @@ export const ConsultationProfileQuery = gql`
       id
       title
       summary
-      summaryHindi {
-        id
-        components
-      }
-      page {
-        id
-        components
-      }
+      englishSummary
+      hindiSummary
       responseDeadline
       url
       visibility

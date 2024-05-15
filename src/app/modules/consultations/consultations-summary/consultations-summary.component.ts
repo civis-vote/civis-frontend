@@ -59,8 +59,8 @@ export class ConsultationsSummaryComponent implements OnInit {
   getProfileSummary() {
     this.currentLanguage = this._cookieService.get('civisLang');
     if (this.currentLanguage === 'hi') {
-      const summaryHindi = this.profileData.summaryHindi;
-      if (summaryHindi && summaryHindi.components.length) {
+      const summaryHindi = this.profileData.hindiSummary;
+      if (summaryHindi) {
         this.useSummaryHindi = true;
       } else {
         this.useSummaryHindi = false;

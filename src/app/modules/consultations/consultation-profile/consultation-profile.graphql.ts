@@ -6,14 +6,8 @@ export const ConsultationProfile = gql`
       id
       title
       summary
-      summaryHindi {
-        id
-        components
-      }
-      page {
-        id
-        components
-      }
+      englishSummary
+      hindiSummary
       responseRounds{
         active
         id
@@ -124,14 +118,8 @@ export const ConsultationProfileCurrentUser = gql`
       id
       title
       summary
-      summaryHindi {
-        id
-        components
-      }
-      page {
-        id
-        components
-      }
+      englishSummary
+      hindiSummary
       responseDeadline
       readingTime
       responsesReadingTimes
@@ -250,14 +238,8 @@ export const ConsultationProfileUser = gql`
       id
       title
       summary
-      summaryHindi {
-        id
-        components
-      }
-      page {
-        id
-        components
-      }
+      englishSummary
+      hindiSummary
       responseDeadline
       readingTime
       responsesReadingTimes

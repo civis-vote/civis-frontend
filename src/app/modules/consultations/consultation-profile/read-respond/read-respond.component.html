@@ -4,8 +4,8 @@
       {{'Summary' | translate}}
       <span>{{profileData?.readingTime ? '(' + profileData?.readingTime + ' min)' : '' }}</span>
     </p>
-    <div *ngIf="profileData?.page || profileData?.summaryHindi">
-      <app-page-content-renderer [page]="useSummaryHindi ? profileData?.summaryHindi : profileData?.page">
+    <div *ngIf="profileData?.englishSummary || profileData?.hindiSummary">
+      <app-page-content-renderer [page]="useSummaryHindi ? profileData?.hindiSummary : profileData?.englishSummary">
       </app-page-content-renderer>
     </div>
   </div>

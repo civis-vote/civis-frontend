@@ -16,8 +16,8 @@
               {{'Round ' + round.roundNumber}}
             </p>
           </div>
-          <div *ngIf="profileData?.page || profileData?.summaryHindi" class="mb-4">
-            <app-page-content-renderer [page]="useSummaryHindi ? profileData?.summaryHindi : profileData?.page"></app-page-content-renderer>
+          <div *ngIf="profileData?.englishSummary || profileData?.hindiSummary" class="mb-4">
+            <app-page-content-renderer [page]="useSummaryHindi ? profileData?.hindiSummary : profileData?.englishSummary"></app-page-content-renderer>
           </div>
           <div *ngIf="satisfactionRatingDistribution" class="mb-4">
             <p class="text-18 text-16-sm m-0 bold-text">{{'Consultation satisfication' | translate}}

@@ -120,25 +120,25 @@ export class ConsultationListComponent implements OnInit {
         variables: {
           page: ++pagingData.currentPage
         },
-        updateQuery: (prev, {fetchMoreResult}) => {
-          this.loader.hide();
-          this.loadingElements.consultationListMore = false;
-          if (!fetchMoreResult) {
-            return prev;
-          }
-          const updatedObject = Object.assign({}, prev, {
-            ...prev,
-            consultationList: {
-              ...prev.consultationList,
-              data: [
-                ...prev.consultationList.data,
-                ...fetchMoreResult.consultationList.data
-              ],
-              paging: fetchMoreResult.consultationList.paging
-            }
-          });
-          return updatedObject;
-        }
+        // updateQuery: (prev, {fetchMoreResult}) => {
+        //   this.loader.hide();
+        //   this.loadingElements.consultationListMore = false;
+        //   if (!fetchMoreResult) {
+        //     return prev;
+        //   }
+        //   const updatedObject = Object.assign({}, prev, {
+        //     ...prev,
+        //     consultationList: {
+        //       ...prev.consultationList,
+        //       data: [
+        //         ...prev.consultationList.data,
+        //         ...fetchMoreResult.consultationList.data
+        //       ],
+        //       paging: fetchMoreResult.consultationList.paging
+        //     }
+        //   });
+        //   return updatedObject;
+        // }
       });
     }
   }  

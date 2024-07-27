@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, Input, Renderer2, ElementRef } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 import { getSocialLink } from '../socialLink.function';
 
 declare global {

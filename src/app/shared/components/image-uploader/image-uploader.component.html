@@ -10,7 +10,7 @@
           <div (click)="closeModal()">X</div>
       </div>
       <div class="modal-body pt-0">
-        <ngx-img (onSelect)="base64 = $event" (onReset)="base64 = $event" [config]="_options"></ngx-img>
+        <img-cropper (onSelect)="base64 = $event" (onReset)="base64 = $event" [settings]="_options"></img-cropper>
         <div *ngIf="!!base64" class="row">
           <div class="col-12 text-center pt-3">
             <button class="app-btn secondary get-start-btn" (click)="sendData()">

@@ -136,24 +136,24 @@ export class LeaderBoardComponent implements OnInit {
         variables: {
           page: ++this.userListData.paging.currentPage
         },
-        updateQuery: (prev, {fetchMoreResult}) => {
-          this.loadingElements.userListMore = false;
-          if (!fetchMoreResult) {
-            return prev;
-          }
-          const updatedObject = Object.assign({}, prev, {
-            ...prev,
-            userList: {
-              ...prev.userList,
-              data: [
-                ...prev.userList.data,
-                ...fetchMoreResult.userList.data
-              ],
-              paging: fetchMoreResult.userList.paging
-            }
-          });
-          return updatedObject;
-        }
+        // updateQuery: (prev, {fetchMoreResult}) => {
+        //   this.loadingElements.userListMore = false;
+        //   if (!fetchMoreResult) {
+        //     return prev;
+        //   }
+        //   const updatedObject = Object.assign({}, prev, {
+        //     ...prev,
+        //     userList: {
+        //       ...prev.userList,
+        //       data: [
+        //         ...prev.userList.data,
+        //         ...fetchMoreResult.userList.data
+        //       ],
+        //       paging: fetchMoreResult.userList.paging
+        //     }
+        //   });
+        //   return updatedObject;
+        // }
       });
     }
   }

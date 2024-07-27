@@ -2,7 +2,7 @@ import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 
 import {ModalModule} from 'ngx-bootstrap/modal';
-import {NgxImgModule} from 'ngx-img';
+import {ImageCropperModule} from 'ngx-img-cropper'
 import {ImageUploaderComponent} from './image-uploader.component';
 import { PipesModule } from '../../pipes/pipes.module';
 
@@ -11,7 +11,7 @@ import { PipesModule } from '../../pipes/pipes.module';
   imports: [
     CommonModule,
     ModalModule,
-    NgxImgModule,
+    ImageCropperModule,
     PipesModule
   ],
   exports: [ImageUploaderComponent]

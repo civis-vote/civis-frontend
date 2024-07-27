@@ -10,7 +10,6 @@ import { SharedDirectivesModule } from 'src/app/shared/directives/shared-directi
 import { ConsultationProfileComponent } from './consultation-profile/consultation-profile.component';
 import { ProfileCardComponent } from './consultation-profile/profile-card/profile-card.component';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import {ModalModule, TooltipModule} from 'ngx-bootstrap';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { AngularDraggableModule } from 'angular2-draggable';
 import { ConsultationsSummaryComponent } from './consultations-summary/consultations-summary.component';
@@ -18,10 +17,10 @@ import { ResponseComponent } from './response/response.component';
 import { DisqusModule } from 'src/app/shared/components/disqus/disqus.module';
 import { ReadRespondComponent } from './consultation-profile/read-respond/read-respond.component';
 import { DiscussEngageComponent } from './consultation-profile/discuss-engage/discuss-engage.component';
-import { ShareButtonModule } from '@ngx-share/button';
+import {ShareButtons} from 'ngx-sharebuttons/buttons'
 import { ConfirmEmailModule } from 'src/app/shared/confirm-email-modal/confirm-email.module';
 import { UserProfileModalModule } from 'src/app/shared/user-profile-modal/user-profile-modal.module';
-import { CKEditorModule } from 'ng2-ckeditor';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { PipesModule } from 'src/app/shared/pipes/pipes.module';
 import { CookieService } from 'ngx-cookie-service';
 import { ConsultationQuestionnaireComponent } from './consultation-profile/consultation-questionnaire/consultation-questionnaire.component';
@@ -40,6 +39,11 @@ import {
     SatisfactionRatingSelectionComponent
  } from './consultation-profile/satisfaction-rating-selection/satisfaction-rating-selection.component';
 import { GlossaryModule } from '../glossary/glossary.module';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
+
+
 
 @NgModule({
     imports: [
@@ -56,7 +60,7 @@ import { GlossaryModule } from '../glossary/glossary.module';
         NgxUploaderModule,
         AngularDraggableModule,
         DisqusModule,
-        ShareButtonModule,
+        ShareButtons,
         ConfirmEmailModule,
         UserProfileModalModule,
         CKEditorModule,

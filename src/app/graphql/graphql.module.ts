@@ -1,27 +1,32 @@
-import {CommonModule} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
-import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {ApolloModule, APOLLO_OPTIONS} from 'apollo-angular';
-import {HttpLinkModule} from 'apollo-angular-link-http';
-import {GraphqlService} from './graphql.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
+import {  HttpLink } from 'apollo-angular/http';
+import { InMemoryCache } from '@apollo/client/core';
+import { GraphqlService } from './graphql.service';
 
 @NgModule({
   imports: [
     CommonModule,
     HttpClientModule,
     ApolloModule,
-    HttpLinkModule
   ],
   providers: [
     {
-      provide: APP_INITIALIZER,
-      useFactory: initializeApollo,
-      deps: [GraphqlService],
-      multi: true
+      provide: APOLLO_OPTIONS,
+      useFactory: (httpLink: HttpLink) => {
+        return {
+          cache: new InMemoryCache(),
+          link: httpLink.create({ uri: 'https://your-graphql-endpoint' }),
+        };
+      },
+      deps: [HttpLink],
     },
     GraphqlService
   ]
 })
+
 export class GraphQLModule {
 }
 

@@ -6,7 +6,8 @@ import { LinearLoaderService } from '../../shared/components/linear-loader/linea
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 
 @Component({
   selector: 'app-glossary',

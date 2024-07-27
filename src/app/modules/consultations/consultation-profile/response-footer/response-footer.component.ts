@@ -183,19 +183,19 @@ export class ResponseFooterComponent implements OnInit {
             variables,
           });
           if (res) {
-            for (const value of resp['consultationProfile'].sharedResponses
-              .edges) {
-              if (value.node.id === response['id']) {
-                if (value.node[res.voteCreate.voteDirection + 'VoteCount']) {
-                  value.node[res.voteCreate.voteDirection + 'VoteCount'] += 1;
-                } else {
-                  value.node[res.voteCreate.voteDirection + 'VoteCount'] = 1;
-                }
-                value.node.votedAs = res.voteCreate;
-                this.response = value;
-                break;
-              }
-            }
+            // for (const value of resp['consultationProfile'].sharedResponses
+            //   .edges) {
+            //   if (value.node.id === response['id']) {
+            //     if (value.node[res.voteCreate.voteDirection + 'VoteCount']) {
+            //       value.node[res.voteCreate.voteDirection + 'VoteCount'] += 1;
+            //     } else {
+            //       value.node[res.voteCreate.voteDirection + 'VoteCount'] = 1;
+            //     }
+            //     value.node.votedAs = res.voteCreate;
+            //     this.response = value;
+            //     break;
+            //   }
+            // }
           }
           store.writeQuery({
             query: ConsultationProfileCurrentUser,

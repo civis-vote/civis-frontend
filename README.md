@@ -16,6 +16,20 @@ This app is configured to auto trigger deployment on master and staging branches
 2. Any push or merge to master branch deploys this app to civis.vote
 
 
+## Files that require editing due to commented code 
+The following files in the code include commented code which disable the working of mnay features of the application
+The nature of the error is most likely related to the typescript language and not a runtime error
+
+read-respond.component.ts
+consultation-questionnare.component.ts
+graphql.service.ts
+consultation-response-test.component.ts
+response-footer.component.ts
+city-selection-modal.component.ts
+create-consultation.component.ts
+consultation-list.component.ts
+leader-board.component.ts
+
 # AngularStarterpack
 
 This app is built from Angular Boilerplate. Angular Boilerplate is a template that can be used to kickstart the development on any Angular project with speed. In the 4 years of working in a service industry, we have built numerous projects and accumulated a lot of learnings from them, that are baked into this boilerplate. Over time, we also noticed certain similarities that repeat themselves in all the projects. We did not necessarily have to re-invent the wheel everytime a new project was started. This boilerplate was all that we would need to get to writing the business logic of the project, the stuff that truly mattered. Using this boilerplate as the base for a project would also force devs to adopt a certian standard set by the boilerplate, thereby ensuring everyone is writing efficient, abstarcted and highly readable code!
@@ -76,3 +90,4 @@ The boilerplate has the following-
 3. isObjectEmpty
 4. isMobile 
 5. getRelativeTime
+

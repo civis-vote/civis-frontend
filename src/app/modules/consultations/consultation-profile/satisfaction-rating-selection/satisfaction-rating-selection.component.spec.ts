@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SatisfactionRatingSelectionComponent } from './satisfaction-rating-selection.component';
 
@@ -6,7 +6,7 @@ describe('SatisfactionRatingSelectionComponent', () => {
   let component: SatisfactionRatingSelectionComponent;
   let fixture: ComponentFixture<SatisfactionRatingSelectionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ SatisfactionRatingSelectionComponent ]
     })

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, HostListener, ViewEncapsulation, ElementRef } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
-import { Apollo } from 'apollo-angular';
+import { Apollo,gql } from 'apollo-angular';
 import { map, filter } from 'rxjs/operators';
 import { ConsultationList } from './navbar.graphql';
 import { ConsultationProfileCurrentUser, ConsultationProfile } from '../consultations/consultation-profile/consultation-profile.graphql';

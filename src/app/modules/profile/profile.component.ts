@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from 'src/app/shared/services/user.service';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 import { Apollo } from 'apollo-angular';
 import { CurrentUserUpdate } from './profile.graphql';
 

@@ -5,7 +5,8 @@ import { Subscription } from 'rxjs';
 import * as moment from 'moment';
 import { Apollo } from 'apollo-angular';
 import { map } from 'rxjs/operators';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 import { UserService } from 'src/app/shared/services/user.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';

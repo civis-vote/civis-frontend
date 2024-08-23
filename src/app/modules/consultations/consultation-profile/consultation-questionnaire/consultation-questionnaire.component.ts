@@ -632,15 +632,11 @@ export class ConsultationQuestionnaireComponent
           });
           if (res) {
             if(this.currentUser?.id) {
-              resp.consultationProfile.respondedOn =
-              res.consultationResponseCreate.consultation.respondedOn;
+              // resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
             }
-            resp.consultationProfile.sharedResponses =
-              res.consultationResponseCreate.consultation.sharedResponses;
-            resp.consultationProfile.responseSubmissionMessage =
-              res.consultationResponseCreate.consultation.responseSubmissionMessage;
-            resp.consultationProfile.satisfactionRatingDistribution =
-              res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
+            // resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
+            // resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
+            // resp.consultationProfile.satisfactionRatingDistribution = res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
           }
           store.writeQuery({
             query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,

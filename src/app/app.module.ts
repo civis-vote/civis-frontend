@@ -1,11 +1,11 @@
-import {HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {GraphQLModule} from './graphql/graphql.module';
-import {SharedComponentsModule} from './shared/components/shared-components.module';
-import {SharedDirectivesModule} from './shared/directives/shared-directives.module';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { GraphQLModule } from './graphql/graphql.module';
+import { SharedComponentsModule } from './shared/components/shared-components.module';
+import { SharedDirectivesModule } from './shared/directives/shared-directives.module';
 import { RouterModule } from '@angular/router';
 import { NavbarModule } from './modules/navbar/navbar.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,9 +17,9 @@ import { CitySelectionModalModule } from './shared/components/city-selection-mod
 import { ConfirmUserGuard } from './shared/guards/confirm-user.guard';
 import { UnsubscribeUserGuard } from './shared/guards/unsubscribe-user.guard';
 import { CookieModule, CookieService } from 'ngx-cookie';
-import { NgxWebstorageModule } from 'ngx-webstorage';
 import { StarterService } from './shared/services/starter.service';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { provideNgxWebstorage,withLocalStorage,withSessionStorage,withNgxWebstorageConfig } from 'ngx-webstorage';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,6 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
     PolicyModule,
     CitySelectionModalModule,
     CookieModule.forRoot(),
-    NgxWebstorageModule.forRoot(),
   ],
   providers: [
     LandingGuard,
@@ -49,7 +48,11 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
     UnsubscribeUserGuard,
     CookieService,
     StarterService,
-  ],
+    provideNgxWebstorage(
+      withNgxWebstorageConfig({ separator: ':', caseSensitive: true }),
+      withLocalStorage(),
+      withSessionStorage()
+    )],
   bootstrap: [AppComponent]
 })
 export class AppModule {

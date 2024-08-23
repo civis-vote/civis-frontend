@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ResponseFooterComponent } from './response-footer.component';
 
@@ -6,7 +6,7 @@ describe('ResponseFooterComponent', () => {
   let component: ResponseFooterComponent;
   let fixture: ComponentFixture<ResponseFooterComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ResponseFooterComponent ]
     })

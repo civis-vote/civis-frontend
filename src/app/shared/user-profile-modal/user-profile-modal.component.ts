@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 import { UserService } from '../services/user.service';
 import { Router } from '@angular/router';
 import { Apollo } from 'apollo-angular';

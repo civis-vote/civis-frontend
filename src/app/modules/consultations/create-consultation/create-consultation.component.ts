@@ -5,10 +5,10 @@ import { CreateConsultationMutation,
          CategoryListQuery,
          MinistryCreateMutation } from './create-consultation.graphql';
 import {debounceTime, distinctUntilChanged, map, switchMap, takeWhile, tap} from 'rxjs/operators';
-import { ModalDirective } from 'ngx-bootstrap';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-create-consultation',
@@ -249,9 +249,9 @@ addMinistry(valid) {
         })
         .subscribe((res) => {
           this.addMinistryModal.hide();
-          const ministry = res.data.ministryCreate;
-          this.ministries = [ministry];
-          this.departmentInfo.ministryId =  ministry.id;
+          // const ministry = res.data.ministryCreate;
+          // this.ministries = [ministry];
+          // this.departmentInfo.ministryId =  ministry.id;
         }, err => {
           this.errorService.showErrorModal(err);
         });

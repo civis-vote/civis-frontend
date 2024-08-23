@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 import { UserService } from '../services/user.service';
 import gql from 'graphql-tag';
 import { Apollo } from 'apollo-angular';

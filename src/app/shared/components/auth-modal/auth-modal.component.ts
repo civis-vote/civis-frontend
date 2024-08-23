@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { ModalDirective } from 'ngx-bootstrap';
 import { NgForm } from '@angular/forms';
 import { SignUpMutation, LocationListQuery } from 'src/app/modules/auth-private/sign-up/sign-up.graphql';
 import { Apollo } from 'apollo-angular';
@@ -10,6 +9,7 @@ import { UserService } from '../../services/user.service';
 import { LoginMutation } from 'src/app/modules/auth-private/login/login.graphql';
 import { GraphqlService } from 'src/app/graphql/graphql.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
+import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-auth-modal',

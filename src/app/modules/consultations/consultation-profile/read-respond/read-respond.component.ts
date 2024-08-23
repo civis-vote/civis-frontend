@@ -11,7 +11,8 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
 import { isObjectEmpty, setResponseVisibility } from 'src/app/shared/functions/modular.functions';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
 
@@ -273,11 +274,11 @@ export class ReadRespondComponent implements OnInit {
         const variables = {id: this.consultationId};
         const resp: any = store.readQuery({query: ConsultationProfileCurrentUser, variables});
         if (res) {
-          resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
-          resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
-          resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
-          resp.consultationProfile.satisfactionRatingDistribution =
-            res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
+          // resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
+          // resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
+          // resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
+          // resp.consultationProfile.satisfactionRatingDistribution =
+          //   res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
         }
         store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resp});
       }

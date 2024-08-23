@@ -33,8 +33,7 @@
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/angular2-draggable/css/resizable.min.css"
             ],
-            "scripts": [],
-            "es5BrowserSupport": true
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -47,7 +46,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -90,28 +88,28 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "civis:build",
+            "buildTarget": "civis:build",
             "port": 3400
           },
           "configurations": {
             "production": {
-              "browserTarget": "civis:build:production"
+              "buildTarget": "civis:build:production"
             },
             "staging": {
-              "browserTarget": "civis:build:staging"
+              "buildTarget": "civis:build:staging"
             },
             "dev-staging": {
-              "browserTarget": "civis:build:dev-staging"
+              "buildTarget": "civis:build:dev-staging"
             },
             "dev-production": {
-              "browserTarget": "civis:build:dev-production"
+              "buildTarget": "civis:build:dev-production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "civis:build"
+            "buildTarget": "civis:build"
           }
         },
         "test": {
@@ -175,7 +173,6 @@
       }
     }
   },
-  "defaultProject": "civis",
   "cli": {
     "analytics": "399e69e2-f95b-459c-8176-7903c20092bd"
   }

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import {Apollo} from 'apollo-angular';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {HttpLink} from 'apollo-angular-link-http';
-import {InMemoryCache} from 'apollo-cache-inmemory';
 import { environment } from '../../environments/environment';
-import { ApolloLink, concat } from 'apollo-link';
+import { ApolloLink, concat } from '@apollo/client/core';
+import { InMemoryCache } from '@apollo/client/cache';
+import { HttpLink } from 'apollo-angular/http';
+
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class GraphqlService {
         link: concat(this.authMiddleware(), http),
         cache: new InMemoryCache()
       });
-      resolve();
+      resolve(console.log()); //! Fix the error later  ---- Very important
     });
   }
 

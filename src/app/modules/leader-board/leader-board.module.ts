@@ -4,7 +4,7 @@ import { SharedComponentsModule } from '../../shared/components/shared-component
 import { FormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 import { LeaderBoardComponent } from './leader-board.component';
-import { ModalModule } from 'ngx-bootstrap';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SharedDirectivesModule } from 'src/app/shared/directives/shared-directives.module';
 import { UserProfileModalModule } from 'src/app/shared/user-profile-modal/user-profile-modal.module';

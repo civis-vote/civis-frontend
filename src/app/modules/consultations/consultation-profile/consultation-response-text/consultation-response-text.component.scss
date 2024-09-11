@@ -36,6 +36,10 @@
       }
     }
 
+    .cke_editable.cke_display_version_check-absolute:before {
+      display: none;
+    }
+
     &__content {
       padding: 5px 30px;
       height: calc(100% - 115px);
@@ -44,6 +48,11 @@
         .cke {
           height: 100% !important;
           border: none !important;
+
+          .cke_editable.cke_display_version_check-absolute:before {
+            display: none;
+          }
+
           .cke_inner {
             height: 100% !important;
             .cke_top {

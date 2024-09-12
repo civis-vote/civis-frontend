@@ -1,3 +1,5 @@
+$font-family-encode-sans: 'Encode Sans', sans-serif;
+
 @import './src/assets/styles/app';
 
 .c-profile-card {
@@ -202,7 +204,7 @@
     }
 
      .publish-date {
-      font-family: 'Encode Sans', sans-serif;
+      font-family: $font-family-encode-sans;
       font-size: 13px;
       font-weight: 400;
       line-height: 15.56px;
@@ -231,7 +233,7 @@
       }
 
       .partner-name {
-        font-family: 'Encode Sans', sans-serif;
+        font-family: $font-family-encode-sans;
         font-size: 14px;
         font-weight: 400;
         line-height: 16.76px;
@@ -246,7 +248,7 @@
         color: #666;
         font-weight: 700;
         line-height: 16.25px;
-        font-family: 'Encode Sans', sans-serif;
+        font-family: $font-family-encode-sans;
         letter-spacing: 0.035em;
         text-align: right;
         margin-left: auto;

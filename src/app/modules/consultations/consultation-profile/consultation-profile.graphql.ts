@@ -96,6 +96,22 @@ export const ConsultationProfile = gql`
       updatedAt
       publishedAt
       visibility
+      consultationPartnerResponses {
+        responseCount
+        organisation {
+          createdAt
+          employeeCount
+          id
+          name
+          officialUrl
+          updatedAt
+          logo {
+            filename
+            id
+            url
+          }
+        }
+      }
     }
   }
 `;
@@ -214,6 +230,22 @@ export const ConsultationProfileCurrentUser = gql`
       updatedAt
       publishedAt
       visibility
+      consultationPartnerResponses {
+        responseCount
+        organisation {
+          createdAt
+          employeeCount
+          id
+          name
+          officialUrl
+          updatedAt
+          logo {
+            filename
+            id
+            url
+          }
+        }
+      }
     }
   }
 `;

@@ -19,6 +19,7 @@
             <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
           </a>
         </div>
+        <hr class="divider" />
         <button *ngIf="consultationStatus === 'active'" class="btn-submit mt-3 active" (click)='stepNext(profile?.respondedOn)' data-event="lead">
           <p class="m-0">
             <span>
@@ -53,13 +54,12 @@
         </button>
       </div>
     </div>
-    <hr class="divider-one" />
   </div>
 
   <div class="c-profile-card__bottom-section">
     <div class="d-flex justify-content-between mb-3">
       <p class="count-text m-0">{{'TOTAL RESPONSES' | translate}}</p>
-      <p class="count-number bold-text text-right m-0">
+      <p class="count-number bold-text text-right m-0" *ngIf="!summaryData; else summaryDataCount">
         {{profile?.consultationResponsesCount ? profile?.consultationResponsesCount : 0}}
       </p>
     </div>
@@ -82,8 +82,7 @@
               {{ partner?.organisation?.name }}
             </a>
           </div>
-
-          <p class="response-count ml-auto">{{ partner?.responseCount || 0 }}</p>
+          <p class="response-count ml-auto d-flex align-items-center">{{ partner?.responseCount || 0 }}</p>
         </div>
       </div>
 

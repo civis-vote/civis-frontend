@@ -36,8 +36,8 @@ constructor(
           return;
         } else {
           this.token = this.tokenService.token;
-          if(this.tokenService.hasToken$){
-          this.getCurrentUser();
+          if (this.tokenService.hasToken$) {
+            this.getCurrentUser();
           }
         }
       });

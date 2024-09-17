@@ -119,7 +119,7 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     return '';
   }
 
-  convertToFormattedDate(date: string): string {
+  formatPublicationDate(date: string): string {
     if (date) {
       return moment(date).format('MMMM D, YYYY');
     }

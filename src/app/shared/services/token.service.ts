@@ -30,13 +30,21 @@ export class TokenService {
 
   checkTokenExpiration() {
     const currentTime = new Date().toISOString();
-    const tokenExpirationTime = localStorage.getItem("civis-token_expires") ?? new Date(0).toISOString();
-   
-    // logout user if token expired
-    if (currentTime > tokenExpirationTime) {
-      localStorage.removeItem("civis-token");
-      localStorage.removeItem("civis-token_expires");
-    } 
+    const tokenExpirationString = localStorage.getItem("civis-token_expires");
+
+    const tokenExpirationTime = new Date(tokenExpirationString);
+
+    // Validating the expiration date
+    if (isNaN(tokenExpirationTime.getTime())) {
+        localStorage.removeItem("civis-token");
+        localStorage.removeItem("civis-token_expires");
+        return;
+    }
+
+    if (currentTime > tokenExpirationTime.toISOString()) {
+        localStorage.removeItem("civis-token");
+        localStorage.removeItem("civis-token_expires");
+    }
   }
 
 

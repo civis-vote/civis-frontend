@@ -11,7 +11,6 @@ import { CookieService } from 'ngx-cookie';
   templateUrl: './profile-card.component.html',
   styleUrls: ['./profile-card.component.scss'],
   encapsulation: ViewEncapsulation.None,
-
 })
 export class ProfileCardComponent implements OnInit, OnChanges {
 
@@ -113,11 +112,27 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     }
   }
 
-  convertDateFormat(date) {
+  convertDateFormat(date: string): string {
     if (date) {
       return moment(date).format('Do MMM YY');
     }
+    return '';
   }
+
+  convertToFormattedDate(date: string): string {
+    if (date) {
+      return moment(date).format('MMMM D, YYYY');
+    }
+    return '';
+  }
+
+  getSecureUrl(url: string): string {
+    if (url && !/^https?:\/\//i.test(url)) {
+      return 'https://' + url;
+    }
+    return url;
+  }
+
 
   getDifferenceInDays(deadline) {
     if (deadline) {
@@ -171,9 +186,7 @@ export class ProfileCardComponent implements OnInit, OnChanges {
 
   getLinkedinUrl(link) {
     if (link) {
-
       return `https://www.linkedin.com/shareArticle?mini=true&url=${link}`;
-
     }
     return null;
   }
@@ -195,7 +208,6 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   }
 
   stepNext(hasResponseSubmited) {
-
     if (!hasResponseSubmited || this.showResponseCreation) {
       const questions = this.consultationsService.getQuestions(this.profile);
       if (questions && questions.length) {

@@ -327,25 +327,26 @@ export class ConsultationQuestionnaireComponent
         if (!isObjectEmpty(consultationResponse)) {
           if (this.currentUser) {
             this.metaPixelService.trackSubmitResponse();
+  
             this.apollo
-            .watchQuery({
-              query: UserCountUser,
-              variables: { userId: this.currentUser.id },
-              fetchPolicy: "no-cache",
-            })
-            .valueChanges.pipe(map((res: any) => res.data.userCountUser))
-            .subscribe(
-              (data) => {
-                if (!this.profanity_count_changed) {
-                  this.userData = data;
-                  this.checkAndUpdateProfanityCount();
+              .watchQuery({
+                query: UserCountUser,
+                variables: { userId: this.currentUser.id },
+                fetchPolicy: "no-cache",
+              })
+              .valueChanges.pipe(map((res: any) => res.data.userCountUser))
+              .subscribe(
+                (data) => {
+                  if (!this.profanity_count_changed) {
+                    this.userData = data;
+                    this.checkAndUpdateProfanityCount();
+                  }
+                },
+                (err) => {
+                  const e = new Error(err);
+                  this.errorService.showErrorModal(err);
                 }
-              },
-              (err) => {
-                const e = new Error(err);
-                this.errorService.showErrorModal(err);
-              }
-            );
+              );
           } else {
             //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
             this.authModal = true;
@@ -355,7 +356,7 @@ export class ConsultationQuestionnaireComponent
             );
           }
         }
-      }
+      } 
     } else {
       if (!this.responseFeedback) {
         this.consultationService.satisfactionRatingError.next(true);

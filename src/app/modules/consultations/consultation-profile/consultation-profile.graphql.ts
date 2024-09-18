@@ -1,5 +1,24 @@
 import gql from 'graphql-tag';
 
+const ConsultationPartnerResponsesFragment = gql`
+  fragment ConsultationPartnerResponsesFragment on ConsultationPartnerResponseType {
+    responseCount
+    organisation {
+      createdAt
+      employeeCount
+      id
+      name
+      officialUrl
+      updatedAt
+      logo {
+        filename
+        id
+        url
+      }
+    }
+  }
+`;
+
 export const ConsultationProfile = gql`
   query consultationProfile($id: Int!) {
     consultationProfile(id: $id) {
@@ -8,7 +27,7 @@ export const ConsultationProfile = gql`
       summary
       englishSummary
       hindiSummary
-      responseRounds{
+      responseRounds {
         active
         id
         questions {
@@ -57,7 +76,7 @@ export const ConsultationProfile = gql`
             answers
             consultation {
               id
-              responseRounds{
+              responseRounds {
                 active
                 id
                 questions {
@@ -96,8 +115,12 @@ export const ConsultationProfile = gql`
       updatedAt
       publishedAt
       visibility
+      consultationPartnerResponses {
+        ...ConsultationPartnerResponsesFragment
+      }
     }
   }
+  ${ConsultationPartnerResponsesFragment}
 `;
 
 export const ConsultationProfileCurrentUser = gql`
@@ -123,7 +146,7 @@ export const ConsultationProfileCurrentUser = gql`
       responseDeadline
       readingTime
       responsesReadingTimes
-      responseRounds{
+      responseRounds {
         active
         id
         questions {
@@ -171,7 +194,7 @@ export const ConsultationProfileCurrentUser = gql`
             answers
             consultation {
               id
-              responseRounds{
+              responseRounds {
                 active
                 id
                 questions {
@@ -214,8 +237,12 @@ export const ConsultationProfileCurrentUser = gql`
       updatedAt
       publishedAt
       visibility
+      consultationPartnerResponses {
+        ...ConsultationPartnerResponsesFragment
+      }
     }
   }
+  ${ConsultationPartnerResponsesFragment}
 `;
 
 

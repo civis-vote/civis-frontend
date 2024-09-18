@@ -59,7 +59,7 @@
           </div>
           <div>
               <button type="submit" class="btn submit-btn d-flex justify-content-between" [ngClass]="{'active-btn' : consultationForm1.valid}">
-                <p class="m-0">{{'NEXT:  DEPARTMENT INFO' | translate}}</p>  
+                <p class="m-0">{{'NEXT:  DEPARTMENT INFO' | translate}}</p>
                 <span><i class="fa fa-angle-right"></i></span>
               </button>
           </div>
@@ -87,11 +87,11 @@
             <label for="ministry">{{'Ministry' | translate}}</label>
               <div class="location-box__border">
                   <ng-select id="ministry" #ministry="ngModel" name="ministry" [loading]="loadingMinistries"
-                  [items]="ministries" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom" 
+                  [items]="ministries" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom"
                   bindValue="id" [notFoundText]="dropdownText" [clearable]="true" loadingText="Searching..."
-                  (search)="onSearch($event)" placeholder="Select" (open)="getMinistriesList()" [(ngModel)]="departmentInfo.ministryId" required> 
-                  </ng-select>  
-              </div>    
+                  (search)="onSearch($event)" placeholder="Select" (open)="getMinistriesList()" [(ngModel)]="departmentInfo.ministryId" required>
+                  </ng-select>
+              </div>
               <div *ngIf="ministry.invalid && (ministry.touched || consultationForm2.submitted)" class="error-msg">
                 {{' Ministry is Required' | translate}}
               </div>
@@ -159,7 +159,7 @@
               <div class="modal-close-btn" (click)="hideAddMinistryModal()"><i class="fa fa-times"></i></div>
             </div>
             <div class="modal-body py-0 mb-4 d-flex">
-      
+
               <div class="form-space">
                   <form #ministryForm="ngForm" (ngSubmit)="addMinistry(ministryForm.valid)" autocomplete="off">
                     <div class="input-block">
@@ -173,32 +173,32 @@
                     </div>
                   <div class="input-block">
                       <label for="category">{{'Category' | translate}}</label>
-                        <ng-select id="category" #category="ngModel" name="category" 
-                        [items]="categoriesList" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom" 
+                        <ng-select id="category" #category="ngModel" name="category"
+                        [items]="categoriesList" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom"
                         bindValue="id" [searchable]="false"
-                        [(ngModel)]="ministryObject.categoryId" required> 
-                        </ng-select> 
+                        [(ngModel)]="ministryObject.categoryId" required>
+                        </ng-select>
                         <div *ngIf="category.invalid && (category.touched || ministryForm.submitted)" class="error-msg">
                           {{'Category is Required' | translate}}
                         </div>
                   </div>
                   <div class="input-block">
-                      <label for="deadline">{{'Department Logo' | translate}}</label>   
+                      <label for="deadline">{{'Department Logo' | translate}}</label>
                       <div class="input-block__upload-field">
                         <label class="w-100 m-0">
-                          <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" hidden required /> 
+                          <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" hidden required />
                           <span><i class="fa fa-cloud-upload"></i></span>
                           {{ ministryObject?.logoFile?.filename ? ministryObject.logoFile.filename :  'Select File'  }}
                         </label>
-                    </div>     
+                    </div>
                   </div>
                   <div class="input-block">
                     <label for="level">{{'Level*' | translate}}</label>
-                      <ng-select id="level" #level="ngModel" name="level"  
-                      [items]="levels" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom" 
+                      <ng-select id="level" #level="ngModel" name="level"
+                      [items]="levels" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom"
                       bindValue="name" [searchable]="false"
-                      [(ngModel)]="ministryObject.level" required> 
-                      </ng-select>  
+                      [(ngModel)]="ministryObject.level" required>
+                      </ng-select>
                       <div *ngIf="level.invalid && (level.touched || ministryForm.submitted)" class="error-msg">
                         {{'Level is Required' | translate}}
                       </div>

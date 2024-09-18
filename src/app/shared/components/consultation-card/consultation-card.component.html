@@ -10,7 +10,7 @@
           <p class="responses-text">
             {{consultation?.consultationResponsesCount ? consultation?.consultationResponsesCount : ''}}
             <span  *ngIf="consultation?.consultationResponsesCount == 1">
-              {{'Resp so faronse' | translate}}
+              {{'Response so far' | translate}}
             </span>
             <span  *ngIf="consultation?.consultationResponsesCount > 1">
               {{'Responses so far' | translate}}

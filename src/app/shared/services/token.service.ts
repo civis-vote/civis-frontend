@@ -32,20 +32,22 @@ export class TokenService {
     const currentTime = new Date().toISOString();
     const tokenExpirationString = localStorage.getItem("civis-token_expires");
 
-    const tokenExpirationTime = new Date(tokenExpirationString);
+    const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
 
-    // Validating the expiration date
-    if (isNaN(tokenExpirationTime.getTime())) {
+    if (typeof tokenExpirationString !== 'string' || !isoDateRegex.test(tokenExpirationString)) {
         localStorage.removeItem("civis-token");
         localStorage.removeItem("civis-token_expires");
         return;
     }
 
-    if (currentTime > tokenExpirationTime.toISOString()) {
+    const tokenExpirationTime = new Date(tokenExpirationString);
+
+    if (isNaN(tokenExpirationTime.getTime()) || (currentTime > tokenExpirationTime.toISOString())) {
         localStorage.removeItem("civis-token");
         localStorage.removeItem("civis-token_expires");
     }
-  }
+}
+
 
 
   storeToken(tokenObject: any) {

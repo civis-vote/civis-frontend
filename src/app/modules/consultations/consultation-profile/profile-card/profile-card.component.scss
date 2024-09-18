@@ -1,5 +1,3 @@
-$font-family-encode-sans: 'Encode Sans', sans-serif;
-
 @import './src/assets/styles/app';
 
 .c-profile-card {
@@ -187,7 +185,7 @@ $font-family-encode-sans: 'Encode Sans', sans-serif;
   }
 
   &__bottom-section {
-    padding: 20px 24px;
+    padding: 0px 24px;
 
     .count-text {
       font-size: 11px;
@@ -200,7 +198,7 @@ $font-family-encode-sans: 'Encode Sans', sans-serif;
       font-size: 13px;
       letter-spacing: 0.035em;
       line-height: 16px;
-      color: #6F6F6F;
+      color: #929292;
     }
 
      .publish-date {
@@ -217,8 +215,8 @@ $font-family-encode-sans: 'Encode Sans', sans-serif;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 20px !important;
-      margin-top: 20px;
+      margin-bottom: 16px;
+      margin-top: 16px;
 
 
       .partner-logo {
@@ -241,17 +239,21 @@ $font-family-encode-sans: 'Encode Sans', sans-serif;
         text-align: left;
         color: #151515;
         text-decoration: underline;
+        text-underline-offset: 4px;
       }
 
       .response-count {
         font-size: 13px;
-        color: #666;
+        color: #929292;
         font-weight: 700;
         line-height: 16.25px;
         font-family: $font-family-encode-sans;
         letter-spacing: 0.035em;
         text-align: right;
         margin-left: auto;
+        text-align: center;
+        margin-top: auto;
+        margin-bottom: auto;
       }
     }
 
@@ -259,11 +261,6 @@ $font-family-encode-sans: 'Encode Sans', sans-serif;
 
   .divider {
     border: 1px solid #CAE5F5;
-    margin: 0 0 16px;
-  }
-
-  .divider-one{
-    border: 1px solid #CAE5F5;
-    margin-top: 20px;
+    margin: 16px -24px;
   }
 }

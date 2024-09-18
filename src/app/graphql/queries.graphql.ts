@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const CurrentUser = gql`
-query{
+query getCurrentUser{
   userCurrent {
     id
     bestRank
@@ -56,7 +56,7 @@ query{
 `;
 
 export const profanityList =  gql`
-query{
+query profanityList{
   profanityList {
     data {
       profaneWord

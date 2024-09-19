@@ -1,25 +1,34 @@
 <div class="c-profile-card sticky">
   <div class="c-profile-card__top-section">
-    <p class="light-text m-0">{{summaryData?.title ? summaryData?.title : 'SENDING IN YOUR RESPONSE TO'}}</p>
-    <div class="d-flex justify-content-between mb-1 mt-2">
-      <p class="card-title m-0">{{profile?.title}}</p>
-      <a class="icon-circle" [href]="profile?.url" target="_blank" *ngIf="!summaryData">
-        <i class="fa fa-link" aria-hidden="true"></i>
-      </a>
-    </div>
+    <div class="divider">
+      <p class="light-text mt-3">{{summaryData?.title ? summaryData?.title : 'SENDING IN YOUR RESPONSE TO'}}</p>
+      <div class="d-flex justify-content-between mb-1 mt-2">
+        <p class="card-title m-0">{{profile?.title}}</p>
+        <a class="icon-circle" [href]="profile?.url" target="_blank" *ngIf="!summaryData">
+          <i class="fa fa-link" aria-hidden="true"></i>
+        </a>
+      </div>
       <div class="ministry-detail">
-        <img [src]="profile?.ministry?.logo?.url" class="avatar avatar--42" alt=" " />
+        <img [src]="profile?.ministry?.logo?.url" class="avatar avatar--42"
+          [alt]="profile?.ministry?.name ? profile.ministry.name + ' logo' : 'Ministry logo'" />
         <p class="regular-text m-0">{{profile?.ministry?.name}}</p>
       </div>
       <div *ngIf="!summaryData">
         <div *ngIf="!profile?.respondedOn || showResponseCreation">
           <div class="d-flex justify-content-between align-items-center mb-1 mt-1">
             <p class="days-remaining m-0">{{getRemainigDays(profile?.responseDeadline)}}</p>
-            <a  [href]="createCalendarEvent()" class="icon-circle" target="_blank">
+            <a [href]="createCalendarEvent()" class="icon-circle" target="_blank">
               <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
             </a>
           </div>
-          <button *ngIf="consultationStatus === 'active'" class="btn-submit mt-3 active" (click)='stepNext(profile?.respondedOn)' data-event="lead">
+        </div>
+      </div>
+    </div>
+    <div class="divider">
+      <div *ngIf="!summaryData">
+        <div *ngIf="!profile?.respondedOn || showResponseCreation">
+          <button *ngIf="consultationStatus === 'active'" class="btn-submit mt-1 active"
+            (click)='stepNext(profile?.respondedOn)' data-event="lead">
             <p class="m-0">
               <span>
                 <picture class="citizen-logo">
@@ -44,77 +53,76 @@
             <p class="success-date m-0">{{convertDateFormat(profile?.respondedOn)}}</p>
           </div>
         </div>
-        <div class="share-block" *ngIf="profile?.visibility === 'public_consultation'">
-          <div class="share-block__position">
-            <div #shareOptionsElement class="share-pop-up" *ngIf="showShareOptions">
-                <a  class="share-btn"
-                [href]="getFbUrl(currentUrl)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-facebook"></i>
-                  </span>
-                </a>
-                <a  class="share-btn"
-                [href]="getTwitterUrl(currentUrl)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-twitter"></i>
-                  </span>
-                </a>
-                <a  class="share-btn"
-                [href]="getWhatsappUrl(currentUrl)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-whatsapp"></i>
-                  </span>
-                </a>
-                <a  class="share-btn"
-                [href]="getLinkedinUrl(currentUrl)"
-                target="_blank">
-                  <span>
-                      <i class="fa fa-linkedin"></i>
-                  </span>
-                </a>
-            </div>
-          </div>
-          <div class="spread-btn mt-3">
-            <button data-event="click-sidebar-share" #spreadButtonElement class="btn-circular"
-              (click)="showShareOptions = !showShareOptions">
-              <span class="mr-2 clr-blue"><i class="fa fa-share"></i></span>
-              <span class="blue-text bold-text">{{'Spread the word' | translate}}</span>
-            </button>
-            <button mat-button (click)="openDialog()" class="btn-circular" style="float: right;">
-              <span class="blue-text bold-text">{{'Glossary' | translate}}</span>
-            </button>
+      </div>
+      <div class="share-block" *ngIf="profile?.visibility === 'public_consultation'">
+        <div class="share-block__position">
+          <div #shareOptionsElement class="share-pop-up" *ngIf="showShareOptions">
+              <a  class="share-btn"
+              [href]="getFbUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-facebook"></i>
+                </span>
+              </a>
+              <a  class="share-btn"
+              [href]="getTwitterUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-twitter"></i>
+                </span>
+              </a>
+              <a  class="share-btn"
+              [href]="getWhatsappUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-whatsapp"></i>
+                </span>
+              </a>
+              <a  class="share-btn"
+              [href]="getLinkedinUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-linkedin"></i>
+                </span>
+              </a>
           </div>
         </div>
-
-      </div>
-      <div *ngIf="summaryData" class="report-download-block">
-        <div>
-          <button  class="btn-submit mt-3  active" (click)='downloadReport()'>
-            <p class="m-0">
-              <span><i class="fa fa-download"></i></span>
-              <span>{{'Download report as pdf' | translate}}</span>
-            </p>
+        <div class="spread-btn mt-3">
+          <button data-event="click-sidebar-share" #spreadButtonElement class="btn-circular"
+            (click)="showShareOptions = !showShareOptions">
+            <span class="mr-2 clr-blue"><i class="fa fa-share"></i></span>
+            <span class="blue-text bold-text">{{'Spread the word' | translate}}</span>
+          </button>
+          <button mat-button (click)="openDialog()" class="btn-circular" style="float: right;">
+            <span class="blue-text bold-text">{{'Glossary' | translate}}</span>
           </button>
         </div>
       </div>
+
+    </div>
+    <div *ngIf="summaryData" class="report-download-block">
+      <div>
+        <button  class="btn-submit mt-3  active" (click)='downloadReport()'>
+          <p class="m-0">
+            <span><i class="fa fa-download"></i></span>
+            <span>{{'Download report as pdf' | translate}}</span>
+          </p>
+        </button>
+      </div>
+    </div>
+
+
   </div>
 
-  <hr class="divider" />
-
   <div class="c-profile-card__bottom-section">
+    <div class="divider">
     <div class="d-flex justify-content-between mb-3">
       <p class="count-text m-0">{{'TOTAL RESPONSES' | translate}}</p>
-      <p class="count-number bold-text text-right m-0">
+      <p class="count-number bold-text text-right m-0" *ngIf="!summaryData; else summaryDataCount">
         {{profile?.consultationResponsesCount ? profile?.consultationResponsesCount : 0}}
       </p>
     </div>
-    <div
-      class="d-flex justify-content-between mb-3"
-      *ngIf="profile?.reviewType && profile?.reviewType !== 'policy'"
-    >
+    <div class="d-flex justify-content-between" *ngIf="profile?.reviewType && profile?.reviewType !== 'policy'">
       <p class="count-text m-0">{{'TOTAL PUBLIC RESPONSES' | translate}}</p>
       <p class="count-number bold-text text-right m-0" *ngIf="!summaryData; else summaryDataCount">
         {{profile?.sharedResponses?.totalCount ? profile?.sharedResponses?.totalCount : 0 }}
@@ -125,9 +133,30 @@
         </p>
       </ng-template>
     </div>
+  </div>
+
+    <div *ngIf="profile?.consultationPartnerResponses?.length > 0">
+      <div class="divider">
+      <p class="count-text m-0">{{'PARTNER RESPONSES ' | translate}}</p>
+      <div *ngFor="let partner of profile?.consultationPartnerResponses">
+        <div class="partner-responses d-flex align-items-center">
+          <img [src]="partner?.organisation?.logo?.url" class="partner-logo" alt="Partner Logo" />
+          <div class="ml-3 partner-details">
+            <a [href]="getSecureUrl(partner?.organisation?.officialUrl)" target="_blank" class="partner-name">
+              {{ partner?.organisation?.name }}
+            </a>
+          </div>
+          <p class="response-count ml-auto d-flex align-items-center">{{ partner?.responseCount || 0 }}</p>
+        </div>
+      </div>
+    </div>
+
+    </div>
+    <div class="divider">
     <div class="d-flex justify-content-between">
-      <p class="count-text m-0">{{profile?.visibility === 'public_consultation' ?  'DRAFT MADE PUBLIC ON'  : 'CONSULTATION PUBLISHED ON' | translate}}</p>
-      <p class="count-number bold-text text-right m-0">{{convertDateFormat(profile?.publishedAt)}}</p>
+      <div class="publish-date">{{'Consultation published on' | translate}}
+        {{formatPublicationDate(profile?.publishedAt)}}</div>
+    </div>
     </div>
   </div>
 </div>

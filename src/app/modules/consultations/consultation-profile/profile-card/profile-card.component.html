@@ -1,7 +1,7 @@
 <div class="c-profile-card sticky">
   <div class="c-profile-card__top-section">
     <div class="divider">
-      <p class="light-text mt-3">{{summaryData?.title ? summaryData?.title : 'SENDING IN YOUR RESPONSE TO'}}</p>
+      <p class="light-text mt-3">{{summaryData?.title ? summaryData?.title : 'SENDING IN YOUR RESPONSE TO' | translate}}</p>
       <div class="d-flex justify-content-between mb-1 mt-2">
         <p class="card-title m-0">{{profile?.title}}</p>
         <a class="icon-circle" [href]="profile?.url" target="_blank" *ngIf="!summaryData">

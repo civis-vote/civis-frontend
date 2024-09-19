@@ -10,7 +10,7 @@
               <div class="question">
                 <p class="question-text">
                   <span class="question-text__number">{{i+1}}.</span>
-                  {{question.questionText}} 
+                  {{question.questionText}}
                   <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
                 </p>
                 <div class="answer" *ngIf="question.questionType === 'multiple_choice'">
@@ -23,12 +23,12 @@
                   <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
                 </div>
                 <div class="answer" *ngIf="question.questionType === 'dropdown'">
-                    <ng-select 
-                    [items]="question.subQuestions" bindLabel="questionText" [virtualScroll]="true" dropdownPosition="bottom" 
+                    <ng-select
+                    [items]="question.subQuestions" bindLabel="questionText" [virtualScroll]="true" dropdownPosition="bottom"
                     bindValue="id"  [clearable]="false" loadingText="Searching..." [searchable]="false" (change)="onAnswerChange(question, $event)"
-                    placeholder="Select an option" [formControlName]="question.id"> 
+                    placeholder="Select an option" [formControlName]="question.id">
                     </ng-select>
-                    <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>  
+                    <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
                 </div>
                 <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
                   <label class="answer__tips">Choose as many as you like</label>
@@ -44,7 +44,7 @@
                   <div class="text-area" >
                     <textarea (input)="longTextAnswer = $event.target.value" placeholder="Type your answer here." [formControlName]="question.id" ></textarea>
                   </div>
-                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div> 
+                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
                 </div>
                 <div class="input-box" *ngIf="question.is_other">
                   <div class="input-box__border">
@@ -52,25 +52,25 @@
                     [formControlName]="question.other_answer" />
                   </div>
                 </div>
-                <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other" class="error-msg text-left ml-3">This is a mandatory question and your response is required</div> 
+                <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other" class="error-msg text-left ml-3">This is a mandatory question and your response is required</div>
               </div>
             </div>
           </div>
           <div class="checkbox-area" *ngIf="showPublicResponseOption() && consultationId !== 707 && consultationId !== 404">
             <div class="input-checbox">
-              <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" [ngModelOptions]="{standalone: true}"/> 
+              <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" [ngModelOptions]="{standalone: true}"/>
               <label class="m-0">{{'Make my response public' | translate}}</label>
-              <span class="link" tooltip="Choosing to make your response public allows it to be viewed by others, who may use it as a reference or template for their 
-              own responses. Only your first name will be disclosed to the organisation conducting the consultation. 
-              This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. 
-              If you are unsure about your own response, you also have the option to adopt and send a public response provided by 
+              <span class="link" tooltip="Choosing to make your response public allows it to be viewed by others, who may use it as a reference or template for their
+              own responses. Only your first name will be disclosed to the organisation conducting the consultation.
+              This option is ideal for those who wish to transparently share their views and contribute to the broader discussion.
+              If you are unsure about your own response, you also have the option to adopt and send a public response provided by
               someone else.">{{'What does this mean?' | translate}}</span>
             </div>
           </div>
           <div class="py-3">
             <button  class="btn-submit active" (click)='submitAnswer()' [tooltip]="(showError && !f.valid)  ? 'Please fill all the answers to submit response.' : ''" data-event="purchase">
               <p class="m-0">
-                SUBMIT RESPONSE
+                {{'SUBMIT RESPONSE' | translate}}
               </p>
               <span class="ml-2"><i class="fa fa-angle-right"></i></span>
             </button>

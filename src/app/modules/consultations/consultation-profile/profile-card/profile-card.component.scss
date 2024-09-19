@@ -8,7 +8,6 @@
   border-radius: 5px;
 
   &__top-section {
-    padding: 20px 24px;
 
     .light-text {
       font-size: 11px;
@@ -185,7 +184,6 @@
   }
 
   &__bottom-section {
-    padding: 0px 24px;
 
     .count-text {
       font-size: 11px;
@@ -209,13 +207,12 @@
       letter-spacing: 0.08em;
       text-align: left;
       color: #B7B7B7;
-    }
+      padding-bottom: 10px;    }
 
     .partner-responses {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
       margin-top: 16px;
 
 
@@ -259,8 +256,8 @@
 
   }
 
-  .divider {
-    border: 1px solid #CAE5F5;
-    margin: 16px -24px;
+  .padding{
+    padding: 15px 24px 15px 24px;
+    border-bottom: 1px solid #CAE5F5;
   }
 }

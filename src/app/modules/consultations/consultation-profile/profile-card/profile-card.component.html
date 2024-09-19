@@ -55,14 +55,63 @@
         </div>
       </div>
       <div class="share-block" *ngIf="profile?.visibility === 'public_consultation'">
+        <div class="share-block__position">
+          <div #shareOptionsElement class="share-pop-up" *ngIf="showShareOptions">
+              <a  class="share-btn"
+              [href]="getFbUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-facebook"></i>
+                </span>
+              </a>
+              <a  class="share-btn"
+              [href]="getTwitterUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-twitter"></i>
+                </span>
+              </a>
+              <a  class="share-btn"
+              [href]="getWhatsappUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-whatsapp"></i>
+                </span>
+              </a>
+              <a  class="share-btn"
+              [href]="getLinkedinUrl(currentUrl)"
+              target="_blank">
+                <span>
+                    <i class="fa fa-linkedin"></i>
+                </span>
+              </a>
+          </div>
+        </div>
         <div class="spread-btn mt-3">
-          <button class="btn-circular" (click)="showShareOptions = !showShareOptions">
+          <button data-event="click-sidebar-share" #spreadButtonElement class="btn-circular"
+            (click)="showShareOptions = !showShareOptions">
             <span class="mr-2 clr-blue"><i class="fa fa-share"></i></span>
             <span class="blue-text bold-text">{{'Spread the word' | translate}}</span>
           </button>
+          <button mat-button (click)="openDialog()" class="btn-circular" style="float: right;">
+            <span class="blue-text bold-text">{{'Glossary' | translate}}</span>
+          </button>
         </div>
       </div>
+
     </div>
+    <div *ngIf="summaryData" class="report-download-block">
+      <div>
+        <button  class="btn-submit mt-3  active" (click)='downloadReport()'>
+          <p class="m-0">
+            <span><i class="fa fa-download"></i></span>
+            <span>{{'Download report as pdf' | translate}}</span>
+          </p>
+        </button>
+      </div>
+    </div>
+
+
   </div>
 
   <div class="c-profile-card__bottom-section">
@@ -75,9 +124,14 @@
     </div>
     <div class="d-flex justify-content-between" *ngIf="profile?.reviewType && profile?.reviewType !== 'policy'">
       <p class="count-text m-0">{{'TOTAL PUBLIC RESPONSES' | translate}}</p>
-      <p class="count-number bold-text text-right m-0">
-        {{profile?.sharedResponses?.totalCount || 0}}
+      <p class="count-number bold-text text-right m-0" *ngIf="!summaryData; else summaryDataCount">
+        {{profile?.sharedResponses?.totalCount ? profile?.sharedResponses?.totalCount : 0 }}
       </p>
+      <ng-template #summaryDataCount>
+        <p>
+          {{summaryData?.publicResponseCount ? summaryData?.publicResponseCount : 0}}
+        </p>
+      </ng-template>
     </div>
   </div>
 
@@ -106,3 +160,5 @@
     </div>
   </div>
 </div>
+<app-glossary *ngIf="showGlossaryModal" (close)="showGlossaryModal = false"></app-glossary>
+<app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false"></app-confirm-email-modal>

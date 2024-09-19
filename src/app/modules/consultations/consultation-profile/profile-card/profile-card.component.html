@@ -1,6 +1,6 @@
 <div class="c-profile-card sticky">
   <div class="c-profile-card__top-section">
-    <div class="padding">
+    <div class="divider">
       <p class="light-text mt-3">{{summaryData?.title ? summaryData?.title : 'SENDING IN YOUR RESPONSE TO'}}</p>
       <div class="d-flex justify-content-between mb-1 mt-2">
         <p class="card-title m-0">{{profile?.title}}</p>
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="padding">
+    <div class="divider">
       <div *ngIf="!summaryData">
         <div *ngIf="!profile?.respondedOn || showResponseCreation">
           <button *ngIf="consultationStatus === 'active'" class="btn-submit mt-1 active"
@@ -115,7 +115,7 @@
   </div>
 
   <div class="c-profile-card__bottom-section">
-    <div class="padding">
+    <div class="divider">
     <div class="d-flex justify-content-between mb-3">
       <p class="count-text m-0">{{'TOTAL RESPONSES' | translate}}</p>
       <p class="count-number bold-text text-right m-0" *ngIf="!summaryData; else summaryDataCount">
@@ -136,7 +136,7 @@
   </div>
 
     <div *ngIf="profile?.consultationPartnerResponses?.length > 0">
-      <div class="padding">
+      <div class="divider">
       <p class="count-text m-0">{{'PARTNER RESPONSES ' | translate}}</p>
       <div *ngFor="let partner of profile?.consultationPartnerResponses">
         <div class="partner-responses d-flex align-items-center">
@@ -152,7 +152,7 @@
     </div>
 
     </div>
-    <div class="padding">
+    <div class="divider">
     <div class="d-flex justify-content-between">
       <div class="publish-date">{{'Consultation published on' | translate}}
         {{formatPublicationDate(profile?.publishedAt)}}</div>

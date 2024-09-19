@@ -16,7 +16,7 @@
           <img class="logo" [routerLink]="['/']" src='assets/images/brand-logo/brand-logo.svg' />
         </div>
         <div class="sign-up-container">
-          <p class="auth-text"> 
+          <p class="auth-text">
             {{"Don't have an account with Civis?" | translate}}
           </p>
           <button class="app-btn circular auth-btn" [routerLink]="['/auth', 'sign-up']">{{'Sign Up' | translate}}</button>
@@ -28,7 +28,7 @@
           </div>
       </div>
       <p class="logo-heading">{{'Sign in to your Citizen Leader account' | translate}}</p>
-  
+
       <div class="form-space no-gutters mt-md-5 mt-2">
 
         <div class="row">
@@ -42,7 +42,7 @@
                 </picture>
               </div>
               <p class="mb-0 ml-4">{{'Sign in with Google' | translate}}</p>
-            </button> 
+            </button>
             <button class="app-btn facebook" (click)="redirectTo('facebook')">
               <div class="social-img">
                 <picture>
@@ -61,7 +61,7 @@
             <div class="or-text">{{'OR' | translate}}</div>
 
             <!-- horizontal-divider for mobile -->
-            <hr class="horizontal-divider" data-content="OR">  
+            <hr class="horizontal-divider" data-content="OR">
           </div>
         </div>
 
@@ -78,7 +78,7 @@
                         <div *ngIf="email.errors.email">{{'Email must be a valid email address' | translate}}</div>
                       </div>
                 </div>
-        
+
                 <div class="input-box">
                     <label for="password">{{'Password' | translate}}</label>
                     <div class="input-box__border">
@@ -86,11 +86,11 @@
                     </div>
                     <div *ngIf="password.invalid && (password.touched || loginForm.submitted)" class="error-msg">{{'Password is Required' | translate}}</div>
                 </div>
-                
+
                 <div>
-                  <input type="button" tabindex="-1" value="Forgot my password" class="forgot-link" [routerLink]="['/auth', 'forgot-password']">
+                  <input type="button" tabindex="-1" value="{{ 'Forgot my password' | translate }}" class="forgot-link" [routerLink]="['/auth', 'forgot-password']">
                 </div>
-        
+
                 <div>
                   <button class="app-btn secondary get-start-btn" type="submit">
                       <p class="m-0">{{'SIGN IN TO MY ACCOUNT' | translate}}</p>
@@ -99,9 +99,9 @@
                 </div>
               </form>
           </div>
-        </div>    
+        </div>
       </div>
     </div>
-  
+
   </div>
-  
+

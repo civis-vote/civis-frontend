@@ -118,7 +118,7 @@
     <div class="divider">
     <div class="d-flex justify-content-between mb-3">
       <p class="count-text m-0">{{'TOTAL RESPONSES' | translate}}</p>
-      <p class="count-number bold-text text-right m-0" *ngIf="!summaryData; else summaryDataCount">
+      <p class="count-number bold-text text-right m-0">
         {{profile?.consultationResponsesCount ? profile?.consultationResponsesCount : 0}}
       </p>
     </div>

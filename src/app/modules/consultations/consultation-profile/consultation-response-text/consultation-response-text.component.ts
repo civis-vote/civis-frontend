@@ -411,7 +411,6 @@ export class ConsultationResponseTextComponent
           //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
           const currentUrl = this.router.url;
           this.cookieService.put('loginCallbackUrl', currentUrl);
-          console.log("currentUrl2", currentUrl);
           this.authModal = true;
           localStorage.setItem(
             'consultationResponse',

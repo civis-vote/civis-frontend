@@ -1,11 +1,24 @@
 <section class="read-response-container" *ngIf="!loading">
   <div class="paper-effect">
-    <p class="heading">
-      {{'Summary' | translate}}
-      <span>{{profileData?.readingTime ? '(' + profileData?.readingTime + ' min)' : '' }}</span>
-    </p>
-    <div *ngIf="profileData?.englishSummary || profileData?.hindiSummary">
-      <app-page-content-renderer [page]="useSummaryHindi ? profileData?.hindiSummary : profileData?.englishSummary">
+    <div class="summary-section">
+      <p class="heading">
+        {{'Summary' | translate}}
+        <span>{{profileData?.readingTime ? '(' + profileData?.readingTime + ' min)' : '' }}</span>
+      </p>
+      <div class="language-dropdown">
+        <ng-select
+          [items]="languages"
+          bindLabel="name"
+          bindValue="id"
+          [clearable]="false"
+          [searchable]="false"
+          (change)="onLanguageChange()"
+          [(ngModel)]="selectedLanguage">
+        </ng-select>
+      </div>
+    </div>
+    <div *ngIf="profileData?.englishSummary || profileData?.hindiSummary || profileData?.odiaSummary">
+      <app-page-content-renderer [page]="useSummaryOdia ? profileData?.odiaSummary : useSummaryHindi ? profileData?.hindiSummary : profileData?.englishSummary">
       </app-page-content-renderer>
     </div>
   </div>

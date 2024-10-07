@@ -28,6 +28,7 @@ export class ReadRespondComponent implements OnInit {
   currentUser: any;
   currentLanguage: any;
   useSummaryHindi: boolean;
+  useSummaryOdia: boolean;
   showThankYouModal = false;
   showFeedbackModal: boolean;
   consultationResponse: any;
@@ -35,6 +36,7 @@ export class ReadRespondComponent implements OnInit {
   loading: boolean;
   questionnaireExist: boolean;
   earnedPoints: any;
+  selectedLanguage: string = 'en';
   emailVerification = false;
   profaneWords = [];
   //Changes for profane resposne nudge
@@ -43,6 +45,12 @@ export class ReadRespondComponent implements OnInit {
     msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
     title: ''
   };
+
+  languages = [
+    { id: 'en', name: 'English' },
+    { id: 'hi', name: 'Hindi' },
+    { id: 'or', name: 'Odia' }
+  ];
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;
   responseMessage = {
@@ -61,8 +69,13 @@ export class ReadRespondComponent implements OnInit {
     private errorService: ErrorService,
     private consultationService: ConsultationsService,
     private title: Title,
-    private _cookieService: CookieService
+    private _cookieService: CookieService,
+    private cdr: ChangeDetectorRef
   ) {
+    const currentLanguage = this._cookieService.get('civisLang');
+    if (currentLanguage) {
+      this.selectedLanguage = currentLanguage;
+    }
     this.consultationService.consultationId$
     .pipe(
       filter(i => i !== null)
@@ -90,6 +103,7 @@ export class ReadRespondComponent implements OnInit {
   ngOnInit() {
     this.getCurrentUser();
     this.setActiveTab();
+    this.getConsultationProfile();
   }
 
   public setTitle(newTitle: string) {
@@ -145,18 +159,32 @@ export class ReadRespondComponent implements OnInit {
     });
   }
 
+
+
+  setLanguage() {
+    this._cookieService.put('civisLang', this.selectedLanguage);
+    this.getProfileSummary();
+    this.cdr.detectChanges();
+    window.location.reload();
+    window.scrollTo(0, 0);
+  }
+
+  onLanguageChange() {
+    this.setLanguage();
+    this.getProfileSummary();
+  }
+
   getProfileSummary() {
-    this.currentLanguage = this._cookieService.get('civisLang');
+    this.currentLanguage = this._cookieService.get('civisLang') || 'en';
+    this.useSummaryHindi = false;
+    this.useSummaryOdia = false;
+
     if (this.currentLanguage === 'hi') {
-      const summaryHindi = this.profileData.hindiSummary;
-      if (summaryHindi) {
-        this.useSummaryHindi = true;
-      } else {
-        this.useSummaryHindi = false;
-      }
-    } else {
-      this.useSummaryHindi = false;
+      this.useSummaryHindi = !!this.profileData?.hindiSummary;
+    } else if (this.currentLanguage === 'or') {
+      this.useSummaryOdia = !!this.profileData?.odiaSummary;
     }
+    this.cdr.detectChanges();
   }
 
   createMetaTags(consultationProfile) {
@@ -431,7 +459,7 @@ export class ReadRespondComponent implements OnInit {
         localStorage.removeItem('consultationResponse');
         this.submitConsultationResponse(consultationResponse);
       }
-    
+
   }
 
   onCloseThanksModal() {

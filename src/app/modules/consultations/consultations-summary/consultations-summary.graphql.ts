@@ -10,12 +10,16 @@ const fragments = {
             id
             isOptional
             questionText
+            hindiQuestionText
+            odiaQuestionText
             questionType
             supportsOther
             isOptional
             subQuestions {
               id
               questionText
+              hindiQuestionText
+              odiaQuestionText
             }
           }
           roundNumber
@@ -32,6 +36,7 @@ export const ConsultationProfileQuery = gql`
       summary
       englishSummary
       hindiSummary
+      odiaSummary
       responseDeadline
       url
       visibility

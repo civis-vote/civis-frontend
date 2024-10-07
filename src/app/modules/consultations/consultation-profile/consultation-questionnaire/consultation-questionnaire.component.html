@@ -10,14 +10,14 @@
               <div class="question">
                 <p class="question-text">
                   <span class="question-text__number">{{i+1}}.</span>
-                  {{question.questionText}}
+                  {{ getQuestionText(question) }}
                   <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
                 </p>
                 <div class="answer" *ngIf="question.questionType === 'multiple_choice'">
                   <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
                     <label>
                       <input type="radio" class="cm-radio" (input)="onAnswerChange(question,subQuestion)" [formControlName]="question.id" [value]="subQuestion.id">
-                      <span>{{subQuestion.questionText}}</span>
+                      <span>{{ getSubQuestionText(subQuestion) }}</span>
                     </label>
                   </div>
                   <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
@@ -35,7 +35,7 @@
                   <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
                     <label>
                       <input type="checkbox" class="cm-radio" (input)="onAnswerChange(question,subQuestion, $event.target.checked)" [formControlName]="subQuestion.id" (click)="toggleCheckbox(question.id, subQuestion.id)">
-                      <span>{{subQuestion.questionText}}</span>
+                      <span>{{ getSubQuestionText(subQuestion) }}</span>
                     </label>
                   </div>
                   <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>

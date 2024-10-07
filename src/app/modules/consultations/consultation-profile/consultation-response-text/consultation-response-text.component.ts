@@ -27,6 +27,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
 import { MetaPixelService } from 'src/app/shared/services/pixel.service';
+import { CookieService } from 'ngx-cookie';
 
 @Component({
   selector: 'app-consultation-response-text',
@@ -99,7 +100,8 @@ export class ConsultationResponseTextComponent
     private apollo: Apollo,
     private sanitizer: DomSanitizer,
     private metaPixelService: MetaPixelService,
-    private errorService: ErrorService
+    private errorService: ErrorService,
+    private cookieService: CookieService,
   ) {
     this.consultationService.consultationId$
       .pipe(filter((i) => i !== null))
@@ -407,6 +409,9 @@ export class ConsultationResponseTextComponent
             });
         } else {
           //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
+          const currentUrl = this.router.url;
+          this.cookieService.put('loginCallbackUrl', currentUrl);
+          console.log("currentUrl2", currentUrl);
           this.authModal = true;
           localStorage.setItem(
             'consultationResponse',

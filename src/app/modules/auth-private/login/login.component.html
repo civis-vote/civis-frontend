@@ -40,7 +40,7 @@
               </picture>
             </div>
             <p class="mb-0 ml-2">Sign in with Google</p>
-          </button> 
+          </button>
           <button class="app-btn facebook ml-3" (click)="redirectTo('facebook')">
             <div class="social-img">
               <picture>
@@ -56,7 +56,7 @@
       <!-- <div class="form-space-middle col-md-12">
           <hr class="horizontal-divider-desktop" data-content="OR"> -->
       <!-- horizontal-divider for mobile -->
-      <!-- <hr class="horizontal-divider" data-content="OR">  
+      <!-- <hr class="horizontal-divider" data-content="OR">
         </div> -->
 
 
@@ -78,7 +78,7 @@
             <div class="input-box col-12">
               <div class="d-flex justify-content-between">
                 <label for="password">Password</label>
-                <input class="pull-right" type="button" tabindex="-1" value="Forgot my password" class="forgot-link"
+                <input class="pull-right" type="button" tabindex="-1" value="{{ 'Forgot my password' | translate }}" class="forgot-link"
                   [routerLink]="['/auth-private', 'forgot-password']">
               </div>
               <div class="input-box__border">

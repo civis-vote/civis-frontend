@@ -33,30 +33,12 @@ export class TokenService {
 
   checkTokenExpiration() {
     const currentTime = new Date().toISOString();
-    const tokenExpirationString = localStorage.getItem("civis-token_expires");
+    const tokenExpirationTime = localStorage.getItem("civis-token_expires") ?? new Date(0).toISOString();
 
-    const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,3})?Z$/;
-
-    const clearTokenData = () => {
+    // logout user if token expired
+    if (currentTime > tokenExpirationTime) {
       localStorage.removeItem("civis-token");
       localStorage.removeItem("civis-token_expires");
-    };
-
-    if (
-      typeof tokenExpirationString !== "string" ||
-      !isoDateRegex.test(tokenExpirationString)
-    ) {
-      clearTokenData();
-      return;
-    }
-
-    const tokenExpirationTime = new Date(tokenExpirationString);
-
-    if (
-      isNaN(tokenExpirationTime.getTime()) ||
-      currentTime > tokenExpirationTime.toISOString()
-    ) {
-      clearTokenData();
     }
   }
 

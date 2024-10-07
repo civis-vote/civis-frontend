@@ -39,6 +39,8 @@ import { ErrorService } from "src/app/shared/components/error-modal/error.servic
 import { profanityList } from "src/app/graphql/queries.graphql";
 import { environment } from "../../../../../environments/environment";
 import { MetaPixelService } from "src/app/shared/services/pixel.service";
+import { CookieService } from 'ngx-cookie';
+import { Router } from '@angular/router';
 
 @Component({
   selector: "app-consultation-questionnaire",
@@ -97,7 +99,9 @@ export class ConsultationQuestionnaireComponent
     private apollo: Apollo,
     private errorService: ErrorService,
     private metaPixelService: MetaPixelService,
-    private el: ElementRef
+    private el: ElementRef,
+    private cookieService: CookieService,
+    private router: Router
   ) {
     this.questionnaireForm = this._fb.group({});
     this.consultationService.consultationId$
@@ -349,6 +353,8 @@ export class ConsultationQuestionnaireComponent
               );
           } else {
             //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
+            const currentUrl = this.router.url;
+            this.cookieService.put('loginCallbackUrl', currentUrl);
             this.authModal = true;
             localStorage.setItem(
               "consultationResponse",

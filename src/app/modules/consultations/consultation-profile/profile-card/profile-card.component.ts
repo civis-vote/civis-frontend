@@ -21,6 +21,7 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   @Input() summaryData: any;
 
   currentUser: any;
+  currentLanguage: any;
   showShareOptions: boolean;
   currentUrl = '';
   showConfirmEmailModal: boolean;
@@ -69,6 +70,50 @@ export class ProfileCardComponent implements OnInit, OnChanges {
       }
     });
   }
+
+
+  getProfileTitle() {
+    this.currentLanguage = this.cookieService.get('civisLang');
+
+    if (this.currentLanguage === 'hi') {
+      const titleHindi = this.profile?.hindiTitle;
+      if (titleHindi) {
+        return titleHindi;
+      }
+    }
+
+    if (this.currentLanguage === 'or') {
+      const titleOdia = this.profile?.odiaTitle;
+      if (titleOdia) {
+        return titleOdia;
+      }
+    }
+
+    return this.profile?.title;
+  }
+
+  getMinistryName() {
+    this.currentLanguage = this.cookieService.get('civisLang');
+
+    if (this.currentLanguage === 'hi') {
+      const ministryNameHindi = this.profile?.ministry?.hindiName;
+      if (ministryNameHindi) {
+        return ministryNameHindi;
+      }
+    }
+
+    if (this.currentLanguage === 'or') {
+      const ministryNameOdia = this.profile?.ministry?.odiaName;
+      if (ministryNameOdia) {
+        return ministryNameOdia;
+      }
+    }
+
+    return this.profile?.ministry?.name;
+  }
+
+
+
 
   enableSubmitResponse() {
     this.consultationsService.submitResponseActiveRoundEnabled

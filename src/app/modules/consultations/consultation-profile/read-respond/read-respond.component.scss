@@ -7,7 +7,6 @@
     background-color: $white;
     box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.13);
     border-radius: 5px;
-    z-index: 1;
     @media screen and (max-width: 991px) {
       padding: 20px 15px;
       border-radius: 0;
@@ -15,8 +14,25 @@
     }
   }
 
+  .summary-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .heading {
     @include general-text($font-size: 16px, $weight: bold);
+    text-align: left;
+  }
+
+  .language-dropdown {
+    width: 96px;
+    height: 36px;
+
+    ng-select {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .summary-content {

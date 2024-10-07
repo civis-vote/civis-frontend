@@ -62,6 +62,8 @@ export class ConsultationQuestionnaireComponent
   longTextAnswer: any;
   templateText: any;
   templateId: any;
+  cookieService: any;
+  currentLanguage: any;
   responseSubmitLoading: boolean;
   consultationId: any;
   showConfirmEmailModal: boolean;
@@ -176,6 +178,43 @@ export class ConsultationQuestionnaireComponent
       this.questionnaireForm = this.makeQuestionnaireModal();
     });
   }
+
+  getQuestionText(question) {
+    this.currentLanguage = this.cookieService.get('civisLang');
+
+    if (this.currentLanguage === 'hi') {
+      const questionTextHindi = question?.hindiQuestionText;
+      if (questionTextHindi) {
+        return questionTextHindi;
+      }
+    }
+
+    if (this.currentLanguage === 'or') {
+      const questionTextOdia = question?.odiaQuestionText;
+      if (questionTextOdia) {
+        return questionTextOdia;
+      }
+    }
+
+    return question?.questionText;
+  }
+
+  getSubQuestionText(subQuestion: any) {
+    const currentLanguage = this.cookieService.get('civisLang');
+
+    if (currentLanguage === 'hi' && subQuestion.hindiQuestionText) {
+      return subQuestion.hindiQuestionText;
+    }
+
+    if (currentLanguage === 'or' && subQuestion.odiaQuestionText) {
+      return subQuestion.odiaQuestionText;
+    }
+
+    return subQuestion.questionText;
+  }
+
+
+
 
   getRespondedRounds() {
     const respondedRounds = [];
@@ -327,7 +366,7 @@ export class ConsultationQuestionnaireComponent
         if (!isObjectEmpty(consultationResponse)) {
           if (this.currentUser) {
             this.metaPixelService.trackSubmitResponse();
-  
+
             this.apollo
               .watchQuery({
                 query: UserCountUser,
@@ -356,7 +395,7 @@ export class ConsultationQuestionnaireComponent
             );
           }
         }
-      } 
+      }
     } else {
       if (!this.responseFeedback) {
         this.consultationService.satisfactionRatingError.next(true);

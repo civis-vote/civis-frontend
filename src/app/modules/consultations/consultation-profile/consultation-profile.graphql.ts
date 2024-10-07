@@ -25,8 +25,11 @@ export const ConsultationProfile = gql`
       id
       title
       summary
+      hindiTitle
+      odiaTitle
       englishSummary
       hindiSummary
+      odiaSummary
       responseRounds {
         active
         id
@@ -34,12 +37,16 @@ export const ConsultationProfile = gql`
           id
           isOptional
           questionText
+          hindiQuestionText
+          odiaQuestionText
           questionType
           supportsOther
           isOptional
           subQuestions {
             id
             questionText
+            hindiQuestionText
+            odiaQuestionText
           }
         }
         roundNumber
@@ -60,6 +67,8 @@ export const ConsultationProfile = gql`
           }
         }
         name
+        hindiName
+        odiaName
         logo {
           id
           filename
@@ -83,12 +92,16 @@ export const ConsultationProfile = gql`
                   id
                   isOptional
                   questionText
+                  hindiQuestionText
+                  odiaQuestionText
                   questionType
                   supportsOther
                   isOptional
                   subQuestions {
                     id
                     questionText
+                    hindiQuestionText
+                    odiaQuestionText
                   }
                 }
                 roundNumber
@@ -140,9 +153,12 @@ export const ConsultationProfileCurrentUser = gql`
       enforcePrivateResponse
       id
       title
+      hindiTitle
+      odiaTitle
       summary
       englishSummary
       hindiSummary
+      odiaSummary
       responseDeadline
       readingTime
       responsesReadingTimes
@@ -153,12 +169,16 @@ export const ConsultationProfileCurrentUser = gql`
           id
           isOptional
           questionText
+          hindiQuestionText
+          odiaQuestionText
           questionType
           supportsOther
           isOptional
           subQuestions {
             id
             questionText
+            hindiQuestionText
+            odiaQuestionText
           }
         }
         roundNumber
@@ -177,6 +197,8 @@ export const ConsultationProfileCurrentUser = gql`
           }
         }
         name
+        hindiName
+        odiaName
         logo {
           id
           filename
@@ -201,12 +223,16 @@ export const ConsultationProfileCurrentUser = gql`
                   id
                   isOptional
                   questionText
+                  hindiQuestionText
+                  odiaQuestionText
                   questionType
                   supportsOther
                   isOptional
                   subQuestions {
                     id
                     questionText
+                    hindiQuestionText
+                    odiaQuestionText
                   }
                 }
                 roundNumber
@@ -266,7 +292,10 @@ export const ConsultationProfileUser = gql`
       title
       summary
       englishSummary
+      hindiTitle
+      odiaTitle
       hindiSummary
+      odiaSummary
       responseDeadline
       readingTime
       responsesReadingTimes
@@ -277,12 +306,16 @@ export const ConsultationProfileUser = gql`
           id
           isOptional
           questionText
+          hindiQuestionText
+          odiaQuestionText
           questionType
           supportsOther
           isOptional
           subQuestions {
             id
             questionText
+            hindiQuestionText
+            odiaQuestionText
           }
         }
         roundNumber
@@ -301,6 +334,8 @@ export const ConsultationProfileUser = gql`
           }
         }
         name
+        hindiName
+        odiaName
         logo {
           id
           filename
@@ -324,12 +359,16 @@ export const ConsultationProfileUser = gql`
                   id
                   isOptional
                   questionText
+                  hindiQuestionText
+                  odiaQuestionText
                   questionType
                   supportsOther
                   isOptional
                   subQuestions {
                     id
                     questionText
+                    hindiQuestionText
+                    odiaQuestionText
                   }
                 }
                 roundNumber
@@ -419,12 +458,16 @@ export const SubmitResponseQuery = gql`
             id
             isOptional
             questionText
+            hindiQuestionText
+            odiaQuestionText
             questionType
             supportsOther
             isOptional
             subQuestions {
               id
               questionText
+              hindiQuestionText
+              odiaQuestionText
             }
           }
           roundNumber
@@ -444,12 +487,16 @@ export const SubmitResponseQuery = gql`
                     id
                     isOptional
                     questionText
+                    hindiQuestionText
+                    odiaQuestionText
                     questionType
                     supportsOther
                     isOptional
                     subQuestions {
                       id
                       questionText
+                      hindiQuestionText
+                      odiaQuestionText
                     }
                   }
                   roundNumber
@@ -502,12 +549,16 @@ export const SubmitResponseGuestUser = gql`
             id
             isOptional
             questionText
+            hindiQuestionText
+            odiaQuestionText
             questionType
             supportsOther
             isOptional
             subQuestions {
               id
               questionText
+              hindiQuestionText
+              odiaQuestionText
             }
           }
           roundNumber
@@ -527,12 +578,16 @@ export const SubmitResponseGuestUser = gql`
                     id
                     isOptional
                     questionText
+                    hindiQuestionText
+                    odiaQuestionText
                     questionType
                     supportsOther
                     isOptional
                     subQuestions {
                       id
                       questionText
+                      hindiQuestionText
+                      odiaQuestionText
                     }
                   }
                   roundNumber

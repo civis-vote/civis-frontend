@@ -3,7 +3,7 @@
     <div class="divider">
       <p class="light-text mt-3">{{summaryData?.title ? summaryData?.title : 'SENDING IN YOUR RESPONSE TO'}}</p>
       <div class="d-flex justify-content-between mb-1 mt-2">
-        <p class="card-title m-0">{{profile?.title}}</p>
+        <p class="card-title m-0">{{ getProfileTitle() }}</p>
         <a class="icon-circle" [href]="profile?.url" target="_blank" *ngIf="!summaryData">
           <i class="fa fa-link" aria-hidden="true"></i>
         </a>
@@ -11,7 +11,7 @@
       <div class="ministry-detail">
         <img [src]="profile?.ministry?.logo?.url" class="avatar avatar--42"
           [alt]="profile?.ministry?.name ? profile.ministry.name + ' logo' : 'Ministry logo'" />
-        <p class="regular-text m-0">{{profile?.ministry?.name}}</p>
+        <p class="regular-text m-0">{{ getMinistryName() }}</p>
       </div>
       <div *ngIf="!summaryData">
         <div *ngIf="!profile?.respondedOn || showResponseCreation">

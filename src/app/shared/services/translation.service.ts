@@ -67,56 +67,59 @@ setIndex() {
 }
 
 translate(text: string) {
-    if (typeof text !== 'string') {
-        return text;
-    }
+  if (typeof text !== 'string') {
+      return text;
+  }
 
-    const length = this.dictionary.value.length;
+  const length = this.dictionary.value.length;
 
-    return this.binarySearch(this.dictionary.value, text.toLowerCase(), 0, length) || text;
-
+  if (this.currentLanguage === 'hi') {
+      return this.binarySearch(this.dictionary.value, text.toLowerCase(), 0, length, 'translation') || text;
+  } else if (this.currentLanguage === 'or') {
+      return this.binarySearch(this.dictionary.value, text.toLowerCase(), 0, length, 'translation2') || text;
+  } else {
+      return text;
+  }
 }
 
+binarySearch(arr: Array<Dictionary>, text: string, start: number, end: number, field: string) {
+  const mid = Math.floor((start + end) / 2);
 
+  if (start > end) {
+      return null;
+  }
 
-binarySearch(arr: Array<Dictionary>, text: string, start: number, end: number) {
+  const startText = arr[start] && arr[start].text.toLowerCase();
+  const midText = arr[mid] && arr[mid].text.toLowerCase();
+  const endText = arr[end] && arr[end].text.toLowerCase();
 
-    const mid = Math.floor((start + end) / 2);
+  if (start === end) {
+      if (startText === text) {
+          return arr[start][field];
+      } else {
+          return null;
+      }
+  }
 
-    if (start > end) {
-        return null;
-    }
+  if (startText === text) {
+      return arr[start][field];
+  }
 
-    const startText = arr[start] && arr[start].text.toLowerCase();
-    const midText = arr[mid] && arr[mid].text.toLowerCase();
-    const endText = arr[end] && arr[end].text.toLowerCase();
+  if (endText === text) {
+      return arr[end][field];
+  }
 
-    if (start === end) {
-        if (startText === text) {
-            return arr[start].translation;
-        } else {
-            return null;
-        }
-    }
+  if (midText === text) {
+      return arr[mid][field];
+  }
 
-    if (startText === text) {
-        return arr[start].translation;
-    }
-
-    if (endText === text) {
-        return arr[end].translation;
-    }
-
-    if (midText === text) {
-        return arr[mid].translation;
-    }
-
-    if (midText > text) {
-        return this.binarySearch(arr, text, start, mid - 1);
-    } else {
-        return this.binarySearch(arr, text, mid + 1, end);
-    }
+  if (midText > text) {
+      return this.binarySearch(arr, text, start, mid - 1, field);
+  } else {
+      return this.binarySearch(arr, text, mid + 1, end, field);
+  }
 }
+
 
 translateArrays(values: any, args: string) {
     if (this.currentLanguage !== 'en') {

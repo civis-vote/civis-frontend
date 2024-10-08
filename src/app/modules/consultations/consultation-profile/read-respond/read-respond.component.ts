@@ -180,6 +180,14 @@ export class ReadRespondComponent implements OnInit {
     }, this.profileData?.englishSummary);
   }
 
+  hasHindiContent(hindiSummary: string | null | undefined): boolean {
+    if (!hindiSummary) {
+      return false;
+    }
+    const strippedContent = hindiSummary.replace(/<[^>]*>/g, '').trim();
+    return strippedContent.length > 0;
+  }
+
   createMetaTags(consultationProfile) {
     const title = consultationProfile.title ? consultationProfile.title : '' ;
     const image = (consultationProfile['mininstry'] ?

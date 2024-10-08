@@ -36,12 +36,11 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     private userService: UserService,
     private cookieService: CookieService,
     private router: Router
-  ) {
-    this.currentLanguage = this.cookieService.get("civisLang");
-  }
+  ) {}
 
   ngOnInit() {
       this.currentUrl = window.location.href;
+      this.currentLanguage = this.cookieService.get("civisLang");
       this.getCurrentUser();
       this.watchConsultationStatus();
       this.enableSubmitResponse();

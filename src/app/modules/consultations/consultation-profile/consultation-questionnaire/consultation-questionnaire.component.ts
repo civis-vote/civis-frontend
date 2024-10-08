@@ -22,6 +22,7 @@ import {
   checkPropertiesPresence,
   scrollToFirstError,
   setResponseVisibility,
+  getTranslatedText,
 } from "../../../../shared/functions/modular.functions";
 import { atLeastOneCheckboxCheckedValidator } from "src/app/shared/validators/checkbox-validator";
 import { Apollo } from "apollo-angular";
@@ -102,8 +103,9 @@ export class ConsultationQuestionnaireComponent
     private metaPixelService: MetaPixelService,
     private el: ElementRef,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
   ) {
+    this.currentLanguage = this.cookieService.get('civisLang');
     this.questionnaireForm = this._fb.group({});
     this.consultationService.consultationId$
       .pipe(filter((i) => i !== null))
@@ -183,41 +185,18 @@ export class ConsultationQuestionnaireComponent
   }
 
   getQuestionText(question) {
-    this.currentLanguage = this.cookieService.get('civisLang');
-
-    if (this.currentLanguage === 'hi') {
-      const questionTextHindi = question?.hindiQuestionText;
-      if (questionTextHindi) {
-        return questionTextHindi;
-      }
-    }
-
-    if (this.currentLanguage === 'or') {
-      const questionTextOdia = question?.odiaQuestionText;
-      if (questionTextOdia) {
-        return questionTextOdia;
-      }
-    }
-
-    return question?.questionText;
+    return getTranslatedText(this.currentLanguage, {
+      hindi: question?.hindiQuestionText,
+      odia: question?.odiaQuestionText
+    }, question?.questionText);
   }
 
   getSubQuestionText(subQuestion: any) {
-    const currentLanguage = this.cookieService.get('civisLang');
-
-    if (currentLanguage === 'hi' && subQuestion.hindiQuestionText) {
-      return subQuestion.hindiQuestionText;
-    }
-
-    if (currentLanguage === 'or' && subQuestion.odiaQuestionText) {
-      return subQuestion.odiaQuestionText;
-    }
-
-    return subQuestion.questionText;
+    return getTranslatedText(this.currentLanguage, {
+      hindi: subQuestion?.hindiQuestionText,
+      odia: subQuestion?.odiaQuestionText
+    }, subQuestion?.questionText);
   }
-
-
-
 
   getRespondedRounds() {
     const respondedRounds = [];

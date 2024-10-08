@@ -72,14 +72,17 @@ translate(text: string) {
   }
 
   const length = this.dictionary.value.length;
+  let translationKey;
 
   if (this.currentLanguage === 'hi') {
-      return this.binarySearch(this.dictionary.value, text.toLowerCase(), 0, length, 'translation') || text;
+      translationKey = 'translation';
   } else if (this.currentLanguage === 'or') {
-      return this.binarySearch(this.dictionary.value, text.toLowerCase(), 0, length, 'translation2') || text;
+      translationKey = 'translation2';
   } else {
       return text;
   }
+
+  return this.binarySearch(this.dictionary.value, text.toLowerCase(), 0, length, translationKey) || text;
 }
 
 binarySearch(arr: Array<Dictionary>, text: string, start: number, end: number, field: string) {
@@ -119,7 +122,6 @@ binarySearch(arr: Array<Dictionary>, text: string, start: number, end: number, f
       return this.binarySearch(arr, text, mid + 1, end, field);
   }
 }
-
 
 translateArrays(values: any, args: string) {
     if (this.currentLanguage !== 'en') {

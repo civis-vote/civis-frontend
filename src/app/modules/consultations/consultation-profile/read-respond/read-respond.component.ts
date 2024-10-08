@@ -10,7 +10,7 @@ import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
-import { isObjectEmpty, setResponseVisibility } from 'src/app/shared/functions/modular.functions';
+import { getTranslatedText, isObjectEmpty, setResponseVisibility } from 'src/app/shared/functions/modular.functions';
 import { ModalDirective } from 'ngx-bootstrap';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
@@ -49,7 +49,6 @@ export class ReadRespondComponent implements OnInit {
   languages = [
     { id: 'en', name: 'English' },
     { id: 'hi', name: 'Hindi' },
-    { id: 'or', name: 'Odia' }
   ];
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;
@@ -98,6 +97,7 @@ export class ReadRespondComponent implements OnInit {
       }, (err: any) => {
       });
     }
+    this.currentLanguage = this._cookieService.get('civisLang') || 'en';
   }
 
   ngOnInit() {
@@ -148,7 +148,7 @@ export class ReadRespondComponent implements OnInit {
         this.consultationService.consultationProfileData.next(data);
         this.satisfactionRatingDistribution = data.satisfactionRatingDistribution;
         this.createMetaTags(this.profileData);
-        this.getProfileSummary();
+        this.cdr.detectChanges();
         this.loading = false;
     }, err => {
       const e = new Error(err);
@@ -163,7 +163,7 @@ export class ReadRespondComponent implements OnInit {
 
   setLanguage() {
     this._cookieService.put('civisLang', this.selectedLanguage);
-    this.getProfileSummary();
+    // this.getProfileSummary();
     this.cdr.detectChanges();
     window.location.reload();
     window.scrollTo(0, 0);
@@ -171,20 +171,15 @@ export class ReadRespondComponent implements OnInit {
 
   onLanguageChange() {
     this.setLanguage();
-    this.getProfileSummary();
+    this.cdr.detectChanges();
+    // this.getProfileSummary();
   }
 
-  getProfileSummary() {
-    this.currentLanguage = this._cookieService.get('civisLang') || 'en';
-    this.useSummaryHindi = false;
-    this.useSummaryOdia = false;
-
-    if (this.currentLanguage === 'hi') {
-      this.useSummaryHindi = !!this.profileData?.hindiSummary;
-    } else if (this.currentLanguage === 'or') {
-      this.useSummaryOdia = !!this.profileData?.odiaSummary;
-    }
-    this.cdr.detectChanges();
+  get profileSummary() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.profileData?.hindiSummary,
+      odia: this.profileData?.odiaSummary
+    }, this.profileData?.englishSummary);
   }
 
   createMetaTags(consultationProfile) {

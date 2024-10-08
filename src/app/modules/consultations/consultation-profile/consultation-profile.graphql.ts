@@ -19,6 +19,31 @@ const ConsultationPartnerResponsesFragment = gql`
   }
 `;
 
+const SubQuestionFragment = gql`
+  fragment SubQuestionFragment on BaseQuestionType {
+    id
+    questionText
+    hindiQuestionText
+    odiaQuestionText
+  }
+`;
+
+const QuestionFragment = gql`
+  fragment QuestionFragment on BaseQuestionType {
+    id
+    isOptional
+    questionText
+    hindiQuestionText
+    odiaQuestionText
+    questionType
+    supportsOther
+    subQuestions {
+      ...SubQuestionFragment
+    }
+  }
+  ${SubQuestionFragment}
+`;
+
 export const ConsultationProfile = gql`
   query consultationProfile($id: Int!) {
     consultationProfile(id: $id) {
@@ -34,20 +59,7 @@ export const ConsultationProfile = gql`
         active
         id
         questions {
-          id
-          isOptional
-          questionText
-          hindiQuestionText
-          odiaQuestionText
-          questionType
-          supportsOther
-          isOptional
-          subQuestions {
-            id
-            questionText
-            hindiQuestionText
-            odiaQuestionText
-          }
+          ...QuestionFragment
         }
         roundNumber
       }
@@ -89,20 +101,7 @@ export const ConsultationProfile = gql`
                 active
                 id
                 questions {
-                  id
-                  isOptional
-                  questionText
-                  hindiQuestionText
-                  odiaQuestionText
-                  questionType
-                  supportsOther
-                  isOptional
-                  subQuestions {
-                    id
-                    questionText
-                    hindiQuestionText
-                    odiaQuestionText
-                  }
+                 ...QuestionFragment
                 }
                 roundNumber
               }
@@ -134,6 +133,7 @@ export const ConsultationProfile = gql`
     }
   }
   ${ConsultationPartnerResponsesFragment}
+  ${QuestionFragment}
 `;
 
 export const ConsultationProfileCurrentUser = gql`
@@ -166,20 +166,7 @@ export const ConsultationProfileCurrentUser = gql`
         active
         id
         questions {
-          id
-          isOptional
-          questionText
-          hindiQuestionText
-          odiaQuestionText
-          questionType
-          supportsOther
-          isOptional
-          subQuestions {
-            id
-            questionText
-            hindiQuestionText
-            odiaQuestionText
-          }
+          ...QuestionFragment
         }
         roundNumber
       }
@@ -220,20 +207,7 @@ export const ConsultationProfileCurrentUser = gql`
                 active
                 id
                 questions {
-                  id
-                  isOptional
-                  questionText
-                  hindiQuestionText
-                  odiaQuestionText
-                  questionType
-                  supportsOther
-                  isOptional
-                  subQuestions {
-                    id
-                    questionText
-                    hindiQuestionText
-                    odiaQuestionText
-                  }
+                  ...QuestionFragment
                 }
                 roundNumber
               }
@@ -269,6 +243,7 @@ export const ConsultationProfileCurrentUser = gql`
     }
   }
   ${ConsultationPartnerResponsesFragment}
+  ${QuestionFragment}
 `;
 
 
@@ -303,20 +278,7 @@ export const ConsultationProfileUser = gql`
         active
         id
         questions {
-          id
-          isOptional
-          questionText
-          hindiQuestionText
-          odiaQuestionText
-          questionType
-          supportsOther
-          isOptional
-          subQuestions {
-            id
-            questionText
-            hindiQuestionText
-            odiaQuestionText
-          }
+          ...QuestionFragment
         }
         roundNumber
       }
@@ -356,20 +318,7 @@ export const ConsultationProfileUser = gql`
                 active
                 id
                 questions {
-                  id
-                  isOptional
-                  questionText
-                  hindiQuestionText
-                  odiaQuestionText
-                  questionType
-                  supportsOther
-                  isOptional
-                  subQuestions {
-                    id
-                    questionText
-                    hindiQuestionText
-                    odiaQuestionText
-                  }
+                  ...QuestionFragment
                 }
                 roundNumber
               }
@@ -389,6 +338,7 @@ export const ConsultationProfileUser = gql`
       visibility
     }
   }
+  ${QuestionFragment}
 `;
 
 export const VoteCreateQuery = gql `
@@ -455,20 +405,7 @@ export const SubmitResponseQuery = gql`
           active
           id
           questions {
-            id
-            isOptional
-            questionText
-            hindiQuestionText
-            odiaQuestionText
-            questionType
-            supportsOther
-            isOptional
-            subQuestions {
-              id
-              questionText
-              hindiQuestionText
-              odiaQuestionText
-            }
+           ...QuestionFragment
           }
           roundNumber
         }
@@ -484,20 +421,7 @@ export const SubmitResponseQuery = gql`
                   active
                   id
                   questions {
-                    id
-                    isOptional
-                    questionText
-                    hindiQuestionText
-                    odiaQuestionText
-                    questionType
-                    supportsOther
-                    isOptional
-                    subQuestions {
-                      id
-                      questionText
-                      hindiQuestionText
-                      odiaQuestionText
-                    }
+                    ...QuestionFragment
                   }
                   roundNumber
                 }
@@ -529,6 +453,7 @@ export const SubmitResponseQuery = gql`
       }
     }
   }
+  ${QuestionFragment}
 `;
 
 
@@ -546,20 +471,7 @@ export const SubmitResponseGuestUser = gql`
           active
           id
           questions {
-            id
-            isOptional
-            questionText
-            hindiQuestionText
-            odiaQuestionText
-            questionType
-            supportsOther
-            isOptional
-            subQuestions {
-              id
-              questionText
-              hindiQuestionText
-              odiaQuestionText
-            }
+           ...QuestionFragment
           }
           roundNumber
         }
@@ -575,20 +487,7 @@ export const SubmitResponseGuestUser = gql`
                   active
                   id
                   questions {
-                    id
-                    isOptional
-                    questionText
-                    hindiQuestionText
-                    odiaQuestionText
-                    questionType
-                    supportsOther
-                    isOptional
-                    subQuestions {
-                      id
-                      questionText
-                      hindiQuestionText
-                      odiaQuestionText
-                    }
+                    ...QuestionFragment
                   }
                   roundNumber
                 }
@@ -608,6 +507,7 @@ export const SubmitResponseGuestUser = gql`
       }
     }
   }
+  ${QuestionFragment}
 `;
 
 export const ConsultationAnalysisQuery = gql`

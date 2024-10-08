@@ -19,10 +19,6 @@ export class FooterComponent implements OnInit {
       id: 'hi',
       name: 'Hindi'
     },
-    {
-      id: 'or',
-      name: 'Odia'
-    }
   ];
 
   selectedLanguage = 'en';

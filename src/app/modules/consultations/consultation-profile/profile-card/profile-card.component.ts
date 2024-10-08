@@ -5,6 +5,7 @@ import { ConsultationsService } from 'src/app/shared/services/consultations.serv
 import { UserService } from 'src/app/shared/services/user.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
+import { getTranslatedText } from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-profile-card',
@@ -29,11 +30,15 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   showResponseCreation: boolean;
   showGlossaryModal: boolean;
 
-  constructor(private consultationsService: ConsultationsService,
-              private userService: UserService,
-              private cookieService: CookieService,
-              private router: Router
-              ){}
+
+  constructor(
+    private consultationsService: ConsultationsService,
+    private userService: UserService,
+    private cookieService: CookieService,
+    private router: Router
+  ) {
+    this.currentLanguage = this.cookieService.get("civisLang");
+  }
 
   ngOnInit() {
       this.currentUrl = window.location.href;
@@ -71,49 +76,19 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     });
   }
 
-
   getProfileTitle() {
-    this.currentLanguage = this.cookieService.get('civisLang');
-
-    if (this.currentLanguage === 'hi') {
-      const titleHindi = this.profile?.hindiTitle;
-      if (titleHindi) {
-        return titleHindi;
-      }
-    }
-
-    if (this.currentLanguage === 'or') {
-      const titleOdia = this.profile?.odiaTitle;
-      if (titleOdia) {
-        return titleOdia;
-      }
-    }
-
-    return this.profile?.title;
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.profile?.hindiTitle,
+      odia: this.profile?.odiaTitle
+    }, this.profile?.title);
   }
 
   getMinistryName() {
-    this.currentLanguage = this.cookieService.get('civisLang');
-
-    if (this.currentLanguage === 'hi') {
-      const ministryNameHindi = this.profile?.ministry?.hindiName;
-      if (ministryNameHindi) {
-        return ministryNameHindi;
-      }
-    }
-
-    if (this.currentLanguage === 'or') {
-      const ministryNameOdia = this.profile?.ministry?.odiaName;
-      if (ministryNameOdia) {
-        return ministryNameOdia;
-      }
-    }
-
-    return this.profile?.ministry?.name;
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.profile?.ministry?.hindiName,
+      odia: this.profile?.ministry?.odiaName
+    }, this.profile?.ministry?.name);
   }
-
-
-
 
   enableSubmitResponse() {
     this.consultationsService.submitResponseActiveRoundEnabled

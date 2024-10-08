@@ -5,7 +5,7 @@
         {{'Summary' | translate}}
         <span>{{profileData?.readingTime ? '(' + profileData?.readingTime + ' min)' : '' }}</span>
       </p>
-      <div class="language-dropdown">
+      <div class="language-dropdown" *ngIf="profileData?.hindiSummary">
         <ng-select
           [items]="languages"
           bindLabel="name"
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div *ngIf="profileData?.englishSummary || profileData?.hindiSummary || profileData?.odiaSummary">
-      <app-page-content-renderer [page]="useSummaryOdia ? profileData?.odiaSummary : useSummaryHindi ? profileData?.hindiSummary : profileData?.englishSummary">
+      <app-page-content-renderer [page]="profileSummary">
       </app-page-content-renderer>
     </div>
   </div>

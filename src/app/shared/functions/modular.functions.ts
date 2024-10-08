@@ -209,3 +209,15 @@ export const setResponseVisibility = (responseVisibility, userVerificationStatus
     //set final response visibility based on initial response visibility set by the user and user verification status
     return responseVisibility && userVerificationStatus ? "shared" : "anonymous";
 }
+
+export function getTranslatedText(currentLanguage: string, textMap: { [key: string]: string }, defaultText: string) {
+  if (currentLanguage === 'hi' && textMap.hindi) {
+    return textMap.hindi;
+  }
+
+  if (currentLanguage === 'or' && textMap.odia) {
+    return textMap.odia;
+  }
+
+  return defaultText;
+}

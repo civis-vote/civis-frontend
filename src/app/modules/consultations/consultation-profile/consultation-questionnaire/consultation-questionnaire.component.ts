@@ -184,11 +184,11 @@ export class ConsultationQuestionnaireComponent
     });
   }
 
-  getTranslatedTextForQuestion(item: any, isSubQuestion: boolean = false) {
+  getTranslatedTextForQuestion(item: any) {
     return getTranslatedText(this.currentLanguage, {
-      hindi: isSubQuestion ? item?.hindiQuestionText : item?.hindiQuestionText,
-      odia: isSubQuestion ? item?.odiaQuestionText : item?.odiaQuestionText
-    }, isSubQuestion ? item?.questionText : item?.questionText);
+      hindi: item?.hindiQuestionText,
+      odia: item?.odiaQuestionText
+    }, item?.questionText);
   }
 
   getQuestionText(question) {
@@ -196,7 +196,7 @@ export class ConsultationQuestionnaireComponent
   }
 
   getSubQuestionText(subQuestion: any) {
-    return this.getTranslatedTextForQuestion(subQuestion, true);
+    return this.getTranslatedTextForQuestion(subQuestion);
   }
 
   getRespondedRounds() {

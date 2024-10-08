@@ -5,7 +5,7 @@
         {{'Summary' | translate}}
         <span>{{profileData?.readingTime ? '(' + profileData?.readingTime + ' min)' : '' }}</span>
       </p>
-      <div class="language-dropdown" *ngIf="profileData?.hindiSummary">
+      <div class="language-dropdown" *ngIf="hasHindiContent(profileData?.hindiSummary)">
         <ng-select
           [items]="languages"
           bindLabel="name"

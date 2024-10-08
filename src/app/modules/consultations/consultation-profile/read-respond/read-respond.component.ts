@@ -163,7 +163,6 @@ export class ReadRespondComponent implements OnInit {
 
   setLanguage() {
     this._cookieService.put('civisLang', this.selectedLanguage);
-    // this.getProfileSummary();
     this.cdr.detectChanges();
     window.location.reload();
     window.scrollTo(0, 0);
@@ -172,7 +171,6 @@ export class ReadRespondComponent implements OnInit {
   onLanguageChange() {
     this.setLanguage();
     this.cdr.detectChanges();
-    // this.getProfileSummary();
   }
 
   get profileSummary() {

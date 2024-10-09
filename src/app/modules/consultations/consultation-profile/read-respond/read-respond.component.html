@@ -5,16 +5,16 @@
         {{'Summary' | translate}}
         <span>{{profileData?.readingTime ? '(' + profileData?.readingTime + ' min)' : '' }}</span>
       </p>
-      <div class="language-dropdown">
+      <div class="language-dropdown" *ngIf="hasContent(profileData?.hindiSummary, profileData?.odiaSummary)">
         <ng-select
-          [items]="languages"
-          bindLabel="name"
-          bindValue="id"
-          [clearable]="false"
-          [searchable]="false"
-          (change)="onLanguageChange()"
-          [(ngModel)]="selectedLanguage">
-        </ng-select>
+        [items]="availableLanguages"
+        bindLabel="name"
+        bindValue="id"
+        [clearable]="false"
+        [searchable]="false"
+        (change)="onLanguageChange()"
+        [(ngModel)]="selectedLanguage">
+      </ng-select>
       </div>
     </div>
     <div *ngIf="profileData?.englishSummary || profileData?.hindiSummary || profileData?.odiaSummary">

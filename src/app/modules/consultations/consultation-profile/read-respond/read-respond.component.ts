@@ -37,6 +37,7 @@ export class ReadRespondComponent implements OnInit {
   questionnaireExist: boolean;
   earnedPoints: any;
   selectedLanguage: string = 'en';
+  availableLanguages: Array<{ id: string; name: string }> = [];
   emailVerification = false;
   profaneWords = [];
   //Changes for profane resposne nudge
@@ -105,6 +106,19 @@ export class ReadRespondComponent implements OnInit {
     this.getCurrentUser();
     this.setActiveTab();
     this.getConsultationProfile();
+    this.updateAvailableLanguages();
+  }
+
+  updateAvailableLanguages() {
+    this.availableLanguages = [{ id: 'en', name: 'English' }];
+
+    if (this.hasHindiContent(this.profileData?.hindiSummary)) {
+      this.availableLanguages.push({ id: 'hi', name: 'Hindi' });
+    }
+
+    if (this.hasOdiaContent(this.profileData?.odiaSummary)) {
+      this.availableLanguages.push({ id: 'or', name: 'Odia' });
+    }
   }
 
   public setTitle(newTitle: string) {
@@ -127,6 +141,7 @@ export class ReadRespondComponent implements OnInit {
     )
     .subscribe((data: any) => {
         this.profileData = data;
+        this.updateAvailableLanguages();
         const questions = this.consultationService.getQuestions(data);
         if (questions && questions.length > 0) {
           this.questionnaireExist = true;
@@ -181,13 +196,23 @@ export class ReadRespondComponent implements OnInit {
     }, this.profileData?.englishSummary);
   }
 
-  hasHindiContent(hindiSummary: string | null | undefined): boolean {
-    if (!hindiSummary) {
-      return false;
-    }
-    const strippedContent = hindiSummary.replace(/<[^>]*>/g, '').trim();
-    return strippedContent.length > 0;
-  }
+hasContentForLanguage(summary: string | null | undefined): boolean {
+  if (!summary) return false;
+  const strippedContent = summary.replace(/<[^>]*>/g, '').trim();
+  return strippedContent.length > 0;
+}
+
+hasHindiContent(hindiSummary: string | null | undefined): boolean {
+  return this.hasContentForLanguage(hindiSummary);
+}
+
+hasOdiaContent(odiaSummary: string | null | undefined): boolean {
+  return this.hasContentForLanguage(odiaSummary);
+}
+
+hasContent(hindiSummary: string | null | undefined, odiaSummary: string | null | undefined): boolean {
+  return this.hasHindiContent(hindiSummary) || this.hasOdiaContent(odiaSummary);
+}
 
   createMetaTags(consultationProfile) {
     const title = consultationProfile.title ? consultationProfile.title : '' ;

@@ -22,6 +22,7 @@ import {
   checkPropertiesPresence,
   scrollToFirstError,
   setResponseVisibility,
+  getTranslatedText,
 } from "../../../../shared/functions/modular.functions";
 import { atLeastOneCheckboxCheckedValidator } from "src/app/shared/validators/checkbox-validator";
 import { Apollo } from "apollo-angular";
@@ -64,6 +65,7 @@ export class ConsultationQuestionnaireComponent
   longTextAnswer: any;
   templateText: any;
   templateId: any;
+  currentLanguage: any;
   responseSubmitLoading: boolean;
   consultationId: any;
   showConfirmEmailModal: boolean;
@@ -101,8 +103,9 @@ export class ConsultationQuestionnaireComponent
     private metaPixelService: MetaPixelService,
     private el: ElementRef,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
   ) {
+    this.currentLanguage = this.cookieService.get('civisLang');
     this.questionnaireForm = this._fb.group({});
     this.consultationService.consultationId$
       .pipe(filter((i) => i !== null))
@@ -179,6 +182,21 @@ export class ConsultationQuestionnaireComponent
       }
       this.questionnaireForm = this.makeQuestionnaireModal();
     });
+  }
+
+  getTranslatedTextForQuestion(item: any) {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: item?.hindiQuestionText,
+      odia: item?.odiaQuestionText
+    }, item?.questionText);
+  }
+
+  getQuestionText(question) {
+    return this.getTranslatedTextForQuestion(question);
+  }
+
+  getSubQuestionText(subQuestion: any) {
+    return this.getTranslatedTextForQuestion(subQuestion);
   }
 
   getRespondedRounds() {

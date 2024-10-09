@@ -23,15 +23,10 @@ export class AppComponent implements OnInit, OnDestroy {
   isPrivate = false;
   confirmModalOpen = false;
   languages = [
-    {
-      id: "en",
-      name: "English",
-    },
-    {
-      id: "hi",
-      name: "Hindi",
-    },
+    { id: "en", name: "English" },
+    { id: "hi", name: "Hindi" },
   ];
+
   constructor(
     private userService: UserService,
     private router: Router,

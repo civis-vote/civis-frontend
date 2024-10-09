@@ -5,6 +5,7 @@ import { ConsultationsService } from 'src/app/shared/services/consultations.serv
 import { UserService } from 'src/app/shared/services/user.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
+import { getTranslatedText } from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-profile-card',
@@ -21,6 +22,7 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   @Input() summaryData: any;
 
   currentUser: any;
+  currentLanguage: any;
   showShareOptions: boolean;
   currentUrl = '';
   showConfirmEmailModal: boolean;
@@ -28,14 +30,17 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   showResponseCreation: boolean;
   showGlossaryModal: boolean;
 
-  constructor(private consultationsService: ConsultationsService,
-              private userService: UserService,
-              private cookieService: CookieService,
-              private router: Router
-              ){}
+
+  constructor(
+    private consultationsService: ConsultationsService,
+    private userService: UserService,
+    private cookieService: CookieService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
       this.currentUrl = window.location.href;
+      this.currentLanguage = this.cookieService.get("civisLang");
       this.getCurrentUser();
       this.watchConsultationStatus();
       this.enableSubmitResponse();
@@ -68,6 +73,20 @@ export class ProfileCardComponent implements OnInit, OnChanges {
         this.currentUser = null;
       }
     });
+  }
+
+  getProfileTitle() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.profile?.hindiTitle,
+      odia: this.profile?.odiaTitle
+    }, this.profile?.title);
+  }
+
+  getMinistryName() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.profile?.ministry?.hindiName,
+      odia: this.profile?.ministry?.odiaName
+    }, this.profile?.ministry?.name);
   }
 
   enableSubmitResponse() {

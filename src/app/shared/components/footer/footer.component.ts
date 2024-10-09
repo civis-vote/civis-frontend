@@ -12,13 +12,13 @@ export class FooterComponent implements OnInit {
 
   languages = [
     {
-    id: 'en',
-    name: 'English'
+      id: 'en',
+      name: 'English'
     },
     {
       id: 'hi',
       name: 'Hindi'
-    }
+    },
   ];
 
   selectedLanguage = 'en';
@@ -59,7 +59,7 @@ export class FooterComponent implements OnInit {
     if (!this.currentUser) {
       this.router.navigateByUrl('/auth');
       return;
-    } 
+    }
     if (this?.currentUser?.confirmedAt) {
       this.router.navigateByUrl('/consultations/new');
     } else {

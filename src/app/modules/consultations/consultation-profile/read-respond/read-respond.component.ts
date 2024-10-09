@@ -10,7 +10,7 @@ import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
-import { isObjectEmpty, setResponseVisibility } from 'src/app/shared/functions/modular.functions';
+import { getTranslatedText, isObjectEmpty, setResponseVisibility } from 'src/app/shared/functions/modular.functions';
 import { ModalDirective } from 'ngx-bootstrap';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
@@ -28,6 +28,7 @@ export class ReadRespondComponent implements OnInit {
   currentUser: any;
   currentLanguage: any;
   useSummaryHindi: boolean;
+  useSummaryOdia: boolean;
   showThankYouModal = false;
   showFeedbackModal: boolean;
   consultationResponse: any;
@@ -35,6 +36,7 @@ export class ReadRespondComponent implements OnInit {
   loading: boolean;
   questionnaireExist: boolean;
   earnedPoints: any;
+  selectedLanguage: string = 'en';
   emailVerification = false;
   profaneWords = [];
   //Changes for profane resposne nudge
@@ -43,6 +45,11 @@ export class ReadRespondComponent implements OnInit {
     msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
     title: ''
   };
+
+  languages = [
+    { id: 'en', name: 'English' },
+    { id: 'hi', name: 'Hindi' },
+  ];
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;
   responseMessage = {
@@ -61,8 +68,13 @@ export class ReadRespondComponent implements OnInit {
     private errorService: ErrorService,
     private consultationService: ConsultationsService,
     private title: Title,
-    private _cookieService: CookieService
+    private _cookieService: CookieService,
+    private cdr: ChangeDetectorRef
   ) {
+    const currentLanguage = this._cookieService.get('civisLang');
+    if (currentLanguage) {
+      this.selectedLanguage = currentLanguage;
+    }
     this.consultationService.consultationId$
     .pipe(
       filter(i => i !== null)
@@ -85,11 +97,13 @@ export class ReadRespondComponent implements OnInit {
       }, (err: any) => {
       });
     }
+    this.currentLanguage = this._cookieService.get('civisLang') || 'en';
   }
 
   ngOnInit() {
     this.getCurrentUser();
     this.setActiveTab();
+    this.getConsultationProfile();
   }
 
   public setTitle(newTitle: string) {
@@ -134,7 +148,7 @@ export class ReadRespondComponent implements OnInit {
         this.consultationService.consultationProfileData.next(data);
         this.satisfactionRatingDistribution = data.satisfactionRatingDistribution;
         this.createMetaTags(this.profileData);
-        this.getProfileSummary();
+        this.cdr.detectChanges();
         this.loading = false;
     }, err => {
       const e = new Error(err);
@@ -145,18 +159,33 @@ export class ReadRespondComponent implements OnInit {
     });
   }
 
-  getProfileSummary() {
-    this.currentLanguage = this._cookieService.get('civisLang');
-    if (this.currentLanguage === 'hi') {
-      const summaryHindi = this.profileData.hindiSummary;
-      if (summaryHindi) {
-        this.useSummaryHindi = true;
-      } else {
-        this.useSummaryHindi = false;
-      }
-    } else {
-      this.useSummaryHindi = false;
+
+
+  setLanguage() {
+    this._cookieService.put('civisLang', this.selectedLanguage);
+    this.cdr.detectChanges();
+    window.location.reload();
+    window.scrollTo(0, 0);
+  }
+
+  onLanguageChange() {
+    this.setLanguage();
+    this.cdr.detectChanges();
+  }
+
+  get profileSummary() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.profileData?.hindiSummary,
+      odia: this.profileData?.odiaSummary
+    }, this.profileData?.englishSummary);
+  }
+
+  hasHindiContent(hindiSummary: string | null | undefined): boolean {
+    if (!hindiSummary) {
+      return false;
     }
+    const strippedContent = hindiSummary.replace(/<[^>]*>/g, '').trim();
+    return strippedContent.length > 0;
   }
 
   createMetaTags(consultationProfile) {
@@ -431,7 +460,7 @@ export class ReadRespondComponent implements OnInit {
         localStorage.removeItem('consultationResponse');
         this.submitConsultationResponse(consultationResponse);
       }
-    
+
   }
 
   onCloseThanksModal() {

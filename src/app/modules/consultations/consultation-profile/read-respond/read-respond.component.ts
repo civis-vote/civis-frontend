@@ -117,7 +117,7 @@ export class ReadRespondComponent implements OnInit {
     }
 
     if (this.hasOdiaContent(this.profileData?.odiaSummary)) {
-      this.availableLanguages.push({ id: 'or', name: 'Odia' });
+      this.availableLanguages.push({ id: 'od', name: 'Odia' });
     }
   }
 

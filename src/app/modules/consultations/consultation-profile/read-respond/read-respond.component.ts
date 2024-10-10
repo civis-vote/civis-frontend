@@ -49,6 +49,7 @@ export class ReadRespondComponent implements OnInit {
   languages = [
     { id: 'en', name: 'English' },
     { id: 'hi', name: 'Hindi' },
+    { id: "od", name: "Odia" },
   ];
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;

@@ -88,6 +88,11 @@ export class ConsultationQuestionnaireComponent
   responseStatus = 0;
   profaneWords = [];
   environment: any = environment;
+  tooltipTranslations = {
+    en: "Choosing to make your response public allows it to be viewed by others, who may use it as a reference or template for their own responses. Only your first name will be disclosed to the organisation conducting the consultation. This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. If you are unsure about your own response, you also have the option to adopt and send a public response provided by someone else.",
+    hi: "अपनी प्रतिक्रिया को सार्वजनिक रूप से साझा करना दूसरों को इसे देखने देता है, जो इसे अपनी प्रतिक्रियाओं के लिए संदर्भ या टेम्पलेट के रूप में उपयोग कर सकते हैं। सलाहकार का संचालन करने वाले संगठन को केवल आपका पहला नाम ही बताया जाएगा। यह विकल्प उन लोगों के लिए आदर्श है जो पारदर्शी तरीके से अपने विचार साझा करना चाहते हैं और व्यापक चर्चा में योगदान देना चाहते हैं। यदि आप अपनी प्रतिक्रिया के बारे में अनिश्चित हैं, तो आपके पास किसी और द्वारा दी गई सार्वजनिक प्रतिक्रिया को अपनाने और भेजने का विकल्प भी है।",
+    od: "ଆପଣଙ୍କ ପ୍ରତିକ୍ରିୟାକୁ ସାର୍ବଜନୀନ କରିବା ଚୟନ କରିବା ଦ୍ୱାରା ଅନ୍ୟମାନେ ଏହାକୁ ଦେଖିପାରିବେ, ଯେଉଁମାନେ ଏହାକୁ ନିଜ ପ୍ରତିକ୍ରିୟା ପାଇଁ ଏକ ସନ୍ଦର୍ଭ କିମ୍ବା ଟେମ୍ପଲେଟ୍ ଭାବରେ ବ୍ୟବହାର କରିପାରିବେ। ପରାମର୍ଶ ନେଉଥିବା ସଂସ୍ଥାକୁ କେବଳ ଆପଣଙ୍କ ପ୍ରଥମ ନାମ ଜଣାଇ ଦିଆଯିବ। ..."
+  };
 
   get profanityCountGetter() {
     //TODO: Profanity filter feature, remove when ready for deployment to production
@@ -132,6 +137,10 @@ export class ConsultationQuestionnaireComponent
     if(this.consultationId === 404 || this.consultationId === 707) {
       this.responseFeedback = "satisfied";
     }
+  }
+
+  get translatedTooltip(): string {
+    return this.tooltipTranslations[this.currentLanguage] || this.tooltipTranslations['en'];
   }
 
   ngOnInit(): void {

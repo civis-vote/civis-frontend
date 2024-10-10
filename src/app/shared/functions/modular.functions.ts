@@ -215,7 +215,7 @@ export function getTranslatedText(currentLanguage: string, textMap: { [key: stri
     return textMap.hindi;
   }
 
-  if (currentLanguage === 'or' && textMap.odia) {
+  if (currentLanguage === 'od' && textMap.odia) {
     return textMap.odia;
   }
 

@@ -117,38 +117,16 @@ export class ProfileCardComponent implements OnInit, OnChanges {
       let { diffInDays, isSameDay } = this.getDifferenceInDays(deadline);
       diffInDays = Math.floor(diffInDays);
 
-      const translations = {
-        en: {
-          closed: "Closed",
-          lastDay: "Last day to respond",
-          oneDayRemaining: "1 Day Remaining",
-          daysRemaining: `${diffInDays} Days Remaining`
-        },
-        hi: {
-          closed: "बंद है",
-          lastDay: "प्रतिक्रिया देने का अंतिम दिन",
-          oneDayRemaining: "1 दिन शेष",
-          daysRemaining: `${diffInDays} दिन शेष`
-        },
-        od: {
-          closed: "ବନ୍ଦ",
-          lastDay: "ପ୍ରତିକ୍ରିୟା ଦେବାର ଶେଷ ଦିନ",
-          oneDayRemaining: "1 ଦିନ ବାକୀ",
-          daysRemaining: `${diffInDays} ଦିନ ବାକୀ`
-        }
-      };
-
-      const lang = this.currentLanguage || 'en';
-
       if (diffInDays < 0) {
-        return translations[lang].closed;
+        return "Closed";
       } else if (diffInDays === 0) {
         if (isSameDay) {
-          return translations[lang].lastDay;
+          return "Last day to respond";
         }
-        return translations[lang].oneDayRemaining;
+
+        return "1 Day Remaining";
       } else {
-        return translations[lang].daysRemaining;
+        return `${diffInDays} Days Remaining`;
       }
     }
   }

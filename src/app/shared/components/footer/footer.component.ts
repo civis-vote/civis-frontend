@@ -20,7 +20,7 @@ export class FooterComponent implements OnInit {
       name: 'Hindi'
     },
     {
-      id: 'od',
+      id: 'or',
       name: 'Odia'
     },
   ];

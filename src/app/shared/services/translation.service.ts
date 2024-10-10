@@ -11,9 +11,8 @@ import {Resolve, ActivatedRouteSnapshot, CanActivate} from '@angular/router';
 import HindiLang from '../../shared/models/constants/translation.json';
 
 interface Dictionary {
-  en: string;
-  hi: string;
-  od: string;
+text: string;
+translation: string;
 }
 
 @Injectable({
@@ -76,9 +75,9 @@ translate(text: string) {
   let translationKey;
 
   if (this.currentLanguage === 'hi') {
-      translationKey = 'hi';
-  } else if (this.currentLanguage === 'od') {
-      translationKey = 'od';
+      translationKey = 'translation';
+  } else if (this.currentLanguage === 'or') {
+      translationKey = 'translation2';
   } else {
       return text;
   }
@@ -93,9 +92,9 @@ binarySearch(arr: Array<Dictionary>, text: string, start: number, end: number, f
       return null;
   }
 
-const startText = arr[start] && arr[start].en.toLowerCase();
-const midText = arr[mid] && arr[mid].en.toLowerCase();
-const endText = arr[end] && arr[end].en.toLowerCase();
+  const startText = arr[start] && arr[start].text.toLowerCase();
+  const midText = arr[mid] && arr[mid].text.toLowerCase();
+  const endText = arr[end] && arr[end].text.toLowerCase();
 
   if (start === end) {
       if (startText === text) {

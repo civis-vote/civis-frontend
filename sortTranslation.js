@@ -4,10 +4,10 @@ const data = fs.readFileSync(fileName, 'utf8');
 const words = JSON.parse(data);
 
 const sortLang = (a, b) => {
-  if (a.text.toLowerCase() < b.text.toLowerCase()) {
+  if (a.en.toLowerCase() < b.en.toLowerCase()) {
     return -1;
   }
-  if (a.text.toLowerCase() > b.text.toLowerCase()) {
+  if (a.en.toLowerCase() > b.en.toLowerCase()) {
     return 1;
   }
   return 0;

@@ -60,7 +60,11 @@
             <div class="input-checbox">
               <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" [ngModelOptions]="{standalone: true}"/>
               <label class="m-0">{{'Make my response public' | translate}}</label>
-              <span class="link" [tooltip]="translatedTooltip">{{'What does this mean?' | translate}}</span>
+              <span class="link" [tooltip]="'Choosing to make your response public allows it to be viewed by others, who may use it as a
+              reference or template for their own responses. Only your first name will be disclosed to the organisation conducting the consultation.
+              This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. If you are unsure
+              about your own response, you also have the option to adopt and send a public response provided by someone else.' | translate">
+              {{'What does this mean?' | translate}}</span>
             </div>
           </div>
           <div class="py-3">

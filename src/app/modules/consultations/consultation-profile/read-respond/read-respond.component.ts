@@ -109,14 +109,22 @@ export class ReadRespondComponent implements OnInit {
     this.updateAvailableLanguages();
   }
 
+  get hasContentForLanguage(): boolean {
+    return this.hasContent(this.profileData?.hindiSummary) || this.hasContent(this.profileData?.odiaSummary);
+  }
+
+  private hasContent(summary: string | null | undefined): boolean {
+    if (!summary) return false;
+    const strippedContent = summary.replace(/<[^>]*>/g, '').trim();
+    return strippedContent.length > 0;
+  }
+
   updateAvailableLanguages() {
     this.availableLanguages = [{ id: 'en', name: 'English' }];
-
-    if (this.hasHindiContent(this.profileData?.hindiSummary)) {
+    if (this.hasContent(this.profileData?.hindiSummary)) {
       this.availableLanguages.push({ id: 'hi', name: 'Hindi' });
     }
-
-    if (this.hasOdiaContent(this.profileData?.odiaSummary)) {
+    if (this.hasContent(this.profileData?.odiaSummary)) {
       this.availableLanguages.push({ id: 'or', name: 'Odia' });
     }
   }
@@ -195,24 +203,6 @@ export class ReadRespondComponent implements OnInit {
       odia: this.profileData?.odiaSummary
     }, this.profileData?.englishSummary);
   }
-
-hasContentForLanguage(summary: string | null | undefined): boolean {
-  if (!summary) return false;
-  const strippedContent = summary.replace(/<[^>]*>/g, '').trim();
-  return strippedContent.length > 0;
-}
-
-hasHindiContent(hindiSummary: string | null | undefined): boolean {
-  return this.hasContentForLanguage(hindiSummary);
-}
-
-hasOdiaContent(odiaSummary: string | null | undefined): boolean {
-  return this.hasContentForLanguage(odiaSummary);
-}
-
-hasContent(hindiSummary: string | null | undefined, odiaSummary: string | null | undefined): boolean {
-  return this.hasHindiContent(hindiSummary) || this.hasOdiaContent(odiaSummary);
-}
 
   createMetaTags(consultationProfile) {
     const title = consultationProfile.title ? consultationProfile.title : '' ;

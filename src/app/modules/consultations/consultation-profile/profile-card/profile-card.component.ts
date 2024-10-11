@@ -112,44 +112,29 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     }
   }
 
-  getRemainigDays(deadline) {
-    if (deadline) {
-      let { diffInDays, isSameDay } = this.getDifferenceInDays(deadline);
+  getRemainingDays(): number | string {
+    if (this.profile?.responseDeadline) {
+      let { diffInDays } = this.getDifferenceInDays(this.profile.responseDeadline);
       diffInDays = Math.floor(diffInDays);
-
-      const translations = {
-        en: {
-          closed: "Closed",
-          lastDay: "Last day to respond",
-          oneDayRemaining: "1 Day Remaining",
-          daysRemaining: `${diffInDays} Days Remaining`
-        },
-        hi: {
-          closed: "बंद है",
-          lastDay: "प्रतिक्रिया देने का अंतिम दिन",
-          oneDayRemaining: "1 दिन शेष",
-          daysRemaining: `${diffInDays} दिन शेष`
-        },
-        od: {
-          closed: "ବନ୍ଦ",
-          lastDay: "ପ୍ରତିକ୍ରିୟା ଦେବାର ଶେଷ ଦିନ",
-          oneDayRemaining: "1 ଦିନ ବାକୀ",
-          daysRemaining: `${diffInDays} ଦିନ ବାକୀ`
-        }
-      };
-
-      const lang = this.currentLanguage || 'en';
-
-      if (diffInDays < 0) {
-        return translations[lang].closed;
-      } else if (diffInDays === 0) {
-        if (isSameDay) {
-          return translations[lang].lastDay;
-        }
-        return translations[lang].oneDayRemaining;
-      } else {
-        return translations[lang].daysRemaining;
+      if (diffInDays > 0) {
+        return diffInDays;
       }
+    }
+    return '';
+  }
+
+  getRemainingDaysText(): string {
+    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.profile?.responseDeadline || '');
+    const lang = this.currentLanguage || 'en';
+
+    if (diffInDays < 0) {
+      return 'Closed';
+    } else if (diffInDays === 0 && isSameDay) {
+      return 'Last day to respond';
+    } else if (diffInDays === 1) {
+      return 'Day Remaining';
+    } else {
+      return 'Days Remaining';
     }
   }
 

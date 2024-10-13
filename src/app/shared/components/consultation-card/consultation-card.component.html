@@ -6,7 +6,7 @@
       <p class="sub-title">{{ consultation?.ministry?.name}}</p>
       <div class="cta-section">
         <div>
-          <p class="days-remaining-text">{{getRemainigDays(consultation?.responseDeadline) | translate}}</p>
+          <p class="days-remaining-text">{{ getRemainingDays() }} {{getRemainingDaysText() | translate}}</p>
           <p class="responses-text">
             {{consultation?.consultationResponsesCount ? consultation?.consultationResponsesCount : ''}}
             <span  *ngIf="consultation?.consultationResponsesCount == 1">
@@ -25,7 +25,7 @@
           <span class="btn-right-arrow"><i class="fa fa-angle-right"></i></span>
         </button>
       </div>
-    </div>  
+    </div>
   </div>
 </a>
 

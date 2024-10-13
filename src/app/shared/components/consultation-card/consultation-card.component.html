@@ -6,7 +6,7 @@
       <p class="sub-title">{{ getMinistryName() }}</p>
       <div class="cta-section">
         <div>
-          <p class="days-remaining-text">{{getRemainigDays(consultation?.responseDeadline) | translate}}</p>
+          <p class="days-remaining-text">{{ getRemainingDays() }} {{getRemainingDaysText() | translate}}</p>
           <p class="responses-text">
             {{consultation?.consultationResponsesCount ? consultation?.consultationResponsesCount : ''}}
             <span  *ngIf="consultation?.consultationResponsesCount == 1">

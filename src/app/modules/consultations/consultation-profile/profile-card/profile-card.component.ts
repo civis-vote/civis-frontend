@@ -112,22 +112,29 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     }
   }
 
-  getRemainigDays(deadline) {
-    if (deadline) {
-      let { diffInDays, isSameDay } = this.getDifferenceInDays(deadline);
+  getRemainingDays(): number | string {
+    if (this.profile?.responseDeadline) {
+      let { diffInDays } = this.getDifferenceInDays(this.profile.responseDeadline);
       diffInDays = Math.floor(diffInDays);
-
-      if (diffInDays < 0) {
-        return "Closed";
-      } else if (diffInDays === 0) {
-        if (isSameDay) {
-          return "Last day to respond";
-        }
-
-        return "1 Day Remaining";
-      } else {
-        return `${diffInDays} Days Remaining`;
+      if (diffInDays > 0) {
+        return diffInDays;
       }
+    }
+    return '';
+  }
+
+  getRemainingDaysText(): string {
+    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.profile?.responseDeadline || '');
+    const lang = this.currentLanguage || 'en';
+
+    if (diffInDays < 0) {
+      return 'Closed';
+    } else if (diffInDays === 0 && isSameDay) {
+      return 'Last day to respond';
+    } else if (diffInDays === 1) {
+      return 'Day Remaining';
+    } else {
+      return 'Days Remaining';
     }
   }
 

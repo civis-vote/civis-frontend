@@ -20,23 +20,22 @@
         </button>
         <div class="auth-modal">
           <img class="modal-img mb-3" src="assets/images/signup-modal.png" />
-          <p class="heading-text mb-2">Just one more step!</p>
+          <p class="heading-text mb-2">{{'Just one more step!' | translate}}</p>
           <p class="sub-heading-text mb-4 text-center">
-            Your response will be submitted as soon as you create an account for
-            verification
+            {{'Your response will be submitted as soon as you create an account for verification' | translate}}
           </p>
           <div class="d-flex">
             <div class="login-btn mr-3" (click)="redirectTo('google')">
               <img class="icon-img" src="assets/images/auth-google.png" />
-              <p class="login-btn-text" *ngIf="!signin">Sign up with google</p>
-              <p class="login-btn-text" *ngIf="signin">Sign in with google</p>
+              <p class="login-btn-text" *ngIf="!signin">{{'Sign up with google' | translate}}</p>
+              <p class="login-btn-text" *ngIf="signin">{{'Sign in with google' | translate}}</p>
             </div>
             <div class="login-btn" (click)="redirectTo('facebook')">
               <img class="icon-img" src="assets/images/auth-fb.png" />
               <p class="login-btn-text" *ngIf="!signin">
-                Sign up with Facebook
+                {{'Sign up with Facebook' | translate}}
               </p>
-              <p class="login-btn-text" *ngIf="signin">Sign in with Facebook</p>
+              <p class="login-btn-text" *ngIf="signin">{{'Sign in with Facebook' | translate}}</p>
             </div>
           </div>
           <div
@@ -45,9 +44,9 @@
             (click)="signup = true"
           >
             <img class="icon-img" src="assets/images/auth-email.png" />
-            <p class="login-btn-text">Sign up with Email</p>
+            <p class="login-btn-text">{{'Sign up with Email' | translate}}</p>
           </div>
-          <p class="signup-text" *ngIf="signup">Sign up with Email</p>
+          <p class="signup-text" *ngIf="signup">{{'Sign up with Email' | translate}}</p>
           <form
             #signupForm="ngForm"
             *ngIf="signup"
@@ -58,7 +57,7 @@
               <label for="fname">{{ "First name" | translate }}</label>
               <div class="input-box__border">
                 <input
-                  placeholder="First Name"
+                  [placeholder]="'First Name' | translate"
                   type="text"
                   id="fname"
                   #fname="ngModel"
@@ -79,7 +78,7 @@
               <label for="efname">{{ "Email" | translate }}</label>
               <div class="input-box__border">
                 <input
-                  placeholder="Email"
+                  [placeholder]="'Email' | translate"
                   type="email"
                   id="email"
                   #email="ngModel"
@@ -106,7 +105,7 @@
               <label for="password">{{ "Password" | translate }}</label>
               <div class="input-box__border">
                 <input
-                  placeholder="At least 8 characters"
+                  [placeholder]="'At least 8 characters' | translate"
                   type="password"
                   id="password"
                   #password="ngModel"
@@ -127,16 +126,15 @@
                   *ngIf="signupObject.password"
                 >
                   <ul>
-                    <li>At least <strong> 8 characters </strong> long</li>
+                    <li>{{ "At least" | translate }} <strong> {{ "8 characters" | translate }}  </strong> {{ "long" | translate }} </li>
                     <li>
-                      Contain an <strong> uppercase letter </strong> (A, B, C,
-                      …)
+                      {{ "Contain an" | translate }} <strong> {{ "uppercase letter" | translate }}  </strong> (A, B, C,…)
                     </li>
                     <li>
-                      Contain a <strong>lowercase letter</strong> (a, b, c, …)
+                       {{ "Contain a" | translate }} <strong> {{ "lowercase letter" | translate }}</strong> (a, b, c, …)
                     </li>
-                    <li>Contain a <strong>symbol</strong> (!, @, #, ...)</li>
-                    <li>Contain a <strong>number</strong> (1, 2, 3, …)</li>
+                    <li>{{ "Contain a" | translate }} <strong>{{ "symbol" | translate }}</strong> (!, @, #, ...)</li>
+                    <li>{{ "Contain a" | translate }}<strong>{{ "number" | translate }}</strong> (1, 2, 3, …)</li>
                   </ul>
                 </span>
                 {{
@@ -169,7 +167,7 @@
                   (search)="onSearch($event)"
                   (open)="loadCities()"
                   [(ngModel)]="signupObject.cityId"
-                  placeholder="City"
+                  [placeholder]="'City' | translate"
                   required
                 >
                 </ng-select>
@@ -178,7 +176,7 @@
                 *ngIf="city.invalid && (city.touched || signupForm.submitted)"
                 class="error-msg"
               >
-                Location is Required
+              {{ "Location is Required" | translate }}
               </div>
             </div>
 
@@ -193,7 +191,7 @@
                 required
               />
               <label for="agreedForTermsCondition" class="d-flex">
-                I agree to the <br />
+                {{ "I agree to the" | translate }} <br />
                 <a href="/terms" class="policy-link">{{
                   "Terms of Service," | translate
                 }}</a>
@@ -240,11 +238,11 @@
                 class="app-btn secondary get-start-btn"
                 (click)="submit()"
               >
-                <p class="m-0">Create my account</p>
+                <p class="m-0">{{'Create my account' | translate}}</p>
               </button>
             </div>
           </form>
-          <div class="hline" *ngIf="signin"><span>Or</span></div>
+          <div class="hline" *ngIf="signin"><span>{{'Or' | translate}}</span></div>
           <form
             #loginForm="ngForm"
             *ngIf="signin"
@@ -253,10 +251,10 @@
           >
             <div class="row">
               <div class="input-box col-12">
-                <label for="email">Email</label>
+                <label for="email">{{'Email' | translate}}</label>
                 <div class="input-box__border">
                   <input
-                    placeholder="Email"
+                    [placeholder]="'Email' | translate"
                     type="email"
                     id="email"
                     #email="ngModel"
@@ -272,20 +270,20 @@
                   "
                   class="error-msg"
                 >
-                  <div *ngIf="email.errors.required">Email is Required</div>
+                  <div *ngIf="email.errors.required">{{'Email is Required' | translate}}</div>
                   <div *ngIf="email.errors.email">
-                    Email must be a valid email address
+                    {{'Email must be a valid email address' | translate}}
                   </div>
                 </div>
               </div>
 
               <div class="input-box col-12">
                 <div class="d-flex justify-content-between">
-                  <label for="password">Password</label>
+                  <label for="password">{{'Password' | translate}}</label>
                 </div>
                 <div class="input-box__border">
                   <input
-                    placeholder="Password"
+                    [placeholder]="'Password' | translate"
                     type="password"
                     id="password"
                     #password="ngModel"
@@ -301,7 +299,7 @@
                   "
                   class="error-msg"
                 >
-                  Password is Required
+                {{'Password is Required' | translate}}
                 </div>
               </div>
 
@@ -310,7 +308,7 @@
                   class="app-btn secondary get-start-btn mt-1"
                   type="submit"
                 >
-                  <p class="m-auto">Sign into my account</p>
+                  <p class="m-auto">{{'Sign into my account' | translate}}</p>
                 </button>
 
                 <div>
@@ -318,7 +316,7 @@
                     class="normal-text mt-4 mb-0 pointer"
                     [routerLink]="['/auth', 'forgot-password']"
                   >
-                    Forgot Password?
+                     {{'Forgot Password?' | translate}}
                   </p>
                 </div>
               </div>
@@ -327,25 +325,21 @@
           <div class="app-hr"></div>
           <div class="d-flex">
             <p class="normal-text mb-2">
-              {{
-                signin
-                  ? "Don'\t have an existing account?"
-                  : "Already have an account?"
-              }}
+              {{ signin ? ('Don\'t have an existing account?' | translate) : ('Already have an account?' | translate) }}
             </p>
             <p
               class="normal-text normal-text-link mb-2"
               *ngIf="(!signin && signup) || (!signup && !signin)"
               (click)="signup = false; signin = true"
             >
-              Sign in
+            {{'Sign in' | translate}}
             </p>
             <p
               class="normal-text normal-text-link mb-2"
               *ngIf="signin"
               (click)="signup = false; signin = false"
             >
-              Sign Up
+              {{'Sign Up' | translate}}
             </p>
           </div>
         </div>

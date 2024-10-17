@@ -10,7 +10,7 @@
             <span>{{profileData?.readingTime ? '(' + profileData?.readingTime + ' min)' : '' }}</span>
           </p>
           <div class="tabs-block" *ngIf="responseRounds && responseRounds.length > 1">
-            <p *ngFor="let round of responseRounds" 
+            <p *ngFor="let round of responseRounds"
               (click)="setActiveRound(round.roundNumber)"
               [ngClass]="{'active': (activeRoundNumber === round?.roundNumber)}">
               {{'Round ' + round.roundNumber}}
@@ -47,16 +47,14 @@
                 </div>
             </div>
           </div>
-        
+
         <div *ngIf="publicResponses && publicResponses.length">
           <div class="d-flex justify-content-between align-items-center">
             <p class="text-18 text-16-sm m-0 bold-text">{{'Public responses' | translate}}
             </p>
-            <p 
-              class="what-resp-text" 
-              tooltip="If you feel passionately about this Consultation, you can make your response public, 
-              for others to use as a template. Your first name is shared with the Government if you make your response public.
-              If you’re not sure what to write, you can choose other people’s responses to send as your own." 
+            <p
+              class="what-resp-text"
+              [tooltip]="'If you feel passionately about this Consultation, you can make your response public, for others to use as a template. Your first name is shared with the Government if you make your response public. If you’re not sure what to write, you can choose other people’s responses to send as your own.' | translate"
               placement="left"
               container="body"
             >
@@ -69,7 +67,7 @@
                 <ng-container *ngFor="let response of publicResponses">
                   <app-summary-response-container
                     [activeRoundNumber]="activeRoundNumber"
-                    [type]="'public'" 
+                    [type]="'public'"
                     [response]="response"
                     *ngIf="activeRoundNumber === response?.node?.roundNumber">
                   </app-summary-response-container>
@@ -83,28 +81,28 @@
             </div>
             <ng-template #allPublicResponses>
               <ng-container *ngFor="let response of publicResponses">
-                <app-summary-response-container 
-                [type]="'public'" 
+                <app-summary-response-container
+                [type]="'public'"
                 [response]="response">
               </app-summary-response-container>
               </ng-container>
             </ng-template>
-          </div>  
+          </div>
         </div>
 
         <div *ngIf="annonymousResponses && annonymousResponses.length">
           <div>
               <p class="text-18 text-16-sm m-0 bold-text">{{'Other responses' | translate}}
               </p>
-          </div>    
+          </div>
           <div class="paper-effect my-4 m-0-sm" *ngFor="let response of annonymousResponses">
             <div *ngIf="roundNumberExist; else allAnnonymousResponses">
               <div *ngIf="annonymousResponsesLength; else noAnnonymousResponses">
                 <ng-container>
-                  <app-summary-response-container 
-                  [activeRoundNumber]="activeRoundNumber" 
-                  [response]="response" 
-                  [type]="'other'" 
+                  <app-summary-response-container
+                  [activeRoundNumber]="activeRoundNumber"
+                  [response]="response"
+                  [type]="'other'"
                   *ngIf="activeRoundNumber === response?.node?.roundNumber">
                   </app-summary-response-container>
                 </ng-container>
@@ -117,19 +115,19 @@
             </div>
             <ng-template #allAnnonymousResponses>
               <ng-container *ngFor="let response of annonymousResponses">
-                <app-summary-response-container 
-                [response]="response" 
+                <app-summary-response-container
+                [response]="response"
                 [type]="'other'"></app-summary-response-container>
               </ng-container>
             </ng-template>
-          </div>  
+          </div>
         </div>
         </div>
 
         <!-- <div class="paper-effect mb-4 inner-space" *ngIf="showKeywordGraph">
           <p class="heading">
             {{'Overview' | translate}}
-          </p> 
+          </p>
           <div id="highchartContainer" style="width:100%; height:400px;"></div>
         </div> -->
       </section>

@@ -20,19 +20,19 @@
                    [innerHTML]="profileData?.responseSubmissionMessage"></p>
                   <ng-template #defaultContent>
                     <p *ngIf="profileData?.visibility === 'public_consultation'; else privateContent" >
-                      We appreciate you taking the time to submit your response. 
-                      Please consider sharing this Consultation on Social Media to help spread the word. 
+                      We appreciate you taking the time to submit your response.
+                      Please consider sharing this Consultation on Social Media to help spread the word.
                       Together, we can make our voices heard and action real change!
                     </p>
                     <ng-template #privateContent>
                       <p>
-                        We appreciate you taking the time to submit your response. 
+                        We appreciate you taking the time to submit your response.
                         You can browse through our other open Consultations to give your feedback.
                       </p>
                     </ng-template>
                   </ng-template>
                 </div>
-              </div> 
+              </div>
               <div class="thankyou-inner__bottom" *ngIf="profileData?.visibility === 'public_consultation'">
                 <div class="social-list">
                   <a class="social-item" [href]="getSocialLink('whatsapp', currentUrl, profileData?.title)" target="_blank">
@@ -48,12 +48,12 @@
                     <img src="assets/images/linkedin.svg" alt="linkedin logo" />
                   </a>
                   <div class="social-item"
-                  (click)="copyMessage(currentUrl)" 
-                  [tooltip]="copyStatus ? 'Copied': 'Copy'">
+                    (click)="copyMessage(currentUrl)"
+                    [tooltip]="copyStatus ? ('Copied' | translate) : ('Copy' | translate)">
                     <img src="assets/images/link.svg" alt="link logo" />
                   </div>
                 </div>
-              </div> 
+              </div>
             </div>
           </div>
         </div>

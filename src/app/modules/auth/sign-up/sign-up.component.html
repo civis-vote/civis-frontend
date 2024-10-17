@@ -90,7 +90,7 @@
               <label for="fname">{{ "First name" | translate }}</label>
               <div class="input-box__border">
                 <input
-                  placeholder="First Name"
+                  [placeholder]="'First Name' | translate"
                   type="text"
                   id="fname"
                   #fname="ngModel"
@@ -111,13 +111,14 @@
               <label for="efname">{{ "Email" | translate }}</label>
               <div class="input-box__border">
                 <input
-                  placeholder="Email"
+                  [placeholder]="'Email' | translate"
                   type="email"
                   id="email"
                   #email="ngModel"
                   name="email"
                   [(ngModel)]="signupObject.email"
                   required
+                  aria-label="'Email' | translate"
                   email
                 />
               </div>
@@ -138,7 +139,7 @@
               <label for="password">{{ "Password" | translate }}</label>
               <div class="input-box__border">
                 <input
-                  placeholder="At least 8 characters"
+                  [placeholder]="'At least 8 characters' | translate"
                   type="password"
                   id="password"
                   #password="ngModel"
@@ -159,16 +160,15 @@
                   *ngIf="signupObject.password"
                 >
                   <ul>
-                    <li>At least <strong> 8 characters </strong> long</li>
+                    <li>{{ "At least" | translate }} <strong> {{ "8 characters" | translate }}  </strong> {{ "long" | translate }} </li>
                     <li>
-                      Contain an <strong> uppercase letter </strong> (A, B, C,
-                      …)
+                      {{ "Contain an" | translate }} <strong> {{ "uppercase letter" | translate }}  </strong> (A, B, C,…)
                     </li>
                     <li>
-                      Contain a <strong>lowercase letter</strong> (a, b, c, …)
+                       {{ "Contain a" | translate }} <strong> {{ "lowercase letter" | translate }}</strong> (a, b, c, …)
                     </li>
-                    <li>Contain a <strong>symbol</strong> (!, @, #, ...)</li>
-                    <li>Contain a <strong>number</strong> (1, 2, 3, …)</li>
+                    <li>{{ "Contain a" | translate }} <strong>{{ "symbol" | translate }}</strong> (!, @, #, ...)</li>
+                    <li>{{ "Contain a" | translate }}<strong>{{ "number" | translate }}</strong> (1, 2, 3, …)</li>
                   </ul>
                 </span>
                 {{

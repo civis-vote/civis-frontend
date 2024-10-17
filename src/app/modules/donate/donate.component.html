@@ -15,13 +15,13 @@
               <div class="input-block">
                 <label for="name">{{'Name' | translate}}</label>
                 <div class="input-block__border">
-                    <input type="text" placeholder="Enter name" name="name" #name="ngModel" id="name" [(ngModel)]="order.name" required />
+                    <input type="text" [placeholder]="'Enter name' | translate" name="name" #name="ngModel" id="name" [(ngModel)]="order.name" required />
                 </div>
               </div>
             <div class="input-block">
                 <label for="contact">{{'Contact Number' | translate}}</label>
                 <div class="input-block__border">
-                    <input type="tel" placeholder="Contact No." name="contact" #contact="ngModel" id="contact" pattern="[0-9]{10}" [(ngModel)]="order.contact" required/>
+                    <input type="tel" [placeholder]="'Contact No.' | translate" name="contact" #contact="ngModel" id="contact" pattern="[0-9]{10}" [(ngModel)]="order.contact" required/>
                 </div>
                 <div *ngIf="contact.invalid && (contact.touched || donationForm.submitted)" class="error-msg">
                   {{'Contact is invalid' | translate}}
@@ -30,7 +30,7 @@
             <div class="input-block">
                 <label for="amount">{{'Amount' | translate}}</label>
                 <div class="input-block__border">
-                    <input type="number" placeholder="Amount" name="amount" #amount="ngModel" id="amount" [(ngModel)]="order.amount" required />
+                    <input type="number" [placeholder]="'Amount' | translate" name="amount" #amount="ngModel" id="amount" [(ngModel)]="order.amount" required />
                 </div>
                 <div *ngIf="amount.invalid && (amount.touched || donationForm.submitted)" class="error-msg">
                   {{'Amount is Required' | translate}}
@@ -39,7 +39,7 @@
             <div class="input-block">
               <label for="email">{{'Email' | translate}}</label>
               <div class="input-block__border">
-                  <input type="email" placeholder="Enter Email" name="email" #email="ngModel" id="email" [(ngModel)]="order.email" email />
+                  <input type="email" [placeholder]="'Enter Email' | translate" name="email" #email="ngModel" id="email" [(ngModel)]="order.email" email />
               </div>
               <div *ngIf="email.invalid && (email.touched || donationForm.submitted)" class="error-msg">
                 <div *ngIf="email.errors.required">{{'Email is Required' | translate}}</div>

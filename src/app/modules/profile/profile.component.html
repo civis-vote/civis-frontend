@@ -159,7 +159,7 @@
         </div>
         <div class="col-md-2">
           <div class="stats-info__heading">
-            {{'RANK IN' | translate}} 
+            {{'RANK IN' | translate}}
             &nbsp;
             {{ currentUser?.city?.name | uppercase}}
           </div>
@@ -169,7 +169,7 @@
         </div>
         <div class="col-md-2">
           <div class="stats-info__heading">
-            {{'RANK IN' | translate}} 
+            {{'RANK IN' | translate}}
             &nbsp;
             {{ currentUser?.city?.parent?.name | uppercase}}
           </div>
@@ -258,32 +258,29 @@
                 <div class="input-box">
                   <label for="firstName">{{'First name' | translate}}</label>
                   <div class="input-box__border">
-                    <input placeholder="Enter first name" type="text" id="firstName" #firstName="ngModel" name="firstName"
+                    <input [placeholder]="'Enter first name' | translate" type="text" id="firstName" #firstName="ngModel" name="firstName"
                       [(ngModel)]="user.firstName" required />
                   </div>
-                  <div *ngIf="firstName?.invalid && (firstName?.touched || userForm.submitted)" class="error-msg">{{'First
-                    name is Required' | translate}}</div>
+                  <div *ngIf="firstName?.invalid && (firstName?.touched || userForm.submitted)" class="error-msg">{{'First name is Required' | translate}}</div>
                 </div>
 
                 <div class="input-box">
                   <label for="lastName">{{'Last name' | translate}}</label>
                   <div class="input-box__border">
-                    <input placeholder="Enter last name" type="text" id="lastName" #lastName="ngModel" name="lastName"
+                    <input [placeholder]="'Enter last name' | translate" type="text" id="lastName" #lastName="ngModel" name="lastName"
                       [(ngModel)]="user.lastName" required />
                   </div>
-                  <div *ngIf="lastName?.invalid && (lastName?.touched || userForm.submitted)" class="error-msg">{{'Last
-                    name is Required' | translate}}</div>
+                  <div *ngIf="lastName?.invalid && (lastName?.touched || userForm.submitted)" class="error-msg">{{'Last name is Required' | translate}}</div>
                 </div>
               </div>
               <div *ngIf="updateField == 'email'">
                 <div class="info-tips">
-                  {{'When you change your email, you will be looged out and will need to confirm it when logging into your
-                  account again' | translate}}
+                  {{'When you change your email, you will be looged out and will need to confirm it when logging into your account again' | translate}}
                 </div>
                 <div class="input-box">
                   <label>{{'Type your current password' | translate}}</label>
                   <div class="input-box__border">
-                    <input placeholder="password" id="password" #password="ngModel" name="password"
+                    <input [placeholder]="'Password' | translate" id="password" #password="ngModel" name="password" aria-label="'Password' | translate"
                       [(ngModel)]="user.password" required />
                   </div>
                   <div *ngIf="password.invalid && (password.touched || userForm.submitted)" class="error-msg">
@@ -293,7 +290,7 @@
                 <div class="input-box">
                   <label>{{'Enter your new email' | translate}}</label>
                   <div class="input-box__border">
-                    <input placeholder="email" id="email" #email="ngModel" name="email" [(ngModel)]="user.email"
+                    <input [placeholder]="'Email' | translate" id="email" #email="ngModel" name="email" [(ngModel)]="user.email" aria-label="'Email' | translate"
                       required email />
                   </div>
                   <div *ngIf="email.invalid && (email.touched || userForm.submitted)" class="error-msg">

@@ -3,7 +3,7 @@
     <div
       class="vote-item"
       (click)="vote('up', response?.node)"
-      tooltip="{{ 'Upvote' }}"
+      [tooltip]="'Upvote' | translate"
       [ngClass]="
         response?.node?.votedAs?.voteDirection === 'up'
           ? 'vote-item-active'
@@ -18,7 +18,7 @@
     <div
       class="vote-item"
       (click)="vote('down', response?.node)"
-      tooltip="{{ 'Downvote' }}"
+      [tooltip]="'Downvote' | translate"
       [ngClass]="
         response?.node?.votedAs?.voteDirection === 'down'
           ? 'vote-item-active'
@@ -31,7 +31,7 @@
       </span>
     </div>
     <div
-      tooltip="{{ 'Share' }}"
+      [tooltip]="'Share' | translate"
       class="share-block"
       (click)="toggleShareBlock(response?.node?.id); shareBtnClicked = true"
       *ngIf="profileData?.visibility === 'public_consultation'"

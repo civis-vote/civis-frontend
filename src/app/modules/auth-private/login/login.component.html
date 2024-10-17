@@ -66,12 +66,12 @@
             <div class="input-box col-12">
               <label for="email">Email</label>
               <div class="input-box__border">
-                <input placeholder="Email" type="email" id="email" #email="ngModel" name="email"
+                <input [placeholder]="'Email' | translate" type="email" id="email" #email="ngModel" name="email"
                   [(ngModel)]="loginObject.email" required email />
               </div>
               <div *ngIf="email.invalid && (email.touched || loginForm.submitted)" class="error-msg">
-                <div *ngIf="email.errors.required">Email is Required</div>
-                <div *ngIf="email.errors.email">Email must be a valid email address</div>
+                <div *ngIf="email.errors.required">{{'Email is Required' | translate}}</div>
+                <div *ngIf="email.errors.email">{{'Email must be a valid email address' | translate}}</div>
               </div>
             </div>
 
@@ -82,11 +82,10 @@
                   [routerLink]="['/auth-private', 'forgot-password']">
               </div>
               <div class="input-box__border">
-                <input placeholder="Password" type="password" id="password" #password="ngModel" name="password"
+                <input [placeholder]="'Password' | translate" type="password" id="password" #password="ngModel" name="password"
                   [(ngModel)]="loginObject.password" required />
               </div>
-              <div *ngIf="password.invalid && (password.touched || loginForm.submitted)" class="error-msg">Password is
-                Required</div>
+              <div *ngIf="password.invalid && (password.touched || loginForm.submitted)" class="error-msg">{{'Password is Required' | translate}}</div>
             </div>
 
             <div class="col-12">

@@ -16,7 +16,7 @@
       <div *ngIf="!summaryData">
         <div *ngIf="!profile?.respondedOn || showResponseCreation">
           <div class="d-flex justify-content-between align-items-center mb-1 mt-1">
-            <p class="days-remaining m-0">{{getRemainigDays(profile?.responseDeadline)}}</p>
+            <p class="days-remaining m-0">{{ getRemainingDays() }} {{getRemainingDaysText() | translate}}</p>
             <a [href]="createCalendarEvent()" class="icon-circle" target="_blank">
               <i class="fa fa-calendar-plus-o" aria-hidden="true"></i>
             </a>

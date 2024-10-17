@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import * as moment from "moment";
+import { CookieService } from "ngx-cookie";
+import { getTranslatedText } from "../../functions/modular.functions";
 
 @Component({
   selector: 'app-consultation-card',
@@ -10,9 +12,12 @@ export class ConsultationCardComponent implements OnInit {
   @Input() consultation: any;
   @Input() type: string;
 
-  constructor() { }
+  currentLanguage: string;
+
+  constructor(private cookieService: CookieService) { }
 
   ngOnInit() {
+    this.currentLanguage = this.cookieService.get("civisLang");
   }
 
   getRemainingDays(): number | string {
@@ -60,5 +65,19 @@ export class ConsultationCardComponent implements OnInit {
       const isSameDay = lastDate.isSame(moment(today), 'day');
       return { diffInDays, isSameDay };
     }
+  }
+
+  getConsultationTitle() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.consultation?.hindiTitle,
+      odia: this.consultation?.odiaTitle
+    }, this.consultation?.title);
+  }
+
+  getMinistryName() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.consultation?.ministry?.hindiName,
+      odia: this.consultation?.ministry?.odiaName
+    }, this.consultation?.ministry?.name);
   }
 }

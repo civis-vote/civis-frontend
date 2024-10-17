@@ -41,8 +41,8 @@
             <img appDefaultImage [type]="'consultation-cover'" [src]="item.ministry?.category?.coverPhoto?.url"
               class="avatar avatar--64 fit-cover" />
             <div class="c-profile-data">
-              <p>{{item?.title}}</p>
-              <p>{{item?.ministry?.name}}</p>
+              <p>{{ getTranslatedTitle(item) }}</p>
+              <p>{{ getTranslatedMinistryName(item) }}</p>
             </div>
           </div>
           <div class="cell-2">
@@ -64,8 +64,8 @@
               class="avatar avatar--42 fit-cover" />
             <div class="list-detail">
               <div class="c-profile-data">
-                <p>{{item?.title}}</p>
-                <p>{{item?.ministry?.name}}</p>
+                <p>{{ getTranslatedTitle(item) }}</p>
+                <p>{{ getTranslatedMinistryName(item) }}</p>
               </div>
               <p class="reponse-count-text">
                 {{ item?.consultationResponsesCount ? item?.consultationResponsesCount : '--'}} RESPONSES

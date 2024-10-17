@@ -20,15 +20,15 @@
                       <span>{{ getSubQuestionText(subQuestion) }}</span>
                     </label>
                   </div>
-                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
+                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
                 </div>
                 <div class="answer" *ngIf="question.questionType === 'dropdown'">
                     <ng-select
                     [items]="question.subQuestions" bindLabel="questionText" [virtualScroll]="true" dropdownPosition="bottom"
                     bindValue="id"  [clearable]="false" loadingText="Searching..." [searchable]="false" (change)="onAnswerChange(question, $event)"
-                    placeholder="Select an option" [formControlName]="question.id">
+                    [placeholder]="'Select an option' | translate" [formControlName]="question.id">
                     </ng-select>
-                    <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
+                    <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
                 </div>
                 <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
                   <label class="answer__tips">Choose as many as you like</label>
@@ -38,21 +38,21 @@
                       <span>{{ getSubQuestionText(subQuestion) }}</span>
                     </label>
                   </div>
-                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
+                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
                 </div>
                 <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
                   <div class="text-area" >
-                    <textarea (input)="longTextAnswer = $event.target.value" placeholder="Type your answer here." [formControlName]="question.id" ></textarea>
+                    <textarea (input)="longTextAnswer = $event.target.value" [placeholder]="'Type your answer here.' | translate" aria-label="'Type your answer here.' | translate" [formControlName]="question.id" ></textarea>
                   </div>
-                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">This is a mandatory question and your response is required</div>
+                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
                 </div>
                 <div class="input-box" *ngIf="question.is_other">
                   <div class="input-box__border">
-                    <input placeholder="Type answer here" type="text"
+                    <input [placeholder]="'Type answer here' | translate" type="text" aria-label="'Type answer here' | translate"
                     [formControlName]="question.other_answer" />
                   </div>
                 </div>
-                <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other" class="error-msg text-left ml-3">This is a mandatory question and your response is required</div>
+                <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other" class="error-msg text-left ml-3">{{'This is a mandatory question and your response is required' | translate}}</div>
               </div>
             </div>
           </div>
@@ -60,10 +60,7 @@
             <div class="input-checbox">
               <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" [ngModelOptions]="{standalone: true}"/>
               <label class="m-0">{{'Make my response public' | translate}}</label>
-              <span class="link" [tooltip]="'Choosing to make your response public allows it to be viewed by others, who may use it as a
-              reference or template for their own responses. Only your first name will be disclosed to the organisation conducting the consultation.
-              This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. If you are unsure
-              about your own response, you also have the option to adopt and send a public response provided by someone else.' | translate">
+              <span class="link" [tooltip]="'Choosing to make your response public allows it to be viewed by others, who may use it as a reference or template for their own responses. Only your first name will be disclosed to the organisation conducting the consultation. This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. If you are unsure about your own response, you also have the option to adopt and send a public response provided by someone else.' | translate">
               {{'What does this mean?' | translate}}</span>
             </div>
           </div>

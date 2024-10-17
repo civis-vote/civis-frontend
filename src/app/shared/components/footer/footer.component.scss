@@ -54,7 +54,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      
+
       @media screen and (max-width: 991px) {
         align-items: center;
         text-align: left;
@@ -99,7 +99,7 @@
         opacity: .2;
         margin-top: 2px;
         cursor: pointer;
-    
+
         i {
           font-weight: bold;
           font-size: 25px;
@@ -110,11 +110,11 @@
           color: white;
           margin-top: 1px;
         }
-    
+
         &:hover {
           background-color: $primary-color;
           opacity: 1;
-        }  
+        }
       }
     }
   }
@@ -167,12 +167,13 @@
       display: flex;
       justify-content: flex-end;
       @media screen and (max-width: 991px) {
-        text-align: left; 
+        text-align: left;
         justify-content: center;
       }
     }
     .language-box {
       z-index: 99;
+      width: 74px;
     }
   }
 }

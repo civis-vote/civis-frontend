@@ -1,15 +1,13 @@
 <div class="paper-effect mt-4 m-0-sm" *ngIf="responseList?.length"  #responsesListContainer>
     <div class="d-flex justify-content-between">
       <p class="text-16 m-0 bold-text">{{'Public responses' | translate}}</p>
-      <p class="what-resp-text" tooltip="If you feel passionately about this Consultation, you can make your response public, 
-        for others to use as a template. Your first name is shared with the Government if you make your response public.
-        If you’re not sure what to write, you can choose other people’s responses to send as your own."
+      <p class="what-resp-text" [tooltip]="'If you feel passionately about this Consultation, you can make your response public, for others to use as a template. Your first name is shared with the Government if you make your response public. If you’re not sure what to write, you can choose other people’s responses to send as your own.' | translate">
         placement="left" container="body">
         {{'What are public responses?' | translate}}
       </p>
     </div>
     <div class="tabs-block" *ngIf="responseRounds.length > 1">
-      <p *ngFor="let round of responseRounds" 
+      <p *ngFor="let round of responseRounds"
         (click)="setActiveRound(round.roundNumber)"
         [ngClass]="{'active-tab': (activeRoundNumber === round?.roundNumber)}">
         {{'Round ' + round.roundNumber}}
@@ -18,12 +16,12 @@
     <div *ngIf="roundNumberExist; else allResponses">
       <div *ngIf="publicResponsesLength ; else noResponses">
         <ng-container *ngFor="let response of responseList">
-            <app-response-container [response]="response" 
-            [activeRoundNumber]="activeRoundNumber" 
+            <app-response-container [response]="response"
+            [activeRoundNumber]="activeRoundNumber"
             *ngIf="response?.node?.roundNumber === activeRoundNumber"
             (openProfile)="openUserProfile($event)"></app-response-container>
         </ng-container>
-      </div> 
+      </div>
       <ng-template #noResponses>
         <div class="no-responses-text">
           No public response yet
@@ -34,8 +32,8 @@
       <ng-container *ngFor="let response of responseList">
         <app-response-container [response]="response" (openProfile)="openUserProfile($event)"></app-response-container>
       </ng-container>
-    </ng-template>   
-</div> 
+    </ng-template>
+</div>
 <div *ngIf="selectedUser && showUserProfileModal">
   <app-user-profile-modal (close)="showUserProfileModal = false" [userId]="selectedUser"></app-user-profile-modal>
 </div>

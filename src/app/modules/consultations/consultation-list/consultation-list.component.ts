@@ -7,6 +7,8 @@ import * as moment from 'moment';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { environment } from '../../../../environments/environment';
+import { CookieService } from 'ngx-cookie';
+import { getTranslatedText } from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-consultation-list',
@@ -28,7 +30,8 @@ export class ConsultationListComponent implements OnInit {
   loadClosedConsultation = false;
   loadingCard = false;
   currentUser: any;
-  
+  currentLanguage: string;
+
   @HostListener('document:scroll', ['$event'])
   onScroll(event: any) {
     const boundingBox = document.documentElement.getBoundingClientRect();
@@ -38,14 +41,16 @@ export class ConsultationListComponent implements OnInit {
   }
 
   constructor(
-    private apollo: Apollo, 
-    private loader: LinearLoaderService, 
+    private apollo: Apollo,
+    private loader: LinearLoaderService,
     private errorService: ErrorService,
-    private userService: UserService
+    private userService: UserService,
+    private cookieService: CookieService
     ) { }
 
   ngOnInit() {
     this.checkUserSignedIn();
+    this.currentLanguage = this.cookieService.get("civisLang");
     this.fetchActiveConsultationList();
   }
 
@@ -67,7 +72,7 @@ export class ConsultationListComponent implements OnInit {
     this.loader.show();
     this.loadingElements.consultationList = true;
     this.consultationListQuery
-      .valueChanges 
+      .valueChanges
         .pipe (
           map((res: any) => res.data.consultationList)
         )
@@ -81,7 +86,7 @@ export class ConsultationListComponent implements OnInit {
               this.consultationListArray = this.sortConsulationList(item.data);
             }
             this.consultationListPaging = item.paging;
-            if (!this.consultationListArray.length || 
+            if (!this.consultationListArray.length ||
               (this.consultationListPaging.currentPage === this.consultationListPaging.totalPages)) {
                 this.loadClosedConsultation = true;
                 this.fetchClosedConsultationList();
@@ -104,7 +109,7 @@ export class ConsultationListComponent implements OnInit {
     }
     return list;
   }
-  
+
   loadMoreCard() {
     if (this.loadingElements.consultationListMore || this.loadingElements.consultationList) {
       return;
@@ -141,7 +146,7 @@ export class ConsultationListComponent implements OnInit {
         }
       });
     }
-  }  
+  }
 
   getQuery(status) {
     const variables = {
@@ -154,13 +159,13 @@ export class ConsultationListComponent implements OnInit {
     };
     return this.apollo.watchQuery({query: ConsultationList, variables});
   }
-  
+
   fetchClosedConsultationList() {
     this.consultationListQuery = this.getQuery('expired');
     this.loader.show();
     this.loadingElements.consultationList = true;
     this.consultationListQuery
-      .valueChanges 
+      .valueChanges
         .pipe (
           map((res: any) => res.data.consultationList)
         )
@@ -175,9 +180,22 @@ export class ConsultationListComponent implements OnInit {
             console.log('error', err);
         });
   }
-  
+
   convertDateType(date) {
     return moment(date).format("Do MMM YY");
   }
-  
+
+  getTranslatedTitle(item: any) {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: item?.hindiTitle,
+      odia: item?.odiaTitle
+    }, item?.title);
+  }
+
+  getTranslatedMinistryName(item: any) {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: item?.ministry?.hindiName,
+      odia: item?.ministry?.odiaName
+    }, item?.ministry?.name);
+  }
 }

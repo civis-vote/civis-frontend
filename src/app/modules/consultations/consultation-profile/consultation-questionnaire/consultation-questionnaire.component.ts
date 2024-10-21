@@ -340,36 +340,36 @@ export class ConsultationQuestionnaireComponent
     if (this.responseSubmitLoading) {
       return;
     }
-    if (this.questionnaireForm.valid && this.responseFeedback) {
+    if (this.questionnaireForm.valid) {
       this.responseAnswers = this.getResponseAnswers();
       const consultationResponse = this.getConsultationResponse();
-      if(this.consultationId === 404 || this.consultationId === 707) {
+      if (this.consultationId === 404 || this.consultationId === 707) {
         this.invokeSubmitResponse();
       } else {
         if (!isObjectEmpty(consultationResponse)) {
           if (this.currentUser) {
             this.metaPixelService.trackSubmitResponse();
             this.apollo
-            .watchQuery({
-              query: UserCountUser,
-              variables: { userId: this.currentUser.id },
-              fetchPolicy: "no-cache",
-            })
-            .valueChanges.pipe(map((res: any) => res.data.userCountUser))
-            .subscribe(
-              (data) => {
-                if (!this.profanity_count_changed) {
-                  this.userData = data;
-                  this.checkAndUpdateProfanityCount();
+              .watchQuery({
+                query: UserCountUser,
+                variables: { userId: this.currentUser.id },
+                fetchPolicy: "no-cache",
+              })
+              .valueChanges.pipe(map((res: any) => res.data.userCountUser))
+              .subscribe(
+                (data) => {
+                  if (!this.profanity_count_changed) {
+                    this.userData = data;
+                    this.checkAndUpdateProfanityCount();
+                  }
+                },
+                (err) => {
+                  const e = new Error(err);
+                  this.errorService.showErrorModal(err);
                 }
-              },
-              (err) => {
-                const e = new Error(err);
-                this.errorService.showErrorModal(err);
-              }
-            );
+              );
           } else {
-            //If user is not authenticated, showing auth modal and storing consultation respose object to local storage
+            // If the user is not authenticated, show the auth modal and store the consultation response to local storage.
             const currentUrl = this.router.url;
             this.cookieService.put('loginCallbackUrl', currentUrl);
             this.authModal = true;
@@ -381,7 +381,7 @@ export class ConsultationQuestionnaireComponent
         }
       }
     } else {
-      if (!this.responseFeedback) {
+      if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
         this.consultationService.satisfactionRatingError.next(true);
       }
       this.showError = true;
@@ -558,7 +558,7 @@ export class ConsultationQuestionnaireComponent
   getConsultationResponse() {
     const consultationResponse = {
       consultationId: this.profileData.id,
-      satisfactionRating: this.responseFeedback,
+      satisfactionRating: this.responseFeedback || null,
       visibility: this.responseVisibility, // initial response visibility set by the user
       responseStatus: this.responseStatus,
     };

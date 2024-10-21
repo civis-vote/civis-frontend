@@ -168,7 +168,7 @@ export class ConsultationResponseTextComponent
       visibility: this.responseVisibility, // initial response visibility set by the user
       responseText: this.responseText,
       responseStatus: this.responseStatus,
-      satisfactionRating: this.responseFeedback,
+      satisfactionRating: this.responseFeedback || null,
     };
     if (checkPropertiesPresence(consultationResponse)) {
       consultationResponse['templateId'] = this.templateId

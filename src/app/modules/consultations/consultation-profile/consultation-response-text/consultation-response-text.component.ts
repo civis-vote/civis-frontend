@@ -381,7 +381,7 @@ export class ConsultationResponseTextComponent
       this.showError = true;
       return;
     }
-    if (this.responseText && this.responseFeedback) {
+    if (this.responseText) {
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
@@ -419,7 +419,7 @@ export class ConsultationResponseTextComponent
         }
       }
     } else {
-      if (!this.responseFeedback) {
+      if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
         this.consultationService.satisfactionRatingError.next(true);
       }
       this.showError = true;

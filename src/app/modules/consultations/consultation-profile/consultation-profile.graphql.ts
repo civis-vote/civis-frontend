@@ -49,6 +49,7 @@ export const ConsultationProfile = gql`
     consultationProfile(id: $id) {
       id
       title
+      isSatisfactionRatingOptional
       summary
       hindiTitle
       odiaTitle
@@ -153,6 +154,7 @@ export const ConsultationProfileCurrentUser = gql`
       enforcePrivateResponse
       id
       title
+      isSatisfactionRatingOptional
       hindiTitle
       odiaTitle
       summary
@@ -265,6 +267,7 @@ export const ConsultationProfileUser = gql`
       enforcePrivateResponse
       id
       title
+      isSatisfactionRatingOptional
       summary
       englishSummary
       hindiTitle

@@ -371,7 +371,7 @@ export class ReadRespondComponent implements OnInit {
       var Filter = require('bad-words'),
       filter = new Filter({list: this.profaneWords});
       this.responseText = consultationResponse.responseText;
-      if(filter.isProfane(consultationResponse.responseText.replace(/(<([^>]+)>)/gi, ""))){
+      if(filter.isProfane(consultationResponse.responseText?.replace?.(/(<([^>]+)>)/gi, ""))){
         this.apollo.watchQuery({
           query: UserCountUser,
           variables: {userId:this.currentUser.id},
@@ -403,7 +403,7 @@ export class ReadRespondComponent implements OnInit {
           const e = new Error(err);
           this.errorService.showErrorModal(err);
         });
-      } else if ( ( consultationResponse.responseText.length - 8 ) <= 50 ) {
+      } else if ( ( (consultationResponse.responseText?.length || 0) - 8 ) <= 50 ) {
         this.apollo.watchQuery({
           query: UserCountUser,
           variables: {userId:this.currentUser.id},
@@ -460,7 +460,6 @@ export class ReadRespondComponent implements OnInit {
         localStorage.removeItem('consultationResponse');
         this.submitConsultationResponse(consultationResponse);
       }
-
   }
 
   onCloseThanksModal() {

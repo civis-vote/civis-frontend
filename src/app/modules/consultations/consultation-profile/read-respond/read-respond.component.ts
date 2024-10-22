@@ -52,11 +52,6 @@ export class ReadRespondComponent implements OnInit {
   ];
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;
-  responseMessage = {
-    msg: 'Are you sure?',
-    title: ''
-  };
-  isResponseShort = false;
   environment: any = environment;
   responseText: any;
 
@@ -280,7 +275,6 @@ export class ReadRespondComponent implements OnInit {
 
   confirmed(event) {
     this.isConfirmModal = false;
-    this.isResponseShort = false;
   }
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
@@ -419,7 +413,6 @@ export class ReadRespondComponent implements OnInit {
             let shortResponseCount=0;
             if(data) {
               if(data.shortResponseCount > 2) {
-                this.isResponseShort = true;
               }
               else {
                 localStorage.removeItem('consultationResponse');

@@ -66,15 +66,10 @@ export class ConsultationResponseTextComponent
   scrollToError: any;
   authModal = false;
   isConfirmModal = false;
-  isResponseShort = false;
   confirmMessage = {
     msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
     title: ''
   };
-  responseMessage = {
-      msg: 'Are you sure?',
-      title: ''
-    };
   nudgeMessageDisplayed = false;
   nudgeShortMessageDisplayed = false;
   profanityCount: any;
@@ -457,7 +452,6 @@ export class ConsultationResponseTextComponent
 
     if((this.responseText.length - 8) <= 50) {
       if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
-        this.isResponseShort = true;
         this.nudgeShortMessageDisplayed=true;
         return;
       }
@@ -575,7 +569,6 @@ export class ConsultationResponseTextComponent
 
   confirmed(event) {
     this.isConfirmModal = false;
-    this.isResponseShort = false;
   }
 
   invokeSubmitResponse(){

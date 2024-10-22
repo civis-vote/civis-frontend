@@ -66,15 +66,10 @@ export class ConsultationResponseTextComponent
   scrollToError: any;
   authModal = false;
   isConfirmModal = false;
-  isResponseShort = false;
   confirmMessage = {
     msg: 'Do you want to reconsider your response? We detected some potentially harmful language, and to keep Civis safe and open we recommend revising responses that were detected as potentially harmful.',
     title: ''
   };
-  responseMessage = {
-      msg: 'Are you sure?',
-      title: ''
-    };
   nudgeMessageDisplayed = false;
   nudgeShortMessageDisplayed = false;
   profanityCount: any;
@@ -168,7 +163,7 @@ export class ConsultationResponseTextComponent
       visibility: this.responseVisibility, // initial response visibility set by the user
       responseText: this.responseText,
       responseStatus: this.responseStatus,
-      satisfactionRating: this.responseFeedback,
+      satisfactionRating: this.responseFeedback || null,
     };
     if (checkPropertiesPresence(consultationResponse)) {
       consultationResponse['templateId'] = this.templateId
@@ -381,7 +376,7 @@ export class ConsultationResponseTextComponent
       this.showError = true;
       return;
     }
-    if (this.responseText && this.responseFeedback) {
+    if (this.responseText) {
       const consultationResponse = this.getConsultationResponse();
       if (!isObjectEmpty(consultationResponse)) {
         if (this.currentUser) {
@@ -419,7 +414,7 @@ export class ConsultationResponseTextComponent
         }
       }
     } else {
-      if (!this.responseFeedback) {
+      if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
         this.consultationService.satisfactionRatingError.next(true);
       }
       this.showError = true;
@@ -457,7 +452,6 @@ export class ConsultationResponseTextComponent
 
     if((this.responseText.length - 8) <= 50) {
       if (!this.nudgeShortMessageDisplayed && this.shortResponseCount > 2) {
-        this.isResponseShort = true;
         this.nudgeShortMessageDisplayed=true;
         return;
       }
@@ -575,7 +569,6 @@ export class ConsultationResponseTextComponent
 
   confirmed(event) {
     this.isConfirmModal = false;
-    this.isResponseShort = false;
   }
 
   invokeSubmitResponse(){
@@ -585,6 +578,8 @@ export class ConsultationResponseTextComponent
   }
 
   submitResponse(consultationResponse) {
+    if (this.responseSubmitLoading) return;
+
     this.responseSubmitLoading = true;
     consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
     this.apollo

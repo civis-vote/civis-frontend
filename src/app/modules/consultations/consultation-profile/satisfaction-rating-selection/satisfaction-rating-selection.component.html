@@ -49,6 +49,8 @@
             </span>
           </button>
         </div>
-        <p class="error-msg" *ngIf="showError && !responseFeedback">{{'Please select a Satisfaction Rating to submit the response' | translate}}</p>
+       <p class="error-msg" *ngIf="showError && !responseFeedback && !profileData?.isSatisfactionRatingOptional">
+        {{'Please select a Satisfaction Rating to submit the response' | translate}}
+      </p>
         <div class="hr-line"></div>
 </section>

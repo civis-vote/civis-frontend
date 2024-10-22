@@ -127,7 +127,7 @@ export const isObjectEmpty = obj => {
 
 export const checkPropertiesPresence = obj => {
     for (const key in obj) {
-        if (obj[key] === null ||  obj[key] === '' || obj[key] === undefined) {
+        if (obj[key] === '' || obj[key] === undefined) {
           return false;
         }
       }

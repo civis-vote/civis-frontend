@@ -637,6 +637,8 @@ export class ConsultationQuestionnaireComponent
   }
 
   submitResponse(consultationResponse) {
+    if (this.responseSubmitLoading) return;
+
     this.responseSubmitLoading = true;
     consultationResponse.visibility = setResponseVisibility(
       consultationResponse.visibility,

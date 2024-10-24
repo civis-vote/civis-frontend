@@ -37,6 +37,7 @@ export class ReadRespondComponent implements OnInit {
   questionnaireExist: boolean;
   earnedPoints: any;
   selectedLanguage: string = 'en';
+  availableLanguages: Array<{ id: string; name: string }> = [];
   emailVerification = false;
   profaneWords = [];
   //Changes for profane resposne nudge
@@ -100,6 +101,27 @@ export class ReadRespondComponent implements OnInit {
     this.getCurrentUser();
     this.setActiveTab();
     this.getConsultationProfile();
+    this.updateAvailableLanguages();
+  }
+
+  get hasContentForLanguage(): boolean {
+    return this.hasContent(this.profileData?.hindiSummary) || this.hasContent(this.profileData?.odiaSummary);
+  }
+
+  private hasContent(summary: string | null | undefined): boolean {
+    if (!summary) return false;
+    const strippedContent = summary.replace(/<[^>]*>/g, '').trim();
+    return strippedContent.length > 0;
+  }
+
+  updateAvailableLanguages() {
+    this.availableLanguages = [{ id: 'en', name: 'English' }];
+    if (this.hasContent(this.profileData?.hindiSummary)) {
+      this.availableLanguages.push({ id: 'hi', name: 'Hindi' });
+    }
+    if (this.hasContent(this.profileData?.odiaSummary)) {
+      this.availableLanguages.push({ id: 'od', name: 'Odia' });
+    }
   }
 
   public setTitle(newTitle: string) {
@@ -122,6 +144,7 @@ export class ReadRespondComponent implements OnInit {
     )
     .subscribe((data: any) => {
         this.profileData = data;
+        this.updateAvailableLanguages();
         const questions = this.consultationService.getQuestions(data);
         if (questions && questions.length > 0) {
           this.questionnaireExist = true;
@@ -174,14 +197,6 @@ export class ReadRespondComponent implements OnInit {
       hindi: this.profileData?.hindiSummary,
       odia: this.profileData?.odiaSummary
     }, this.profileData?.englishSummary);
-  }
-
-  hasHindiContent(hindiSummary: string | null | undefined): boolean {
-    if (!hindiSummary) {
-      return false;
-    }
-    const strippedContent = hindiSummary.replace(/<[^>]*>/g, '').trim();
-    return strippedContent.length > 0;
   }
 
   createMetaTags(consultationProfile) {

@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="stripo-logo-container">
-        <p class="title-text">Newsletter Powered by:</p>
+        <p class="title-text">{{'Newsletter Powered by:' | translate}}</p>
         <picture>
           <source srcset="assets/images/stripo-email.webp" type="image/webp">
           <source srcset="assets/images/stripo-email.png" type="image/png">
@@ -61,7 +61,7 @@
       <div class="logo-right">
         <div class="mr-2 language-box">
           <ng-select
-          [items]="languages" bindLabel="name" dropdownPosition="bottom"
+          [items]="languages" bindLabel="name" dropdownPosition="top"
           bindValue="id"
           [clearable]="false"
           [searchable]="false"

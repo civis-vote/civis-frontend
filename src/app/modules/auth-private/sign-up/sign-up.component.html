@@ -110,7 +110,7 @@
               <label for="fname">First name</label>
               <div class="input-box__border">
                 <input
-                  placeholder="First Name"
+                  [placeholder]="'First Name' | translate"
                   type="text"
                   id="fname"
                   #fname="ngModel"
@@ -131,12 +131,13 @@
               <label for="fname">Last name</label>
               <div class="input-box__border">
                 <input
-                  placeholder="Last Name"
+                  [placeholder]="'Last Name' | translate"
                   type="text"
                   id="lname"
                   #lname="ngModel"
                   name="lname"
                   [(ngModel)]="signupObject.lastName"
+                  aria-label="'Last Name' | translate"
                 />
               </div>
             </div>
@@ -163,7 +164,7 @@
                   (search)="onSearch($event)"
                   (open)="loadCities()"
                   [(ngModel)]="signupObject.cityId"
-                  placeholder="City"
+                  [placeholder]="'City' | translate"
                   required
                 >
                 </ng-select>
@@ -183,13 +184,14 @@
               <label for="efname">Official email</label>
               <div class="input-box__border">
                 <input
-                  placeholder="Email"
+                  [placeholder]="'Email' | translate"
                   type="email"
                   id="email"
                   #email="ngModel"
                   name="email"
                   [(ngModel)]="signupObject.email"
                   required
+                  aria-label="'Email' | translate"
                   email
                 />
               </div>
@@ -210,7 +212,7 @@
               <label for="password">Password</label>
               <div class="input-box__border">
                 <input
-                  placeholder="At least 8 characters"
+                  [placeholder]="'At least 8 characters' | translate"
                   type="password"
                   id="password"
                   #password="ngModel"
@@ -317,12 +319,13 @@
               <label for="company">Organisation/Department</label>
               <div class="input-box__border">
                 <input
-                  placeholder="Company Name"
+                  [placeholder]="'Company Name' | translate"
                   type="text"
                   id="organization"
                   #organization="ngModel"
                   name="organization"
                   [(ngModel)]="signupObject.organization"
+                  aria-label="'Company Name' | translate"
                 />
               </div>
               <div
@@ -339,7 +342,7 @@
               <label for="designation">Designation</label>
               <div class="input-box__border">
                 <input
-                  placeholder="Designation"
+                  [placeholder]="'Designation' | translate"
                   type="text"
                   id="designation"
                   #designation="ngModel"

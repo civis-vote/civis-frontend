@@ -42,18 +42,19 @@ export class ConsultationCardComponent implements OnInit {
     }
 
     const { diffInDays, isSameDay } = this.getDifferenceInDays(this.consultation?.responseDeadline);
+    const roundedDiffInDays = Math.floor(diffInDays);
 
-    if (diffInDays < 0) {
+    if (roundedDiffInDays < 0) {
       return 'Closed';
-    } else if (diffInDays === 0 && isSameDay) {
+    } else if (roundedDiffInDays === 0 || isSameDay) {
       return 'Last day to respond';
-    } else if (diffInDays === 1) {
+    } else if (roundedDiffInDays === 1) {
       return 'Day Remaining';
-    } else if (diffInDays > 1) {
-      return `Days Remaining`;
+    } else if(roundedDiffInDays > 1) {
+      return 'Days Remaining';
+    } else {
+      return ''
     }
-
-    return '';
   }
 
   getDifferenceInDays(deadline) {

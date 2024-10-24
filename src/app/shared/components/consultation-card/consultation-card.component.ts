@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import * as moment from "moment";
+import { CookieService } from "ngx-cookie";
+import { getTranslatedText } from "../../functions/modular.functions";
 
 @Component({
   selector: 'app-consultation-card',
@@ -10,32 +12,48 @@ export class ConsultationCardComponent implements OnInit {
   @Input() consultation: any;
   @Input() type: string;
 
-  constructor() { }
+  currentLanguage: string;
+
+  constructor(private cookieService: CookieService) { }
 
   ngOnInit() {
+    this.currentLanguage = this.cookieService.get("civisLang");
   }
 
-  getRemainigDays(deadline) {
-    if (deadline) {
+  getRemainingDays(): number | string {
+    if (this.consultation?.responseDeadline) {
       if (this.consultation.status === 'expired') {
-        return 'Closed';
+        return '';
       }
 
-      let { diffInDays, isSameDay } = this.getDifferenceInDays(deadline);
+      let { diffInDays } = this.getDifferenceInDays(this.consultation?.responseDeadline);
       diffInDays = Math.floor(diffInDays);
 
-      if (diffInDays < 0) {
-        return 'Closed';
-      } else if (diffInDays === 0) {
-        if (isSameDay) {
-          return 'Last day to respond';
-        }
-
-        return '1 Day Remaining';
-      } else {
-        return `${diffInDays} Days Remaining`;
+      if (diffInDays > 0) {
+        return diffInDays;
       }
     }
+    return '';
+  }
+
+  getRemainingDaysText(): string {
+    if (this.consultation.status === 'expired') {
+      return 'Closed';
+    }
+
+    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.consultation?.responseDeadline);
+
+    if (diffInDays < 0) {
+      return 'Closed';
+    } else if (diffInDays === 0 && isSameDay) {
+      return 'Last day to respond';
+    } else if (diffInDays === 1) {
+      return 'Day Remaining';
+    } else if (diffInDays > 1) {
+      return `Days Remaining`;
+    }
+
+    return '';
   }
 
   getDifferenceInDays(deadline) {
@@ -47,5 +65,19 @@ export class ConsultationCardComponent implements OnInit {
       const isSameDay = lastDate.isSame(moment(today), 'day');
       return { diffInDays, isSameDay };
     }
+  }
+
+  getConsultationTitle() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.consultation?.hindiTitle,
+      odia: this.consultation?.odiaTitle
+    }, this.consultation?.title);
+  }
+
+  getMinistryName() {
+    return getTranslatedText(this.currentLanguage, {
+      hindi: this.consultation?.ministry?.hindiName,
+      odia: this.consultation?.ministry?.odiaName
+    }, this.consultation?.ministry?.name);
   }
 }

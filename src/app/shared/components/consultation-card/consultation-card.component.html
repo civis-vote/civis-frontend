@@ -2,11 +2,11 @@
   <div class="consultation-card">
     <div class="consultation-card__card-image" appDefaultImage appLazyLoad [type]="'consultation-cover'" [ngStyle]="consultation?.ministry?.category?.coverPhoto?.url ? {'background-image': 'url(' + consultation?.ministry?.category?.coverPhoto?.url + ')'} : null"></div>
     <div class="consultation-card__details">
-      <p class="title">{{ consultation?.title}}</p>
-      <p class="sub-title">{{ consultation?.ministry?.name}}</p>
+      <p class="title">{{ getConsultationTitle() }}</p>
+      <p class="sub-title">{{ getMinistryName() }}</p>
       <div class="cta-section">
         <div>
-          <p class="days-remaining-text">{{getRemainigDays(consultation?.responseDeadline) | translate}}</p>
+          <p class="days-remaining-text">{{ getRemainingDays() }} {{getRemainingDaysText() | translate}}</p>
           <p class="responses-text">
             {{consultation?.consultationResponsesCount ? consultation?.consultationResponsesCount : ''}}
             <span  *ngIf="consultation?.consultationResponsesCount == 1">

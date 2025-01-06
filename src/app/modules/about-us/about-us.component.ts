@@ -68,7 +68,7 @@ export class AboutUsComponent {
     {
       name: "Mallika Dandekar",
       image: "assets/images/about-us/Mallika Dandekar.jpg",
-      description: "Consultation Fellow",
+      description: "Associate, Governance",
       href: "https://www.linkedin.com/in/mallikadandekar/",
       class: "next long-description",
     },

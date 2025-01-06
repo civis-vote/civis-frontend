@@ -45,11 +45,11 @@ export class AboutUsComponent {
       class: "first",
     },
     {
-      name: "Vagda Galhotra",
-      image: "assets/images/about-us/Vagda Galhotra.png",
-      description: "Senior Associate, Outreach and Comms",
-      href: "https://www.linkedin.com/in/vagda-galhotra-320a04269",
-      class: "vagda",
+      name: "Akalya V",
+      image: "assets/images/about-us/Akalya V.png",
+      description: "Associate, Communications",
+      href: "https://www.linkedin.com/in/akalya-veerappan-b9b346203",
+      class: "next long-description",
     },
     {
       name: "Atharva Joshi",
@@ -57,6 +57,13 @@ export class AboutUsComponent {
       description: "Senior Product Manager",
       href: "https://www.linkedin.com/in/atharva-joshi-b80356153",
       class: "atharva",
+    },
+    {
+      name: "Brishti Mondal",
+      image: "assets/images/about-us/Brishti Mondal.png",
+      description: "Consultation Fellow",
+      href: "https://www.linkedin.com/in/brishtimondal",
+      class: "next long-description",
     },
     {
       name: "Hetvi Chheda",
@@ -73,19 +80,12 @@ export class AboutUsComponent {
       class: "next long-description",
     },
     {
-      name: "Akalya V",
-      image: "assets/images/about-us/Akalya V.png",
-      description: "Associate, Communications",
-      href: "https://www.linkedin.com/in/akalya-veerappan-b9b346203",
+      name: "Vagda Galhotra",
+      image: "assets/images/about-us/Vagda Galhotra.png",
+      description: "Senior Associate, Outreach and Comms",
+      href: "https://www.linkedin.com/in/vagda-galhotra-320a04269",
       class: "next long-description",
-    },
-    {
-      name: "Brishti Mondal",
-      image: "assets/images/about-us/Brishti Mondal.png",
-      description: "Consultation Fellow",
-      href: "https://www.linkedin.com/in/brishtimondal",
-      class: "next long-description",
-    },
+    }
   ];
 
   pastPartners = [

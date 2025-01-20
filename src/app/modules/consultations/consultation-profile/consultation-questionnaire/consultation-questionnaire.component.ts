@@ -343,7 +343,7 @@ export class ConsultationQuestionnaireComponent
     if (this.questionnaireForm.valid) {
       this.responseAnswers = this.getResponseAnswers();
       const consultationResponse = this.getConsultationResponse();
-      if (this.consultationId === 404 || this.consultationId === 707) {
+      if (this.consultationId === 1089) {
         this.invokeSubmitResponse();
       } else {
         if (!isObjectEmpty(consultationResponse)) {

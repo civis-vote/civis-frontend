@@ -126,7 +126,7 @@ export class ConsultationQuestionnaireComponent
           (err: any) => {}
         );
     }
-    if(this.consultationId === 404 || this.consultationId === 707) {
+    if(this.consultationId === 1089 || this.consultationId === 464) {
       this.responseFeedback = "satisfied";
     }
   }
@@ -325,13 +325,13 @@ export class ConsultationQuestionnaireComponent
     if (this.questionnaireForm.valid && this.responseFeedback) {
       this.responseAnswers = this.getResponseAnswers();
       const consultationResponse = this.getConsultationResponse();
-      if(this.consultationId === 404 || this.consultationId === 707) {
+      if(this.consultationId === 464 || this.consultationId === 1089) {
         this.invokeSubmitResponse();
       } else {
         if (!isObjectEmpty(consultationResponse)) {
           if (this.currentUser) {
             this.metaPixelService.trackSubmitResponse();
-  
+
             this.apollo
               .watchQuery({
                 query: UserCountUser,
@@ -362,7 +362,7 @@ export class ConsultationQuestionnaireComponent
             );
           }
         }
-      } 
+      }
     } else {
       if (!this.responseFeedback) {
         this.consultationService.satisfactionRatingError.next(true);

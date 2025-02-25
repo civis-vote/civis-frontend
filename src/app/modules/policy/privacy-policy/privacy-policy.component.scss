@@ -1,11 +1,11 @@
 @import './src/assets/styles/app';
 
 .privacy-wrapper {
-  margin-top: 77px;  
+  margin-top: 122px;
   padding: 60px 60px 60px 45px;
   max-width: 700px;
   @media screen and (max-width: 991px) {
-    margin-top: 58px; 
+    margin-top: 103px;
     padding: 30px;
   }
 
@@ -13,23 +13,23 @@
     .title {
       font-size: 42px;
       color: $primary-color;
-      margin: 0; 
+      margin: 0;
       @media screen and (max-width: 991px) {
         font-size: 28px;
-      } 
+      }
     }
     .sub-title {
       font-size: 16px;
       color: #808080;
     }
-  } 
+  }
 
   &__dark-text {
     font-size: 20px;
     color: #000;
     @media screen and (max-width: 991px) {
       font-size: 18px;
-    } 
+    }
   }
 
   &__detail {
@@ -41,7 +41,7 @@
       color: $black;
       @media screen and (max-width: 991px) {
         font-size: 16px;
-      } 
+      }
     }
 
     .detail-content {
@@ -49,7 +49,7 @@
       color: $black;
       @media screen and (max-width: 991px) {
         font-size: 14px;
-      } 
+      }
     }
 
     .content-point {
@@ -58,7 +58,7 @@
       color: $black;
       @media screen and (max-width: 991px) {
         font-size: 14px;
-      } 
+      }
       span:nth-child(1) {
         font-weight: 500;
       }
@@ -73,7 +73,7 @@
       color: $black;
       @media screen and (max-width: 991px) {
         font-size: 14px;
-      } 
+      }
       span:nth-child(1) {
         display: inline-block;
         width: 7px;

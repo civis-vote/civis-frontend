@@ -1,6 +1,9 @@
 @import "./src/assets/styles/app";
 
 .app-landing {
+  $mobile-breakpoint: 481px;
+  $desktop-breakpoint: 992px;
+  $desktop-large-size: 1440px;
   margin-top: 122px;
   @media screen and (max-width: 991px) {
     margin-top: 102px;

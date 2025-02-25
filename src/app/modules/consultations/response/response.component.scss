@@ -1,10 +1,10 @@
 @import './src/assets/styles/app';
 
 .response-index {
-   margin-top: 77px;
-  
+   margin-top: 122px;
+
     @media screen and (max-width: 991px) {
-     margin-top: 57px;
+     margin-top: 102px;
     }
     min-height: 100vh;
 
@@ -15,28 +15,28 @@
     width: 80%;
     margin: 77px auto;
     padding: 25px 0;
-    
+
     @media screen and (max-width: 991px) {
       margin: 57px 0 120px;
       grid-template-columns: auto;
       grid-column-gap: 0;
       width: 100%;
     }
-  
+
     &__sidebar-section {
       .c-profile-card {
         width: 100%;
         background-color: #F2FAFF;
         box-shadow: 0px 5px 7px rgba(0, 0, 0, 0.13);
-      
+
         &__top-section {
           padding: 20px 24px;
           background-color: #F1F1F1;
-      
+
           .light-text {
             @include general-text($font-size: 12px, $color: $light-gray);
           }
-        
+
           .card-title {
             width: 90%;
             @include general-text($font-size: 20px, $weight: bold);
@@ -44,7 +44,7 @@
               font-size: 16px;
             }
           }
-          
+
           .ministry-detail {
             display: grid;
             grid-template-columns: 50px 1fr;
@@ -58,7 +58,7 @@
               color: #767676;
             }
           }
-        
+
           .divider {
             border: 1px solid #CAE5F5;
             margin: 0;
@@ -77,10 +77,10 @@
             padding: 20px 30px;
           }
         }
-      
+
         &__bottom-section {
           padding: 20px 24px;
-      
+
           .count-text {
             font-size: 14px;
             color: #6F6F6F;
@@ -88,7 +88,7 @@
         }
       }
     }
-  
+
     &__main-section {
       .response-info {
         background: #FFFFFF;
@@ -179,7 +179,7 @@
           &:nth-child(3) {
             color: rgba(255, 255, 255, 0.5) !important;
           }
-        }     
+        }
       }
 
       .share-btn {

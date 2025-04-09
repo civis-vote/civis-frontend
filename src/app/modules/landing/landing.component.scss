@@ -82,51 +82,68 @@
   // TODO: Temporary Awards section styles
   &__award-section {
     display: flex;
-    gap: 48px;
-    padding: 80px 120px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px;
     background-color: #fcf9f2;
-    @media screen and (max-width: 1400px) and (min-width: 992px) {
-      padding: 80px 24px;
+
+    .content-container {
+      max-width: 800px;
+      width: 100%;
     }
-    @media screen and (max-width: 991px) {
-      flex-direction: column;
-      padding: 80px 24px;
+
+    .text-container {
+      margin-bottom: 24px;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #3a5f7a;
     }
+
     .image-container {
-      width: 50%;
-      @media screen and (max-width: 991px) {
-        width: 100%;
-      }
+      margin-bottom: 24px;
+
       img {
         width: 100%;
+        height: auto;
       }
     }
-    .info-container {
-      width: 50%;
-      @media screen and (max-width: 991px) {
-        width: 100%;
+
+    @media screen and (max-width: 991px) {
+      padding: 60px 16px;
+
+      .text-container {
+          font-size: 16px;
+          line-height: 1.5;
       }
-      p {
-        font-size: 18px;
-        line-height: 1.5;
-        text-align: left;
-        color: #3a5f7a;
+
+      .image-container {
+        margin-bottom: 16px;
+
+        img {
+          max-width: 100%;
+        }
       }
-      button {
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 1.5;
-        padding: 7px 20px;
-        border-radius: 33px;
+    }
+
+    @media screen and (max-width: 480px) {
+      padding: 40px 12px;
+
+      .text-container {
+          font-size: 14px;
+          line-height: 1.4;
+      }
+
+      .image-container {
+        margin-bottom: 12px;
+
+        img {
+          max-width: 100%;
+        }
       }
       .seats-btn {
         color: #fff;
         background-color: #d4af37;
-      }
-      .about-awards-btn {
-        margin-left: 16px;
-        color: #d4af37;
-        background-color: rgba(212, 175, 55, 0.1);
       }
     }
   }

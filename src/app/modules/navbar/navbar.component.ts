@@ -30,6 +30,7 @@ export class NavbarComponent implements OnInit {
   consultationId: number;
   reviewType: any;
   showDiscussSection: boolean;
+  consultationLogo: any;
   environment: any = environment;
   lastViewedUrl: any;
 
@@ -149,6 +150,7 @@ export class NavbarComponent implements OnInit {
     .subscribe((data: any) => {
       this.reviewType = data.reviewType;
       this.showDiscussSection = data.showDiscussSection;
+      this.consultationLogo = data.consultationLogo;
     }, err => {
       const e = new Error(err);
       if (!e.message.includes('Invalid Access Token')) {

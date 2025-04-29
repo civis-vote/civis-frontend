@@ -54,6 +54,10 @@ export const ConsultationProfile = gql`
       showDiscussSection
       isSatisfactionRatingOptional
       summary
+      consultationLogo {
+        id
+        url
+      }
       hindiTitle
       odiaTitle
       marathiTitle
@@ -166,6 +170,10 @@ export const ConsultationProfileCurrentUser = gql`
       odiaTitle
       marathiTitle
       summary
+      consultationLogo {
+        id
+        url
+      }
       englishSummary
       hindiSummary
       odiaSummary

@@ -17,14 +17,14 @@
 
     <div class="app-navbar__center-item" *ngIf="currentUrl === 'consultations-profile'">
       <div class="profile-tab-wrapper">
-        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.--> 
+        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.-->
           <a class="profile-tab px-3" [ngClass]="activeTab === 'read & respond' ? 'active-tab' : ''"
           (click)="routeToConsultation('read')">
           <p>{{'Read & Respond' | translate}}</p>
           <p>{{'Submit your feedback' | translate}}</p>
         </a>
         <!-- </ng-container> -->
-        <ng-container *ngIf="reviewType !== 'policy'">
+        <ng-container *ngIf="reviewType !== 'policy' && showDiscussSection">
           <a class="profile-tab px-3" [ngClass]="activeTab === 'discuss & engage' ? 'active-tab' : ''"
             (click)="routeToConsultation('discuss')">
             <p>{{'Discuss & Engage' | translate}}</p>

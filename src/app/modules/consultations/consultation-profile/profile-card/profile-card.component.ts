@@ -78,14 +78,16 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   getProfileTitle() {
     return getTranslatedText(this.currentLanguage, {
       hindi: this.profile?.hindiTitle,
-      odia: this.profile?.odiaTitle
+      odia: this.profile?.odiaTitle,
+      marathi: this.profile?.marathiTitle,
     }, this.profile?.title);
   }
 
   getMinistryName() {
     return getTranslatedText(this.currentLanguage, {
       hindi: this.profile?.ministry?.hindiName,
-      odia: this.profile?.ministry?.odiaName
+      odia: this.profile?.ministry?.odiaName,
+      marathi: this.profile?.ministry?.marathiName,
     }, this.profile?.ministry?.name);
   }
 

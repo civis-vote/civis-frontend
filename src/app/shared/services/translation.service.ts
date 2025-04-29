@@ -14,6 +14,7 @@ interface Dictionary {
   en: string;
   hi: string;
   od: string;
+  mr: string;
 }
 
 @Injectable({
@@ -79,6 +80,8 @@ translate(text: string) {
       translationKey = 'hi';
   } else if (this.currentLanguage === 'od') {
       translationKey = 'od';
+  } else if (this.currentLanguage === 'mr') {
+      translationKey = 'mr';
   } else {
       return text;
   }

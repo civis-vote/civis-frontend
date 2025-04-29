@@ -29,6 +29,7 @@ export class NavbarComponent implements OnInit {
   activeCount: any;
   consultationId: number;
   reviewType: any;
+  consultationLogo: any;
   environment: any = environment;
   lastViewedUrl: any;
 
@@ -139,14 +140,15 @@ export class NavbarComponent implements OnInit {
     const query = ConsultationProfileCurrentUser;
     this.apollo.watchQuery({
       query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfile,
-      variables: {id: this.consultationId}
+      variables: { id: this.consultationId }
     })
     .valueChanges
     .pipe (
       map((res: any) => res.data.consultationProfile)
     )
     .subscribe((data: any) => {
-        this.reviewType  = data.reviewType;
+      this.reviewType = data.reviewType;
+      this.consultationLogo = data.consultationLogo; // Store consultationLogo
     }, err => {
       const e = new Error(err);
       if (!e.message.includes('Invalid Access Token')) {
@@ -198,7 +200,7 @@ export class NavbarComponent implements OnInit {
       this.transparentNav = true;
     }
   }
-  
+
   @HostListener('document:click', ['$event']) clickedOutside(event) {
     this.profilePopup = false;
   }

@@ -2,7 +2,7 @@
   <nav class="app-navbar" [ngClass]="currentUrl == 'landing' ? 'landing-nav-spacer' : 'nav-spacer'">
     <div class="app-navbar__left-item">
       <div class="logo-space pointer" [routerLink]="['/']">
-        <img class="logo pointer" [src]="getLogoUrl()"
+        <img class="logo pointer" [src]="consultationLogo?.url || getLogoUrl()"
           [ngClass]="(currentUrl == 'consultations-profile') ? 'xs-logo' : ''" />
       </div>
       <div class="left-nav-link" *ngIf="currentUrl !== 'consultations-profile'">
@@ -17,7 +17,7 @@
 
     <div class="app-navbar__center-item" *ngIf="currentUrl === 'consultations-profile'">
       <div class="profile-tab-wrapper">
-        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.--> 
+        <!-- <ng-container *ngIf="consultationStatus === 'active'"> // To Toggle Read and Respond based on consultation status uncomment it.-->
           <a class="profile-tab px-3" [ngClass]="activeTab === 'read & respond' ? 'active-tab' : ''"
           (click)="routeToConsultation('read')">
           <p>{{'Read & Respond' | translate}}</p>

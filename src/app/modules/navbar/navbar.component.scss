@@ -51,8 +51,11 @@
       }
 
       .logo {
+        height: 60px;
+        max-width: 100%;
+        object-fit: contain;
         @media screen and (max-width: 991px) {
-          height: 58px;
+          height: 30px;
         }
       }
     }

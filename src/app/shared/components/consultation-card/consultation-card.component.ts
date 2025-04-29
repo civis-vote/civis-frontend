@@ -71,14 +71,16 @@ export class ConsultationCardComponent implements OnInit {
   getConsultationTitle() {
     return getTranslatedText(this.currentLanguage, {
       hindi: this.consultation?.hindiTitle,
-      odia: this.consultation?.odiaTitle
+      odia: this.consultation?.odiaTitle,
+      marathi: this.consultation?.marathiTitle,
     }, this.consultation?.title);
   }
 
   getMinistryName() {
     return getTranslatedText(this.currentLanguage, {
       hindi: this.consultation?.ministry?.hindiName,
-      odia: this.consultation?.ministry?.odiaName
+      odia: this.consultation?.ministry?.odiaName,
+      marathi: this.consultation?.ministry?.marathiName,
     }, this.consultation?.ministry?.name);
   }
 }

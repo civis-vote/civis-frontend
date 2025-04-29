@@ -187,7 +187,8 @@ export class ConsultationQuestionnaireComponent
   getTranslatedTextForQuestion(item: any) {
     return getTranslatedText(this.currentLanguage, {
       hindi: item?.hindiQuestionText,
-      odia: item?.odiaQuestionText
+      odia: item?.odiaQuestionText,
+      marathi: item?.marathiQuestionText,
     }, item?.questionText);
   }
 

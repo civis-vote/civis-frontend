@@ -188,14 +188,16 @@ export class ConsultationListComponent implements OnInit {
   getTranslatedTitle(item: any) {
     return getTranslatedText(this.currentLanguage, {
       hindi: item?.hindiTitle,
-      odia: item?.odiaTitle
+      odia: item?.odiaTitle,
+      marathi: item?.marathiTitle,
     }, item?.title);
   }
 
   getTranslatedMinistryName(item: any) {
     return getTranslatedText(this.currentLanguage, {
       hindi: item?.ministry?.hindiName,
-      odia: item?.ministry?.odiaName
+      odia: item?.ministry?.odiaName,
+      marathi: item?.ministry?.marathiName,
     }, item?.ministry?.name);
   }
 }

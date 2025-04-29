@@ -26,6 +26,7 @@ export class AppComponent implements OnInit, OnDestroy {
     { id: "en", name: "English" },
     { id: "hi", name: "Hindi" },
     { id: "od", name: "Odia" },
+    { id: "mr", name: "Marathi" },
   ];
 
   constructor(

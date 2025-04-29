@@ -51,6 +51,7 @@ export class ReadRespondComponent implements OnInit {
     { id: 'en', name: 'English' },
     { id: 'hi', name: 'Hindi' },
     { id: "od", name: "Odia" },
+    { id: "mr", name: "Marathi" },
   ];
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;
@@ -105,7 +106,7 @@ export class ReadRespondComponent implements OnInit {
   }
 
   get hasContentForLanguage(): boolean {
-    return this.hasContent(this.profileData?.hindiSummary) || this.hasContent(this.profileData?.odiaSummary);
+    return this.hasContent(this.profileData?.hindiSummary) || this.hasContent(this.profileData?.odiaSummary) || this.hasContent(this.profileData?.marathiSummary);
   }
 
   private hasContent(summary: string | null | undefined): boolean {
@@ -121,6 +122,9 @@ export class ReadRespondComponent implements OnInit {
     }
     if (this.hasContent(this.profileData?.odiaSummary)) {
       this.availableLanguages.push({ id: 'od', name: 'Odia' });
+    }
+    if (this.hasContent(this.profileData?.marathiSummary)) {
+      this.availableLanguages.push({ id: 'mr', name: 'Marathi' });
     }
   }
 
@@ -195,7 +199,8 @@ export class ReadRespondComponent implements OnInit {
   get profileSummary() {
     return getTranslatedText(this.currentLanguage, {
       hindi: this.profileData?.hindiSummary,
-      odia: this.profileData?.odiaSummary
+      odia: this.profileData?.odiaSummary,
+      marathi: this.profileData?.marathiSummary,
     }, this.profileData?.englishSummary);
   }
 

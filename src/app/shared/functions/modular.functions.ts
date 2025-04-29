@@ -219,5 +219,9 @@ export function getTranslatedText(currentLanguage: string, textMap: { [key: stri
     return textMap.odia;
   }
 
+  if (currentLanguage === 'mr' && textMap.marathi) {
+    return textMap.marathi;
+  }
+
   return defaultText;
 }

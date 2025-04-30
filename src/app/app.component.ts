@@ -5,6 +5,8 @@ import { UserService } from './shared/services/user.service';
 import { filter, pairwise } from 'rxjs/operators';
 import { StarterService } from './shared/services/starter.service';
 import { Subscription } from 'rxjs';
+import { LANGUAGES } from './shared/models/constants/constants';
+
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
@@ -22,12 +24,8 @@ export class AppComponent implements OnInit, OnDestroy {
   };
   isPrivate = false;
   confirmModalOpen = false;
-  languages = [
-    { id: "en", name: "English" },
-    { id: "hi", name: "Hindi" },
-    { id: "od", name: "Odia" },
-    { id: "mr", name: "Marathi" },
-  ];
+
+  languages = LANGUAGES;
 
   constructor(
     private userService: UserService,

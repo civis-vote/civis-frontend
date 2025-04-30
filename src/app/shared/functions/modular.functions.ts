@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import { LANGUAGE_IDS } from '../models/constants/constants';
 // Date time operations
 
 export function getRelativeTime(dateTime) {
@@ -211,17 +212,33 @@ export const setResponseVisibility = (responseVisibility, userVerificationStatus
 }
 
 export function getTranslatedText(currentLanguage: string, textMap: { [key: string]: string }, defaultText: string) {
-  if (currentLanguage === 'hi' && textMap.hindi) {
+  if (currentLanguage === LANGUAGE_IDS.HINDI && textMap.hindi) {
     return textMap.hindi;
   }
 
-  if (currentLanguage === 'od' && textMap.odia) {
+  if (currentLanguage === LANGUAGE_IDS.ODIA && textMap.odia) {
     return textMap.odia;
   }
 
-  if (currentLanguage === 'mr' && textMap.marathi) {
+  if (currentLanguage === LANGUAGE_IDS.MARATHI && textMap.marathi) {
     return textMap.marathi;
   }
 
   return defaultText;
 }
+
+export const createLangObject = ({ source, suffix }: { source: any; suffix: string }) => {
+  const HINDI = "hindi";
+  const ODIA = "odia";
+  const MARATHI = "marathi";
+
+  const languages = [HINDI, ODIA, MARATHI];
+  const obj: { [key: string]: string } = {};
+
+  languages.forEach((lang) => {
+    const key = lang + suffix;
+    obj[lang] = source?.[key];
+  });
+
+  return obj;
+};

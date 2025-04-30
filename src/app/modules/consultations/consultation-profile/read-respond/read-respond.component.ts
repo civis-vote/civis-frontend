@@ -14,8 +14,7 @@ import { getTranslatedText, createLangObject, setResponseVisibility } from 'src/
 import { ModalDirective } from 'ngx-bootstrap';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
-import { LANGUAGE_IDS } from 'src/app/shared/models/constants/constants';
-// import { LANGUAGE_IDS } from 'src/app/shared/models/constants/constant.type';
+import { LANGUAGE_IDS, LANGUAGES } from 'src/app/shared/models/constants/constants';
 
 @Component({
   selector: 'app-read-respond',
@@ -49,12 +48,8 @@ export class ReadRespondComponent implements OnInit {
     title: ''
   };
 
-  languages = [
-    { id: LANGUAGE_IDS.ENGLISH, name: "English" },
-    { id: LANGUAGE_IDS.HINDI, name: "Hindi" },
-    { id: LANGUAGE_IDS.ODIA, name: "Odia" },
-    { id: LANGUAGE_IDS.MARATHI, name: "Marathi" },
-  ];
+  languages = LANGUAGES;
+
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;
   environment: any = environment;

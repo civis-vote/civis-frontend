@@ -23,6 +23,7 @@ import {
   scrollToFirstError,
   setResponseVisibility,
   getTranslatedText,
+  createLangObject,
 } from "../../../../shared/functions/modular.functions";
 import { atLeastOneCheckboxCheckedValidator } from "src/app/shared/validators/checkbox-validator";
 import { Apollo } from "apollo-angular";
@@ -185,11 +186,8 @@ export class ConsultationQuestionnaireComponent
   }
 
   getTranslatedTextForQuestion(item: any) {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: item?.hindiQuestionText,
-      odia: item?.odiaQuestionText,
-      marathi: item?.marathiQuestionText,
-    }, item?.questionText);
+    const textMap = createLangObject({ source: item, suffix: "QuestionText" });
+    return getTranslatedText(this.currentLanguage, textMap, item?.questionText);
   }
 
   getQuestionText(question) {

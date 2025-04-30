@@ -10,10 +10,12 @@ import { map, filter } from 'rxjs/operators';
 import { ErrorService } from 'src/app/shared/components/error-modal/error.service';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
-import { getTranslatedText, isObjectEmpty, setResponseVisibility } from 'src/app/shared/functions/modular.functions';
+import { getTranslatedText, createLangObject } from 'src/app/shared/functions/modular.functions';
 import { ModalDirective } from 'ngx-bootstrap';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
+import { LANGUAGE_IDS } from 'src/app/shared/models/constants/constants';
+// import { LANGUAGE_IDS } from 'src/app/shared/models/constants/constant.type';
 
 @Component({
   selector: 'app-read-respond',
@@ -48,10 +50,10 @@ export class ReadRespondComponent implements OnInit {
   };
 
   languages = [
-    { id: 'en', name: 'English' },
-    { id: 'hi', name: 'Hindi' },
-    { id: "od", name: "Odia" },
-    { id: "mr", name: "Marathi" },
+    { id: LANGUAGE_IDS.ENGLISH, name: "English" },
+    { id: LANGUAGE_IDS.HINDI, name: "Hindi" },
+    { id: LANGUAGE_IDS.ODIA, name: "Odia" },
+    { id: LANGUAGE_IDS.MARATHI, name: "Marathi" },
   ];
   profanity_count_changed: boolean=false;
   short_response_count_changed: boolean=false;
@@ -116,15 +118,15 @@ export class ReadRespondComponent implements OnInit {
   }
 
   updateAvailableLanguages() {
-    this.availableLanguages = [{ id: 'en', name: 'English' }];
+    this.availableLanguages = [{ id: LANGUAGE_IDS.ENGLISH, name: "English" }];
     if (this.hasContent(this.profileData?.hindiSummary)) {
-      this.availableLanguages.push({ id: 'hi', name: 'Hindi' });
+      this.availableLanguages.push({ id: LANGUAGE_IDS.HINDI, name: "Hindi" });
     }
     if (this.hasContent(this.profileData?.odiaSummary)) {
-      this.availableLanguages.push({ id: 'od', name: 'Odia' });
+      this.availableLanguages.push({ id: LANGUAGE_IDS.ODIA, name: "Odia" });
     }
     if (this.hasContent(this.profileData?.marathiSummary)) {
-      this.availableLanguages.push({ id: 'mr', name: 'Marathi' });
+      this.availableLanguages.push({ id: LANGUAGE_IDS.MARATHI, name: "Marathi" });
     }
   }
 
@@ -197,11 +199,8 @@ export class ReadRespondComponent implements OnInit {
   }
 
   get profileSummary() {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: this.profileData?.hindiSummary,
-      odia: this.profileData?.odiaSummary,
-      marathi: this.profileData?.marathiSummary,
-    }, this.profileData?.englishSummary);
+    const textMap = createLangObject({ source: this.profileData, suffix: "Summary" });
+    return getTranslatedText(this.currentLanguage, textMap, this.profileData?.englishSummary);
   }
 
   createMetaTags(consultationProfile) {

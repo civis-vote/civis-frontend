@@ -225,3 +225,19 @@ export function getTranslatedText(currentLanguage: string, textMap: { [key: stri
 
   return defaultText;
 }
+
+export const createLangObject = ({ source, suffix }: { source: any; suffix: string }) => {
+  const HINDI = "hindi";
+  const ODIA = "odia";
+  const MARATHI = "marathi";
+
+  const languages = [HINDI, ODIA, MARATHI];
+  const obj: { [key: string]: string } = {};
+
+  languages.forEach((lang) => {
+    const key = lang + suffix;
+    obj[lang] = source?.[key];
+  });
+
+  return obj;
+};

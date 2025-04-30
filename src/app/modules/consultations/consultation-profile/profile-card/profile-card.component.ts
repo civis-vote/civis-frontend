@@ -5,7 +5,7 @@ import { ConsultationsService } from 'src/app/shared/services/consultations.serv
 import { UserService } from 'src/app/shared/services/user.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
-import { getTranslatedText } from 'src/app/shared/functions/modular.functions';
+import { getTranslatedText, createLangObject } from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-profile-card',
@@ -76,19 +76,13 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   }
 
   getProfileTitle() {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: this.profile?.hindiTitle,
-      odia: this.profile?.odiaTitle,
-      marathi: this.profile?.marathiTitle,
-    }, this.profile?.title);
+    const textMap = createLangObject({ source: this.profile, suffix: "Title" });
+    return getTranslatedText(this.currentLanguage, textMap, this.profile?.title);
   }
 
   getMinistryName() {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: this.profile?.ministry?.hindiName,
-      odia: this.profile?.ministry?.odiaName,
-      marathi: this.profile?.ministry?.marathiName,
-    }, this.profile?.ministry?.name);
+    const textMap = createLangObject({ source: this.profile?.ministry, suffix: "Name" });
+    return getTranslatedText(this.currentLanguage, textMap, this.profile?.ministry?.name);
   }
 
   enableSubmitResponse() {

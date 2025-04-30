@@ -8,7 +8,7 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
 import { UserService } from 'src/app/shared/services/user.service';
 import { environment } from '../../../../environments/environment';
 import { CookieService } from 'ngx-cookie';
-import { getTranslatedText } from 'src/app/shared/functions/modular.functions';
+import { getTranslatedText, createLangObject } from 'src/app/shared/functions/modular.functions';
 
 @Component({
   selector: 'app-consultation-list',
@@ -186,18 +186,12 @@ export class ConsultationListComponent implements OnInit {
   }
 
   getTranslatedTitle(item: any) {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: item?.hindiTitle,
-      odia: item?.odiaTitle,
-      marathi: item?.marathiTitle,
-    }, item?.title);
+    const textMap = createLangObject({ source: item, suffix: "Title" });
+    return getTranslatedText(this.currentLanguage, textMap, item?.title);
   }
 
   getTranslatedMinistryName(item: any) {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: item?.ministry?.hindiName,
-      odia: item?.ministry?.odiaName,
-      marathi: item?.ministry?.marathiName,
-    }, item?.ministry?.name);
+    const textMap = createLangObject({ source: item?.ministry, suffix: "Name" });
+    return getTranslatedText(this.currentLanguage, textMap, item?.ministry?.name);
   }
 }

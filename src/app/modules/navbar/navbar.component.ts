@@ -30,7 +30,7 @@ export class NavbarComponent implements OnInit {
   consultationId: number;
   reviewType: any;
   showDiscussSection: boolean;
-  consultationLogo: any;
+  consultationLogo: { id: string; url: string };
   environment: any = environment;
   lastViewedUrl: any;
 

@@ -29,7 +29,7 @@ export class NavbarComponent implements OnInit {
   activeCount: any;
   consultationId: number;
   reviewType: any;
-  consultationLogo: any;
+  consultationLogo: { id: string; url: string };
   environment: any = environment;
   lastViewedUrl: any;
 

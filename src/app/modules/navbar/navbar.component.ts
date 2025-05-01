@@ -76,6 +76,10 @@ export class NavbarComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.currentUrl = this.findUrl(event.url);
         this.lastViewedUrl = event.url;
+
+        if (this.currentUrl !== 'consultations-profile') {
+          this.consultationLogo = null;
+        }
       }
     });
     this.getCurrentUser();

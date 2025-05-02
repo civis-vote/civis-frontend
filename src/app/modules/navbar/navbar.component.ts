@@ -29,6 +29,7 @@ export class NavbarComponent implements OnInit {
   activeCount: any;
   consultationId: number;
   reviewType: any;
+  consultationLogo: { id: string; url: string };
   environment: any = environment;
   lastViewedUrl: any;
 
@@ -75,6 +76,10 @@ export class NavbarComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.currentUrl = this.findUrl(event.url);
         this.lastViewedUrl = event.url;
+
+        if (this.currentUrl !== 'consultations-profile') {
+          this.consultationLogo = null;
+        }
       }
     });
     this.getCurrentUser();
@@ -139,14 +144,15 @@ export class NavbarComponent implements OnInit {
     const query = ConsultationProfileCurrentUser;
     this.apollo.watchQuery({
       query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfile,
-      variables: {id: this.consultationId}
+      variables: { id: this.consultationId }
     })
     .valueChanges
     .pipe (
       map((res: any) => res.data.consultationProfile)
     )
     .subscribe((data: any) => {
-        this.reviewType  = data.reviewType;
+      this.reviewType = data.reviewType;
+      this.consultationLogo = data.consultationLogo; // Store consultationLogo
     }, err => {
       const e = new Error(err);
       if (!e.message.includes('Invalid Access Token')) {
@@ -169,6 +175,9 @@ export class NavbarComponent implements OnInit {
   }
 
   getLogoUrl() {
+    if (this.currentUrl === 'consultations-profile' && this.consultationLogo?.url) {
+      return this.consultationLogo.url;
+    }
     if (screen && screen.width <= 991) {
       if (this.currentUrl === 'consultations-profile') {
         return 'assets/images/mobile-logo.svg';
@@ -198,7 +207,7 @@ export class NavbarComponent implements OnInit {
       this.transparentNav = true;
     }
   }
-  
+
   @HostListener('document:click', ['$event']) clickedOutside(event) {
     this.profilePopup = false;
   }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
 import { UserService } from '../../services/user.service';
+import { LANGUAGES } from '../../models/constants/constants';
 
 @Component({
   selector: 'app-footer',
@@ -10,20 +11,7 @@ import { UserService } from '../../services/user.service';
 })
 export class FooterComponent implements OnInit {
 
-  languages = [
-    {
-      id: 'en',
-      name: 'English'
-    },
-    {
-      id: 'hi',
-      name: 'Hindi'
-    },
-    {
-      id: 'od',
-      name: 'Odia'
-    },
-  ];
+  languages = LANGUAGES;
 
   selectedLanguage = 'en';
   currentUser: any;

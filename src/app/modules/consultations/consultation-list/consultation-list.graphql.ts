@@ -8,12 +8,14 @@ const fragments = environment.production ? gql `
       locationId
       hindiName
       odiaName
+      marathiName
     }
   `: gql `
     fragment ministryFields on Ministry {
       name
       hindiName
       odiaName
+      marathiName
     }
   `
 
@@ -25,6 +27,7 @@ export const ConsultationList = gql`
         title
         hindiTitle
         odiaTitle
+        marathiTitle
         createdAt
         consultationResponsesCount
         updatedAt
@@ -34,6 +37,7 @@ export const ConsultationList = gql`
           hindiName
           name
           odiaName
+          marathiName
           category {
             id
             coverPhoto (resolution: "350X285>") {

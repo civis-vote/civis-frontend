@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from "@angular/core";
 import * as moment from "moment";
 import { CookieService } from "ngx-cookie";
-import { getTranslatedText } from "../../functions/modular.functions";
+import { getTranslatedText, createLangObject } from "../../functions/modular.functions";
 
 @Component({
   selector: 'app-consultation-card',
@@ -69,16 +69,12 @@ export class ConsultationCardComponent implements OnInit {
   }
 
   getConsultationTitle() {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: this.consultation?.hindiTitle,
-      odia: this.consultation?.odiaTitle
-    }, this.consultation?.title);
+    const textMap = createLangObject({ source: this.consultation, suffix: "Title" });
+    return getTranslatedText(this.currentLanguage, textMap, this.consultation?.title);
   }
 
   getMinistryName() {
-    return getTranslatedText(this.currentLanguage, {
-      hindi: this.consultation?.ministry?.hindiName,
-      odia: this.consultation?.ministry?.odiaName
-    }, this.consultation?.ministry?.name);
+    const textMap = createLangObject({ source: this.consultation?.ministry, suffix: "Name" });
+    return getTranslatedText(this.currentLanguage, textMap, this.consultation?.ministry?.name);
   }
 }

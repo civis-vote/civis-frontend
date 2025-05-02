@@ -30,6 +30,7 @@ export class NavbarComponent implements OnInit {
   consultationId: number;
   reviewType: any;
   showDiscussSection: boolean;
+  consultationLogo: { id: string; url: string };
   environment: any = environment;
   lastViewedUrl: any;
 
@@ -76,6 +77,10 @@ export class NavbarComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.currentUrl = this.findUrl(event.url);
         this.lastViewedUrl = event.url;
+
+        if (this.currentUrl !== 'consultations-profile') {
+          this.consultationLogo = null;
+        }
       }
     });
     this.getCurrentUser();
@@ -149,6 +154,7 @@ export class NavbarComponent implements OnInit {
     .subscribe((data: any) => {
       this.reviewType = data.reviewType;
       this.showDiscussSection = data.showDiscussSection;
+      this.consultationLogo = data.consultationLogo;
     }, err => {
       const e = new Error(err);
       if (!e.message.includes('Invalid Access Token')) {
@@ -171,6 +177,9 @@ export class NavbarComponent implements OnInit {
   }
 
   getLogoUrl() {
+    if (this.currentUrl === 'consultations-profile' && this.consultationLogo?.url) {
+      return this.consultationLogo.url;
+    }
     if (screen && screen.width <= 991) {
       if (this.currentUrl === 'consultations-profile') {
         return 'assets/images/mobile-logo.svg';

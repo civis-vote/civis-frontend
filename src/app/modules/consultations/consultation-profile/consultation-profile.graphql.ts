@@ -25,6 +25,7 @@ const SubQuestionFragment = gql`
     questionText
     hindiQuestionText
     odiaQuestionText
+    marathiQuestionText
   }
 `;
 
@@ -35,6 +36,7 @@ const QuestionFragment = gql`
     questionText
     hindiQuestionText
     odiaQuestionText
+    marathiQuestionText
     questionType
     supportsOther
     subQuestions {
@@ -52,11 +54,17 @@ export const ConsultationProfile = gql`
       showDiscussSection
       isSatisfactionRatingOptional
       summary
+      consultationLogo {
+        id
+        url
+      }
       hindiTitle
       odiaTitle
+      marathiTitle
       englishSummary
       hindiSummary
       odiaSummary
+      marathiSummary
       responseRounds {
         active
         id
@@ -83,6 +91,7 @@ export const ConsultationProfile = gql`
         name
         hindiName
         odiaName
+        marathiName
         logo {
           id
           filename
@@ -159,10 +168,16 @@ export const ConsultationProfileCurrentUser = gql`
       isSatisfactionRatingOptional
       hindiTitle
       odiaTitle
+      marathiTitle
       summary
+      consultationLogo {
+        id
+        url
+      }
       englishSummary
       hindiSummary
       odiaSummary
+      marathiSummary
       responseDeadline
       readingTime
       responsesReadingTimes
@@ -190,6 +205,7 @@ export const ConsultationProfileCurrentUser = gql`
         name
         hindiName
         odiaName
+        marathiName
         logo {
           id
           filename
@@ -274,8 +290,10 @@ export const ConsultationProfileUser = gql`
       englishSummary
       hindiTitle
       odiaTitle
+      marathiTitle
       hindiSummary
       odiaSummary
+      marathiSummary
       responseDeadline
       readingTime
       responsesReadingTimes
@@ -303,6 +321,7 @@ export const ConsultationProfileUser = gql`
         name
         hindiName
         odiaName
+        marathiName
         logo {
           id
           filename

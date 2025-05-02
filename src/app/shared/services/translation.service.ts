@@ -9,11 +9,13 @@ import {LocalStorageService} from 'ngx-webstorage';
 import {HttpClient} from '@angular/common/http';
 import {Resolve, ActivatedRouteSnapshot, CanActivate} from '@angular/router';
 import HindiLang from '../../shared/models/constants/translation.json';
+import { LANGUAGE_IDS } from '../models/constants/constants';
 
 interface Dictionary {
   en: string;
   hi: string;
   od: string;
+  mr: string;
 }
 
 @Injectable({
@@ -75,10 +77,12 @@ translate(text: string) {
   const length = this.dictionary.value.length;
   let translationKey;
 
-  if (this.currentLanguage === 'hi') {
-      translationKey = 'hi';
-  } else if (this.currentLanguage === 'od') {
-      translationKey = 'od';
+  if (this.currentLanguage === LANGUAGE_IDS.HINDI) {
+      translationKey = LANGUAGE_IDS.HINDI;
+  } else if (this.currentLanguage === LANGUAGE_IDS.ODIA) {
+      translationKey = LANGUAGE_IDS.ODIA;
+  } else if (this.currentLanguage === LANGUAGE_IDS.MARATHI) {
+      translationKey = LANGUAGE_IDS.MARATHI;
   } else {
       return text;
   }

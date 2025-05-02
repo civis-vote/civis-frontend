@@ -23,7 +23,7 @@
           <p>{{'Submit your feedback' | translate}}</p>
         </a>
         <!-- </ng-container> -->
-        <ng-container *ngIf="reviewType !== 'policy'">
+        <ng-container *ngIf="reviewType !== 'policy' && showDiscussSection">
           <a class="profile-tab px-3" [ngClass]="activeTab === 'discuss & engage' ? 'active-tab' : ''"
             (click)="routeToConsultation('discuss')">
             <p>{{'Discuss & Engage' | translate}}</p>

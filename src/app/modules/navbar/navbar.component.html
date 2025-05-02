@@ -2,8 +2,7 @@
   <nav class="app-navbar" [ngClass]="currentUrl == 'landing' ? 'landing-nav-spacer' : 'nav-spacer'">
     <div class="app-navbar__left-item">
       <div class="logo-space pointer" [routerLink]="['/']">
-        <img class="logo pointer" [src]="(currentUrl === 'consultations-profile' && consultationLogo?.url) || getLogoUrl()"
-          [ngClass]="(currentUrl == 'consultations-profile') ? 'xs-logo' : ''" />
+        <img class="logo pointer" [src]="getLogoUrl()" [ngClass]="(currentUrl == 'consultations-profile') ? 'xs-logo' : ''" />
       </div>
       <div class="left-nav-link" *ngIf="currentUrl !== 'consultations-profile'">
         <p class="nav-link-text bold-text" [routerLink]="['consultations/list']">

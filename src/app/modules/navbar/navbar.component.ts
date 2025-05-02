@@ -177,6 +177,9 @@ export class NavbarComponent implements OnInit {
   }
 
   getLogoUrl() {
+    if (this.currentUrl === 'consultations-profile' && this.consultationLogo?.url) {
+      return this.consultationLogo.url;
+    }
     if (screen && screen.width <= 991) {
       if (this.currentUrl === 'consultations-profile') {
         return 'assets/images/mobile-logo.svg';

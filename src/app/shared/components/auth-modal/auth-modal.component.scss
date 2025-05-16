@@ -285,3 +285,21 @@
     }
 }
 
+.user-details-modal-overlay {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5) !important;
+  z-index: 1055 !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-details-modal-overlay .modal-dialog {
+  max-width: 500px;
+  width: 100%;
+}
+

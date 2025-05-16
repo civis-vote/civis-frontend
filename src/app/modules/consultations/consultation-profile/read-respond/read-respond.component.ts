@@ -54,6 +54,7 @@ export class ReadRespondComponent implements OnInit {
   short_response_count_changed: boolean=false;
   environment: any = environment;
   responseText: any;
+  private hasSubmittedConsultationResponse = false;
 
   @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
@@ -263,7 +264,12 @@ export class ReadRespondComponent implements OnInit {
         if (this.consultationId) {
           this.getConsultationProfile();
         }
-        if (consultationResponseData && this.currentUser.city && this.currentUser.city.id) {
+        if (
+          consultationResponseData &&
+          this.currentUser.city &&
+          this.currentUser.city.id &&
+          !this.hasSubmittedConsultationResponse
+        ) {
           const resData = JSON.parse(consultationResponseData);
           if (!this.currentUser.confirmedAt) {
             resData.visibility = 'anonymous';
@@ -276,7 +282,6 @@ export class ReadRespondComponent implements OnInit {
           this.getConsultationProfile();
         }
       }
-
     });
   }
 
@@ -293,6 +298,9 @@ export class ReadRespondComponent implements OnInit {
   }
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
+    if (this.hasSubmittedConsultationResponse) return;
+    this.hasSubmittedConsultationResponse = true;
+
     if(!consultationResponse){
       //after user has completed authentication step
       consultationResponse=JSON.parse(localStorage.getItem('consultationResponse'));
@@ -328,6 +336,7 @@ export class ReadRespondComponent implements OnInit {
         this.showThankYouModal = true;
         this.profanity_count_changed=true;
         this.short_response_count_changed=true;
+        this.getConsultationProfile();
     }, err => {
       this.errorService.showErrorModal(err);
     });

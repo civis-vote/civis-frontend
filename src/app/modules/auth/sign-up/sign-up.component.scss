@@ -348,3 +348,94 @@
 
     }
 }
+
+.user-details-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-details-modal-overlay .modal-dialog {
+  max-width: 500px;
+  width: 100%;
+}
+
+.user-details-modal-overlay .modal-content {
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 0;
+}
+
+.user-details-modal-overlay .modal-header {
+  border-bottom: 1px solid #eee;
+  padding: 20px 24px 10px 24px;
+}
+
+.user-details-modal-overlay .modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #151515;
+}
+
+.user-details-modal-overlay .modal-body {
+  padding: 24px;
+}
+
+.user-details-modal-overlay .modal-footer {
+  border-top: none;
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  justify-content: flex-end;
+  background: none;
+}
+
+.user-details-modal-overlay .input-box,
+.user-details-modal-overlay .location-box {
+  margin-bottom: 18px;
+}
+
+.user-details-modal-overlay .input-box__border,
+.user-details-modal-overlay .location-box__border {
+  border: 1px solid #D5DBE2;
+  border-radius: 3px;
+  background: #fff;
+  padding: 0;
+}
+
+.user-details-modal-overlay input[type="text"],
+.user-details-modal-overlay input[type="email"] {
+  width: 100%;
+  font-size: 15px;
+  padding: 10px;
+  border: none;
+  background: #fff;
+  border-radius: 3px;
+}
+
+.user-details-modal-overlay label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #151515;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.user-details-modal-overlay .error-msg {
+  color: #F0653A;
+  font-size: 14px;
+  margin: 8px 0 0 0;
+}
+
+.user-details-modal-overlay .app-btn.get-start-btn {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+}

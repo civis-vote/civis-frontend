@@ -149,3 +149,5 @@
     </div>
   </div>
 </div>
+
+<app-auth-modal *ngIf="authModal" (close)="onAuthModalClose()" [fromNavbar]="true"></app-auth-modal>

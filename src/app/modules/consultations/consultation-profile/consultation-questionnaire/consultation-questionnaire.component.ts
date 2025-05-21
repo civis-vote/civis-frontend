@@ -232,7 +232,6 @@ export class ConsultationQuestionnaireComponent
 
   makeQuestionnaireModal(roundNumber?) {
     const responseRounds = this.profileData.responseRounds;
-    console.log({ responseRounds });
     let draftObj: any = localStorage.getItem("consultationResponse");
     const savedAnswers = {};
     if (draftObj) {
@@ -247,7 +246,6 @@ export class ConsultationQuestionnaireComponent
         console.error("Failed to parse saved response");
       }
     }
-    console.log({draftObj, savedAnswers})
 
     const getSavedAnswer = (questionId) => {
       return savedAnswers[questionId] ?? null;

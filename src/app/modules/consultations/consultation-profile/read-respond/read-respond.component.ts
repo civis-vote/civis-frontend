@@ -39,7 +39,6 @@ export class ReadRespondComponent implements OnInit {
   earnedPoints: any;
   selectedLanguage: string = 'en';
   availableLanguages: Array<{ id: string; name: string }> = [];
-  emailVerification = false;
   profaneWords = [];
   //Changes for profane resposne nudge
   isConfirmModal = false;
@@ -55,8 +54,6 @@ export class ReadRespondComponent implements OnInit {
   environment: any = environment;
   responseText: any;
   private hasSubmittedConsultationResponse = false;
-
-  @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
 
   constructor(
     private userService: UserService,
@@ -481,14 +478,5 @@ export class ReadRespondComponent implements OnInit {
 
   onCloseThanksModal() {
     this.showThankYouModal = false;
-    if (!this.currentUser.confirmedAt) {
-      this.emailVerification = true;
-    }
   }
-
-  onCloseEmailModal() {
-    this.emailVerificationModal.hide();
-    this.emailVerification = false;
-  }
-
 }

@@ -7,7 +7,6 @@ import { map } from 'rxjs/operators';
 import { TokenService } from '../../services/token.service';
 import { ErrorService } from '../error-modal/error.service';
 import { UserService } from '../../services/user.service';
-import { LoginMutation } from 'src/app/modules/auth-private/login/login.graphql';
 import { GraphqlService } from 'src/app/graphql/graphql.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import gql from 'graphql-tag';
@@ -76,7 +75,6 @@ export class AuthModalComponent implements OnInit {
   signupObject = {
     firstName: '',
     email: '',
-    password: '',
     notifyForNewConsultation: true,
     agreedForTermsCondition: false,
     cityId: null
@@ -85,8 +83,7 @@ export class AuthModalComponent implements OnInit {
   signin = false;
   login = false;
   loginObject = {
-    email: '',
-    password: ''
+    email: ''
   };
   loadingCities: boolean;
   cities: any;
@@ -111,6 +108,8 @@ export class AuthModalComponent implements OnInit {
   userDetailsLoading: boolean = false;
   userDetailsCitiesLoading: boolean = false;
   userDetailsCities: any[] = [];
+
+  @Input() fromNavbar: boolean = false;
 
   constructor(
     private apollo: Apollo,
@@ -168,30 +167,6 @@ export class AuthModalComponent implements OnInit {
         this.cities = cities;
       }, err => {
         this.loadingCities = false;
-        this.errorService.showErrorModal(err);
-      });
-  }
-
-  submitLogin(isValid: boolean) {
-    if (!isValid) {
-      return;
-    }
-
-    this.apollo.mutate({
-      mutation: LoginMutation,
-      variables: { auth: this.loginObject }
-    })
-      .pipe(
-        map((res: any) => res.data.authLogin)
-      )
-      .subscribe((tokenObject: any) => {
-        if (tokenObject) {
-          this.tokenService.storeToken(tokenObject);
-          this.authModal.hide();
-          this.close.emit(true);
-          this.onSignUp();
-        }
-      }, (err: any) => {
         this.errorService.showErrorModal(err);
       });
   }

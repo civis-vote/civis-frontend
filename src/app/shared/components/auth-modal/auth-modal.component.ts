@@ -247,7 +247,11 @@ export class AuthModalComponent implements OnInit {
       },
       err => {
         this.loadingOtp = false;
-        this.otpError = err?.message || 'Failed to verify OTP. Please try again.';
+        let msg = err?.message || 'Failed to verify OTP. Please try again.';
+        if (msg.startsWith('GraphQL error: ')) {
+          msg = msg.replace('GraphQL error: ', '');
+        }
+        this.otpError = msg;
       }
     );
   }

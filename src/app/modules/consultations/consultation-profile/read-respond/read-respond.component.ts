@@ -54,6 +54,7 @@ export class ReadRespondComponent implements OnInit {
   environment: any = environment;
   responseText: any;
   private hasSubmittedConsultationResponse = false;
+  private isSubmittingConsultationResponse = false;
 
   constructor(
     private userService: UserService,
@@ -295,7 +296,8 @@ export class ReadRespondComponent implements OnInit {
   }
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
-    if (this.hasSubmittedConsultationResponse) return;
+    if (this.hasSubmittedConsultationResponse || this.isSubmittingConsultationResponse) return;
+    this.isSubmittingConsultationResponse = true;
     this.hasSubmittedConsultationResponse = true;
 
     if(!consultationResponse){
@@ -330,12 +332,14 @@ export class ReadRespondComponent implements OnInit {
     )
     .subscribe((res) => {
         this.earnedPoints = res.points;
+        this.getConsultationProfile();
         this.showThankYouModal = true;
         this.profanity_count_changed=true;
         this.short_response_count_changed=true;
-        this.getConsultationProfile();
+        this.isSubmittingConsultationResponse = false;
     }, err => {
       this.errorService.showErrorModal(err);
+      this.isSubmittingConsultationResponse = false;
     });
   }
 
@@ -413,6 +417,8 @@ export class ReadRespondComponent implements OnInit {
             else{
               this.createProfanityCountRecord(1, 0, true);
             }
+            localStorage.removeItem('consultationResponse');
+            this.submitConsultationResponse(consultationResponse, true);
           }
         }, err => {
           const e = new Error(err);
@@ -437,7 +443,7 @@ export class ReadRespondComponent implements OnInit {
               }
               else {
                 localStorage.removeItem('consultationResponse');
-                this.submitConsultationResponse(consultationResponse);
+                this.submitConsultationResponse(consultationResponse, false);
               }
               shortResponseCount=data.shortResponseCount+1;
               this.updateProfanityCountRecord(data.profanityCount,shortResponseCount, false);
@@ -467,12 +473,12 @@ export class ReadRespondComponent implements OnInit {
           if(data) {
             this.updateProfanityCountRecord(data.profanityCount,0, false);
           }
+          localStorage.removeItem('consultationResponse');
+          this.submitConsultationResponse(consultationResponse, false);
         }, err => {
           const e = new Error(err);
           this.errorService.showErrorModal(err);
         });
-        localStorage.removeItem('consultationResponse');
-        this.submitConsultationResponse(consultationResponse);
       }
   }
 

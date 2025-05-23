@@ -1,3 +1,5 @@
+@import './src/assets/styles/app';
+
 .city-selector {
     ng-select {
         .ng-select-container {
@@ -10,4 +12,64 @@
             }
         }
     }
+}
+
+.input-box {
+    margin-bottom: 15px;
+
+    &__border {
+        width: 100%;
+        border: 1px solid $input-border;
+        box-sizing: border-box;
+        border-radius: 3px;
+
+        input {
+            width: 100%;
+            font-weight: 400;
+            font-size: 16px;
+            background: $white;
+            padding: 5px;
+            border: none;
+            border-radius: 3px;
+
+            &::placeholder {
+                color: #9A9A9A;
+                opacity: 1;
+            }
+        }
+
+        @media screen and (max-width: 991px) {
+            width: 100%;
+        }
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        font-size: 14px;
+        color: $black;
+        margin-bottom: 10px;
+    }
+}
+
+.required-field {
+    label {
+        &::after {
+            content: "*";
+            color: #F0653A;
+        }
+    }
+}
+
+.profile-input-wrapper {
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+// ng-select placeholder color
+.ng-select .ng-select-container .ng-placeholder {
+  color: #9A9A9A !important;
+  opacity: 1;
 }

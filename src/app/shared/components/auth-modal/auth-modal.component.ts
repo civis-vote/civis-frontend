@@ -97,6 +97,9 @@ export class AuthModalComponent implements OnInit {
   emailError: string = '';
   loadingOtp: boolean = false;
   loadingEmail: boolean = false;
+  resendingOtp: boolean = false;
+  resendOtpCountdown: number = 0;
+  resendOtpTimer: any = null;
 
   showUserDetailsModal = false;
   userDetailsForm: any = {
@@ -203,6 +206,22 @@ export class AuthModalComponent implements OnInit {
     this.otp = '';
   }
 
+  startResendOtpCountdown(seconds: number = 3) {
+    this.resendOtpCountdown = seconds;
+    if (this.resendOtpTimer) {
+      clearInterval(this.resendOtpTimer);
+    }
+    this.resendOtpTimer = setInterval(() => {
+      if (this.resendOtpCountdown > 0) {
+        this.resendOtpCountdown--;
+      }
+      if (this.resendOtpCountdown === 0 && this.resendOtpTimer) {
+        clearInterval(this.resendOtpTimer);
+        this.resendOtpTimer = null;
+      }
+    }, 1000);
+  }
+
   submitEmailSignup(emailInput: NgForm) {
     if (!emailInput.valid) return;
     this.loadingEmail = true;
@@ -216,6 +235,7 @@ export class AuthModalComponent implements OnInit {
         if (res?.data?.authLogin) {
           this.otpStep = true;
           this.otpError = '';
+          this.startResendOtpCountdown();
         } else {
           this.emailError = 'Unexpected error. Please try again.';
         }
@@ -342,20 +362,27 @@ export class AuthModalComponent implements OnInit {
   }
 
   resendOtp() {
-    if (!this.emailForOtp) return;
-    this.loadingOtp = true;
+    if (!this.emailForOtp || this.resendOtpCountdown > 0) return;
+    this.resendingOtp = true;
     this.otpError = '';
     this.apollo.mutate({
       mutation: AUTH_LOGIN_MUTATION,
       variables: { email: this.emailForOtp }
     }).subscribe(
       (res: any) => {
-        this.loadingOtp = false;
+        this.resendingOtp = false;
+        this.startResendOtpCountdown();
       },
       err => {
-        this.loadingOtp = false;
+        this.resendingOtp = false;
         this.otpError = err?.message || 'Failed to resend OTP. Please try again.';
       }
     );
+  }
+
+  ngOnDestroy() {
+    if (this.resendOtpTimer) {
+      clearInterval(this.resendOtpTimer);
+    }
   }
 }

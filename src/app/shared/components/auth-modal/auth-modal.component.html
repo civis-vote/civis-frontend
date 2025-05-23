@@ -20,23 +20,28 @@
         </button>
         <div class="auth-modal">
           <img class="modal-img mb-3" src="assets/images/signup-modal.png" />
-          <p class="heading-text mb-2" *ngIf="!otpStep">{{'Just one more step!' | translate}}</p>
+          <p class="heading-text mb-2" *ngIf="!otpStep">
+            {{ fromNavbar ? ('Log In / Sign Up' | translate) : ('Just one more step!' | translate) }}
+          </p>
           <p class="heading-text mb-2" *ngIf="otpStep">Enter OTP</p>
           <p class="sub-heading-text mb-4 text-center" *ngIf="!otpStep && !fromNavbar">
             {{'Your response will be submitted as soon as you Sign Up/ Log In' | translate}}
           </p>
           <p class="sub-heading-text mb-4 text-center" *ngIf="otpStep">
-            OTP sent to <strong>{{ emailForOtp }}</strong>
+            OTP sent to <strong>{{ emailForOtp }}.</strong>
+            <span class="ml-2">
+              <a href="javascript:void(0)" (click)="startEmailSignup()" class="not-you-link">Not you?</a>
+            </span>
           </p>
 
           <div class="d-flex" *ngIf="!emailSignup && !otpStep">
             <div class="login-btn mr-3" (click)="redirectTo('google')">
               <img class="icon-img" src="assets/images/auth-google.png" />
-              <p class="login-btn-text">{{'Sign up with google' | translate}}</p>
+              <p class="login-btn-text">{{'Sign in with Google' | translate}}</p>
             </div>
             <div class="login-btn" (click)="redirectTo('facebook')">
               <img class="icon-img" src="assets/images/auth-fb.png" />
-              <p class="login-btn-text">{{'Sign up with Facebook' | translate}}</p>
+              <p class="login-btn-text">{{'Sign in with Facebook' | translate}}</p>
             </div>
           </div>
           <div
@@ -45,7 +50,7 @@
             (click)="startEmailSignup()"
           >
             <img class="icon-img" src="assets/images/auth-email.png" />
-            <p class="login-btn-text">{{'Sign up with Email' | translate}}</p>
+            <p class="login-btn-text">{{'Sign in with Email' | translate}}</p>
           </div>
 
           <form #emailSignupForm="ngForm" *ngIf="emailSignup && !otpStep" class="signup-form" autocomplete="off" (ngSubmit)="submitEmailSignup(emailSignupForm)">
@@ -85,14 +90,24 @@
             <div class="input-box required-field">
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <label for="otp" class="mb-0">OTP</label>
-                <a href="javascript:void(0)" (click)="resendOtp()" [class.disabled]="loadingOtp" class="ml-2">
-                  {{ loadingOtp ? ('Resending...' | translate) : ('Resend OTP' | translate) }}
+                <a href="javascript:void(0)"
+                   (click)="resendOtp()"
+                   [class.disabled]="resendingOtp || resendOtpCountdown > 0"
+                   class="ml-2">
+                  <ng-container *ngIf="resendOtpCountdown > 0">
+                    {{'Resend OTP in' | translate}} 00:0{{resendOtpCountdown}}
+                  </ng-container>
+                  <ng-container *ngIf="resendOtpCountdown === 0">
+                    {{ resendingOtp ? ('Resending...' | translate) : ('Resend OTP' | translate) }}
+                  </ng-container>
                 </a>
               </div>
               <div class="input-box__border">
                 <input
                   [placeholder]="'Enter OTP' | translate"
-                  type="text"
+                  type="tel"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
                   id="otp"
                   name="otp"
                   [(ngModel)]="otp"

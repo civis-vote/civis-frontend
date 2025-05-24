@@ -51,7 +51,7 @@ export class NavbarComponent implements OnInit {
   activeTab: string;
   consultationStatus: any;
 
-  authModal = false;
+  isAuthModalShown = false;
 
   constructor(
     private router: Router,
@@ -243,11 +243,11 @@ export class NavbarComponent implements OnInit {
   }
 
   onSignUp() {
-    this.authModal = true;
+    this.isAuthModalShown = true;
   }
 
   onAuthModalClose() {
-    this.authModal = false;
+    this.isAuthModalShown = false;
   }
 
   changeMenu(event) {

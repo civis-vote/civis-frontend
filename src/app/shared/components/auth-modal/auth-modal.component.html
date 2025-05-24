@@ -23,14 +23,14 @@
           <p class="heading-text mb-2" *ngIf="!otpStep">
             {{ fromNavbar ? ('Log In / Sign Up' | translate) : ('Just one more step!' | translate) }}
           </p>
-          <p class="heading-text mb-2" *ngIf="otpStep">Enter OTP</p>
+          <p class="heading-text mb-2" *ngIf="otpStep">{{'Enter OTP' | translate}}</p>
           <p class="sub-heading-text mb-4 text-center" *ngIf="!otpStep && !fromNavbar">
             {{'Your response will be submitted as soon as you Sign Up/ Log In' | translate}}
           </p>
           <p class="sub-heading-text mb-4 text-center" *ngIf="otpStep">
-            OTP sent to <strong>{{ emailForOtp }}.</strong>
+            {{'OTP sent to' | translate}} <strong>{{ emailForOtp }}.</strong>
             <span class="ml-2">
-              <a href="javascript:void(0)" (click)="startEmailSignup()" class="not-you-link">Not you?</a>
+              <a href="javascript:void(0)" (click)="startEmailSignup()" class="not-you-link">{{'Not you?' | translate}}</a>
             </span>
           </p>
 
@@ -89,7 +89,7 @@
           <form #otpForm="ngForm" *ngIf="otpStep" class="signup-form" autocomplete="off" (ngSubmit)="submitOtp(otpForm)">
             <div class="input-box required-field">
               <div class="d-flex justify-content-between align-items-center mb-1">
-                <label for="otp" class="mb-0">OTP</label>
+                <label for="otp" class="mb-0">{{'OTP' | translate}}</label>
                 <a href="javascript:void(0)"
                    (click)="resendOtp()"
                    [class.disabled]="resendingOtp || resendOtpCountdown > 0"
@@ -146,27 +146,28 @@
     <div class="modal-content">
       <form #userDetailsNgForm="ngForm" (ngSubmit)="submitUserDetails(userDetailsNgForm)" autocomplete="off">
         <div class="modal-header">
-          <h5 class="modal-title">Complete Your Profile</h5>
+          <h5 class="modal-title">{{'Complete Your Profile' | translate}}</h5>
         </div>
         <div class="modal-body">
           <div class="input-box required-field">
-            <label for="userDetailsFirstName">First Name</label>
+            <label for="userDetailsFirstName">{{'First Name' | translate}}</label>
             <div class="input-box__border">
               <input
                 type="text"
                 id="userDetailsFirstName"
                 name="firstName"
+                [placeholder]="'Enter First Name' | translate"
                 [(ngModel)]="userDetailsForm.firstName"
                 required
                 [disabled]="userDetailsLoading"
               />
             </div>
             <div *ngIf="userDetailsNgForm.submitted && userDetailsNgForm.controls.firstName?.invalid" class="error-msg">
-              First name is required.
+              {{'First name is required.' | translate}}
             </div>
           </div>
           <div class="input-box required-field">
-            <label for="userDetailsEmail">Email</label>
+            <label for="userDetailsEmail">{{'Email' | translate}}</label>
             <div class="input-box__border">
               <input
                 type="email"
@@ -179,7 +180,7 @@
             </div>
           </div>
           <div class="location-box required-field col-12">
-            <label for="userDetailsCity">City</label>
+            <label for="userDetailsCity">{{'City' | translate}}</label>
             <div class="location-box__border">
               <ng-select
                 id="userDetailsCity"
@@ -188,6 +189,7 @@
                 [items]="userDetailsCities"
                 bindLabel="name"
                 bindValue="id"
+                [placeholder]="'Enter City' | translate"
                 [virtualScroll]="true"
                 dropdownPosition="bottom"
                 [notFoundText]="'No cities found'"
@@ -199,15 +201,15 @@
               </ng-select>
             </div>
             <div *ngIf="userDetailsNgForm.submitted && userDetailsNgForm.controls.cityId?.invalid" class="error-msg">
-              City is required.
+              {{'City is required.' | translate}}
             </div>
           </div>
           <div *ngIf="userDetailsError" class="alert alert-danger mt-2">{{ userDetailsError }}</div>
         </div>
         <div class="modal-footer">
           <button class="app-btn secondary get-start-btn" type="submit" [disabled]="userDetailsLoading">
-            <span *ngIf="!userDetailsLoading">Save</span>
-            <span *ngIf="userDetailsLoading"><span class="spinner-border spinner-border-sm"></span> Please wait...</span>
+            <span *ngIf="!userDetailsLoading">{{'Save' | translate}}</span>
+            <span *ngIf="userDetailsLoading"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' | translate}}</span>
           </button>
         </div>
       </form>

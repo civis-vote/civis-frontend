@@ -10,7 +10,7 @@ query locationAutocomplete($q: String, $type: String, $isInternationalCity: Bool
 	}
 `;
 
-export const UpdateCity = gql`
+export const CURRENT_USER_UPDATE_MUTATION = gql`
   mutation currentUserUpdate($user: CurrentUserUpdateInput!) {
     currentUserUpdate(user: $user) {
       email

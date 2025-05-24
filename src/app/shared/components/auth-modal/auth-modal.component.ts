@@ -11,6 +11,7 @@ import { GraphqlService } from 'src/app/graphql/graphql.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import gql from 'graphql-tag';
 import { ApolloQueryResult } from 'apollo-client';
+import { CURRENT_USER_UPDATE_MUTATION } from '../city-selection-modal/city-selection-modal.graphql';
 
 const AUTH_LOGIN_MUTATION = gql`
   mutation AuthLogin($email: String!) {
@@ -34,23 +35,6 @@ const USER_CURRENT_QUERY = gql`
       firstName
       id
       isVerified
-      phoneNumber
-      city {
-        id
-        locationType
-        name
-      }
-    }
-  }
-`;
-
-const CURRENT_USER_UPDATE_MUTATION = gql`
-  mutation CurrentUserUpdate($user: CurrentUserUpdateInput!) {
-    currentUserUpdate(user: $user) {
-      email
-      id
-      firstName
-      lastName
       phoneNumber
       city {
         id

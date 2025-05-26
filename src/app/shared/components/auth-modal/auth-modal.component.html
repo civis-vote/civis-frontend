@@ -90,17 +90,19 @@
             <div class="input-box required-field">
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <label for="otp" class="mb-0">{{'OTP' | translate}}</label>
-                <a href="javascript:void(0)"
-                   (click)="resendOtp()"
-                   [class.disabled]="resendingOtp || resendOtpCountdown > 0"
-                   class="ml-2">
-                  <ng-container *ngIf="resendOtpCountdown > 0">
+                <ng-container *ngIf="resendOtpCountdown > 0">
+                  <span class="ml-2">
                     {{'Resend OTP in' | translate}} 00:0{{resendOtpCountdown}}
-                  </ng-container>
-                  <ng-container *ngIf="resendOtpCountdown === 0">
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="resendOtpCountdown === 0">
+                  <a href="javascript:void(0)"
+                     (click)="resendOtp()"
+                     [class.disabled]="resendingOtp"
+                     class="ml-2">
                     {{ resendingOtp ? ('Resending...' | translate) : ('Resend OTP' | translate) }}
-                  </ng-container>
-                </a>
+                  </a>
+                </ng-container>
               </div>
               <div class="input-box__border">
                 <input

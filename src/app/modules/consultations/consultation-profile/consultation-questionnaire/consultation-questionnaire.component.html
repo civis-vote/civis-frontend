@@ -67,13 +67,7 @@
           <div class="py-3">
             <button  class="btn-submit active"
               (click)='submitAnswer()'
-              [tooltip]="
-                (showError && !responseFeedback && !profileData?.isSatisfactionRatingOptional)
-                  ? ('Please select a Satisfaction Rating to submit the response' | translate)
-                  : (showError && !f.valid)
-                    ? ('Please fill all the answers to submit response.' | translate)
-                    : ''
-              "
+              [tooltip]="getSubmitButtonTooltip() | translate"
               data-event="purchase">
               <p class="m-0">
                 {{'SUBMIT RESPONSE' | translate}}

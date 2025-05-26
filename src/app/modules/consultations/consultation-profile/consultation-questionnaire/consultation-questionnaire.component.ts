@@ -714,4 +714,14 @@ export class ConsultationQuestionnaireComponent
     }
     return;
   }
+
+  getSubmitButtonTooltip(): string {
+    if (this.showError && !this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
+      return 'Please select a Satisfaction Rating to submit the response';
+    } else if (this.showError && !this.questionnaireForm?.valid) {
+      return 'Please fill all the answers to submit response.';
+    } else {
+      return '';
+    }
+  }
 }

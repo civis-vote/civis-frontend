@@ -337,6 +337,12 @@ export class ConsultationQuestionnaireComponent
     if (this.responseSubmitLoading) {
       return;
     }
+    if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
+      this.consultationService.satisfactionRatingError.next(true);
+      this.showError = true;
+      this.scrollToError = true;
+      return;
+    }
     if (this.questionnaireForm.valid) {
       this.responseAnswers = this.getResponseAnswers();
       const consultationResponse = this.getConsultationResponse();
@@ -705,5 +711,15 @@ export class ConsultationQuestionnaireComponent
       }
     }
     return;
+  }
+
+  getSubmitButtonTooltip(): string {
+    if (this.showError && !this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
+      return 'Please select a Satisfaction Rating to submit the response';
+    } else if (this.showError && !this.questionnaireForm?.valid) {
+      return 'Please fill all the answers to submit response.';
+    } else {
+      return '';
+    }
   }
 }

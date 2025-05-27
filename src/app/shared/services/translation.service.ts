@@ -29,7 +29,7 @@ dictionary: BehaviorSubject<Array<Dictionary>> = new BehaviorSubject([]);
 environment: any;
 
 // Added a version key for translations
-private TRANSLATION_VERSION = '6';
+private TRANSLATION_VERSION = '1';
 private TRANSLATION_VERSION_KEY = 'lang_version';
 
 constructor(

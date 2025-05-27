@@ -45,10 +45,20 @@
         margin-bottom: 16px;
     }
 
+    .d-flex {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+
+        @media screen and (max-width: 576px) {
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+    }
     .login-btn {
         display: flex;
         align-items: center;
-        padding: 9px 33px;
+        padding: 9px 26px;
         background-color: #4285F4;
         border-radius: 3px;
         cursor: pointer;
@@ -68,6 +78,13 @@
             width: 100%;
             justify-content: center;
             margin-top: 16px;
+        }
+        @media screen and (max-width: 576px) {
+            flex: 1 1 48%;
+            min-width: 140px;
+            max-width: 100%;
+            justify-content: center;
+            margin-right: 0 !important;
         }
     }
     .app-hr {

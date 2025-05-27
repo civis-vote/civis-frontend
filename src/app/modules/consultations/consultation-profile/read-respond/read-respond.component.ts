@@ -316,15 +316,22 @@ export class ReadRespondComponent implements OnInit {
       },
       update: (store, {data: res}) => {
         const variables = {id: this.consultationId};
-        const resp: any = store.readQuery({query: ConsultationProfileCurrentUser, variables});
-        if (res) {
-          resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
-          resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
-          resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
-          resp.consultationProfile.satisfactionRatingDistribution =
-            res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
-        }
-        store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resp});
+        this.apollo.watchQuery({
+          query: ConsultationProfileCurrentUser,
+          variables
+        })
+        .valueChanges
+        .pipe(map((result: any) => result.data))
+        .subscribe((resp: any) => {
+          if (res && resp) {
+            resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
+            resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
+            resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
+            resp.consultationProfile.satisfactionRatingDistribution =
+              res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
+            store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resp});
+          }
+        });
       }
     })
     .pipe (

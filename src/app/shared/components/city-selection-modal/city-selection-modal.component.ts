@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, EventEmitter, ViewEncapsulation, Input } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap';
 import { distinctUntilChanged, debounceTime, takeWhile, switchMap, map, tap } from 'rxjs/operators';
-import { CitiesSearchQuery, UpdateCity } from './city-selection-modal.graphql';
+import { CitiesSearchQuery, CURRENT_USER_UPDATE_MUTATION } from './city-selection-modal.graphql';
 import { Apollo } from 'apollo-angular';
 import { UserService } from '../../services/user.service';
 import { ErrorService } from '../error-modal/error.service';
@@ -89,7 +89,7 @@ export class CitySelectionModalComponent implements OnInit {
     const variables = {
       user
     };
-    this.apollo.mutate({ mutation: UpdateCity, variables,
+    this.apollo.mutate({ mutation: CURRENT_USER_UPDATE_MUTATION, variables,
       update: (store, {data: currentUserUpdate}) => {
         const data: any = store.readQuery({query: CurrentUser, variables: {}});
         data.userCurrent = {...data.userCurrent, ...currentUserUpdate};

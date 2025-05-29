@@ -1,28 +1,41 @@
 <div class="modal fade-in" bsModal #citySelectionModal="bs-modal" [config]="{ show: true, backdrop: 'static', keyboard: false }" (onHidden)="close()"
   tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">
-          {{'Update your location' | translate}}</h4>
+          {{'Complete Your Profile' | translate}}</h4>
       </div>
       <app-linear-loader *ngIf="loading"></app-linear-loader>
       <div class="modal-body">
         <p>
-
-        {{'We have noticed that your account does not have a city associated with it.
-          To help us serve you better, please select a city from the dropdown below.' | translate}}
+        {{'We have noticed that your account does not have a first name and city associated with it. To help us serve you better, please enter your first name and select a city from the dropdown below.' | translate}}
         </p>
-        <div class="d-flex city-selector">
-            <ng-select class="w-50" id="locations" #city="ngModel" name="city" [loading]="loading" [clearable]="false"
-            [items]="cities" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom"
-            bindValue="id" [notFoundText]="dropdownText" [clearable]="true" loadingText="Searching..."
-            (search)="onCitySearch($event)" [(ngModel)]="user.cityId" [placeholder]="'Type to search' | translate" required>
+        <div class="input-box required-field mb-3 profile-input-wrapper">
+          <label for="firstName">{{'First Name' | translate}}</label>
+          <div class="input-box__border">
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              [(ngModel)]="user.firstName"
+              required
+              [disabled]="loading"
+              [placeholder]="'Enter First Name' | translate"
+            />
+          </div>
+        </div>
+        <div class="input-box required-field mb-3 profile-input-wrapper">
+          <label for="locations">{{'City' | translate}}</label>
+            <ng-select class="w-100" id="locations" #city="ngModel" name="city" [loading]="loading" [clearable]="false"
+              [items]="cities" bindLabel="name" [virtualScroll]="true" dropdownPosition="bottom"
+              bindValue="id" [notFoundText]="dropdownText" [clearable]="true" loadingText="Searching..."
+              (search)="onCitySearch($event)" [(ngModel)]="user.cityId" [placeholder]="'Enter City' | translate" required>
             </ng-select>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-blue" [disabled]="!user?.cityId" (click)="submit()">{{'Save' }}</button>
+        <button type="button" class="btn btn-blue" [disabled]="!user?.cityId || !user?.firstName" (click)="submit()">{{'Save' | translate}}</button>
       </div>
     </div>
   </div>

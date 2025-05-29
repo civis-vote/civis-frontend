@@ -28,6 +28,10 @@ currentLanguage: string;
 dictionary: BehaviorSubject<Array<Dictionary>> = new BehaviorSubject([]);
 environment: any;
 
+// Added a version key for translations
+private TRANSLATION_VERSION = '1';
+private TRANSLATION_VERSION_KEY = 'lang_version';
+
 constructor(
         private _cookieService: CookieService,
         private storage: LocalStorageService,
@@ -35,17 +39,22 @@ constructor(
 ) {
 
     const currentLanguage = this._cookieService.get('civisLang');
+    const storedVersion = this.storage.retrieve(this.TRANSLATION_VERSION_KEY);
 
     if (currentLanguage) {
         this.currentLanguage = currentLanguage;
 
-        if (this.storage.retrieve('lang')) {
+        if (this.storage.retrieve('lang') && storedVersion === this.TRANSLATION_VERSION) {
             this.dictionary.next(this.storage.retrieve('lang'));
             this.setIndex();
         } else {
+            // Remove old translations and version before updating
+            this.storage.clear('lang');
+            this.storage.clear(this.TRANSLATION_VERSION_KEY);
             const lang = HindiLang;
             this.dictionary.next(lang);
             this.storage.store('lang', lang);
+            this.storage.store(this.TRANSLATION_VERSION_KEY, this.TRANSLATION_VERSION);
             this.setIndex();
         }
     } else {
@@ -143,5 +152,4 @@ translateArrays(values: any, args: string) {
         return values;
     }
 }
-
 }

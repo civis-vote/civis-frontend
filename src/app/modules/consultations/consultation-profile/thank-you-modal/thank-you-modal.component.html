@@ -11,23 +11,20 @@
                 <img class="thankyou-img" src="assets/images/thankyou.png" />
                 <div class="thankyou-content">
                   <p>
-                    Thank you for your response.
+                    {{'Thank you for your response.' | translate}}
                     <span *ngIf="profileData?.visibility === 'public_consultation'">
-                    You have scored {{points | number:'1.0-0'}} points for your response!
+                    {{'You have scored' | translate}} {{points | number:'1.0-0'}} {{'points for your response!' | translate}}
                     </span>
                   </p>
                   <p *ngIf="profileData?.responseSubmissionMessage ; else defaultContent"
                    [innerHTML]="profileData?.responseSubmissionMessage"></p>
                   <ng-template #defaultContent>
                     <p *ngIf="profileData?.visibility === 'public_consultation'; else privateContent" >
-                      We appreciate you taking the time to submit your response.
-                      Please consider sharing this Consultation on Social Media to help spread the word.
-                      Together, we can make our voices heard and action real change!
+                      {{'We appreciate you taking the time to submit your response. Please consider sharing this Consultation on Social Media to help spread the word. Together, we can make our voices heard and action real change!' | translate}}
                     </p>
                     <ng-template #privateContent>
                       <p>
-                        We appreciate you taking the time to submit your response.
-                        You can browse through our other open Consultations to give your feedback.
+                        {{'We appreciate you taking the time to submit your response. You can browse through our other open Consultations to give your feedback.' | translate}}
                       </p>
                     </ng-template>
                   </ng-template>

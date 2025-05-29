@@ -39,7 +39,6 @@ export class ReadRespondComponent implements OnInit {
   earnedPoints: any;
   selectedLanguage: string = 'en';
   availableLanguages: Array<{ id: string; name: string }> = [];
-  emailVerification = false;
   profaneWords = [];
   //Changes for profane resposne nudge
   isConfirmModal = false;
@@ -54,8 +53,8 @@ export class ReadRespondComponent implements OnInit {
   short_response_count_changed: boolean=false;
   environment: any = environment;
   responseText: any;
-
-  @ViewChild('emailVerificationModal', { static: false }) emailVerificationModal: ModalDirective;
+  private hasSubmittedConsultationResponse = false;
+  private isSubmittingConsultationResponse = false;
 
   constructor(
     private userService: UserService,
@@ -263,7 +262,12 @@ export class ReadRespondComponent implements OnInit {
         if (this.consultationId) {
           this.getConsultationProfile();
         }
-        if (consultationResponseData && this.currentUser.city && this.currentUser.city.id) {
+        if (
+          consultationResponseData &&
+          this.currentUser.city &&
+          this.currentUser.city.id &&
+          !this.hasSubmittedConsultationResponse
+        ) {
           const resData = JSON.parse(consultationResponseData);
           if (!this.currentUser.confirmedAt) {
             resData.visibility = 'anonymous';
@@ -276,7 +280,6 @@ export class ReadRespondComponent implements OnInit {
           this.getConsultationProfile();
         }
       }
-
     });
   }
 
@@ -293,6 +296,10 @@ export class ReadRespondComponent implements OnInit {
   }
 
   submitConsultationResponse(consultationResponse:any = null, isProfane:boolean = false){
+    if (this.hasSubmittedConsultationResponse || this.isSubmittingConsultationResponse) return;
+    this.isSubmittingConsultationResponse = true;
+    this.hasSubmittedConsultationResponse = true;
+
     if(!consultationResponse){
       //after user has completed authentication step
       consultationResponse=JSON.parse(localStorage.getItem('consultationResponse'));
@@ -309,15 +316,22 @@ export class ReadRespondComponent implements OnInit {
       },
       update: (store, {data: res}) => {
         const variables = {id: this.consultationId};
-        const resp: any = store.readQuery({query: ConsultationProfileCurrentUser, variables});
-        if (res) {
-          resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
-          resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
-          resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
-          resp.consultationProfile.satisfactionRatingDistribution =
-            res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
-        }
-        store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resp});
+        this.apollo.watchQuery({
+          query: ConsultationProfileCurrentUser,
+          variables
+        })
+        .valueChanges
+        .pipe(map((result: any) => result.data))
+        .subscribe((resultData: any) => {
+          if (res && resultData) {
+            resultData.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
+            resultData.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
+            resultData.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
+            resultData.consultationProfile.satisfactionRatingDistribution =
+              res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
+            store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resultData});
+          }
+        });
       }
     })
     .pipe (
@@ -325,11 +339,14 @@ export class ReadRespondComponent implements OnInit {
     )
     .subscribe((res) => {
         this.earnedPoints = res.points;
+        this.getConsultationProfile();
         this.showThankYouModal = true;
         this.profanity_count_changed=true;
         this.short_response_count_changed=true;
+        this.isSubmittingConsultationResponse = false;
     }, err => {
       this.errorService.showErrorModal(err);
+      this.isSubmittingConsultationResponse = false;
     });
   }
 
@@ -407,6 +424,8 @@ export class ReadRespondComponent implements OnInit {
             else{
               this.createProfanityCountRecord(1, 0, true);
             }
+            localStorage.removeItem('consultationResponse');
+            this.submitConsultationResponse(consultationResponse, true);
           }
         }, err => {
           const e = new Error(err);
@@ -431,7 +450,7 @@ export class ReadRespondComponent implements OnInit {
               }
               else {
                 localStorage.removeItem('consultationResponse');
-                this.submitConsultationResponse(consultationResponse);
+                this.submitConsultationResponse(consultationResponse, false);
               }
               shortResponseCount=data.shortResponseCount+1;
               this.updateProfanityCountRecord(data.profanityCount,shortResponseCount, false);
@@ -461,25 +480,16 @@ export class ReadRespondComponent implements OnInit {
           if(data) {
             this.updateProfanityCountRecord(data.profanityCount,0, false);
           }
+          localStorage.removeItem('consultationResponse');
+          this.submitConsultationResponse(consultationResponse, false);
         }, err => {
           const e = new Error(err);
           this.errorService.showErrorModal(err);
         });
-        localStorage.removeItem('consultationResponse');
-        this.submitConsultationResponse(consultationResponse);
       }
   }
 
   onCloseThanksModal() {
     this.showThankYouModal = false;
-    if (!this.currentUser.confirmedAt) {
-      this.emailVerification = true;
-    }
   }
-
-  onCloseEmailModal() {
-    this.emailVerificationModal.hide();
-    this.emailVerification = false;
-  }
-
 }

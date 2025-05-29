@@ -51,6 +51,8 @@ export class NavbarComponent implements OnInit {
   activeTab: string;
   consultationStatus: any;
 
+  isAuthModalShown = false;
+
   constructor(
     private router: Router,
     private userService: UserService,
@@ -241,14 +243,12 @@ export class NavbarComponent implements OnInit {
   }
 
   onSignUp() {
-    this.cookieService.put('loginCallbackUrl', this.lastViewedUrl);
-    if (this.currentUrl === 'consultations-profile') {
-      this.router.navigateByUrl('/auth');
-      return;
-    }
-    this.router.navigateByUrl('/auth');
+    this.isAuthModalShown = true;
   }
 
+  onAuthModalClose() {
+    this.isAuthModalShown = false;
+  }
 
   changeMenu(event) {
     switch (event.name) {

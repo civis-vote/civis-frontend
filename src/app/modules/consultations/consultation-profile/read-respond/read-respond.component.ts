@@ -322,14 +322,14 @@ export class ReadRespondComponent implements OnInit {
         })
         .valueChanges
         .pipe(map((result: any) => result.data))
-        .subscribe((resp: any) => {
-          if (res && resp) {
-            resp.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
-            resp.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
-            resp.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
-            resp.consultationProfile.satisfactionRatingDistribution =
+        .subscribe((resultData: any) => {
+          if (res && resultData) {
+            resultData.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
+            resultData.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
+            resultData.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
+            resultData.consultationProfile.satisfactionRatingDistribution =
               res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
-            store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resp});
+            store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resultData});
           }
         });
       }

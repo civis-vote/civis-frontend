@@ -1,349 +1,167 @@
-<div
-  bsModal
-  #authModal="bs-modal"
-  class="modal fade logout-confirm-modal"
-  tabindex="-1"
-  [config]="{
+<div bsModal #authModal="bs-modal" class="modal fade auth-modal-wrapper" tabindex="-1" [config]="{
     show: true,
-    backdrop: false,
+    backdrop: true,
     ignoreBackdropClick: true,
     keyboard: false
-  }"
-  role="dialog"
-  aria-labelledby="authModal"
->
-  <div class="modal-dialog">
+  }" role="dialog" aria-labelledby="authModal">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body">
         <button class="close-btn">
           <img src="assets/images/close.png" (click)="onClose()" />
         </button>
         <div class="auth-modal">
-          <img class="modal-img mb-3" src="assets/images/signup-modal.png" />
-          <p class="heading-text mb-2">{{'Just one more step!' | translate}}</p>
-          <p class="sub-heading-text mb-4 text-center">
-            {{'Your response will be submitted as soon as you create an account for verification' | translate}}
+          <div class="text-center">
+            <img class="modal-img mb-3" src="assets/images/signup-modal.png" />
+          </div>
+          <p class="heading-text mb-3" *ngIf="!otpStep">
+            {{ fromNavbar ? ('Log In / Sign Up' | translate) : ('Just one more step!' | translate) }}
           </p>
-          <div class="d-flex">
-            <div class="login-btn mr-3" (click)="redirectTo('google')">
-              <img class="icon-img" src="assets/images/auth-google.png" />
-              <p class="login-btn-text" *ngIf="!signin">{{'Sign up with google' | translate}}</p>
-              <p class="login-btn-text" *ngIf="signin">{{'Sign in with google' | translate}}</p>
-            </div>
-            <div class="login-btn" (click)="redirectTo('facebook')">
-              <img class="icon-img" src="assets/images/auth-fb.png" />
-              <p class="login-btn-text" *ngIf="!signin">
-                {{'Sign up with Facebook' | translate}}
-              </p>
-              <p class="login-btn-text" *ngIf="signin">{{'Sign in with Facebook' | translate}}</p>
-            </div>
-          </div>
-          <div
-            class="login-btn login-btn-email"
-            *ngIf="!signup && !signin"
-            (click)="signup = true"
-          >
-            <img class="icon-img" src="assets/images/auth-email.png" />
-            <p class="login-btn-text">{{'Sign up with Email' | translate}}</p>
-          </div>
-          <p class="signup-text" *ngIf="signup">{{'Sign up with Email' | translate}}</p>
-          <form
-            #signupForm="ngForm"
-            *ngIf="signup"
-            class="signup-form"
-            autocomplete="off"
-          >
-            <div class="input-box required-field">
-              <label for="fname">{{ "First name" | translate }}</label>
-              <div class="input-box__border">
-                <input
-                  [placeholder]="'First Name' | translate"
-                  type="text"
-                  id="fname"
-                  #fname="ngModel"
-                  name="fname"
-                  [(ngModel)]="signupObject.firstName"
-                  required
-                />
-              </div>
-              <div
-                *ngIf="fname.invalid && (fname.touched || signupForm.submitted)"
-                class="error-msg"
-              >
-                {{ "First name is Required" | translate }}
-              </div>
-            </div>
+          <p class="heading-text mb-2" *ngIf="otpStep">{{'Enter OTP' | translate}}</p>
+          <p class="sub-heading-text mb-4" *ngIf="!otpStep && !fromNavbar">
+            {{'Your response will be submitted as soon as you Sign Up/ Log In' | translate}}
+          </p>
+          <p class="sub-heading-text mb-4" *ngIf="otpStep">
+            {{'OTP sent to' | translate}} <strong>{{ emailForOtp }}.</strong>
+            <span class="ml-2">
+              <a href="javascript:void(0)" (click)="startEmailSignup()" class="not-you-link">{{'Not you?' |
+                translate}}</a>
+            </span>
+          </p>
 
+          <div class="social-login-btn-container" *ngIf="!emailSignup && !otpStep">
+            <div class="login-btn w-100" (click)="redirectTo('google')">
+              <img class="icon-img" src="assets/images/auth-google.png" />
+              <p class="login-btn-text">{{'Sign in with Google' | translate}}</p>
+            </div>
+            <div class="login-btn w-100" (click)="redirectTo('facebook')">
+              <img class="icon-img" src="assets/images/auth-fb.png" />
+              <p class="login-btn-text">{{'Sign in with Facebook' | translate}}</p>
+            </div>
+          </div>
+          <div class="login-btn login-btn-email" *ngIf="!emailSignup && !otpStep" (click)="startEmailSignup()">
+            <img class="icon-img" src="assets/images/auth-email.png" />
+            <p class="login-btn-text">{{'Sign in with Email' | translate}}</p>
+          </div>
+
+          <form #emailSignupForm="ngForm" *ngIf="emailSignup && !otpStep" class="signup-form" autocomplete="off"
+            (ngSubmit)="submitEmailSignup(emailSignupForm)">
             <div class="input-box required-field">
-              <label for="efname">{{ "Email" | translate }}</label>
+              <label for="email">{{ "Email" | translate }}</label>
               <div class="input-box__border">
-                <input
-                  [placeholder]="'Email' | translate"
-                  type="email"
-                  id="email"
-                  #email="ngModel"
-                  name="email"
-                  [(ngModel)]="signupObject.email"
-                  required
-                  email
-                />
+                <input email id="email" name="email" [(ngModel)]="emailForOtp" required #email="ngModel" type="email"
+                  [placeholder]="'Email' | translate" />
               </div>
-              <div
-                *ngIf="email.invalid && (email.touched || signupForm.submitted)"
-                class="error-msg"
-              >
-                <div *ngIf="email.errors.required">
+              <div *ngIf="emailSignupForm.submitted && email.invalid" class="error-msg">
+                <div *ngIf="email.errors?.required">
                   {{ "Email is Required" | translate }}
                 </div>
-                <div *ngIf="email.errors.email">
+                <div *ngIf="email.errors?.email">
                   {{ "Email must be a valid email address" | translate }}
                 </div>
               </div>
+              <div *ngIf="emailError" class="alert alert-danger mt-2">{{ emailError }}</div>
             </div>
-
-            <div class="input-box required-field">
-              <label for="password">{{ "Password" | translate }}</label>
-              <div class="input-box__border">
-                <input
-                  [placeholder]="'At least 8 characters' | translate"
-                  type="password"
-                  id="password"
-                  #password="ngModel"
-                  name="password"
-                  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$#@$!%*?&])[A-Za-z\d$@#$!%*?&].{8,}"
-                  [(ngModel)]="signupObject.password"
-                  required
-                />
-              </div>
-              <div
-                *ngIf="
-                  password.invalid && (password.touched || signupForm.submitted)
-                "
-                class="error-msg"
-              >
-                <span
-                  class="password-validation-error"
-                  *ngIf="signupObject.password"
-                >
-                  <ul>
-                    <li>{{ "At least" | translate }} <strong> {{ "8 characters" | translate }}  </strong> {{ "long" | translate }} </li>
-                    <li>
-                      {{ "Contain an" | translate }} <strong> {{ "uppercase letter" | translate }}  </strong> (A, B, C,…)
-                    </li>
-                    <li>
-                       {{ "Contain a" | translate }} <strong> {{ "lowercase letter" | translate }}</strong> (a, b, c, …)
-                    </li>
-                    <li>{{ "Contain a" | translate }} <strong>{{ "symbol" | translate }}</strong> (!, @, #, ...)</li>
-                    <li>{{ "Contain a" | translate }}<strong>{{ "number" | translate }}</strong> (1, 2, 3, …)</li>
-                  </ul>
-                </span>
-                {{
-                  signupObject.password
-                    ? ""
-                    : ("Password is Required" | translate)
-                }}
-              </div>
-            </div>
-
-            <div
-              class="location-box required-field col-12"
-              *ngIf="!invitationToken"
-            >
-              <label for="locations"> City </label>
-              <div class="location-box__border">
-                <ng-select
-                  id="locations"
-                  #city="ngModel"
-                  name="city"
-                  [loading]="loadingCities"
-                  [items]="cities"
-                  bindLabel="name"
-                  [virtualScroll]="true"
-                  dropdownPosition="bottom"
-                  bindValue="id"
-                  [notFoundText]="dropdownText"
-                  [clearable]="true"
-                  loadingText="Searching..."
-                  (search)="onSearch($event)"
-                  (open)="loadCities()"
-                  [(ngModel)]="signupObject.cityId"
-                  [placeholder]="'City' | translate"
-                  required
-                >
-                </ng-select>
-              </div>
-              <div
-                *ngIf="city.invalid && (city.touched || signupForm.submitted)"
-                class="error-msg"
-              >
-              {{ "Location is Required" | translate }}
-              </div>
-            </div>
-
-            <div class="input-checbox">
-              <input
-                class="cm-checkbox"
-                type="checkbox"
-                #agreedForTermsCondition="ngModel"
-                id="agreedForTermsCondition"
-                name="agreedForTermsCondition"
-                [(ngModel)]="signupObject.agreedForTermsCondition"
-                required
-              />
-              <label for="agreedForTermsCondition" class="d-flex">
-                {{ "I agree to the" | translate }} <br />
-                <a href="/terms" class="policy-link">{{
-                  "Terms of Service," | translate
-                }}</a>
-                &nbsp;
-                <a href="/privacy" class="policy-link">{{
-                  "Privacy Policy" | translate
-                }}</a>
-                &nbsp;&&nbsp;
-                <a href="/content-policy" class="policy-link">{{
-                  "Content Policy." | translate
-                }}</a>
-              </label>
-            </div>
-            <div
-              class="error-msg"
-              *ngIf="
-                agreedForTermsCondition.invalid &&
-                (agreedForTermsCondition.touched || signupForm.submitted)
-              "
-            >
-              {{
-                "Please accept our Terms of Service & Privacy Policy to continue."
-                  | translate
-              }}
-            </div>
-
-            <div class="input-checbox">
-              <input
-                class="cm-checkbox"
-                type="checkbox"
-                id="notifyMe"
-                #notifyMe="ngModel"
-                name="notifyMe"
-                [(ngModel)]="signupObject.notifyForNewConsultation"
-              />
-              <label for="notifyMe"
-                >{{ "Notify me when an open consultation" | translate
-                }}<br />&nbsp; {{ "is created on Civis." | translate }}</label
-              >
-            </div>
-
             <div>
-              <button
-                class="app-btn secondary get-start-btn"
-                (click)="submit()"
-              >
-                <p class="m-0">{{'Create my account' | translate}}</p>
+              <button class="app-btn secondary get-start-btn" type="submit" [disabled]="loadingEmail">
+                <span *ngIf="!loadingEmail">{{'Continue' | translate}}</span>
+                <span *ngIf="loadingEmail"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' |
+                  translate}}</span>
               </button>
             </div>
           </form>
-          <div class="hline" *ngIf="signin"><span>{{'Or' | translate}}</span></div>
-          <form
-            #loginForm="ngForm"
-            *ngIf="signin"
-            (ngSubmit)="submitLogin(loginForm.valid)"
-            autocomplete="off"
-          >
-            <div class="row">
-              <div class="input-box col-12">
-                <label for="email">{{'Email' | translate}}</label>
-                <div class="input-box__border">
-                  <input
-                    [placeholder]="'Email' | translate"
-                    type="email"
-                    id="email"
-                    #email="ngModel"
-                    name="email"
-                    [(ngModel)]="loginObject.email"
-                    required
-                    email
-                  />
-                </div>
-                <div
-                  *ngIf="
-                    email.invalid && (email.touched || loginForm.submitted)
-                  "
-                  class="error-msg"
-                >
-                  <div *ngIf="email.errors.required">{{'Email is Required' | translate}}</div>
-                  <div *ngIf="email.errors.email">
-                    {{'Email must be a valid email address' | translate}}
-                  </div>
+
+          <form #otpForm="ngForm" *ngIf="otpStep" class="signup-form" autocomplete="off"
+            (ngSubmit)="submitOtp(otpForm)">
+            <div class="input-box required-field">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label for="otp" class="mb-0">{{'OTP' | translate}}</label>
+                <ng-container *ngIf="resendOtpCountdown > 0">
+                  <span class="ml-2">
+                    {{'Resend OTP in' | translate}} 00:{{resendOtpCountdown < 10 ? '0' + resendOtpCountdown : resendOtpCountdown}}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="resendOtpCountdown === 0">
+                  <a href="javascript:void(0)" (click)="resendOtp()" [class.disabled]="resendingOtp" class="ml-2">
+                    {{ resendingOtp ? ('Resending...' | translate) : ('Resend OTP' | translate) }}
+                  </a>
+                </ng-container>
+              </div>
+              <div class="input-box__border">
+                <input [placeholder]="'Enter OTP' | translate" type="tel" inputmode="numeric" pattern="[0-9]*" id="otp"
+                  name="otp" [(ngModel)]="otp" required minlength="4" maxlength="8" #otpInput="ngModel" />
+              </div>
+              <div *ngIf="otpForm.submitted && otpInput.invalid" class="error-msg">
+                <div *ngIf="otpInput.errors?.required">
+                  {{ "OTP is Required" | translate }}
                 </div>
               </div>
-
-              <div class="input-box col-12">
-                <div class="d-flex justify-content-between">
-                  <label for="password">{{'Password' | translate}}</label>
-                </div>
-                <div class="input-box__border">
-                  <input
-                    [placeholder]="'Password' | translate"
-                    type="password"
-                    id="password"
-                    #password="ngModel"
-                    name="password"
-                    [(ngModel)]="loginObject.password"
-                    required
-                  />
-                </div>
-                <div
-                  *ngIf="
-                    password.invalid &&
-                    (password.touched || loginForm.submitted)
-                  "
-                  class="error-msg"
-                >
-                {{'Password is Required' | translate}}
-                </div>
-              </div>
-
-              <div class="col-12">
-                <button
-                  class="app-btn secondary get-start-btn mt-1"
-                  type="submit"
-                >
-                  <p class="m-auto">{{'Sign into my account' | translate}}</p>
-                </button>
-
-                <div>
-                  <p
-                    class="normal-text mt-4 mb-0 pointer"
-                    [routerLink]="['/auth', 'forgot-password']"
-                  >
-                     {{'Forgot Password?' | translate}}
-                  </p>
-                </div>
-              </div>
+              <div *ngIf="otpError" class="alert alert-danger mt-2">{{ otpError }}</div>
+            </div>
+            <div>
+              <button class="app-btn secondary get-start-btn" type="submit" [disabled]="loadingOtp">
+                <span *ngIf="!loadingOtp">{{'Login' | translate}}</span>
+                <span *ngIf="loadingOtp"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' |
+                  translate}}</span>
+              </button>
             </div>
           </form>
-          <div class="app-hr"></div>
-          <div class="d-flex">
-            <p class="normal-text mb-2">
-              {{ signin ? ('Don\'t have an existing account?' | translate) : ('Already have an account?' | translate) }}
-            </p>
-            <p
-              class="normal-text normal-text-link mb-2"
-              *ngIf="(!signin && signup) || (!signup && !signin)"
-              (click)="signup = false; signin = true"
-            >
-            {{'Sign in' | translate}}
-            </p>
-            <p
-              class="normal-text normal-text-link mb-2"
-              *ngIf="signin"
-              (click)="signup = false; signin = false"
-            >
-              {{'Sign Up' | translate}}
-            </p>
-          </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class=" fade show user-details-modal-overlay" tabindex="-1" role="dialog" *ngIf="showUserDetailsModal"
+  style="display:block;">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form #userDetailsNgForm="ngForm" (ngSubmit)="submitUserDetails(userDetailsNgForm)" autocomplete="off">
+        <div class="modal-header">
+          <h5 class="modal-title">{{'Complete Your Profile' | translate}}</h5>
+        </div>
+        <div class="modal-body">
+          <div class="input-box required-field">
+            <label for="userDetailsFirstName">{{'First Name' | translate}}</label>
+            <div class="input-box__border">
+              <input type="text" id="userDetailsFirstName" name="firstName"
+                [placeholder]="'Enter First Name' | translate" [(ngModel)]="userDetailsForm.firstName" required
+                [disabled]="userDetailsLoading" />
+            </div>
+            <div *ngIf="userDetailsNgForm.submitted && userDetailsNgForm.controls.firstName?.invalid" class="error-msg">
+              {{'First name is required.' | translate}}
+            </div>
+          </div>
+          <div class="input-box required-field">
+            <label for="userDetailsEmail">{{'Email' | translate}}</label>
+            <div class="input-box__border disabled-input">
+              <input type="email" id="userDetailsEmail" name="email" [(ngModel)]="userDetailsForm.email" required
+                [readonly]="true" disabled />
+            </div>
+          </div>
+          <div class="location-box required-field col-12">
+            <label for="userDetailsCity">{{'City' | translate}}</label>
+            <div class="location-box__border">
+              <ng-select id="userDetailsCity" name="cityId" [loading]="userDetailsCitiesLoading"
+                [items]="userDetailsCities" bindLabel="name" bindValue="id" [placeholder]="'Enter City' | translate"
+                [virtualScroll]="true" dropdownPosition="bottom" [notFoundText]="'No cities found'" [clearable]="true"
+                loadingText="Searching..." [(ngModel)]="userDetailsForm.cityId" required>
+              </ng-select>
+            </div>
+            <div *ngIf="userDetailsNgForm.submitted && userDetailsNgForm.controls.cityId?.invalid" class="error-msg">
+              {{'City is required.' | translate}}
+            </div>
+          </div>
+          <div *ngIf="userDetailsError" class="alert alert-danger mt-2">{{ userDetailsError }}</div>
+        </div>
+        <div class="modal-footer">
+          <button class="app-btn secondary get-start-btn" type="submit" [disabled]="userDetailsLoading">
+            <span *ngIf="!userDetailsLoading">{{'Save' | translate}}</span>
+            <span *ngIf="userDetailsLoading"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' |
+              translate}}</span>
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

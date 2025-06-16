@@ -19,7 +19,7 @@
           <div *ngIf="profileData?.englishSummary || profileData?.hindiSummary" class="mb-4">
             <app-page-content-renderer [page]="useSummaryHindi ? profileData?.hindiSummary : profileData?.englishSummary"></app-page-content-renderer>
           </div>
-          <div *ngIf="satisfactionRatingDistribution" class="mb-4">
+          <div *ngIf="satisfactionRatingDistribution && consultationId !== 1245" class="mb-4">
             <p class="text-18 text-16-sm m-0 bold-text">{{'Consultation satisfication' | translate}}
             <div class="satisfication-container my-4 m-0-sm">
                 <!-- <p class="text-16 m-0 bold-text">{{'Consultation satisfication' | translate}}</p> -->

@@ -120,7 +120,11 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   }
 
   getRemainingDaysText(): string {
-    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.profile?.responseDeadline || '');
+    const diffObj = this.getDifferenceInDays(this.profile?.responseDeadline || '');
+    if (!diffObj) {
+      return '';
+    }
+    const { diffInDays, isSameDay } = diffObj;
     const lang = this.currentLanguage || 'en';
 
     const roundedDiffInDays = Math.floor(diffInDays);

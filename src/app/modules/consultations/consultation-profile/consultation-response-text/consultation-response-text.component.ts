@@ -48,6 +48,7 @@ export class ConsultationResponseTextComponent
   ckeConfig = {
     removePlugins: 'elementspath',
     resize_enabled: false,
+    versionCheck: false,
   };
   currentUser: any;
   consultationId: any;

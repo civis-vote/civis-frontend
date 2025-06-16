@@ -33,28 +33,12 @@
     </ng-template>
   </div>
   <div *ngIf="profileData?.reviewType !== 'policy'">
-    <app-satisfaction-rating-distribution [satisfactionRatingDistribution]="satisfactionRatingDistribution" [profileData]="profileData"></app-satisfaction-rating-distribution>
+    <ng-container *ngIf="consultationId !== 1245">
+      <app-satisfaction-rating-distribution [satisfactionRatingDistribution]="satisfactionRatingDistribution" [profileData]="profileData"></app-satisfaction-rating-distribution>
+    </ng-container>
     <app-consultation-public-responses></app-consultation-public-responses>
   </div>
 </section>
 <app-thank-you-modal *ngIf="showThankYouModal" [points]="earnedPoints" [profileData]="profileData" (closeThankYouModal)="onCloseThanksModal()">
 </app-thank-you-modal>
 <app-profane-modal *ngIf="isConfirmModal" [message]='confirmMessage' [showCancel]=false (close)='confirmed($event)'></app-profane-modal>
-
-
-<div bsModal #emailVerificationModal="bs-modal" *ngIf="emailVerification" class="modal fade logout-confirm-modal" tabindex="-1"
-  [config]="{show: true, backdrop: false, ignoreBackdropClick: true, keyboard: false}" role="dialog"
-  aria-labelledby="emailVerificationModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-        <button class="cls-btn" ><img src="assets/images/close.png" (click)="onCloseEmailModal()" /></button>
-        <div class="email-modal">
-            <img class="modal-img mb-3" src="assets/images/email-verify.png" />
-            <p class="heading-text mb-2">Please check your email and verify</p>
-            <p class="sub-heading-text mb-4 text-center">In order to claim your {{earnedPoints}} points and submit your response to the government, please verify your email</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

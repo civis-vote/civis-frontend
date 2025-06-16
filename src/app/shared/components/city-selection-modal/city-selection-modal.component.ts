@@ -21,9 +21,7 @@ export class CitySelectionModalComponent implements OnInit {
   loading: boolean;
   cities: any;
   dropdownText = 'Begin Typing';
-  user = {
-    cityId: null,
-  };
+  user: { cityId: any; firstName?: string } = { cityId: null, firstName: '' };
 
   constructor(
     private apollo: Apollo,

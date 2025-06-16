@@ -29,7 +29,7 @@
             </span>
           </p>
 
-          <div class="social-login-btn-container" *ngIf="!emailSignup && !otpStep && !isWhiteLabelDomain">
+          <div class="social-login-btn-container" *ngIf="!emailSignup && !otpStep">
             <div class="login-btn w-100" (click)="redirectTo('google')">
               <img class="icon-img" src="assets/images/auth-google.png" />
               <p class="login-btn-text">{{'Sign in with Google' | translate}}</p>

@@ -1,72 +1,56 @@
-<div
-  bsModal
-  #authModal="bs-modal"
-  class="modal fade logout-confirm-modal"
-  tabindex="-1"
-  [config]="{
+<div bsModal #authModal="bs-modal" class="modal fade auth-modal-wrapper" tabindex="-1" [config]="{
     show: true,
-    backdrop: false,
+    backdrop: true,
     ignoreBackdropClick: true,
     keyboard: false
-  }"
-  role="dialog"
-  aria-labelledby="authModal"
->
-  <div class="modal-dialog">
+  }" role="dialog" aria-labelledby="authModal">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-body">
         <button class="close-btn">
           <img src="assets/images/close.png" (click)="onClose()" />
         </button>
         <div class="auth-modal">
-          <img class="modal-img mb-3" src="assets/images/signup-modal.png" />
-          <p class="heading-text mb-2" *ngIf="!otpStep">
+          <div class="text-center">
+            <img class="modal-img mb-3" src="assets/images/signup-modal.png" />
+          </div>
+          <p class="heading-text mb-3" *ngIf="!otpStep">
             {{ fromNavbar ? ('Log In / Sign Up' | translate) : ('Just one more step!' | translate) }}
           </p>
           <p class="heading-text mb-2" *ngIf="otpStep">{{'Enter OTP' | translate}}</p>
-          <p class="sub-heading-text mb-4 text-center" *ngIf="!otpStep && !fromNavbar">
+          <p class="sub-heading-text mb-4" *ngIf="!otpStep && !fromNavbar">
             {{'Your response will be submitted as soon as you Sign Up/ Log In' | translate}}
           </p>
-          <p class="sub-heading-text mb-4 text-center" *ngIf="otpStep">
+          <p class="sub-heading-text mb-4" *ngIf="otpStep">
             {{'OTP sent to' | translate}} <strong>{{ emailForOtp }}.</strong>
             <span class="ml-2">
-              <a href="javascript:void(0)" (click)="startEmailSignup()" class="not-you-link">{{'Not you?' | translate}}</a>
+              <a href="javascript:void(0)" (click)="startEmailSignup()" class="not-you-link">{{'Not you?' |
+                translate}}</a>
             </span>
           </p>
 
-          <div class="d-flex" *ngIf="!emailSignup && !otpStep">
-            <div class="login-btn mr-3" (click)="redirectTo('google')">
+          <div class="social-login-btn-container" *ngIf="!emailSignup && !otpStep">
+            <div class="login-btn w-100" (click)="redirectTo('google')">
               <img class="icon-img" src="assets/images/auth-google.png" />
               <p class="login-btn-text">{{'Sign in with Google' | translate}}</p>
             </div>
-            <div class="login-btn" (click)="redirectTo('facebook')">
+            <div class="login-btn w-100" (click)="redirectTo('facebook')">
               <img class="icon-img" src="assets/images/auth-fb.png" />
               <p class="login-btn-text">{{'Sign in with Facebook' | translate}}</p>
             </div>
           </div>
-          <div
-            class="login-btn login-btn-email"
-            *ngIf="!emailSignup && !otpStep"
-            (click)="startEmailSignup()"
-          >
+          <div class="login-btn login-btn-email" *ngIf="!emailSignup && !otpStep" (click)="startEmailSignup()">
             <img class="icon-img" src="assets/images/auth-email.png" />
             <p class="login-btn-text">{{'Sign in with Email' | translate}}</p>
           </div>
 
-          <form #emailSignupForm="ngForm" *ngIf="emailSignup && !otpStep" class="signup-form" autocomplete="off" (ngSubmit)="submitEmailSignup(emailSignupForm)">
+          <form #emailSignupForm="ngForm" *ngIf="emailSignup && !otpStep" class="signup-form" autocomplete="off"
+            (ngSubmit)="submitEmailSignup(emailSignupForm)">
             <div class="input-box required-field">
               <label for="email">{{ "Email" | translate }}</label>
               <div class="input-box__border">
-                <input
-                  email
-                  id="email"
-                  name="email"
-                  [(ngModel)]="emailForOtp"
-                  required
-                  #email="ngModel"
-                  type="email"
-                  [placeholder]="'Email' | translate"
-                />
+                <input email id="email" name="email" [(ngModel)]="emailForOtp" required #email="ngModel" type="email"
+                  [placeholder]="'Email' | translate" />
               </div>
               <div *ngIf="emailSignupForm.submitted && email.invalid" class="error-msg">
                 <div *ngIf="email.errors?.required">
@@ -81,43 +65,31 @@
             <div>
               <button class="app-btn secondary get-start-btn" type="submit" [disabled]="loadingEmail">
                 <span *ngIf="!loadingEmail">{{'Continue' | translate}}</span>
-                <span *ngIf="loadingEmail"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' | translate}}</span>
+                <span *ngIf="loadingEmail"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' |
+                  translate}}</span>
               </button>
             </div>
           </form>
 
-          <form #otpForm="ngForm" *ngIf="otpStep" class="signup-form" autocomplete="off" (ngSubmit)="submitOtp(otpForm)">
+          <form #otpForm="ngForm" *ngIf="otpStep" class="signup-form" autocomplete="off"
+            (ngSubmit)="submitOtp(otpForm)">
             <div class="input-box required-field">
               <div class="d-flex justify-content-between align-items-center mb-1">
                 <label for="otp" class="mb-0">{{'OTP' | translate}}</label>
                 <ng-container *ngIf="resendOtpCountdown > 0">
                   <span class="ml-2">
-                    {{'Resend OTP in' | translate}} 00:0{{resendOtpCountdown}}
+                    {{'Resend OTP in' | translate}} 00:{{resendOtpCountdown < 10 ? '0' + resendOtpCountdown : resendOtpCountdown}}
                   </span>
                 </ng-container>
                 <ng-container *ngIf="resendOtpCountdown === 0">
-                  <a href="javascript:void(0)"
-                     (click)="resendOtp()"
-                     [class.disabled]="resendingOtp"
-                     class="ml-2">
+                  <a href="javascript:void(0)" (click)="resendOtp()" [class.disabled]="resendingOtp" class="ml-2">
                     {{ resendingOtp ? ('Resending...' | translate) : ('Resend OTP' | translate) }}
                   </a>
                 </ng-container>
               </div>
               <div class="input-box__border">
-                <input
-                  [placeholder]="'Enter OTP' | translate"
-                  type="tel"
-                  inputmode="numeric"
-                  pattern="[0-9]*"
-                  id="otp"
-                  name="otp"
-                  [(ngModel)]="otp"
-                  required
-                  minlength="4"
-                  maxlength="8"
-                  #otpInput="ngModel"
-                />
+                <input [placeholder]="'Enter OTP' | translate" type="tel" inputmode="numeric" pattern="[0-9]*" id="otp"
+                  name="otp" [(ngModel)]="otp" required minlength="4" maxlength="8" #otpInput="ngModel" />
               </div>
               <div *ngIf="otpForm.submitted && otpInput.invalid" class="error-msg">
                 <div *ngIf="otpInput.errors?.required">
@@ -129,7 +101,8 @@
             <div>
               <button class="app-btn secondary get-start-btn" type="submit" [disabled]="loadingOtp">
                 <span *ngIf="!loadingOtp">{{'Login' | translate}}</span>
-                <span *ngIf="loadingOtp"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' | translate}}</span>
+                <span *ngIf="loadingOtp"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' |
+                  translate}}</span>
               </button>
             </div>
           </form>
@@ -139,11 +112,8 @@
   </div>
 </div>
 
-<div class=" fade show user-details-modal-overlay"
-     tabindex="-1"
-     role="dialog"
-     *ngIf="showUserDetailsModal"
-     style="display:block;">
+<div class=" fade show user-details-modal-overlay" tabindex="-1" role="dialog" *ngIf="showUserDetailsModal"
+  style="display:block;">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form #userDetailsNgForm="ngForm" (ngSubmit)="submitUserDetails(userDetailsNgForm)" autocomplete="off">
@@ -154,15 +124,9 @@
           <div class="input-box required-field">
             <label for="userDetailsFirstName">{{'First Name' | translate}}</label>
             <div class="input-box__border">
-              <input
-                type="text"
-                id="userDetailsFirstName"
-                name="firstName"
-                [placeholder]="'Enter First Name' | translate"
-                [(ngModel)]="userDetailsForm.firstName"
-                required
-                [disabled]="userDetailsLoading"
-              />
+              <input type="text" id="userDetailsFirstName" name="firstName"
+                [placeholder]="'Enter First Name' | translate" [(ngModel)]="userDetailsForm.firstName" required
+                [disabled]="userDetailsLoading" />
             </div>
             <div *ngIf="userDetailsNgForm.submitted && userDetailsNgForm.controls.firstName?.invalid" class="error-msg">
               {{'First name is required.' | translate}}
@@ -170,36 +134,18 @@
           </div>
           <div class="input-box required-field">
             <label for="userDetailsEmail">{{'Email' | translate}}</label>
-            <div class="input-box__border">
-              <input
-                type="email"
-                id="userDetailsEmail"
-                name="email"
-                [(ngModel)]="userDetailsForm.email"
-                required
-                [readonly]="true"
-              />
+            <div class="input-box__border disabled-input">
+              <input type="email" id="userDetailsEmail" name="email" [(ngModel)]="userDetailsForm.email" required
+                [readonly]="true" disabled />
             </div>
           </div>
           <div class="location-box required-field col-12">
             <label for="userDetailsCity">{{'City' | translate}}</label>
             <div class="location-box__border">
-              <ng-select
-                id="userDetailsCity"
-                name="cityId"
-                [loading]="userDetailsCitiesLoading"
-                [items]="userDetailsCities"
-                bindLabel="name"
-                bindValue="id"
-                [placeholder]="'Enter City' | translate"
-                [virtualScroll]="true"
-                dropdownPosition="bottom"
-                [notFoundText]="'No cities found'"
-                [clearable]="true"
-                loadingText="Searching..."
-                [(ngModel)]="userDetailsForm.cityId"
-                required
-              >
+              <ng-select id="userDetailsCity" name="cityId" [loading]="userDetailsCitiesLoading"
+                [items]="userDetailsCities" bindLabel="name" bindValue="id" [placeholder]="'Enter City' | translate"
+                [virtualScroll]="true" dropdownPosition="bottom" [notFoundText]="'No cities found'" [clearable]="true"
+                loadingText="Searching..." [(ngModel)]="userDetailsForm.cityId" required>
               </ng-select>
             </div>
             <div *ngIf="userDetailsNgForm.submitted && userDetailsNgForm.controls.cityId?.invalid" class="error-msg">
@@ -211,7 +157,8 @@
         <div class="modal-footer">
           <button class="app-btn secondary get-start-btn" type="submit" [disabled]="userDetailsLoading">
             <span *ngIf="!userDetailsLoading">{{'Save' | translate}}</span>
-            <span *ngIf="userDetailsLoading"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' | translate}}</span>
+            <span *ngIf="userDetailsLoading"><span class="spinner-border spinner-border-sm"></span> {{'Please wait...' |
+              translate}}</span>
           </button>
         </div>
       </form>

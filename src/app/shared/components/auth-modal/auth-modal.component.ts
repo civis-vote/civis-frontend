@@ -190,7 +190,7 @@ export class AuthModalComponent implements OnInit {
     this.otp = '';
   }
 
-  startResendOtpCountdown(seconds: number = 3) {
+  startResendOtpCountdown(seconds: number = 10) {
     this.resendOtpCountdown = seconds;
     if (this.resendOtpTimer) {
       clearInterval(this.resendOtpTimer);

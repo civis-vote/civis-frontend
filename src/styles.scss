@@ -49,3 +49,7 @@ body {
   margin: 0;
   font-family: 'Encode Sans', sans-serif !important;
 }
+
+.cke_display_version_check-absolute:before {
+  display: none !important;
+}

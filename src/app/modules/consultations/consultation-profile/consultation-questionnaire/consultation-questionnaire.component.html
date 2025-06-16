@@ -1,6 +1,6 @@
 <div #questionnaireContainer>
   <div class="paper-effect  mt-4 m-0-sm" *ngIf="!responseCreated">
-    <ng-container *ngIf="consultationId !== 707 && consultationId !== 404 && consultationId !== 1245">
+    <ng-container *ngIf="consultationId !== 707 && consultationId !== 404 && consultationId !== WHITE_LABEL_CONSULTATION_ID">
       <app-satisfaction-rating-selection (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
     </ng-container>
     <div class="question-box">
@@ -35,7 +35,8 @@
                   <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
                     <label>
                       <input type="checkbox" class="cm-radio" (input)="onAnswerChange(question,subQuestion, $event.target.checked)" [formControlName]="subQuestion.id" (click)="toggleCheckbox(question.id, subQuestion.id)">
-                      <span>{{ getSubQuestionText(subQuestion) }}</span>
+                      <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
+                      <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                     </label>
                   </div>
                   <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>

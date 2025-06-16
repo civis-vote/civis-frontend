@@ -20,12 +20,10 @@ import { CookieModule, CookieService } from 'ngx-cookie';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { StarterService } from './shared/services/starter.service';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { WhiteLabelGuard } from "./shared/guards/white-label.guard";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    PageNotFoundComponent,
-  ],
+  declarations: [AppComponent, PageNotFoundComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -47,10 +45,10 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
     AuthGuard,
     ConfirmUserGuard,
     UnsubscribeUserGuard,
+    WhiteLabelGuard,
     CookieService,
     StarterService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

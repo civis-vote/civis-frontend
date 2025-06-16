@@ -9,6 +9,7 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
 import { CookieService } from 'ngx-cookie';
 import { environment } from '../../../environments/environment';
+import { WhiteLabelService } from 'src/app/shared/services/white-label.service';
 
 @Component({
   selector: 'app-navbar',
@@ -61,6 +62,7 @@ export class NavbarComponent implements OnInit {
     private consultationService: ConsultationsService,
     private errorService: ErrorService,
     private cookieService: CookieService,
+    private readonly whiteLabelService: WhiteLabelService
     ) {
         this.consultationService.consultationId$
         .pipe(
@@ -199,7 +201,11 @@ export class NavbarComponent implements OnInit {
     localStorage.removeItem('civis-token_expires');
     this.userService.currentUser = null;
     this.userService.userLoaded$.next(false);
-    this.router.navigate(['']);
+    if (this.whiteLabelService.isWhiteLabelSubdomain()) {
+      window.location.reload();
+    } else {
+      this.router.navigate(['']);
+    }
   }
 
   @HostListener('window:scroll', [])

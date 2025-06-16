@@ -14,7 +14,7 @@ import { getTranslatedText, createLangObject, setResponseVisibility } from 'src/
 import { ModalDirective } from 'ngx-bootstrap';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
-import { LANGUAGE_IDS, LANGUAGES } from 'src/app/shared/models/constants/constants';
+import { LANGUAGE_IDS, LANGUAGES, WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
 
 @Component({
   selector: 'app-read-respond',
@@ -23,6 +23,7 @@ import { LANGUAGE_IDS, LANGUAGES } from 'src/app/shared/models/constants/constan
   encapsulation: ViewEncapsulation.None,
 })
 export class ReadRespondComponent implements OnInit {
+  public WHITE_LABEL_CONSULTATION_ID = WHITE_LABEL_CONSULTATION_ID;
 
   profileData: any;
   consultationId: number;

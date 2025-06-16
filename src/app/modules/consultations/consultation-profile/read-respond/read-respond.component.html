@@ -33,7 +33,7 @@
     </ng-template>
   </div>
   <div *ngIf="profileData?.reviewType !== 'policy'">
-    <ng-container *ngIf="consultationId !== 1245">
+    <ng-container *ngIf="consultationId !== WHITE_LABEL_CONSULTATION_ID">
       <app-satisfaction-rating-distribution [satisfactionRatingDistribution]="satisfactionRatingDistribution" [profileData]="profileData"></app-satisfaction-rating-distribution>
     </ng-container>
     <app-consultation-public-responses></app-consultation-public-responses>

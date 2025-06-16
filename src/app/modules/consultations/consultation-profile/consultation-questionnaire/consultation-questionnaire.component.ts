@@ -43,6 +43,7 @@ import { environment } from "../../../../../environments/environment";
 import { MetaPixelService } from "src/app/shared/services/pixel.service";
 import { CookieService } from 'ngx-cookie';
 import { Router } from '@angular/router';
+import { WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
 
 @Component({
   selector: "app-consultation-questionnaire",
@@ -52,6 +53,8 @@ import { Router } from '@angular/router';
 export class ConsultationQuestionnaireComponent
   implements OnInit, AfterViewInit, AfterViewChecked
 {
+  public WHITE_LABEL_CONSULTATION_ID = WHITE_LABEL_CONSULTATION_ID;
+
   @Input() profileData;
   @Output() openThankYouModal: EventEmitter<any> = new EventEmitter();
   @ViewChild("questionnaireContainer", { read: ElementRef, static: false })

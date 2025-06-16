@@ -12,6 +12,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import gql from 'graphql-tag';
 import { ApolloQueryResult } from 'apollo-client';
 import { CURRENT_USER_UPDATE_MUTATION } from '../city-selection-modal/city-selection-modal.graphql';
+import { WhiteLabelService } from '../../services/white-label.service';
 
 const AUTH_LOGIN_MUTATION = gql`
   mutation AuthLogin($email: String!) {
@@ -106,9 +107,12 @@ export class AuthModalComponent implements OnInit {
     private errorService: ErrorService,
     private userService: UserService,
     private graphqlService: GraphqlService,
+    private readonly whiteLabelService: WhiteLabelService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.isWhiteLabelDomain = this.whiteLabelService.isWhiteLabelSubdomain();
+  }
 
   submit() {
     if (!this.signupForm.valid) {

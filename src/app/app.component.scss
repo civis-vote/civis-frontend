@@ -22,3 +22,39 @@
     margin-left: -15px;
   }
 }
+
+// TODO: Remove the code after awards section removed
+.quick-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  padding: 8px 16px;
+  background-color: #fcf9f2;
+  z-index: 9999;
+  @media screen and (max-width: 768px) {
+    height: 110px;
+  }
+  img {
+    width: 35px;
+    height: 35px;
+    margin-right: 8px;
+  }
+  a {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5;
+    color: #3a5f7a;
+  }
+}
+
+.router-outlet-wrapper {
+  margin-top: 130px;
+  @media screen and (max-width: 768px) {
+    margin-top: 160px;
+  }
+}

@@ -129,11 +129,6 @@
     }
 
     .logo-container {
-      display: flex;
-      align-items: center;
-      @media screen and (max-width: 991px) {
-        justify-content: center;
-      }
       .logo-2 {
         margin-left: 30px;
         margin-top: 15px;

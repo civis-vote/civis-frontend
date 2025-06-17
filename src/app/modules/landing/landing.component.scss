@@ -78,6 +78,28 @@
     }
   }
 
+  &__vikasit-section {
+    text-align: center;
+    background-color: $blue-bg-light;
+    padding: 64px 24px;
+    
+    .section-heading {
+      letter-spacing: 3px !important;
+      text-align: center !important;
+    }
+    .content-container {
+      max-width: 800px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .text-container {
+      margin-bottom: 24px;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #3a5f7a;
+    }
+  }
 
   // TODO: Temporary Awards section styles
   &__award-section {

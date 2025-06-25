@@ -28,12 +28,12 @@ query userProfile($id: Int!) {
                 points
                 consultation {
                 id
-                    title
+                title
                 ministry {
                     id
                     name
-                    logo (resolution : "") {
-                    url
+                    logo (resolution : "100X100") {
+                        url
                     }
                 }
                 responseDeadline

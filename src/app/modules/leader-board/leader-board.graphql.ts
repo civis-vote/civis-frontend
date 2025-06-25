@@ -7,7 +7,7 @@ export const UserList = gql`
         id
         firstName
         points
-        profilePicture (resolution: "300X400>") {
+        profilePicture (resolution: "100X100") {
           id
           filename
           url

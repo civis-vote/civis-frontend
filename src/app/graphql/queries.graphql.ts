@@ -25,7 +25,7 @@ query getCurrentUser{
     lastName
     notifyForNewConsultation
     phoneNumber
-    profilePicture (resolution: "100X100") {
+    profilePicture (resolution: "100x100") {
       id
       url
     }
@@ -41,7 +41,7 @@ query getCurrentUser{
             ministry {
               id
               name
-              logo (resolution : "100X100") {
+              logo (resolution : "100x100") {
                 url
               }
             }

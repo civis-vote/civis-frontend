@@ -49,13 +49,13 @@ export const ConsultationProfileQuery = gql`
         name
         category {
           id
-          coverPhoto (resolution: "350X285") {
+          coverPhoto (resolution: "350x285") {
             id
             filename
             url
           }
         }
-        logo (resolution: "100X100") {
+        logo (resolution: "100x100") {
           id
           filename
           url
@@ -81,7 +81,7 @@ export const ConsultationProfileQuery = gql`
             user {
               id
               firstName
-              profilePicture(resolution: "100X100") {
+              profilePicture(resolution: "100x100") {
                 id
                 url
               }

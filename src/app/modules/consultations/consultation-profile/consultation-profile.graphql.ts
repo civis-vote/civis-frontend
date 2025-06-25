@@ -460,7 +460,7 @@ export const SubmitResponseQuery = gql`
               user {
                 id
                 firstName
-                profilePicture(resolution: "100X100") {
+                profilePicture(resolution: "100x100") {
                   id
                   url
                 }

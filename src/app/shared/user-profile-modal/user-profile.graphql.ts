@@ -16,7 +16,7 @@ query userProfile($id: Int!) {
         cityRank
         firstName
         points
-        profilePicture (resolution: "300X400>") {
+        profilePicture (resolution: "300X400") {
             id
             filename
             url

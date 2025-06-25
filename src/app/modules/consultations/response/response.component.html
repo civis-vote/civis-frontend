@@ -6,7 +6,7 @@
         <div class="c-profile-card__top-section">
           <p class="light-text">{{'CONSULTATION BY'}}</p>
           <div class="ministry-detail">
-            <img [src]="profile?.consultation?.ministry?.logo?.url" class="avatar avatar--42" alt=" " />
+            <img [src]="profile?.consultation?.ministry?.logo?.url" appDefaultImage [type]="'user'" class="avatar avatar--42" alt=" " />
             <p class="ministry-text m-0">{{profile?.consultation?.ministry?.name}}</p>
           </div>
         </div>

@@ -10,7 +10,7 @@
       </div>
       <div class="ministry-detail">
         <img [src]="profile?.ministry?.logo?.url" class="avatar avatar--42"
-          [alt]="profile?.ministry?.name ? profile.ministry.name + ' logo' : 'Ministry logo'" />
+          [alt]="profile?.ministry?.name ? profile.ministry.name + ' logo' : 'Ministry logo'" appDefaultImage [type]="'user'" />
         <p class="regular-text m-0">{{ getMinistryName() }}</p>
       </div>
       <div *ngIf="!summaryData">

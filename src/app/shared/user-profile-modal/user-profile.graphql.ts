@@ -16,7 +16,7 @@ query userProfile($id: Int!) {
         cityRank
         firstName
         points
-        profilePicture (resolution: "300X400>") {
+        profilePicture (resolution: "100X100") {
             id
             filename
             url
@@ -28,12 +28,12 @@ query userProfile($id: Int!) {
                 points
                 consultation {
                 id
-                    title
+                title
                 ministry {
                     id
                     name
-                    logo (resolution : "") {
-                    url
+                    logo (resolution : "100X100") {
+                        url
                     }
                 }
                 responseDeadline

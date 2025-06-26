@@ -40,7 +40,7 @@ export const ConsultationList = gql`
           marathiName
           category {
             id
-            coverPhoto (resolution: "350x285") {
+            coverPhoto (resolution: "350X285") {
               id
               filename
               url

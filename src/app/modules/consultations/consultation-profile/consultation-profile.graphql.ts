@@ -10,7 +10,7 @@ const ConsultationPartnerResponsesFragment = gql`
       name
       officialUrl
       updatedAt
-      logo (resolution: "100x100") {
+      logo (resolution: "100X100") {
         filename
         id
         url
@@ -54,7 +54,7 @@ export const ConsultationProfile = gql`
       showDiscussSection
       isSatisfactionRatingOptional
       summary
-      consultationLogo (resolution: "200x200") {
+      consultationLogo (resolution: "200X200") {
         id
         url
       }
@@ -82,7 +82,7 @@ export const ConsultationProfile = gql`
         id
         category {
           id
-          coverPhoto (resolution: "1500x750") {
+          coverPhoto (resolution: "1500X750") {
             id
             filename
             url
@@ -92,7 +92,7 @@ export const ConsultationProfile = gql`
         hindiName
         odiaName
         marathiName
-        logo (resolution: "100x100") {
+        logo (resolution: "100X100") {
           id
           filename
           url
@@ -126,7 +126,7 @@ export const ConsultationProfile = gql`
             user {
               id
               firstName
-              profilePicture (resolution: "100x100") {
+              profilePicture (resolution: "100X100") {
                 id
                 url
               }
@@ -170,7 +170,7 @@ export const ConsultationProfileCurrentUser = gql`
       odiaTitle
       marathiTitle
       summary
-      consultationLogo (resolution: "350x285") {
+      consultationLogo (resolution: "350X285") {
         id
         url
       }
@@ -196,7 +196,7 @@ export const ConsultationProfileCurrentUser = gql`
         id
         category {
           id
-          coverPhoto (resolution: "1500x750") {
+          coverPhoto (resolution: "1500X750") {
             id
             filename
             url
@@ -206,7 +206,7 @@ export const ConsultationProfileCurrentUser = gql`
         hindiName
         odiaName
         marathiName
-        logo (resolution: "100x100") {
+        logo (resolution: "100X100") {
           id
           filename
           url
@@ -241,7 +241,7 @@ export const ConsultationProfileCurrentUser = gql`
             user {
               id
               firstName
-              profilePicture (resolution: "100x100") {
+              profilePicture (resolution: "100X100") {
                 id
                 url
               }
@@ -312,7 +312,7 @@ export const ConsultationProfileUser = gql`
         id
         category {
           id
-          coverPhoto (resolution: "1500x750") {
+          coverPhoto (resolution: "1500X750") {
             id
             filename
             url
@@ -322,7 +322,7 @@ export const ConsultationProfileUser = gql`
         hindiName
         odiaName
         marathiName
-        logo (resolution: "100x100") {
+        logo (resolution: "100X100") {
           id
           filename
           url
@@ -460,7 +460,7 @@ export const SubmitResponseQuery = gql`
               user {
                 id
                 firstName
-                profilePicture(resolution: "100x100") {
+                profilePicture(resolution: "100X100") {
                   id
                   url
                 }

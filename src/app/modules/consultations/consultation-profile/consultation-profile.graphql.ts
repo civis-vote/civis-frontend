@@ -54,7 +54,7 @@ export const ConsultationProfile = gql`
       showDiscussSection
       isSatisfactionRatingOptional
       summary
-      consultationLogo (resolution: "350x285") {
+      consultationLogo (resolution: "200x200") {
         id
         url
       }
@@ -82,7 +82,7 @@ export const ConsultationProfile = gql`
         id
         category {
           id
-          coverPhoto (resolution: "350x285") {
+          coverPhoto (resolution: "1500x750") {
             id
             filename
             url
@@ -196,7 +196,7 @@ export const ConsultationProfileCurrentUser = gql`
         id
         category {
           id
-          coverPhoto (resolution: "350x285") {
+          coverPhoto (resolution: "1500x750") {
             id
             filename
             url
@@ -312,7 +312,7 @@ export const ConsultationProfileUser = gql`
         id
         category {
           id
-          coverPhoto (resolution: "350x285") {
+          coverPhoto (resolution: "1500x750") {
             id
             filename
             url

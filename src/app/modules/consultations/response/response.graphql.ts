@@ -20,14 +20,14 @@ export const ResponseProfileQuery = gql`
                   id
                   category {
                     id
-                    coverPhoto (resolution: "350x285") {
+                    coverPhoto (resolution: "350X285") {
                       id
                       filename
                       url
                     }
                   }
                   name
-                  logo (resolution: "100x100") {
+                  logo (resolution: "100X100") {
                     id
                     filename
                     url

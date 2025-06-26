@@ -14,7 +14,7 @@ export const ConsultationResponseList = gql`
         user {
           id
           firstName
-          profilePicture (resolution: "100x100") {
+          profilePicture (resolution: "100X100") {
             id
             url
           }
@@ -43,7 +43,7 @@ export const LeaderListQuery = gql`
         id
         firstName
         points
-        profilePicture (resolution: "100x100") {
+        profilePicture (resolution: "100X100") {
           id
           filename
           url

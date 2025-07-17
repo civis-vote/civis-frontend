@@ -25,6 +25,7 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
   profileData: any;
   consultationId: number;
   currentUser: any;
+  loading: boolean;
 
   constructor (
     private activatedRoute: ActivatedRoute,
@@ -46,6 +47,7 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
   }
 
   getConsultationProfile() {
+    this.loading = true;
     const query = ConsultationProfileCurrentUser;
     this.apollo.watchQuery({
       query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfile,
@@ -56,9 +58,11 @@ export class ConsultationProfileComponent implements OnInit, OnDestroy {
       map((res: any) => res.data.consultationProfile)
     )
     .subscribe((data: any) => {
+      this.loading = false;
       this.profileData = data;
       this.updateConsultationStatus();
     }, err => {
+      this.loading = false;
       const e = new Error(err);
         if (e.message.includes('Invalid Access Token')) {
         this.router.navigate(['/auth-private']);

@@ -1,21 +1,12 @@
 <div class="consultation-bg-img" appDefaultImage [type]="'consultation-cover'"
 [ngStyle]="profileData?.ministry?.category?.coverPhoto?.url ? {'background-image': 'url(' + profileData?.ministry?.category?.coverPhoto?.url + ')'} : null"
 [ngClass]="profileData?.visibility === 'private_consultation' ? 'private-bg' : ''"></div>
-<ng-container *ngIf="!loading; else loader">
-  <div class="consultation-profile">
-    <aside class="consultation-profile__sidebar-section">
-      <app-profile-card [profile]='profileData'></app-profile-card>
-    </aside>
-    <section>
-      <router-outlet></router-outlet>
-    </section>
-  </div>
-</ng-container>
-<ng-template #loader>
-  <div class="profile-loading-card d-flex justify-content-center align-items-center">
-    <div class="spinner-border text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div>
-</ng-template>
+<div class="consultation-profile">
+  <aside class="consultation-profile__sidebar-section">
+    <app-profile-card [profile]='profileData' [loading]="loading"></app-profile-card>
+  </aside>
+  <section>
+    <router-outlet></router-outlet>
+  </section>
+</div>
 <app-footer></app-footer>

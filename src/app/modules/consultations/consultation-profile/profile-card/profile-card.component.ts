@@ -20,6 +20,7 @@ export class ProfileCardComponent implements OnInit, OnChanges {
 
   @Input() profile: any;
   @Input() summaryData: any;
+  @Input() loading: boolean;
 
   currentUser: any;
   currentLanguage: any;

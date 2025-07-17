@@ -39,6 +39,15 @@
     <app-consultation-public-responses></app-consultation-public-responses>
   </div>
 </section>
+<ng-container *ngIf="loading">
+  <section class="read-response-container">
+    <div class="paper-effect d-flex justify-content-center align-items-center" style="height: 500px;">
+      <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </section>
+</ng-container>
 <app-thank-you-modal *ngIf="showThankYouModal" [points]="earnedPoints" [profileData]="profileData" (closeThankYouModal)="onCloseThanksModal()">
 </app-thank-you-modal>
 <app-profane-modal *ngIf="isConfirmModal" [message]='confirmMessage' [showCancel]=false (close)='confirmed($event)'></app-profane-modal>

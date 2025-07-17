@@ -3,7 +3,7 @@
 [ngClass]="profileData?.visibility === 'private_consultation' ? 'private-bg' : ''"></div>
 <div class="consultation-profile">
   <aside class="consultation-profile__sidebar-section">
-    <app-profile-card [profile]='profileData'></app-profile-card>
+    <app-profile-card [profile]='profileData' [loading]="loading"></app-profile-card>
   </aside>
   <section>
     <router-outlet></router-outlet>

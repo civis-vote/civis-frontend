@@ -175,7 +175,7 @@ export class ConsultationQuestionnaireComponent
       this.activeRoundNumber = this.getActiveRound(
         this.profileData.responseRounds
       );
-      if (!this.profileData.hasUserFilledResponseInCurrentResponseRound) {
+      if (this.profileData.hasUserFilledResponseInCurrentResponseRound) {
         this.responseCreated = true;
         return;
       } else {

@@ -175,8 +175,7 @@ export class ConsultationQuestionnaireComponent
       this.activeRoundNumber = this.getActiveRound(
         this.profileData.responseRounds
       );
-      this.respondedRounds = this.getRespondedRounds();
-      if (this.respondedRounds.includes(this.activeRoundNumber)) {
+      if (this.profileData.hasUserFilledResponseInCurrentResponseRound) {
         this.responseCreated = true;
         return;
       } else {
@@ -199,38 +198,6 @@ export class ConsultationQuestionnaireComponent
 
   getSubQuestionText(subQuestion: any) {
     return this.getTranslatedTextForQuestion(subQuestion);
-  }
-
-  getRespondedRounds() {
-    const respondedRounds = [];
-    if (this.profileData) {
-      const anonymousResponses =
-        this.profileData.anonymousResponses &&
-        this.profileData.anonymousResponses.edges;
-      const sharedResponses =
-        this.profileData.sharedResponses &&
-        this.profileData.sharedResponses.edges;
-      if (anonymousResponses && anonymousResponses.length) {
-        anonymousResponses.map((response: any) => {
-          if (response && response.node && response.node.user) {
-            respondedRounds.push(response.node.roundNumber);
-          }
-        });
-      }
-      if (sharedResponses && sharedResponses.length) {
-        sharedResponses.map((response: any) => {
-          if (response && response.node && response.node.user) {
-            if (
-              this.currentUser &&
-              this.currentUser.id === response.node.user.id
-            ) {
-              respondedRounds.push(response.node.roundNumber);
-            }
-          }
-        });
-      }
-    }
-    return respondedRounds;
   }
 
   makeQuestionnaireModal(roundNumber?) {

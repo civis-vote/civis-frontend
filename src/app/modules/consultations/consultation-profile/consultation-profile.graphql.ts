@@ -150,17 +150,7 @@ export const ConsultationProfile = gql`
 export const ConsultationProfileCurrentUser = gql`
   query consultationProfileCurrentUser($id: Int!) {
     consultationProfile(id: $id) {
-      anonymousResponses {
-        edges {
-          node {
-            id
-            roundNumber
-            user {
-              id
-            }
-          }
-        }
-      }
+      hasUserFilledResponseInCurrentResponseRound
       enforcePrivateResponse
       id
       title
@@ -271,17 +261,7 @@ export const ConsultationProfileCurrentUser = gql`
 export const ConsultationProfileUser = gql`
   query consultationProfileCurrentUser($id: Int!) {
     consultationProfile(id: $id) {
-      anonymousResponses {
-        edges {
-          node {
-            id
-            roundNumber
-            user {
-              id
-            }
-          }
-        }
-      }
+      hasUserFilledResponseInCurrentResponseRound
       enforcePrivateResponse
       id
       title

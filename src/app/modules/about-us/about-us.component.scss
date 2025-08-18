@@ -292,23 +292,10 @@
       row-gap: 40px;
 
       @media screen and (min-width: 710px) {
-        display: flex;
-        flex-wrap: wrap;
+        grid-template-columns: repeat(3, 1fr);
         justify-content: center;
-        column-gap: 24px;
-        row-gap: 64px;
-
-        .first {
-          order: 0;
-        }
-
-        .atharva {
-          order: 1;
-        }
-
-        .next {
-          order: 2;
-        }
+        column-gap: 16px;
+        row-gap: 24px;
 
         .long-description {
           .member-description {

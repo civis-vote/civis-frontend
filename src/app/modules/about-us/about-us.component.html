@@ -11,11 +11,10 @@
   </section>
   <section class="quote-section">
     <div class="quote-text">
-      <q
-        >No office in this land is
+      <q>No office in this land is
         <div class="sep-text">more important</div>
-        than that of being a citizen</q
-      >
+        than that of being a citizen
+      </q>
     </div>
     <div class="quotemaster">Felix Frankfurter</div>
   </section>
@@ -23,12 +22,9 @@
     <h1>What We Do</h1>
     <div class="section-content">
       <div class="video-section">
-        <iframe
-          src="https://www.youtube.com/embed/O20DsP3oWB0"
-          title="YouTube video player"
+        <iframe src="https://www.youtube.com/embed/O20DsP3oWB0" title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        >
+          allowfullscreen>
         </iframe>
       </div>
       <div>
@@ -50,18 +46,14 @@
   <section class="cards-section">
     <h1>At Civis, We...</h1>
     <div class="cards-list">
-      <div
-        class="info-card-wrapper"
-        *ngFor="let card of atCivisCards"
-        [ngClass]="card.isSpecialCard ? 'special-card' : ''"
-      >
+      <div class="info-card-wrapper" *ngFor="let card of atCivisCards"
+        [ngClass]="card.isSpecialCard ? 'special-card' : ''">
         <div class="info-card">
           <div>
             <img [src]="card.image" [alt]="card.text" />
           </div>
           <div class="text">
-            <span class="bolded">{{ card.text }}</span
-            >{{ card.normalText }}
+            <span class="bolded">{{ card.text }}</span>{{ card.normalText }}
           </div>
         </div>
       </div>
@@ -90,10 +82,7 @@
       shape the laws that impact you!
     </div>
     <div class="text-center">
-      <button
-        class="app-btn abt-btn circular"
-        [routerLink]="['/how-civis-works']"
-      >
+      <button class="app-btn abt-btn circular" [routerLink]="['/how-civis-works']">
         How we work
       </button>
     </div>
@@ -103,12 +92,7 @@
     <div class="title">The Team</div>
     <div class="members-list">
       <ng-container *ngFor="let teamMember of teamMembers">
-        <a
-          [href]="teamMember.href"
-          target="_blank"
-          class="member-link"
-          [ngClass]="teamMember.class"
-        >
+        <a [href]="teamMember.href" target="_blank" class="member-link" [ngClass]="teamMember.class">
           <div class="member-card">
             <img [src]="teamMember.image" [alt]="teamMember.name" />
             <div class="name">{{ teamMember.name }}</div>
@@ -140,7 +124,7 @@
         <button class="app-btn abt-btn circular">
           <a [href]="resource.href" target="_blank">{{
             resource.buttonText
-          }}</a>
+            }}</a>
         </button>
       </div>
     </div>

@@ -104,12 +104,22 @@
   </section>
   <section class="partners-section">
     <div class="title">PAST CONSULTATION PARTNERS</div>
-    <div class="img-list">
-      <ng-container *ngFor="let pastPartner of pastPartners">
-        <a [href]="pastPartner.href" target="_blank">
-          <img [src]="pastPartner.image" [alt]="pastPartner.alt" />
-        </a>
-      </ng-container>
+    <div class="marquee-container">
+      <div class="marquee">
+        <div class="img-track">
+          <ng-container *ngFor="let pastPartner of pastPartners">
+            <a [href]="pastPartner.href" target="_blank">
+              <img [src]="pastPartner.image" [alt]="pastPartner.alt" />
+            </a>
+          </ng-container>
+          <!-- Duplicate for seamless looping -->
+          <ng-container *ngFor="let pastPartner of pastPartners">
+            <a [href]="pastPartner.href" target="_blank">
+              <img [src]="pastPartner.image" [alt]="pastPartner.alt" />
+            </a>
+          </ng-container>
+        </div>
+      </div>
     </div>
   </section>
   <section class="resources-section">

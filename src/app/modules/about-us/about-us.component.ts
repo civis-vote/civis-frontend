@@ -102,31 +102,99 @@ export class AboutUsComponent {
     },
   ];
 
+  // pastPartners = [
+  //   {
+  //     image: "assets/images/about-us/NIUA_Logo_new 1 1.png",
+  //     alt: "National Institute of Urban Affairs",
+  //     href: "https://medium.com/civis-vote/engaging-communities-in-the-future-of-indias-cities-7b795ecb99a5",
+  //   },
+  //   {
+  //     image: "assets/images/about-us/logo (1) 1 1.png",
+  //     alt: "CBSE",
+  //     href: "https://medium.com/civis-vote/enabling-educators-learnings-from-a-consultation-10b084fafba4",
+  //   },
+  //   {
+  //     image: "assets/images/about-us/MSInS_Logo 1 1.png",
+  //     alt: "MSInS",
+  //     href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+  //   },
+  //   {
+  //     image: "assets/images/about-us/gmda_logo_trans 1 1.png",
+  //     alt: "GMDA",
+  //     href: "https://medium.com/civis-vote/building-dialogue-a-new-beginning-for-citizens-engagement-6caff57672be",
+  //   },
+  //   {
+  //     image: "assets/images/about-us/NITI_Aayog_logo 1 1.png",
+  //     alt: "NITI AAYOG",
+  //     href: "https://medium.com/civis-vote/justice-delivery-goes-digital-826938401e1",
+  //   },
+  // ];
+
   pastPartners = [
     {
-      image: "assets/images/about-us/NIUA_Logo_new 1 1.png",
-      alt: "National Institute of Urban Affairs",
+      image: "assets/images/about-us/government-partners/1. Government of Maharashtra.jpg",
+      alt: "Government of Maharashtra",
       href: "https://medium.com/civis-vote/engaging-communities-in-the-future-of-indias-cities-7b795ecb99a5",
     },
     {
-      image: "assets/images/about-us/logo (1) 1 1.png",
-      alt: "CBSE",
+      image: "assets/images/about-us/government-partners/2. BMC.jpg",
+      alt: "BMC",
       href: "https://medium.com/civis-vote/enabling-educators-learnings-from-a-consultation-10b084fafba4",
     },
     {
-      image: "assets/images/about-us/MSInS_Logo 1 1.png",
-      alt: "MSInS",
+      image: "assets/images/about-us/government-partners/3. OCAC.jpg",
+      alt: "OCAC",
       href: "https://twitter.com/MSInSociety/status/1656238177018064896",
     },
     {
-      image: "assets/images/about-us/gmda_logo_trans 1 1.png",
-      alt: "GMDA",
-      href: "https://medium.com/civis-vote/building-dialogue-a-new-beginning-for-citizens-engagement-6caff57672be",
+      image: "assets/images/about-us/government-partners/4. Karmayogi Bharat.webp",
+      alt: "Karmayogi Bharat",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
     },
     {
-      image: "assets/images/about-us/NITI_Aayog_logo 1 1.png",
-      alt: "NITI AAYOG",
-      href: "https://medium.com/civis-vote/justice-delivery-goes-digital-826938401e1",
+      image: "assets/images/about-us/government-partners/5. Manipur State Rural Livelihoods Mission.png",
+      alt: "Manipur State Rural Livelihoods Mission",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/6. Securities and Exchange Board of India.png",
+      alt: "Securities and Exchange Board of India",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/7. Maharashtra State Innovaiton Society.png",
+      alt: "Maharashtra State Innovation Society",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/8. Central Board of Secondary Education.png",
+      alt: "Central Board of Secondary Education",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/9. National Institute of Urban Affairs.png",
+      alt: "National Institute of Urban Affairs",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/10. Supreme Court E-committee.png",
+      alt: "Supreme Court E-committee",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/11. NITI Aayog.jpg",
+      alt: "NITI Aayog",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/12. GMDA.webp",
+      alt: "GMDA",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
+    },
+    {
+      image: "assets/images/about-us/government-partners/13. IChangeMyCity.png",
+      alt: "IChangeMyCity",
+      href: "https://twitter.com/MSInSociety/status/1656238177018064896",
     },
   ];
 

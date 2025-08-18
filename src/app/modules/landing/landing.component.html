@@ -244,5 +244,5 @@
 </div>
 
 <ng-template #supporterCard let-supporter="supporter">
-  <img [src]="supporter.image" [alt]="supporter.alt" />
+  <img [src]="supporter.image" [alt]="supporter.alt" [ngClass]="supporter.class" />
 </ng-template>

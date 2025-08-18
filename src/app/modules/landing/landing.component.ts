@@ -31,18 +31,8 @@ export class LandingComponent implements OnInit {
 
   supporters = [
     {
-      image: "assets/images/about-us/godrej 1 1.png",
-      alt: "Godrej",
-      href: "https://godrejcp.com/",
-    },
-    {
       image: "assets/images/about-us/ll 1 1.png",
       alt: "LAL FAMILY FOUNDATION",
-    },
-    {
-      image: "assets/images/about-us/Manuputra 1.png",
-      alt: "Manupatra",
-      href: "https://www.manupatrafast.com/?t=desktop",
     },
     {
       image: "assets/images/about-us/rnp 1 1.png",
@@ -50,9 +40,15 @@ export class LandingComponent implements OnInit {
       href: "https://rohininilekaniphilanthropies.org/",
     },
     {
-      image: "assets/images/about-us/SVP-India.png",
+      image: "assets/images/donor-logos-25-26/SVP-Full-Logo.png",
       alt: "SVP INDIA",
       href: "https://svpindia.org/",
+    },
+    {
+      image: "assets/images/donor-logos-25-26/Tata Trusts Black Logo.png",
+      alt: "TATA TRUSTS",
+      href: "https://www.tatatrusts.org/",
+      class: "tata-trusts"
     },
   ];
 

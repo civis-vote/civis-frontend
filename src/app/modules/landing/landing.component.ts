@@ -45,10 +45,15 @@ export class LandingComponent implements OnInit {
       href: "https://svpindia.org/",
     },
     {
-      image: "assets/images/donor-logos-25-26/Tata Trusts Black Logo.png",
+      image: "assets/images/donor-logos-25-26/Tata-Trusts-Black-Logo.png",
       alt: "TATA TRUSTS",
       href: "https://www.tatatrusts.org/",
       class: "tata-trusts"
+    },
+    {
+      image: "assets/images/donor-logos-25-26/TOL-Logo.png",
+      alt: "TATA TRUSTS",
+      class: "tol-logo"
     },
   ];
 

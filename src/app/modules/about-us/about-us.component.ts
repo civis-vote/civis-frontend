@@ -102,34 +102,6 @@ export class AboutUsComponent {
     },
   ];
 
-  // pastPartners = [
-  //   {
-  //     image: "assets/images/about-us/NIUA_Logo_new 1 1.png",
-  //     alt: "National Institute of Urban Affairs",
-  //     href: "https://medium.com/civis-vote/engaging-communities-in-the-future-of-indias-cities-7b795ecb99a5",
-  //   },
-  //   {
-  //     image: "assets/images/about-us/logo (1) 1 1.png",
-  //     alt: "CBSE",
-  //     href: "https://medium.com/civis-vote/enabling-educators-learnings-from-a-consultation-10b084fafba4",
-  //   },
-  //   {
-  //     image: "assets/images/about-us/MSInS_Logo 1 1.png",
-  //     alt: "MSInS",
-  //     href: "https://twitter.com/MSInSociety/status/1656238177018064896",
-  //   },
-  //   {
-  //     image: "assets/images/about-us/gmda_logo_trans 1 1.png",
-  //     alt: "GMDA",
-  //     href: "https://medium.com/civis-vote/building-dialogue-a-new-beginning-for-citizens-engagement-6caff57672be",
-  //   },
-  //   {
-  //     image: "assets/images/about-us/NITI_Aayog_logo 1 1.png",
-  //     alt: "NITI AAYOG",
-  //     href: "https://medium.com/civis-vote/justice-delivery-goes-digital-826938401e1",
-  //   },
-  // ];
-
   pastPartners = [
     {
       image: "assets/images/about-us/government-partners/1. Government of Maharashtra.jpg",

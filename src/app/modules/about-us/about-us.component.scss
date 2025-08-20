@@ -373,7 +373,9 @@
       display: flex;
       width: max-content;
       animation: scroll 30s linear infinite;
-  
+      &:hover {
+        animation-play-state: paused;
+      }
       .img-track {
         display: flex;
         align-items: center;
@@ -383,6 +385,7 @@
         a {
           flex: 0 0 auto;
           display: block;
+          cursor: initial;
           
           img {
             height: 70px;

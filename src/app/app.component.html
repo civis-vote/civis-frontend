@@ -1,17 +1,8 @@
 <app-confirmation-modal *ngIf="confirmModalOpen" [message]='confirmMessage'
   (close)='optionTranslate($event)'></app-confirmation-modal>
 <app-toast></app-toast>
-<!-- TODO: start Temporary Awards section will be removed later -->
-<div class="quick-banner">
-  <img src="assets/images/Gom-Logo.jpeg" alt="Gom Logo" />
-  <a href="https://vikasitmaharashtra.civis.vote/consultations/1245/read">CLICK HERE TO SHARE YOUR FEEDBACK ON THE
-    VIKASIT MAHARASHTRA 2047 SURVEY SUPPORTED BY CIVIC INNOVATION FOUNDATION (CIVIS)</a>
-</div>
-<!-- End Temporary Awards section will be removed later -->
 <app-navbar></app-navbar>
 <app-error></app-error>
-<div class="router-outlet-wrapper">
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>
 <app-city-selection-modal *ngIf="showCitySelection" [isPrivate]="isPrivate">
 </app-city-selection-modal>

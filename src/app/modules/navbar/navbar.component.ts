@@ -237,7 +237,11 @@ export class NavbarComponent implements OnInit {
 
   routeToConsultation(subRoute: string) {
     if (!this.currentUser && subRoute === 'discuss') {
-      this.router.navigateByUrl('/auth');
+      this.errorService.showErrorModal(
+        '401',
+        'To view the Discussion please login',
+        false
+      );
       return;
     }
     const urlArray = this.router.url.split('/');

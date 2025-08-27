@@ -1,6 +1,6 @@
 <div #questionnaireContainer>
   <div class="paper-effect  mt-4 m-0-sm" *ngIf="!responseCreated">
-    <ng-container *ngIf="consultationId !== 707 && consultationId !== 404 && consultationId !== WHITE_LABEL_CONSULTATION_ID">
+    <ng-container *ngIf="profileData?.showSatisfactionRating">
       <app-satisfaction-rating-selection (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
     </ng-container>
     <div class="question-box">

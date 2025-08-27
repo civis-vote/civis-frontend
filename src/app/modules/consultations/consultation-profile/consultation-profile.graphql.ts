@@ -52,6 +52,7 @@ export const ConsultationProfile = gql`
       id
       title
       showDiscussSection
+      showSatisfactionRating
       isSatisfactionRatingOptional
       summary
       consultationLogo (resolution: "200X200") {
@@ -155,6 +156,7 @@ export const ConsultationProfileCurrentUser = gql`
       id
       title
       showDiscussSection
+      showSatisfactionRating
       isSatisfactionRatingOptional
       hindiTitle
       odiaTitle
@@ -265,6 +267,7 @@ export const ConsultationProfileUser = gql`
       enforcePrivateResponse
       id
       title
+      showSatisfactionRating
       isSatisfactionRatingOptional
       summary
       englishSummary

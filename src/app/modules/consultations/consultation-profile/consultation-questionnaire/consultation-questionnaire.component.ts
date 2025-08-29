@@ -41,9 +41,9 @@ import { ErrorService } from "src/app/shared/components/error-modal/error.servic
 import { profanityList } from "src/app/graphql/queries.graphql";
 import { environment } from "../../../../../environments/environment";
 import { MetaPixelService } from "src/app/shared/services/pixel.service";
-import { CookieService } from 'ngx-cookie';
-import { Router } from '@angular/router';
-import { WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
+import { CookieService } from "ngx-cookie";
+import { Router } from "@angular/router";
+import { WHITE_LABEL_CONSULTATION_ID } from "src/app/shared/models/constants/constants";
 
 @Component({
   selector: "app-consultation-questionnaire",
@@ -107,9 +107,9 @@ export class ConsultationQuestionnaireComponent
     private metaPixelService: MetaPixelService,
     private el: ElementRef,
     private cookieService: CookieService,
-    private router: Router,
+    private router: Router
   ) {
-    this.currentLanguage = this.cookieService.get('civisLang');
+    this.currentLanguage = this.cookieService.get("civisLang");
     this.questionnaireForm = this._fb.group({});
     this.consultationService.consultationId$
       .pipe(filter((i) => i !== null))
@@ -133,7 +133,7 @@ export class ConsultationQuestionnaireComponent
           (err: any) => {}
         );
     }
-    if(this.consultationId === 404 || this.consultationId === 707) {
+    if (this.consultationId === 404 || this.consultationId === 707) {
       this.responseFeedback = "satisfied";
     }
   }
@@ -307,7 +307,10 @@ export class ConsultationQuestionnaireComponent
     if (this.responseSubmitLoading) {
       return;
     }
-    if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
+    if (
+      !this.responseFeedback &&
+      !this.profileData?.isSatisfactionRatingOptional
+    ) {
       this.consultationService.satisfactionRatingError.next(true);
       this.showError = true;
       this.scrollToError = true;
@@ -344,7 +347,7 @@ export class ConsultationQuestionnaireComponent
           } else {
             // If the user is not authenticated, show the auth modal and store the consultation response to local storage.
             const currentUrl = this.router.url;
-            this.cookieService.put('loginCallbackUrl', currentUrl);
+            this.cookieService.put("loginCallbackUrl", currentUrl);
             this.authModal = true;
             localStorage.setItem(
               "consultationResponse",
@@ -354,7 +357,10 @@ export class ConsultationQuestionnaireComponent
         }
       }
     } else {
-      if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
+      if (
+        !this.responseFeedback &&
+        !this.profileData?.isSatisfactionRatingOptional
+      ) {
         this.consultationService.satisfactionRatingError.next(true);
       }
       this.showError = true;
@@ -619,20 +625,24 @@ export class ConsultationQuestionnaireComponent
     );
     this.apollo
       .mutate({
-        mutation: this.currentUser ? SubmitResponseQuery : SubmitResponseGuestUser,
+        mutation: this.currentUser
+          ? SubmitResponseQuery
+          : SubmitResponseGuestUser,
         variables: {
           consultationResponse: consultationResponse,
         },
         update: (store, { data: res }) => {
           const variables = { id: this.consultationId };
           const resp: any = store.readQuery({
-            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
+            query: this.currentUser
+              ? ConsultationProfileCurrentUser
+              : ConsultationProfileUser,
             variables,
           });
           if (res) {
-            if(this.currentUser?.id) {
+            if (this.currentUser?.id) {
               resp.consultationProfile.respondedOn =
-              res.consultationResponseCreate.consultation.respondedOn;
+                res.consultationResponseCreate.consultation.respondedOn;
             }
             resp.consultationProfile.sharedResponses =
               res.consultationResponseCreate.consultation.sharedResponses;
@@ -642,7 +652,9 @@ export class ConsultationQuestionnaireComponent
               res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
           }
           store.writeQuery({
-            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
+            query: this.currentUser
+              ? ConsultationProfileCurrentUser
+              : ConsultationProfileUser,
             variables,
             data: resp,
           });
@@ -683,13 +695,83 @@ export class ConsultationQuestionnaireComponent
     return;
   }
 
+  checkQuestionShown(questionId: string): boolean {
+    const question = this.questions?.find((q) => q.id == questionId);
+    if (!question?.isConditional) return true;
+
+    const parentQuestion = this.questions?.find(
+      (q) =>
+        q.conditionalQuestions?.some(
+          (conditionalQuestion) => conditionalQuestion.id == questionId
+        ) ||
+        q.subQuestions?.some((subQuestion) =>
+          subQuestion.conditionalQuestionOptions?.some(
+            (conditionalQuestionOption) =>
+              conditionalQuestionOption.id == questionId
+          )
+        )
+    );
+
+    if (!parentQuestion) return false;
+
+    const parentValue = this.questionnaireForm.get(
+      parentQuestion.id.toString()
+    )?.value;
+    if (!parentValue) return false;
+
+    switch (parentQuestion.questionType) {
+      case "checkbox":
+        return Object.keys(parentValue).some(
+          (key) =>
+            parentValue[key] &&
+            parentQuestion.subQuestions
+              ?.find((subQuestion) => subQuestion.id == key)
+              ?.conditionalQuestionOptions?.some(
+                (conditionalQuestionOption) =>
+                  conditionalQuestionOption.id == questionId
+              )
+        );
+      case "multiple_choice":
+      case "dropdown":
+        return (
+          parentQuestion.subQuestions
+            ?.find((subQuestion) => subQuestion.id == parentValue)
+            ?.conditionalQuestionOptions?.some(
+              (conditionalQuestionOption) =>
+                conditionalQuestionOption.id == questionId
+            ) || false
+        );
+      case "long_text":
+        return parentValue.trim().length > 0;
+      default:
+        return false;
+    }
+  }
+
+  getVisibleQuestions() {
+    return (
+      this.questions?.filter((question) =>
+        this.checkQuestionShown(question.id.toString())
+      ) || []
+    );
+  }
+
+  getQuestionNumber(questionId: string): number {
+    const visibleQuestions = this.getVisibleQuestions();
+    return visibleQuestions.findIndex((q) => q.id == questionId) + 1;
+  }
+
   getSubmitButtonTooltip(): string {
-    if (this.showError && !this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
-      return 'Please select a Satisfaction Rating to submit the response';
+    if (
+      this.showError &&
+      !this.responseFeedback &&
+      !this.profileData?.isSatisfactionRatingOptional
+    ) {
+      return "Please select a Satisfaction Rating to submit the response";
     } else if (this.showError && !this.questionnaireForm?.valid) {
-      return 'Please fill all the answers to submit response.';
+      return "Please fill all the answers to submit response.";
     } else {
-      return '';
+      return "";
     }
   }
 }

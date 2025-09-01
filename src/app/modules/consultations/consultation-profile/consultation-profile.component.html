@@ -1,6 +1,5 @@
 <div class="consultation-bg-img" appDefaultImage [type]="'consultation-cover'"
-[ngStyle]="profileData?.ministry?.category?.coverPhoto?.url ? {'background-image': 'url(' + profileData?.ministry?.category?.coverPhoto?.url + ')'} : null"
-[ngClass]="profileData?.visibility === 'private_consultation' ? 'private-bg' : ''"></div>
+[ngStyle]="profileData?.ministry?.category?.coverPhoto?.url ? {'background-image': 'url(' + profileData?.ministry?.category?.coverPhoto?.url + ')'} : null"></div>
 <div class="consultation-profile">
   <aside class="consultation-profile__sidebar-section">
     <app-profile-card [profile]='profileData' [loading]="loading"></app-profile-card>

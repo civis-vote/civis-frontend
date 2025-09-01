@@ -15,12 +15,6 @@
     display: none;
   }
   z-index: -1;
-  &.private-bg {
-    background-image: url('../../../../assets/images/private-consultation-bg.png') !important;
-    background-repeat: repeat !important;
-    background-position: 0% 0% !important;
-    background-size: auto !important;
-  }
 }
 
 .consultation-profile {

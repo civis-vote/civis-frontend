@@ -9,10 +9,7 @@ import {
 } from "@angular/router";
 import { Observable } from "rxjs";
 import { WhiteLabelService } from "../services/white-label.service";
-import {
-  WHITE_LABEL_ALLOWED_PATHS,
-  WHITE_LABEL_CONSULTATION_URL,
-} from "../models/constants/constants";
+import { WHITE_LABEL_CONFIGS } from "../models/constants/constants";
 
 @Injectable()
 export class WhiteLabelGuard implements CanActivate {
@@ -34,14 +31,20 @@ export class WhiteLabelGuard implements CanActivate {
       const path = this.document?.location?.pathname;
       const isWhiteLabelSubdomain =
         this.whiteLabelService.isWhiteLabelSubdomain();
-      const isAllowed = WHITE_LABEL_ALLOWED_PATHS.some(function (allowedPath) {
-        return path?.startsWith(allowedPath);
-      });
+      
+      if (isWhiteLabelSubdomain) {
+        const allowedPaths = this.whiteLabelService.getAllowedPathsForHostname();
+        const isAllowed = allowedPaths.some(function (allowedPath) {
+          return path?.startsWith(allowedPath);
+        });
 
-      if (isWhiteLabelSubdomain && !isAllowed) {
-        this.router.navigate([WHITE_LABEL_CONSULTATION_URL]);
-        console.log("navigating")
-        return false;
+        if (!isAllowed) {
+          const config = this.whiteLabelService.getCurrentWhiteLabelConfig();
+          if (config) {
+            this.router.navigate([config.consultationUrl]);
+            return false;
+          }
+        }
       }
       return true;
     } catch (error) {

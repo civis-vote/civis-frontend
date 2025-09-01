@@ -12,7 +12,31 @@ export const LANGUAGES = [
   { id: LANGUAGE_IDS.MARATHI, name: "Marathi" },
 ];
 
-export const WHITE_LABEL_CONSULTATION_ID = 1245;
-export const WHITE_LABEL_HOSTNAME = 'vikasitmaharashtra.civis.vote';
-export const WHITE_LABEL_CONSULTATION_URL = '/consultations/1245';
-export const WHITE_LABEL_ALLOWED_PATHS = [WHITE_LABEL_CONSULTATION_URL, '/auth'];
+export interface WhiteLabelConfig {
+  consultationId: number;
+  hostname: string;
+  consultationUrl: string;
+  allowedPaths: string[];
+}
+
+// White label configurations for different consultations
+export const WHITE_LABEL_CONFIGS: WhiteLabelConfig[] = [
+  {
+    consultationId: 1245,
+    hostname: 'vikasitmaharashtra.civis.vote',
+    consultationUrl: '/consultations/1245',
+    allowedPaths: ['/consultations/1245', '/auth']
+  },
+  {
+    consultationId: 1318,
+    hostname: 'banapeleblueprint-part1.civis.vote',
+    consultationUrl: '/consultations/1318',
+    allowedPaths: ['/consultations/1318', '/auth']
+  },
+  {
+    consultationId: 1317,
+    hostname: 'banapeleblueprint-part2.civis.vote',
+    consultationUrl: '/consultations/1317',
+    allowedPaths: ['/consultations/1317', '/auth']
+  }
+];

@@ -7,7 +7,7 @@ import { ErrorService } from 'src/app/shared/components/error-modal/error.servic
 import { CookieService } from 'ngx-cookie';
 import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
 import { ConsultationsService } from 'src/app/shared/services/consultations.service';
-import { WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
+import { WhiteLabelService } from 'src/app/shared/services/white-label.service';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/con
   encapsulation: ViewEncapsulation.None,
 })
 export class ConsultationsSummaryComponent implements OnInit {
-  public WHITE_LABEL_CONSULTATION_ID = WHITE_LABEL_CONSULTATION_ID;
+  public whiteLabelConsultationId: number | null = null;
 
   consultationId: number;
   responseToken: any;
@@ -41,7 +41,9 @@ export class ConsultationsSummaryComponent implements OnInit {
               private errorService: ErrorService,
               private _cookieService: CookieService,
               private consultationService: ConsultationsService,
+              private whiteLabelService: WhiteLabelService,
               ) {
+    this.whiteLabelConsultationId = this.whiteLabelService.getConsultationIdForHostname();
     this.activatedRoute.params.subscribe((param: any) => {
       this.consultationId = +param['id'];
     });

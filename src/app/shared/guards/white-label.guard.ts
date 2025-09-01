@@ -42,7 +42,6 @@ export class WhiteLabelGuard implements CanActivate {
           const config = this.whiteLabelService.getCurrentWhiteLabelConfig();
           if (config) {
             this.router.navigate([config.consultationUrl]);
-            console.log("navigating to", config.consultationUrl);
             return false;
           }
         }

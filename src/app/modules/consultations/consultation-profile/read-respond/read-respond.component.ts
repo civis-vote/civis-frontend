@@ -14,7 +14,8 @@ import { getTranslatedText, createLangObject, setResponseVisibility } from 'src/
 import { ModalDirective } from 'ngx-bootstrap';
 import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
-import { LANGUAGE_IDS, LANGUAGES, WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
+import { LANGUAGE_IDS, LANGUAGES } from 'src/app/shared/models/constants/constants';
+import { WhiteLabelService } from 'src/app/shared/services/white-label.service';
 
 @Component({
   selector: 'app-read-respond',
@@ -23,7 +24,7 @@ import { LANGUAGE_IDS, LANGUAGES, WHITE_LABEL_CONSULTATION_ID } from 'src/app/sh
   encapsulation: ViewEncapsulation.None,
 })
 export class ReadRespondComponent implements OnInit {
-  public WHITE_LABEL_CONSULTATION_ID = WHITE_LABEL_CONSULTATION_ID;
+  public whiteLabelConsultationId: number | null = null;
 
   profileData: any;
   consultationId: number;
@@ -64,12 +65,14 @@ export class ReadRespondComponent implements OnInit {
     private consultationService: ConsultationsService,
     private title: Title,
     private _cookieService: CookieService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private whiteLabelService: WhiteLabelService
   ) {
     const currentLanguage = this._cookieService.get('civisLang');
     if (currentLanguage) {
       this.selectedLanguage = currentLanguage;
     }
+    this.whiteLabelConsultationId = this.whiteLabelService.getConsultationIdForHostname();
     this.consultationService.consultationId$
     .pipe(
       filter(i => i !== null)

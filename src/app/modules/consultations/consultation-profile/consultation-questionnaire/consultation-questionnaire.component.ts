@@ -43,7 +43,7 @@ import { environment } from "../../../../../environments/environment";
 import { MetaPixelService } from "src/app/shared/services/pixel.service";
 import { CookieService } from 'ngx-cookie';
 import { Router } from '@angular/router';
-import { WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
+import { WhiteLabelService } from 'src/app/shared/services/white-label.service';
 
 @Component({
   selector: "app-consultation-questionnaire",
@@ -53,7 +53,7 @@ import { WHITE_LABEL_CONSULTATION_ID } from 'src/app/shared/models/constants/con
 export class ConsultationQuestionnaireComponent
   implements OnInit, AfterViewInit, AfterViewChecked
 {
-  public WHITE_LABEL_CONSULTATION_ID = WHITE_LABEL_CONSULTATION_ID;
+  public whiteLabelConsultationId: number | null = null;
 
   @Input() profileData;
   @Output() openThankYouModal: EventEmitter<any> = new EventEmitter();
@@ -108,9 +108,11 @@ export class ConsultationQuestionnaireComponent
     private el: ElementRef,
     private cookieService: CookieService,
     private router: Router,
+    private whiteLabelService: WhiteLabelService,
   ) {
     this.currentLanguage = this.cookieService.get('civisLang');
     this.questionnaireForm = this._fb.group({});
+    this.whiteLabelConsultationId = this.whiteLabelService.getConsultationIdForHostname();
     this.consultationService.consultationId$
       .pipe(filter((i) => i !== null))
       .subscribe((consulationId: any) => {

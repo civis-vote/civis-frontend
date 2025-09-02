@@ -1,81 +1,95 @@
 <div #questionnaireContainer>
   <div class="paper-effect  mt-4 m-0-sm" *ngIf="!responseCreated">
     <ng-container *ngIf="profileData?.showSatisfactionRating">
-      <app-satisfaction-rating-selection (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
+      <app-satisfaction-rating-selection
+        (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
     </ng-container>
     <div class="question-box">
-      <form [formGroup]="questionnaireForm"  #f="ngForm">
+      <form [formGroup]="questionnaireForm" #f="ngForm">
         <div class="questions-container">
-          <div class="question-index" *ngFor="let question of questions; let i = index">
-              <div class="question">
-                <p class="question-text">
-                  <span class="question-text__number">{{ i + 1 }}.</span>
-                  {{ getQuestionText(question) }}
-                  <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
-                </p>
-                <div class="answer" *ngIf="question.questionType === 'multiple_choice'">
-                  <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
-                    <label>
-                      <input type="radio" class="cm-radio" (input)="onAnswerChange(question,subQuestion)" [formControlName]="question.id" [value]="subQuestion.id">
-                      <span>{{ getSubQuestionText(subQuestion) }}</span>
-                    </label>
-                  </div>
-                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
-                </div>
-                <div class="answer" *ngIf="question.questionType === 'dropdown'">
-                    <ng-select
-                    [items]="question.subQuestions" bindLabel="questionText" [virtualScroll]="true" dropdownPosition="bottom"
-                    bindValue="id"  [clearable]="false" loadingText="Searching..." [searchable]="false" (change)="onAnswerChange(question, $event)"
-                    [placeholder]="'Select an option' | translate" [formControlName]="question.id">
-                    </ng-select>
-                    <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
-                </div>
-                <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
-                  <label class="answer__tips">Choose as many as you like</label>
-                  <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
-                    <label>
-                      <input type="checkbox" class="cm-radio" (input)="onAnswerChange(question,subQuestion, $event.target.checked)" [formControlName]="subQuestion.id" (click)="toggleCheckbox(question.id, subQuestion.id)">
-                      <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
-                      <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
-                    </label>
-                  </div>
-                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
-                </div>
-                <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
-                  <div class="text-area" >
-                    <textarea (input)="longTextAnswer = $event.target.value" [placeholder]="'Type your answer here.' | translate" aria-label="'Type your answer here.' | translate" [formControlName]="question.id" ></textarea>
-                  </div>
-                  <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">{{'This is a mandatory question and your response is required' | translate}}</div>
-                </div>
-                <div class="input-box" *ngIf="question.is_other">
-                  <div class="input-box__border">
-                    <input [placeholder]="'Type answer here' | translate" type="text" aria-label="'Type answer here' | translate"
-                    [formControlName]="question.other_answer" />
-                  </div>
-                </div>
-                <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other" class="error-msg text-left ml-3">{{'This is a mandatory question and your response is required' | translate}}</div>
-              </div>
-            </div>
-          </div>
-          <div class="checkbox-area" *ngIf="showPublicResponseOption() && consultationId !== 707 && consultationId !== 404">
-            <div class="input-checbox">
-              <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility" [ngModelOptions]="{standalone: true}"/>
-              <label class="m-0">{{'Make my response public' | translate}}</label>
-              <span class="link" [tooltip]="'Choosing to make your response public allows it to be viewed by others, who may use it as a reference or template for their own responses. Only your first name will be disclosed to the organisation conducting the consultation. This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. If you are unsure about your own response, you also have the option to adopt and send a public response provided by someone else.' | translate">
-              {{'What does this mean?' | translate}}</span>
-            </div>
-          </div>
-          <div class="py-3">
-            <button  class="btn-submit active"
-              (click)='submitAnswer()'
-              [tooltip]="getSubmitButtonTooltip() | translate"
-              data-event="purchase">
-              <p class="m-0">
-                {{'SUBMIT RESPONSE' | translate}}
+          <div class="question-index" *ngFor="let question of questions; let i = index"
+            [style.display]="isQuestionVisible(question) ? 'block' : 'none'">
+            <div class="question">
+              <p class="question-text">
+                <span class="question-text__number">{{ getQuestionDisplayNumber(question) }}.</span>
+                {{ getQuestionText(question) }}
+                <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
               </p>
-              <span class="ml-2"><i class="fa fa-angle-right"></i></span>
-            </button>
+              <div class="answer" *ngIf="question.questionType === 'multiple_choice'">
+                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
+                  <label>
+                    <input type="radio" class="cm-radio" (input)="onAnswerChange(question,subQuestion)"
+                      [formControlName]="question.id" [value]="subQuestion.id">
+                    <span>{{ getSubQuestionText(subQuestion) }}</span>
+                  </label>
+                </div>
+                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
+                  {{'This is a mandatory question and your response is required' | translate}}</div>
+              </div>
+              <div class="answer" *ngIf="question.questionType === 'dropdown'">
+                <ng-select [items]="question.subQuestions" bindLabel="questionText" [virtualScroll]="true"
+                  dropdownPosition="bottom" bindValue="id" [clearable]="false" loadingText="Searching..."
+                  [searchable]="false" (change)="onAnswerChange(question, $event)"
+                  [placeholder]="'Select an option' | translate" [formControlName]="question.id">
+                </ng-select>
+                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
+                  {{'This is a mandatory question and your response is required' | translate}}</div>
+              </div>
+              <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
+                <label class="answer__tips">Choose as many as you like</label>
+                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
+                  <label>
+                    <input type="checkbox" class="cm-radio"
+                      (input)="onAnswerChange(question,subQuestion, $event.target.checked)"
+                      [formControlName]="subQuestion.id" (click)="toggleCheckbox(question.id, subQuestion.id)">
+                    <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
+                    <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
+                  </label>
+                </div>
+                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
+                  {{'This is a mandatory question and your response is required' | translate}}</div>
+              </div>
+              <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
+                <div class="text-area">
+                  <textarea (input)="longTextAnswer = $event.target.value"
+                    [placeholder]="'Type your answer here.' | translate"
+                    aria-label="'Type your answer here.' | translate" [formControlName]="question.id"></textarea>
+                </div>
+                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
+                  {{'This is a mandatory question and your response is required' | translate}}</div>
+              </div>
+              <div class="input-box" *ngIf="question.is_other">
+                <div class="input-box__border">
+                  <input [placeholder]="'Type answer here' | translate" type="text"
+                    aria-label="'Type answer here' | translate" [formControlName]="question.other_answer" />
+                </div>
+              </div>
+              <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other"
+                class="error-msg text-left ml-3">{{'This is a mandatory question and your response is required' |
+                translate}}</div>
+            </div>
           </div>
+        </div>
+        <div class="checkbox-area"
+          *ngIf="showPublicResponseOption() && consultationId !== 707 && consultationId !== 404">
+          <div class="input-checbox">
+            <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility"
+              [ngModelOptions]="{standalone: true}" />
+            <label class="m-0">{{'Make my response public' | translate}}</label>
+            <span class="link"
+              [tooltip]="'Choosing to make your response public allows it to be viewed by others, who may use it as a reference or template for their own responses. Only your first name will be disclosed to the organisation conducting the consultation. This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. If you are unsure about your own response, you also have the option to adopt and send a public response provided by someone else.' | translate">
+              {{'What does this mean?' | translate}}</span>
+          </div>
+        </div>
+        <div class="py-3">
+          <button class="btn-submit active" (click)='submitAnswer()' [tooltip]="getSubmitButtonTooltip() | translate"
+            data-event="purchase">
+            <p class="m-0">
+              {{'SUBMIT RESPONSE' | translate}}
+            </p>
+            <span class="ml-2"><i class="fa fa-angle-right"></i></span>
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -84,4 +98,5 @@
 </app-confirm-email-modal>
 
 <app-auth-modal *ngIf="authModal" [consultationId]="consultationId" (close)="authModal = false"></app-auth-modal>
-<app-profane-modal *ngIf="isConfirmModal" [message]='confirmMessage' [showCancel]=false (close)='confirmed($event)'></app-profane-modal>
+<app-profane-modal *ngIf="isConfirmModal" [message]='confirmMessage' [showCancel]=false
+  (close)='confirmed($event)'></app-profane-modal>

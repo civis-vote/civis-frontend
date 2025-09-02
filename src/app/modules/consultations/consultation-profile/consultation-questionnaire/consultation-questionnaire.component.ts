@@ -41,9 +41,9 @@ import { ErrorService } from "src/app/shared/components/error-modal/error.servic
 import { profanityList } from "src/app/graphql/queries.graphql";
 import { environment } from "../../../../../environments/environment";
 import { MetaPixelService } from "src/app/shared/services/pixel.service";
-import { CookieService } from 'ngx-cookie';
-import { Router } from '@angular/router';
-import { WhiteLabelService } from 'src/app/shared/services/white-label.service';
+import { CookieService } from "ngx-cookie";
+import { Router } from "@angular/router";
+import { WhiteLabelService } from "src/app/shared/services/white-label.service";
 
 @Component({
   selector: "app-consultation-questionnaire",
@@ -108,11 +108,12 @@ export class ConsultationQuestionnaireComponent
     private el: ElementRef,
     private cookieService: CookieService,
     private router: Router,
-    private whiteLabelService: WhiteLabelService,
+    private whiteLabelService: WhiteLabelService
   ) {
-    this.currentLanguage = this.cookieService.get('civisLang');
+    this.currentLanguage = this.cookieService.get("civisLang");
     this.questionnaireForm = this._fb.group({});
-    this.whiteLabelConsultationId = this.whiteLabelService.getConsultationIdForHostname();
+    this.whiteLabelConsultationId =
+      this.whiteLabelService.getConsultationIdForHostname();
     this.consultationService.consultationId$
       .pipe(filter((i) => i !== null))
       .subscribe((consulationId: any) => {
@@ -135,7 +136,7 @@ export class ConsultationQuestionnaireComponent
           (err: any) => {}
         );
     }
-    if(this.consultationId === 404 || this.consultationId === 707) {
+    if (this.consultationId === 404 || this.consultationId === 707) {
       this.responseFeedback = "satisfied";
     }
   }
@@ -309,7 +310,10 @@ export class ConsultationQuestionnaireComponent
     if (this.responseSubmitLoading) {
       return;
     }
-    if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
+    if (
+      !this.responseFeedback &&
+      !this.profileData?.isSatisfactionRatingOptional
+    ) {
       this.consultationService.satisfactionRatingError.next(true);
       this.showError = true;
       this.scrollToError = true;
@@ -346,7 +350,7 @@ export class ConsultationQuestionnaireComponent
           } else {
             // If the user is not authenticated, show the auth modal and store the consultation response to local storage.
             const currentUrl = this.router.url;
-            this.cookieService.put('loginCallbackUrl', currentUrl);
+            this.cookieService.put("loginCallbackUrl", currentUrl);
             this.authModal = true;
             localStorage.setItem(
               "consultationResponse",
@@ -356,7 +360,10 @@ export class ConsultationQuestionnaireComponent
         }
       }
     } else {
-      if (!this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
+      if (
+        !this.responseFeedback &&
+        !this.profileData?.isSatisfactionRatingOptional
+      ) {
         this.consultationService.satisfactionRatingError.next(true);
       }
       this.showError = true;
@@ -621,20 +628,24 @@ export class ConsultationQuestionnaireComponent
     );
     this.apollo
       .mutate({
-        mutation: this.currentUser ? SubmitResponseQuery : SubmitResponseGuestUser,
+        mutation: this.currentUser
+          ? SubmitResponseQuery
+          : SubmitResponseGuestUser,
         variables: {
           consultationResponse: consultationResponse,
         },
         update: (store, { data: res }) => {
           const variables = { id: this.consultationId };
           const resp: any = store.readQuery({
-            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
+            query: this.currentUser
+              ? ConsultationProfileCurrentUser
+              : ConsultationProfileUser,
             variables,
           });
           if (res) {
-            if(this.currentUser?.id) {
+            if (this.currentUser?.id) {
               resp.consultationProfile.respondedOn =
-              res.consultationResponseCreate.consultation.respondedOn;
+                res.consultationResponseCreate.consultation.respondedOn;
             }
             resp.consultationProfile.sharedResponses =
               res.consultationResponseCreate.consultation.sharedResponses;
@@ -644,7 +655,9 @@ export class ConsultationQuestionnaireComponent
               res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
           }
           store.writeQuery({
-            query: this.currentUser ? ConsultationProfileCurrentUser : ConsultationProfileUser,
+            query: this.currentUser
+              ? ConsultationProfileCurrentUser
+              : ConsultationProfileUser,
             variables,
             data: resp,
           });
@@ -686,12 +699,89 @@ export class ConsultationQuestionnaireComponent
   }
 
   getSubmitButtonTooltip(): string {
-    if (this.showError && !this.responseFeedback && !this.profileData?.isSatisfactionRatingOptional) {
-      return 'Please select a Satisfaction Rating to submit the response';
+    if (
+      this.showError &&
+      !this.responseFeedback &&
+      !this.profileData?.isSatisfactionRatingOptional
+    ) {
+      return "Please select a Satisfaction Rating to submit the response";
     } else if (this.showError && !this.questionnaireForm?.valid) {
-      return 'Please fill all the answers to submit response.';
+      return "Please fill all the answers to submit response.";
     } else {
-      return '';
+      return "";
     }
+  }
+
+  // ===== CONDITIONAL QUESTIONS LOGIC =====
+
+  /**
+   * Check if a question should be visible
+   */
+  isQuestionVisible(question: any): boolean {
+    // Non-conditional questions are always visible
+    if (!question.isConditional) return true;
+
+    // For conditional questions, check if parent has selected value with conditional questions
+    const parentQuestion = this.findParentQuestion(question.id);
+    if (!parentQuestion) return false;
+
+    return this.shouldShowConditionalQuestion(parentQuestion);
+  }
+
+  /**
+   * Find parent question that controls a conditional question
+   */
+  private findParentQuestion(conditionalQuestionId: number): any {
+    return this.questions?.find(
+      (question) =>
+        question.conditionalQuestions?.some(
+          (cq) => cq.id === conditionalQuestionId
+        ) ||
+        question.subQuestions?.some((sq) =>
+          sq.conditionalQuestionOptions?.some(
+            (cqo) => cqo.id === conditionalQuestionId
+          )
+        )
+    );
+  }
+
+  /**
+   * Check if parent question should show conditional questions
+   */
+  private shouldShowConditionalQuestion(parentQuestion: any): boolean {
+    const control = this.questionnaireForm?.get(parentQuestion.id.toString());
+    if (!control?.value) return false;
+
+    if (parentQuestion.questionType === "checkbox") {
+      // Check if any selected option has conditional questions
+      const selectedOptions = Object.entries(control.value)
+        .filter(([_, isSelected]) => isSelected)
+        .map(([optionId, _]) => optionId);
+
+      return selectedOptions.some((optionId) => {
+        const subQuestion = parentQuestion.subQuestions?.find(
+          (sq) => sq.id.toString() === optionId
+        );
+        return subQuestion?.conditionalQuestionOptions?.length > 0;
+      });
+    } else if (parentQuestion.questionType === "long_text") {
+      const textValue = control.value;
+      if (textValue && textValue.trim().length > 0) {
+        return parentQuestion.conditionalQuestions?.length > 0;
+      }
+      return false;
+    } else {
+      const subQuestion = parentQuestion.subQuestions?.find(
+        (sq) => sq.id === control.value
+      );
+      return subQuestion?.conditionalQuestionOptions?.length > 0;
+    }
+  }
+
+  getQuestionDisplayNumber(question: any): number {
+    const visibleQuestions =
+      this.questions?.filter((q) => this.isQuestionVisible(q)) || [];
+    const index = visibleQuestions.findIndex((q) => q.id === question.id);
+    return index >= 0 ? index + 1 : 0;
   }
 }

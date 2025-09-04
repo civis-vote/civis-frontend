@@ -13,6 +13,7 @@ import gql from 'graphql-tag';
 import { ApolloQueryResult } from 'apollo-client';
 import { CURRENT_USER_UPDATE_MUTATION } from '../city-selection-modal/city-selection-modal.graphql';
 import { WhiteLabelService } from '../../services/white-label.service';
+import { GeoCountryCode } from 'src/app/graphql/queries.graphql';
 
 const AUTH_LOGIN_MUTATION = gql`
   mutation AuthLogin($email: String!) {
@@ -100,6 +101,7 @@ export class AuthModalComponent implements OnInit {
   @Input() fromNavbar: boolean = false;
 
   isWhiteLabelDomain: boolean = false;
+  showCitySelectionForGeo: boolean = false;
 
   constructor(
     private apollo: Apollo,
@@ -112,6 +114,20 @@ export class AuthModalComponent implements OnInit {
 
   ngOnInit() {
     this.isWhiteLabelDomain = this.whiteLabelService.isWhiteLabelSubdomain();
+    this.checkGeoLocationForCitySelection();
+  }
+
+  checkGeoLocationForCitySelection() {
+    this.apollo.query({
+      query: GeoCountryCode
+    }).pipe(
+      map((result: any) => result.data.geoCountryCode)
+    ).subscribe((countryCode: string) => {
+      // Only show city selection if user is from India
+      this.showCitySelectionForGeo = countryCode === 'IN';
+    }, (error) => {
+      this.errorService.showErrorModal(error);
+    });
   }
 
   submit() {
@@ -272,20 +288,19 @@ export class AuthModalComponent implements OnInit {
     }).subscribe(
       (result: ApolloQueryResult<any>) => {
         const user = result?.data?.userCurrent;
-        if (
-          !user ||
-          !user.firstName ||
-          !user.email ||
-          !user.city ||
-          !user.city.id
-        ) {
+        const needsFirstName = !user || !user.firstName || !user.email;
+        const needsCity = this.showCitySelectionForGeo && (!user || !user.city || !user.city.id);
+        
+        if (needsFirstName || needsCity) {
           this.userDetailsForm = {
             firstName: user?.firstName || '',
             cityId: user?.city?.id || null,
             email: user?.email || this.emailForOtp
           };
           this.showUserDetailsModal = true;
-          this.loadUserDetailsCities();
+          if (this.showCitySelectionForGeo) {
+            this.loadUserDetailsCities();
+          }
         } else {
           this.authModal.hide();
           this.close.emit(true);
@@ -299,7 +314,9 @@ export class AuthModalComponent implements OnInit {
           email: this.emailForOtp
         };
         this.showUserDetailsModal = true;
-        this.loadUserDetailsCities();
+        if (this.showCitySelectionForGeo) {
+          this.loadUserDetailsCities();
+        }
       }
     );
   }
@@ -324,16 +341,26 @@ export class AuthModalComponent implements OnInit {
   }
 
   submitUserDetails(form: NgForm) {
-    if (!form.valid) return;
+    const isValid = this.userDetailsForm.firstName && 
+                   (!this.showCitySelectionForGeo || this.userDetailsForm.cityId);
+    
+    if (!isValid) return;
+    
     this.userDetailsLoading = true;
     this.userDetailsError = '';
+    
+    const updateData: any = {
+      firstName: this.userDetailsForm.firstName
+    };
+    
+    if (this.showCitySelectionForGeo && this.userDetailsForm.cityId) {
+      updateData.cityId = this.userDetailsForm.cityId;
+    }
+    
     this.apollo.mutate({
       mutation: CURRENT_USER_UPDATE_MUTATION,
       variables: {
-        user: {
-          firstName: this.userDetailsForm.firstName,
-          cityId: this.userDetailsForm.cityId
-        }
+        user: updateData
       }
     }).subscribe(
       (res: any) => {

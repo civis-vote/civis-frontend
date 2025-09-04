@@ -5,7 +5,7 @@ import { CitiesSearchQuery, CURRENT_USER_UPDATE_MUTATION } from './city-selectio
 import { Apollo } from 'apollo-angular';
 import { UserService } from '../../services/user.service';
 import { ErrorService } from '../error-modal/error.service';
-import { CurrentUser } from 'src/app/graphql/queries.graphql';
+import { CurrentUser, GeoCountryCode } from 'src/app/graphql/queries.graphql';
 
 @Component({
   selector: 'app-city-selection-modal',
@@ -22,6 +22,8 @@ export class CitySelectionModalComponent implements OnInit {
   cities: any;
   dropdownText = 'Begin Typing';
   user: { cityId: any; firstName?: string } = { cityId: null, firstName: '' };
+  shouldShowModal: boolean = false;
+  isCheckingGeolocation: boolean = true;
 
   constructor(
     private apollo: Apollo,
@@ -30,7 +32,29 @@ export class CitySelectionModalComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.checkGeoLocationAndShowModal();
     this.subscribeToSearch();
+  }
+
+  checkGeoLocationAndShowModal() {
+    this.isCheckingGeolocation = true;
+    this.apollo.query({
+      query: GeoCountryCode
+    }).pipe(
+      map((result: any) => result.data.geoCountryCode)
+    ).subscribe((countryCode: string) => {
+      this.isCheckingGeolocation = false;
+      // Only show modal if user is from India
+      if (countryCode === 'IN') {
+        this.shouldShowModal = true;
+      } else {
+        this.shouldShowModal = false;
+      }
+    }, (error) => {
+        this.isCheckingGeolocation = false;
+        this.shouldShowModal = false;
+        this.errorService.showErrorModal(error);
+    });
   }
 
   subscribeToSearch() {

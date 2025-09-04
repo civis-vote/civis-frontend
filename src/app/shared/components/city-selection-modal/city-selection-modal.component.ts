@@ -23,6 +23,7 @@ export class CitySelectionModalComponent implements OnInit {
   dropdownText = 'Begin Typing';
   user: { cityId: any; firstName?: string } = { cityId: null, firstName: '' };
   shouldShowModal: boolean = false;
+  isCheckingGeolocation: boolean = true;
 
   constructor(
     private apollo: Apollo,
@@ -36,21 +37,23 @@ export class CitySelectionModalComponent implements OnInit {
   }
 
   checkGeoLocationAndShowModal() {
+    this.isCheckingGeolocation = true;
     this.apollo.query({
       query: GeoCountryCode
     }).pipe(
       map((result: any) => result.data.geoCountryCode)
     ).subscribe((countryCode: string) => {
+      this.isCheckingGeolocation = false;
       // Only show modal if user is from India
       if (countryCode === 'IN') {
         this.shouldShowModal = true;
       } else {
-        // Hide modal immediately for non-Indian users
-        this.close();
+        this.shouldShowModal = false;
       }
     }, (error) => {
+        this.isCheckingGeolocation = false;
+        this.shouldShowModal = false;
         this.errorService.showErrorModal(error);
-        this.close();
     });
   }
 

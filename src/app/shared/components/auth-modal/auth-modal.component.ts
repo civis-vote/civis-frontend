@@ -101,7 +101,7 @@ export class AuthModalComponent implements OnInit {
   @Input() fromNavbar: boolean = false;
 
   isWhiteLabelDomain: boolean = false;
-  showCitySelectionForGeo: boolean = false;
+  isCitySelectionShown: boolean = false;
 
   constructor(
     private apollo: Apollo,
@@ -124,7 +124,7 @@ export class AuthModalComponent implements OnInit {
       map((result: any) => result.data.geoCountryCode)
     ).subscribe((countryCode: string) => {
       // Only show city selection if user is from India
-      this.showCitySelectionForGeo = countryCode === 'IN';
+      this.isCitySelectionShown = countryCode === 'IN';
     }, (error) => {
       this.errorService.showErrorModal(error);
     });
@@ -289,7 +289,7 @@ export class AuthModalComponent implements OnInit {
       (result: ApolloQueryResult<any>) => {
         const user = result?.data?.userCurrent;
         const needsFirstName = !user || !user.firstName || !user.email;
-        const needsCity = this.showCitySelectionForGeo && (!user || !user.city || !user.city.id);
+        const needsCity = this.isCitySelectionShown && (!user || !user.city || !user.city.id);
         
         if (needsFirstName || needsCity) {
           this.userDetailsForm = {
@@ -298,7 +298,7 @@ export class AuthModalComponent implements OnInit {
             email: user?.email || this.emailForOtp
           };
           this.showUserDetailsModal = true;
-          if (this.showCitySelectionForGeo) {
+          if (this.isCitySelectionShown) {
             this.loadUserDetailsCities();
           }
         } else {
@@ -314,7 +314,7 @@ export class AuthModalComponent implements OnInit {
           email: this.emailForOtp
         };
         this.showUserDetailsModal = true;
-        if (this.showCitySelectionForGeo) {
+        if (this.isCitySelectionShown) {
           this.loadUserDetailsCities();
         }
       }
@@ -342,25 +342,25 @@ export class AuthModalComponent implements OnInit {
 
   submitUserDetails(form: NgForm) {
     const isValid = this.userDetailsForm.firstName && 
-                   (!this.showCitySelectionForGeo || this.userDetailsForm.cityId);
+                   (!this.isCitySelectionShown || this.userDetailsForm.cityId);
     
     if (!isValid) return;
     
     this.userDetailsLoading = true;
     this.userDetailsError = '';
     
-    const updateData: any = {
+    const userUpdateData: any = {
       firstName: this.userDetailsForm.firstName
     };
     
-    if (this.showCitySelectionForGeo && this.userDetailsForm.cityId) {
-      updateData.cityId = this.userDetailsForm.cityId;
+    if (this.isCitySelectionShown && this.userDetailsForm.cityId) {
+      userUpdateData.cityId = this.userDetailsForm.cityId;
     }
     
     this.apollo.mutate({
       mutation: CURRENT_USER_UPDATE_MUTATION,
       variables: {
-        user: updateData
+        user: userUpdateData
       }
     }).subscribe(
       (res: any) => {

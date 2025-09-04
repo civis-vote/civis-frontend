@@ -66,7 +66,7 @@ query profanityList{
 `;
 
 export const GeoCountryCode = gql`
-query {
+query geoCountryCode {
   geoCountryCode
 }
 `;

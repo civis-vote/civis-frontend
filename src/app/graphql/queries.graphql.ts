@@ -64,3 +64,9 @@ query profanityList{
   }
 }
 `;
+
+export const GeoCountryCode = gql`
+query geoCountryCode {
+  geoCountryCode
+}
+`;

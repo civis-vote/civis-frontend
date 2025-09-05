@@ -139,8 +139,7 @@
                 [readonly]="true" disabled />
             </div>
           </div>
-          <!-- TODO: Temporarily removed city selection. Added back when needed -->
-          <!-- <div class="location-box required-field col-12">
+          <div *ngIf="isCitySelectionShown" class="location-box required-field col-12">
             <label for="userDetailsCity">{{'City' | translate}}</label>
             <div class="location-box__border">
               <ng-select id="userDetailsCity" name="cityId" [loading]="userDetailsCitiesLoading"
@@ -152,7 +151,7 @@
             <div *ngIf="userDetailsNgForm.submitted && userDetailsNgForm.controls.cityId?.invalid" class="error-msg">
               {{'City is required.' | translate}}
             </div>
-          </div> -->
+          </div>
           <div *ngIf="userDetailsError" class="alert alert-danger mt-2">{{ userDetailsError }}</div>
         </div>
         <div class="modal-footer">

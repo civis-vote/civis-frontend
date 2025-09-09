@@ -110,37 +110,29 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   }
 
   getRemainingDays(): number | string {
-    if (this.profile?.responseDeadline) {
-      let { diffInDays } = this.getDifferenceInDays(this.profile.responseDeadline);
-      diffInDays = Math.floor(diffInDays);
-      if (diffInDays > 0) {
-        return diffInDays;
-      }
-    }
-    return '';
+    if (!this.profile?.responseDeadline) return '';
+    
+    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.profile.responseDeadline);
+    const roundedDays = Math.floor(diffInDays);
+    
+    if (roundedDays < 0) return '';
+    if (roundedDays === 0 || isSameDay) return '';
+    if (roundedDays === 1) return '2';
+    
+    return roundedDays;
   }
-
+  
   getRemainingDaysText(): string {
-    const diffObj = this.getDifferenceInDays(this.profile?.responseDeadline || '');
-    if (!diffObj) {
-      return '';
-    }
-    const { diffInDays, isSameDay } = diffObj;
-    const lang = this.currentLanguage || 'en';
-
-    const roundedDiffInDays = Math.floor(diffInDays);
-
-    if (roundedDiffInDays < 0) {
-      return 'Closed';
-    } else if (roundedDiffInDays === 0 || isSameDay) {
-      return 'Last day to respond';
-    } else if (roundedDiffInDays === 1) {
-      return 'Day Remaining';
-    } else if(roundedDiffInDays > 1) {
-      return 'Days Remaining';
-    } else {
-      return ''
-    }
+    if (!this.profile?.responseDeadline) return '';
+    
+    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.profile.responseDeadline);
+    const roundedDays = Math.floor(diffInDays);
+    
+    if (roundedDays < 0) return 'Closed';
+    if (roundedDays === 0 || isSameDay) return 'Last day to respond';
+    if (roundedDays === 1) return 'days to respond';
+    
+    return 'days remaining';
   }
 
   convertDateFormat(date: string): string {
@@ -165,15 +157,13 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   }
 
 
-  getDifferenceInDays(deadline) {
-    if (deadline) {
-      const today = new Date();
-      const lastDate = moment(deadline);
-      const diff_in_time = lastDate.valueOf() - today.getTime();
-      const diffInDays = diff_in_time / (1000 * 3600 * 24);
-      const isSameDay = lastDate.isSame(moment(today), "day");
-      return { diffInDays, isSameDay };
-    }
+  getDifferenceInDays(deadline: string) {
+    const deadlineDateLocal = moment(deadline).local().startOf('day');
+    const todayLocal = moment().startOf('day');
+    const diff_in_time = deadlineDateLocal.valueOf() - todayLocal.valueOf();
+    const diffInDays = diff_in_time / (1000 * 3600 * 24);
+    const isSameDay = deadlineDateLocal.isSame(todayLocal, 'day');
+    return { diffInDays, isSameDay };
   }
 
   getTwitterUrl(link) {

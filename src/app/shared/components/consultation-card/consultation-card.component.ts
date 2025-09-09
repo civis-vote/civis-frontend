@@ -21,51 +21,38 @@ export class ConsultationCardComponent implements OnInit {
   }
 
   getRemainingDays(): number | string {
-    if (this.consultation?.responseDeadline) {
-      if (this.consultation.status === 'expired') {
-        return '';
-      }
-
-      let { diffInDays } = this.getDifferenceInDays(this.consultation?.responseDeadline);
-      diffInDays = Math.floor(diffInDays);
-
-      if (diffInDays > 0) {
-        return diffInDays;
-      }
-    }
-    return '';
+    if (!this.consultation?.responseDeadline) return '';
+    
+    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.consultation.responseDeadline);
+    const roundedDays = Math.floor(diffInDays);
+    
+    if (roundedDays < 0) return '';
+    if (roundedDays === 0 || isSameDay) return '';
+    if (roundedDays === 1) return '2';
+    
+    return roundedDays;
   }
-
+  
   getRemainingDaysText(): string {
-    if (this.consultation.status === 'expired') {
-      return 'Closed';
-    }
-
-    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.consultation?.responseDeadline);
-    const roundedDiffInDays = Math.floor(diffInDays);
-
-    if (roundedDiffInDays < 0) {
-      return 'Closed';
-    } else if (roundedDiffInDays === 0 || isSameDay) {
-      return 'Last day to respond';
-    } else if (roundedDiffInDays === 1) {
-      return 'Day Remaining';
-    } else if(roundedDiffInDays > 1) {
-      return 'Days Remaining';
-    } else {
-      return ''
-    }
+    if (!this.consultation?.responseDeadline) return '';
+    
+    const { diffInDays, isSameDay } = this.getDifferenceInDays(this.consultation.responseDeadline);
+    const roundedDays = Math.floor(diffInDays);
+    
+    if (roundedDays < 0) return 'Closed';
+    if (roundedDays === 0 || isSameDay) return 'Last day to respond';
+    if (roundedDays === 1) return 'days to respond';
+    
+    return 'days remaining';
   }
 
-  getDifferenceInDays(deadline) {
-    if (deadline) {
-      const today = new Date();
-      const lastDate = moment(deadline);
-      const diff_in_time = lastDate.valueOf() - today.getTime();
-      const diffInDays = diff_in_time / (1000 * 3600 * 24);
-      const isSameDay = lastDate.isSame(moment(today), 'day');
-      return { diffInDays, isSameDay };
-    }
+  getDifferenceInDays(deadline: string) {
+    const deadlineDateLocal = moment(deadline).local().startOf('day');
+    const todayLocal = moment().startOf('day');
+    const diff_in_time = deadlineDateLocal.valueOf() - todayLocal.valueOf();
+    const diffInDays = diff_in_time / (1000 * 3600 * 24);
+    const isSameDay = deadlineDateLocal.isSame(todayLocal, 'day');
+    return { diffInDays, isSameDay };
   }
 
   getConsultationTitle() {

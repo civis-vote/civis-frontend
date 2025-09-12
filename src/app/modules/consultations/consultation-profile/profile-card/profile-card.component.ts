@@ -6,6 +6,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie';
 import { getTranslatedText, createLangObject } from 'src/app/shared/functions/modular.functions';
+import { ConsultationDeadlineService } from 'src/app/shared/services/consultation-deadline.service';
 
 @Component({
   selector: 'app-profile-card',
@@ -36,7 +37,8 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     private consultationsService: ConsultationsService,
     private userService: UserService,
     private cookieService: CookieService,
-    private router: Router
+    private router: Router,
+    private consultationDeadlineService: ConsultationDeadlineService
   ) {}
 
   ngOnInit() {
@@ -110,40 +112,11 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   }
 
   getRemainingDays(): number | string {
-    if (!this.profile?.responseDeadline) return '';
-    
-    const { diffInDays, isSameDay, diffInHours } = this.getDifferenceInDays(this.profile.responseDeadline);
-    const roundedDays = Math.floor(diffInDays);
-    
-    if (roundedDays < 0 || diffInHours < 0) return '';
-    if (roundedDays === 0 || isSameDay) {
-      return Math.ceil(diffInHours);
-    }
-    
-    const displayDays = roundedDays + 1;
-    
-    return displayDays;
+    return this.consultationDeadlineService.getRemainingDays(this.profile?.responseDeadline);
   }
   
   getRemainingDaysText(): string {
-    if (!this.profile?.responseDeadline) return '';
-    
-    const { diffInDays, isSameDay, diffInHours } = this.getDifferenceInDays(this.profile.responseDeadline);
-    const roundedDays = Math.floor(diffInDays);
-    
-    if (roundedDays < 0 || diffInHours < 0) return 'Closed';
-    if (roundedDays === 0 || isSameDay) {
-      const hoursRemaining = Math.ceil(diffInHours);
-      return hoursRemaining === 1 ? 'hour to respond' : 'hours to respond';
-    }
-    
-    const displayDays = roundedDays + 1;
-    
-    if (displayDays === 2) {
-      return 'days to respond';
-    } else {
-      return 'days remaining';
-    }
+    return this.consultationDeadlineService.getRemainingDaysText(this.profile?.responseDeadline);
   }
 
   convertDateFormat(date: string): string {
@@ -168,24 +141,9 @@ export class ProfileCardComponent implements OnInit, OnChanges {
   }
 
 
-  getDifferenceInDays(deadline: string) {
-    const deadlineDate = moment(deadline).local();
-    const currentTime = moment();
-    const deadlineDateLocal = moment(deadline).local().startOf('day');
-    const todayLocal = moment().startOf('day');
-    
-    const diff_in_time = deadlineDateLocal.valueOf() - todayLocal.valueOf();
-    const diffInDays = diff_in_time / (1000 * 3600 * 24);
-    const isSameDay = deadlineDateLocal.isSame(todayLocal, 'day');
-    
-    // Calculate hours difference for more precise timing
-    const diffInHours = deadlineDate.diff(currentTime, 'hours', true);
-    
-    return { diffInDays, isSameDay, diffInHours };
-  }
 
   getTwitterUrl(link) {
-    let { diffInDays, isSameDay } = this.getDifferenceInDays(this.profile.responseDeadline);
+    let { diffInDays, isSameDay } = this.consultationDeadlineService.getDifferenceInDays(this.profile.responseDeadline);
       diffInDays = Math.floor(diffInDays );
     let remainingDays = '';
 

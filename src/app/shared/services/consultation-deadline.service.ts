@@ -11,11 +11,14 @@ export class ConsultationDeadlineService {
   getRemainingDays(responseDeadline: string): number | string {
     if (!responseDeadline) return '';
     
-    const { diffInDays, isSameDay, diffInHours } = this.getDifferenceInDays(responseDeadline);
+    const { diffInDays, isSameDay, diffInHours, diffInMinutes } = this.getDifferenceInDays(responseDeadline);
     const roundedDays = Math.floor(diffInDays);
     
     if (roundedDays < 0 || diffInHours < 0) return '';
     if (roundedDays === 0 || isSameDay) {
+      if (diffInHours < 1) {
+        return Math.ceil(diffInMinutes);
+      }
       return Math.ceil(diffInHours);
     }
     
@@ -27,11 +30,15 @@ export class ConsultationDeadlineService {
   getRemainingDaysText(responseDeadline: string): string {
     if (!responseDeadline) return '';
     
-    const { diffInDays, isSameDay, diffInHours } = this.getDifferenceInDays(responseDeadline);
+    const { diffInDays, isSameDay, diffInHours, diffInMinutes } = this.getDifferenceInDays(responseDeadline);
     const roundedDays = Math.floor(diffInDays);
     
     if (roundedDays < 0 || diffInHours < 0) return 'Closed';
     if (roundedDays === 0 || isSameDay) {
+      if (diffInHours < 1) {
+        const minutesRemaining = Math.ceil(diffInMinutes);
+        return minutesRemaining === 1 ? 'minute to respond' : 'minutes to respond';
+      }
       const hoursRemaining = Math.ceil(diffInHours);
       return hoursRemaining === 1 ? 'hour to respond' : 'hours to respond';
     }
@@ -55,9 +62,9 @@ export class ConsultationDeadlineService {
     const diffInDays = diff_in_time / (1000 * 3600 * 24);
     const isSameDay = deadlineDateLocal.isSame(todayLocal, 'day');
     
-    // Calculate hours difference for more precise timing
     const diffInHours = deadlineDate.diff(currentTime, 'hours', true);
+    const diffInMinutes = deadlineDate.diff(currentTime, 'minutes', true);
     
-    return { diffInDays, isSameDay, diffInHours };
+    return { diffInDays, isSameDay, diffInHours, diffInMinutes };
   }
 }

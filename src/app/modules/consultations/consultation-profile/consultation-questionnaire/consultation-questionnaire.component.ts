@@ -719,41 +719,38 @@ export class ConsultationQuestionnaireComponent
    */
   isQuestionVisible(question: any): boolean {
     // Non-conditional questions are always visible
-    if (!question.isConditional) return true;
+    if (!question.isConditionalQuestion) return true;
 
     // For conditional questions, check if parent has selected value with conditional questions
     const parentQuestion = this.findParentQuestion(question.id);
     if (!parentQuestion) return false;
 
-    return this.shouldShowConditionalQuestion(parentQuestion);
+    return this.shouldShowConditionalQuestion(parentQuestion, question.id);
   }
 
   /**
    * Find parent question that controls a conditional question
    */
   private findParentQuestion(conditionalQuestionId: number): any {
-    return this.questions?.find(
-      (question) =>
-        question.conditionalQuestions?.some(
-          (cq) => cq.id === conditionalQuestionId
-        ) ||
-        question.subQuestions?.some((sq) =>
-          sq.conditionalQuestionOptions?.some(
-            (cqo) => cqo.id === conditionalQuestionId
-          )
-        )
+    return this.questions?.find((question) =>
+      question.subQuestions?.some(
+        (sq) => sq.conditionalQuestion?.id === conditionalQuestionId
+      )
     );
   }
 
   /**
    * Check if parent question should show conditional questions
    */
-  private shouldShowConditionalQuestion(parentQuestion: any): boolean {
+  private shouldShowConditionalQuestion(
+    parentQuestion: any,
+    conditionalQuestionId: number
+  ): boolean {
     const control = this.questionnaireForm?.get(parentQuestion.id.toString());
     if (!control?.value) return false;
 
     if (parentQuestion.questionType === "checkbox") {
-      // Check if any selected option has conditional questions
+      // Check if any selected option has the specific conditional question
       const selectedOptions = Object.entries(control.value)
         .filter(([_, isSelected]) => isSelected)
         .map(([optionId, _]) => optionId);
@@ -762,26 +759,39 @@ export class ConsultationQuestionnaireComponent
         const subQuestion = parentQuestion.subQuestions?.find(
           (sq) => sq.id.toString() === optionId
         );
-        return subQuestion?.conditionalQuestionOptions?.length > 0;
+        return subQuestion?.conditionalQuestion?.id === conditionalQuestionId;
       });
     } else if (parentQuestion.questionType === "long_text") {
       const textValue = control.value;
       if (textValue && textValue.trim().length > 0) {
-        return parentQuestion.conditionalQuestions?.length > 0;
+        // For long text, check if any subQuestion has this conditional question
+        return parentQuestion.subQuestions?.some(
+          (sq) => sq.conditionalQuestion?.id === conditionalQuestionId
+        );
       }
       return false;
     } else {
+      // For dropdown/radio, check if selected option has this conditional question
       const subQuestion = parentQuestion.subQuestions?.find(
         (sq) => sq.id === control.value
       );
-      return subQuestion?.conditionalQuestionOptions?.length > 0;
+      return subQuestion?.conditionalQuestion?.id === conditionalQuestionId;
     }
   }
 
   getQuestionDisplayNumber(question: any): number {
     const visibleQuestions =
       this.questions?.filter((q) => this.isQuestionVisible(q)) || [];
-    const index = visibleQuestions.findIndex((q) => q.id === question.id);
+    const sortedVisibleQuestions = visibleQuestions.sort(
+      (a, b) => a.position - b.position
+    );
+
+    const index = sortedVisibleQuestions.findIndex((q) => q.id === question.id);
     return index >= 0 ? index + 1 : 0;
+  }
+
+  getOrderedQuestions(): any[] {
+    if (!this.questions) return [];
+    return this.questions.slice().sort((a, b) => a.position - b.position);
   }
 }

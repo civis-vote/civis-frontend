@@ -29,8 +29,8 @@ const  ConditionalQuestionFragment = gql`
     marathiQuestionText
     questionType
     supportsOther
-    isConditional
-    showConditionalQuestionOnAnswer
+    position
+    isConditionalQuestion
     subQuestions {
       id
       questionText
@@ -49,7 +49,7 @@ const SubQuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
-    conditionalQuestionOptions {
+    conditionalQuestion {
       ...ConditionalQuestionFragment
     }
   }
@@ -66,17 +66,13 @@ const QuestionFragment = gql`
     marathiQuestionText
     questionType
     supportsOther
-    isConditional
-    showConditionalQuestionOnAnswer
+    position
+    isConditionalQuestion
     subQuestions {
       ...SubQuestionFragment
     }
-    conditionalQuestions {
-      ...ConditionalQuestionFragment
-    }
   }
   ${SubQuestionFragment}
-  ${ConditionalQuestionFragment}
 `;
 
 export const ConsultationProfile = gql`

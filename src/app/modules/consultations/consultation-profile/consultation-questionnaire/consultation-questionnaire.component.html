@@ -7,7 +7,7 @@
     <div class="question-box">
       <form [formGroup]="questionnaireForm" #f="ngForm">
         <div class="questions-container">
-          <div class="question-index" *ngFor="let question of questions; let i = index"
+          <div class="question-index" *ngFor="let question of getOrderedQuestions(); let i = index"
             [style.display]="isQuestionVisible(question) ? 'block' : 'none'">
             <div class="question">
               <p class="question-text">

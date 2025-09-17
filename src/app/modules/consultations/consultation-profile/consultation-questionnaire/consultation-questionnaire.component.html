@@ -7,11 +7,11 @@
     <div class="question-box">
       <form [formGroup]="questionnaireForm" #f="ngForm">
         <div class="questions-container">
-          <div class="question-index" *ngFor="let question of getOrderedQuestions(); let i = index"
-            [style.display]="isQuestionVisible(question) ? 'block' : 'none'">
+          <!-- Top-level (non-conditional) questions -->
+          <div class="question-index" *ngFor="let question of getTopLevelQuestions(); let i = index">
             <div class="question">
               <p class="question-text">
-                <span class="question-text__number">{{ getQuestionDisplayNumber(question) }}.</span>
+                <span class="question-text__number">{{ i + 1 }}.</span>
                 {{ getQuestionText(question) }}
                 <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
               </p>
@@ -67,6 +67,69 @@
               <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other"
                 class="error-msg text-left ml-3">{{'This is a mandatory question and your response is required' |
                 translate}}</div>
+            </div>
+
+            <!-- Direct conditional questions children under the parent -->
+            <div class="conditional-question-index" *ngFor="let child of getDirectConditionalChildren(question)"
+              [style.display]="shouldShowConditionalQuestion(question, child.id) ? 'block' : 'none'">
+              <div class="question">
+                <p class="question-text">
+                  {{ getQuestionText(child) }}
+                  <span *ngIf="!child.isOptional" class="required-text pl-1"> *</span>
+                </p>
+                <div class="answer" *ngIf="child.questionType === 'multiple_choice'">
+                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
+                    <label>
+                      <input type="radio" class="cm-radio" (input)="onAnswerChange(child,subQuestion)"
+                        [formControlName]="child.id" [value]="subQuestion.id">
+                      <span>{{ getSubQuestionText(subQuestion) }}</span>
+                    </label>
+                  </div>
+                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
+                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                </div>
+                <div class="answer" *ngIf="child.questionType === 'dropdown'">
+                  <ng-select [items]="child.subQuestions" bindLabel="questionText" [virtualScroll]="true"
+                    dropdownPosition="bottom" bindValue="id" [clearable]="false" loadingText="Searching..."
+                    [searchable]="false" (change)="onAnswerChange(child, $event)"
+                    [placeholder]="'Select an option' | translate" [formControlName]="child.id">
+                  </ng-select>
+                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
+                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                </div>
+                <div class="answer" [formGroupName]="child.id" *ngIf="child.questionType === 'checkbox'">
+                  <label class="answer__tips">Choose as many as you like</label>
+                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
+                    <label>
+                      <input type="checkbox" class="cm-radio"
+                        (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
+                        [formControlName]="subQuestion.id" (click)="toggleCheckbox(child.id, subQuestion.id)">
+                      <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
+                      <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
+                    </label>
+                  </div>
+                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
+                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                </div>
+                <div class="answer" [id]="'text-area-' + child.id" *ngIf="child.questionType === 'long_text'">
+                  <div class="text-area">
+                    <textarea (input)="longTextAnswer = $event.target.value"
+                      [placeholder]="'Type your answer here.' | translate"
+                      aria-label="'Type your answer here.' | translate" [formControlName]="child.id"></textarea>
+                  </div>
+                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
+                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                </div>
+                <div class="input-box" *ngIf="child.is_other">
+                  <div class="input-box__border">
+                    <input [placeholder]="'Type answer here' | translate" type="text"
+                      aria-label="'Type answer here' | translate" [formControlName]="child.other_answer" />
+                  </div>
+                </div>
+                <div *ngIf="showError && questionnaireForm.controls[child.other_answer]?.errors && child.is_other"
+                  class="error-msg text-left ml-3">{{'This is a mandatory question and your response is required' |
+                  translate}}</div>
+              </div>
             </div>
           </div>
         </div>

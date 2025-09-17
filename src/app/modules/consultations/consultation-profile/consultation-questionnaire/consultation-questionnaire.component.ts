@@ -319,7 +319,7 @@ export class ConsultationQuestionnaireComponent
       this.scrollToError = true;
       return;
     }
-    if (this.questionnaireForm.valid) {
+    if (this.isFormValidForVisibleQuestions()) {
       this.responseAnswers = this.getResponseAnswers();
       const consultationResponse = this.getConsultationResponse();
       if (this.consultationId === 1089) {
@@ -369,6 +369,54 @@ export class ConsultationQuestionnaireComponent
       this.showError = true;
       this.scrollToError = true;
     }
+  }
+
+  /**
+   * Validate only visible questions (parents and actually shown conditional children)
+   */
+  private isFormValidForVisibleQuestions(): boolean {
+    if (!this.questions || !this.questionnaireForm) return true;
+
+    let allValid = true;
+
+    const parents = this.getTopLevelQuestions();
+    parents.forEach((parent: any) => {
+      const parentCtrl = this.questionnaireForm.get(parent.id.toString());
+      if (parentCtrl) {
+        parentCtrl.markAsTouched({ onlySelf: true });
+        parentCtrl.updateValueAndValidity({ onlySelf: true });
+        if (parentCtrl.invalid) allValid = false;
+      }
+      const parentOther = this.questionnaireForm.get(
+        "other_answer-" + parent.id
+      );
+      if (parent.is_other && parentOther) {
+        parentOther.markAsTouched({ onlySelf: true });
+        parentOther.updateValueAndValidity({ onlySelf: true });
+        if (parentOther.invalid) allValid = false;
+      }
+
+      const children = this.getDirectConditionalChildren(parent);
+      children.forEach((child: any) => {
+        if (!this.shouldShowConditionalQuestion(parent, child.id)) return;
+        const childCtrl = this.questionnaireForm.get(child.id.toString());
+        if (childCtrl) {
+          childCtrl.markAsTouched({ onlySelf: true });
+          childCtrl.updateValueAndValidity({ onlySelf: true });
+          if (childCtrl.invalid) allValid = false;
+        }
+        const childOther = this.questionnaireForm.get(
+          "other_answer-" + child.id
+        );
+        if (child.is_other && childOther) {
+          childOther.markAsTouched({ onlySelf: true });
+          childOther.updateValueAndValidity({ onlySelf: true });
+          if (childOther.invalid) allValid = false;
+        }
+      });
+    });
+
+    return allValid;
   }
 
   checkAndUpdateProfanityCount() {
@@ -705,7 +753,7 @@ export class ConsultationQuestionnaireComponent
       !this.profileData?.isSatisfactionRatingOptional
     ) {
       return "Please select a Satisfaction Rating to submit the response";
-    } else if (this.showError && !this.questionnaireForm?.valid) {
+    } else if (this.showError && !this.isFormValidForVisibleQuestions()) {
       return "Please fill all the answers to submit response.";
     } else {
       return "";
@@ -742,7 +790,7 @@ export class ConsultationQuestionnaireComponent
   /**
    * Check if parent question should show conditional questions
    */
-  private shouldShowConditionalQuestion(
+  shouldShowConditionalQuestion(
     parentQuestion: any,
     conditionalQuestionId: number
   ): boolean {
@@ -793,5 +841,28 @@ export class ConsultationQuestionnaireComponent
   getOrderedQuestions(): any[] {
     if (!this.questions) return [];
     return this.questions.slice().sort((a, b) => a.position - b.position);
+  }
+
+  /**
+   * Return only top-level (non-conditional) questions, ordered by position
+   */
+  getTopLevelQuestions(): any[] {
+    if (!this.questions) return [];
+    return this.questions
+      .filter((q) => !q.isConditionalQuestion)
+      .sort((a, b) => a.position - b.position);
+  }
+
+  /**
+   * Return direct conditional children of a given parent question, ordered by position
+   */
+  getDirectConditionalChildren(parentQuestion: any): any[] {
+    if (!this.questions) return [];
+    const children = this.questions.filter((q) => {
+      if (!q.isConditionalQuestion) return false;
+      const parent = this.findParentQuestion(q.id);
+      return parent?.id === parentQuestion.id;
+    });
+    return children.sort((a, b) => a.position - b.position);
   }
 }

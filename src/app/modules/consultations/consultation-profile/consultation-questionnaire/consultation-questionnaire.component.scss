@@ -1,0 +1,27 @@
+/* Ensure the border appears after conditional children, not immediately after the parent */
+.questions-container {
+  .question-index {
+    border-bottom: 1px solid #D5DBE2;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+/* Remove any border from the inner parent block so we don't get double borders */
+.question-index {
+  .question {
+    border-bottom: none !important;
+  }
+}
+
+.conditional-question-index {
+  margin-left: 24px;
+  .question {
+    padding-top: 0 !important;
+    border-bottom: none !important;
+  }
+  .answer {
+    padding: 0;
+  }
+}

@@ -53,6 +53,8 @@ import { WhiteLabelService } from "src/app/shared/services/white-label.service";
 export class ConsultationQuestionnaireComponent
   implements OnInit, AfterViewInit, AfterViewChecked
 {
+  private static readonly OTHER_ANSWER_PREFIX = "other_answer-";
+
   public whiteLabelConsultationId: number | null = null;
 
   @Input() profileData;
@@ -158,6 +160,10 @@ export class ConsultationQuestionnaireComponent
     }
   }
 
+  getOtherAnswerControlName(id: string | number): string {
+    return ConsultationQuestionnaireComponent.OTHER_ANSWER_PREFIX + id;
+  }
+
   setSatisfactoryRating(value) {
     this.responseFeedback = value;
   }
@@ -254,13 +260,16 @@ export class ConsultationQuestionnaireComponent
               );
             }
             if (question.is_other) {
+              const otherControlName = this.getOtherAnswerControlName(
+                question.id
+              );
               question.isOptional
                 ? form.addControl(
-                    "other_answer-" + question.id,
+                    otherControlName,
                     new FormControl(getSavedAnswer(question.id))
                   )
                 : form.addControl(
-                    "other_answer-" + question.id,
+                    otherControlName,
                     new FormControl(
                       getSavedAnswer(question.id),
                       Validators.required
@@ -388,7 +397,7 @@ export class ConsultationQuestionnaireComponent
         if (parentCtrl.invalid) allValid = false;
       }
       const parentOther = this.questionnaireForm.get(
-        "other_answer-" + parent.id
+        this.getOtherAnswerControlName(parent.id)
       );
       if (parent.is_other && parentOther) {
         parentOther.markAsTouched({ onlySelf: true });
@@ -406,7 +415,7 @@ export class ConsultationQuestionnaireComponent
           if (childCtrl.invalid) allValid = false;
         }
         const childOther = this.questionnaireForm.get(
-          "other_answer-" + child.id
+          this.getOtherAnswerControlName(child.id)
         );
         if (child.is_other && childOther) {
           childOther.markAsTouched({ onlySelf: true });
@@ -538,14 +547,16 @@ export class ConsultationQuestionnaireComponent
               responseAnswers.push({
                 question_id: item,
                 is_other: true,
-                other_option_answer: answers["other_answer-" + item],
+                other_option_answer:
+                  answers[this.getOtherAnswerControlName(item)],
                 answer: filteredAnswers,
               });
             } else {
               responseAnswers.push({
                 question_id: item,
                 is_other: true,
-                other_option_answer: answers["other_answer-" + item],
+                other_option_answer:
+                  answers[this.getOtherAnswerControlName(item)],
               });
             }
           } else {
@@ -561,7 +572,7 @@ export class ConsultationQuestionnaireComponent
           responseAnswers.push({
             question_id: item,
             is_other: true,
-            other_option_answer: answers["other_answer-" + item],
+            other_option_answer: answers[this.getOtherAnswerControlName(item)],
           });
         } else if (!item.includes("other") && !Array.isArray(answers[item])) {
           if (answers[item].length > 0 || typeof answers[item] !== "string") {
@@ -615,12 +626,12 @@ export class ConsultationQuestionnaireComponent
           this.questions[i].is_other = otherValue;
           if (question.isOptional) {
             this.questionnaireForm.addControl(
-              "other_answer-" + question.id,
+              this.getOtherAnswerControlName(question.id),
               new FormControl(null)
             );
           } else {
             this.questionnaireForm.addControl(
-              "other_answer-" + question.id,
+              this.getOtherAnswerControlName(question.id),
               new FormControl(null, Validators.required)
             );
           }
@@ -632,8 +643,9 @@ export class ConsultationQuestionnaireComponent
         this.questions.forEach((ques) => {
           if (question.id === ques.id) {
             ques.is_other = false;
-            if (this.questionnaireForm.controls["other_answer-" + ques.id]) {
-              this.questionnaireForm.removeControl("other_answer-" + ques.id);
+            const otherName = this.getOtherAnswerControlName(ques.id);
+            if (this.questionnaireForm.controls[otherName]) {
+              this.questionnaireForm.removeControl(otherName);
             }
           }
         });
@@ -854,15 +866,28 @@ export class ConsultationQuestionnaireComponent
   }
 
   /**
-   * Return direct conditional children of a given parent question, ordered by position
+   * Return direct conditional children of a given parent question, preserving
+   * the order defined in the parent's subQuestions (no sorting by position).
    */
   getDirectConditionalChildren(parentQuestion: any): any[] {
-    if (!this.questions) return [];
-    const children = this.questions.filter((q) => {
-      if (!q.isConditionalQuestion) return false;
-      const parent = this.findParentQuestion(q.id);
-      return parent?.id === parentQuestion.id;
+    if (!this.questions || !parentQuestion?.subQuestions) return [];
+
+    const idToQuestionMap: Record<string, any> = {};
+    for (const q of this.questions) {
+      idToQuestionMap[q.id?.toString()] = q;
+    }
+
+    const orderedChildren: any[] = [];
+    parentQuestion.subQuestions.forEach((sq: any) => {
+      const childId = sq?.conditionalQuestion?.id;
+      if (childId) {
+        const child = idToQuestionMap[childId.toString()];
+        if (child && child.isConditionalQuestion) {
+          orderedChildren.push(child);
+        }
+      }
     });
-    return children.sort((a, b) => a.position - b.position);
+
+    return orderedChildren;
   }
 }

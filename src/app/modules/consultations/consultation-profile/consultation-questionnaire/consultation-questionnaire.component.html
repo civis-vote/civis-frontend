@@ -6,6 +6,13 @@
     </ng-container>
     <div class="question-box">
       <form [formGroup]="questionnaireForm" #f="ngForm">
+        <!-- Reusable error message block -->
+        <ng-template #errorBlock let-controlName="controlName" let-show="show" let-addMargin="addMargin">
+          <div *ngIf="showError && show && questionnaireForm.controls[controlName]?.errors" class="error-msg text-left"
+            [ngClass]="{'ml-3': addMargin}">
+            {{'This is a mandatory question and your response is required' | translate}}
+          </div>
+        </ng-template>
         <div class="questions-container">
           <!-- Top-level (non-conditional) questions -->
           <div class="question-index" *ngFor="let question of getTopLevelQuestions(); let i = index">
@@ -23,8 +30,8 @@
                     <span>{{ getSubQuestionText(subQuestion) }}</span>
                   </label>
                 </div>
-                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
-                  {{'This is a mandatory question and your response is required' | translate}}</div>
+                <ng-container [ngTemplateOutlet]="errorBlock"
+                  [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
               </div>
               <div class="answer" *ngIf="question.questionType === 'dropdown'">
                 <ng-select [items]="question.subQuestions" bindLabel="questionText" [virtualScroll]="true"
@@ -32,8 +39,8 @@
                   [searchable]="false" (change)="onAnswerChange(question, $event)"
                   [placeholder]="'Select an option' | translate" [formControlName]="question.id">
                 </ng-select>
-                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
-                  {{'This is a mandatory question and your response is required' | translate}}</div>
+                <ng-container [ngTemplateOutlet]="errorBlock"
+                  [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
               </div>
               <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
                 <label class="answer__tips">Choose as many as you like</label>
@@ -46,8 +53,8 @@
                     <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                   </label>
                 </div>
-                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
-                  {{'This is a mandatory question and your response is required' | translate}}</div>
+                <ng-container [ngTemplateOutlet]="errorBlock"
+                  [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
               </div>
               <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
                 <div class="text-area">
@@ -61,12 +68,12 @@
               <div class="input-box" *ngIf="question.is_other">
                 <div class="input-box__border">
                   <input [placeholder]="'Type answer here' | translate" type="text"
-                    aria-label="'Type answer here' | translate" [formControlName]="question.other_answer" />
+                    aria-label="'Type answer here' | translate"
+                    [formControlName]="getOtherAnswerControlName(question.id)" />
                 </div>
               </div>
-              <div *ngIf="showError && questionnaireForm.controls[question.other_answer]?.errors && question.is_other"
-                class="error-msg text-left ml-3">{{'This is a mandatory question and your response is required' |
-                translate}}</div>
+              <ng-container [ngTemplateOutlet]="errorBlock"
+                [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), show: question.is_other, addMargin: true }"></ng-container>
             </div>
 
             <!-- Direct conditional questions children under the parent -->
@@ -85,8 +92,8 @@
                       <span>{{ getSubQuestionText(subQuestion) }}</span>
                     </label>
                   </div>
-                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
-                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                  <ng-container [ngTemplateOutlet]="errorBlock"
+                    [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
                 </div>
                 <div class="answer" *ngIf="child.questionType === 'dropdown'">
                   <ng-select [items]="child.subQuestions" bindLabel="questionText" [virtualScroll]="true"
@@ -94,8 +101,8 @@
                     [searchable]="false" (change)="onAnswerChange(child, $event)"
                     [placeholder]="'Select an option' | translate" [formControlName]="child.id">
                   </ng-select>
-                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
-                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                  <ng-container [ngTemplateOutlet]="errorBlock"
+                    [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
                 </div>
                 <div class="answer" [formGroupName]="child.id" *ngIf="child.questionType === 'checkbox'">
                   <label class="answer__tips">Choose as many as you like</label>
@@ -108,8 +115,8 @@
                       <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                     </label>
                   </div>
-                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
-                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                  <ng-container [ngTemplateOutlet]="errorBlock"
+                    [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
                 </div>
                 <div class="answer" [id]="'text-area-' + child.id" *ngIf="child.questionType === 'long_text'">
                   <div class="text-area">
@@ -123,12 +130,12 @@
                 <div class="input-box" *ngIf="child.is_other">
                   <div class="input-box__border">
                     <input [placeholder]="'Type answer here' | translate" type="text"
-                      aria-label="'Type answer here' | translate" [formControlName]="child.other_answer" />
+                      aria-label="'Type answer here' | translate"
+                      [formControlName]="getOtherAnswerControlName(child.id)" />
                   </div>
                 </div>
-                <div *ngIf="showError && questionnaireForm.controls[child.other_answer]?.errors && child.is_other"
-                  class="error-msg text-left ml-3">{{'This is a mandatory question and your response is required' |
-                  translate}}</div>
+                <ng-container [ngTemplateOutlet]="errorBlock"
+                  [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), show: child.is_other, addMargin: true }"></ng-container>
               </div>
             </div>
           </div>

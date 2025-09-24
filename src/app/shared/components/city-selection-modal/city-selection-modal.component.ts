@@ -21,7 +21,7 @@ export class CitySelectionModalComponent implements OnInit {
   loading: boolean;
   cities: any;
   dropdownText = 'Begin Typing';
-  user: { cityId: any; firstName?: string } = { cityId: null, firstName: '' };
+  user: { cityId: any; firstName?: string, notifyForNewConsultation?: boolean } = { cityId: null, firstName: '', notifyForNewConsultation: true };
   shouldShowModal: boolean = false;
   isCheckingGeolocation: boolean = true;
 

@@ -19,29 +19,6 @@ const ConsultationPartnerResponsesFragment = gql`
   }
 `;
 
-const  ConditionalQuestionFragment = gql`
-  fragment ConditionalQuestionFragment on BaseQuestionType {
-    id
-    isOptional
-    questionText
-    hindiQuestionText
-    odiaQuestionText
-    marathiQuestionText
-    questionType
-    supportsOther
-    position
-    isConditionalQuestion
-    subQuestions {
-      id
-      questionText
-      hindiQuestionText
-      odiaQuestionText
-      marathiQuestionText
-    }
-  }
-`;
-
-
 const SubQuestionFragment = gql`
   fragment SubQuestionFragment on BaseQuestionType {
     id
@@ -49,11 +26,7 @@ const SubQuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
-    conditionalQuestion {
-      ...ConditionalQuestionFragment
-    }
   }
-  ${ConditionalQuestionFragment}
 `;
 
 const QuestionFragment = gql`
@@ -66,8 +39,6 @@ const QuestionFragment = gql`
     marathiQuestionText
     questionType
     supportsOther
-    position
-    isConditionalQuestion
     subQuestions {
       ...SubQuestionFragment
     }

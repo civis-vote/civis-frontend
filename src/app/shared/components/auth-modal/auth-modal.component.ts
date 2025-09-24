@@ -350,7 +350,8 @@ export class AuthModalComponent implements OnInit {
     this.userDetailsError = '';
     
     const userUpdateData: any = {
-      firstName: this.userDetailsForm.firstName
+      firstName: this.userDetailsForm.firstName,
+      notifyForNewConsultation: true,
     };
     
     if (this.isCitySelectionShown && this.userDetailsForm.cityId) {

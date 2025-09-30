@@ -25,3 +25,24 @@
     padding: 0;
   }
 }
+
+.start-button, .stop-button, .cancel-button {
+  background-color: #0e73b9;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 30px;
+  margin-bottom: 10px;
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+  color: white !important;
+}

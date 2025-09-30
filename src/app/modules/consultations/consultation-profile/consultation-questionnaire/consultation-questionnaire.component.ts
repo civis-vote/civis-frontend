@@ -44,6 +44,8 @@ import { MetaPixelService } from "src/app/shared/services/pixel.service";
 import { CookieService } from "ngx-cookie";
 import { Router } from "@angular/router";
 import { WhiteLabelService } from "src/app/shared/services/white-label.service";
+import { AudioRecordingService } from "src/app/shared/services/audio-recording.service";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: "app-consultation-questionnaire",
@@ -94,6 +96,11 @@ export class ConsultationQuestionnaireComponent
   responseStatus = 0;
   profaneWords = [];
   environment: any = environment;
+  // https://stackblitz.com/edit/angular-audio-recorder
+  isRecording = false;
+  recordedTime;
+  blobUrl;
+  teste;
 
   get profanityCountGetter() {
     //TODO: Profanity filter feature, remove when ready for deployment to production
@@ -110,7 +117,9 @@ export class ConsultationQuestionnaireComponent
     private el: ElementRef,
     private cookieService: CookieService,
     private router: Router,
-    private whiteLabelService: WhiteLabelService
+    private whiteLabelService: WhiteLabelService,
+    private audioRecordingService: AudioRecordingService,
+    private sanitizer: DomSanitizer
   ) {
     this.currentLanguage = this.cookieService.get("civisLang");
     this.questionnaireForm = this._fb.group({});
@@ -141,12 +150,37 @@ export class ConsultationQuestionnaireComponent
     if (this.consultationId === 404 || this.consultationId === 707) {
       this.responseFeedback = "satisfied";
     }
+
+    this.audioRecordingService
+      .recordingFailed()
+      .subscribe(() => (this.isRecording = false));
+    this.audioRecordingService
+      .getRecordedTime()
+      .subscribe((time) => (this.recordedTime = time));
+    this.audioRecordingService.getRecordedBlob().subscribe((data) => {
+      this.teste = data;
+      this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
+        URL.createObjectURL(data.blob)
+      );
+    });
   }
 
   ngOnInit(): void {
     this.getCurrentUser();
     this.subscribeProfileData();
     this.validateAnswers();
+  }
+
+  ngOnDestroy(): void {
+    this.abortRecording();
+  }
+
+  download(): void {
+    const url = window.URL.createObjectURL(this.teste.blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = this.teste.title;
+    link.click();
   }
 
   ngAfterViewInit() {
@@ -316,68 +350,8 @@ export class ConsultationQuestionnaireComponent
   }
 
   submitAnswer() {
-    if (this.responseSubmitLoading) {
-      return;
-    }
-    if (
-      !this.responseFeedback &&
-      !this.profileData?.isSatisfactionRatingOptional
-    ) {
-      this.consultationService.satisfactionRatingError.next(true);
-      this.showError = true;
-      this.scrollToError = true;
-      return;
-    }
-    if (this.isFormValidForVisibleQuestions()) {
-      this.responseAnswers = this.getResponseAnswers();
-      const consultationResponse = this.getConsultationResponse();
-      if (this.consultationId === 1089) {
-        this.invokeSubmitResponse();
-      } else {
-        if (!isObjectEmpty(consultationResponse)) {
-          if (this.currentUser) {
-            this.metaPixelService.trackSubmitResponse();
-            this.apollo
-              .watchQuery({
-                query: UserCountUser,
-                variables: { userId: this.currentUser.id },
-                fetchPolicy: "no-cache",
-              })
-              .valueChanges.pipe(map((res: any) => res.data.userCountUser))
-              .subscribe(
-                (data) => {
-                  if (!this.profanity_count_changed) {
-                    this.userData = data;
-                    this.checkAndUpdateProfanityCount();
-                  }
-                },
-                (err) => {
-                  const e = new Error(err);
-                  this.errorService.showErrorModal(err);
-                }
-              );
-          } else {
-            // If the user is not authenticated, show the auth modal and store the consultation response to local storage.
-            const currentUrl = this.router.url;
-            this.cookieService.put("loginCallbackUrl", currentUrl);
-            this.authModal = true;
-            localStorage.setItem(
-              "consultationResponse",
-              JSON.stringify(consultationResponse)
-            );
-          }
-        }
-      }
-    } else {
-      if (
-        !this.responseFeedback &&
-        !this.profileData?.isSatisfactionRatingOptional
-      ) {
-        this.consultationService.satisfactionRatingError.next(true);
-      }
-      this.showError = true;
-      this.scrollToError = true;
-    }
+    this.openThankYouModal.emit(100);
+    this.responseCreated = true;
   }
 
   /**
@@ -889,5 +863,31 @@ export class ConsultationQuestionnaireComponent
     });
 
     return orderedChildren;
+  }
+
+  startRecording() {
+    if (!this.isRecording) {
+      this.isRecording = true;
+      this.audioRecordingService.startRecording();
+    }
+  }
+
+  abortRecording() {
+    if (this.isRecording) {
+      this.isRecording = false;
+      this.audioRecordingService.abortRecording();
+    }
+  }
+
+  stopRecording() {
+    if (this.isRecording) {
+      this.audioRecordingService.stopRecording();
+      this.isRecording = false;
+    }
+  }
+
+  clearRecordedData() {
+    this.blobUrl = null;
+    this.startRecording();
   }
 }

@@ -1,172 +1,109 @@
 <div #questionnaireContainer>
-  <div class="paper-effect  mt-4 m-0-sm" *ngIf="!responseCreated">
+  <div class="paper-effect mt-4 m-0-sm" *ngIf="!responseCreated">
     <ng-container *ngIf="profileData?.showSatisfactionRating">
       <app-satisfaction-rating-selection
-        (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
+        (selectSatisfaction)="responseFeedback = $event"
+      ></app-satisfaction-rating-selection>
     </ng-container>
-    <div class="question-box">
-      <form [formGroup]="questionnaireForm" #f="ngForm">
-        <!-- Reusable error message block -->
-        <ng-template #errorBlock let-controlName="controlName" let-show="show" let-addMargin="addMargin">
-          <div *ngIf="showError && show && questionnaireForm.controls[controlName]?.errors" class="error-msg text-left"
-            [ngClass]="{'ml-3': addMargin}">
-            {{'This is a mandatory question and your response is required' | translate}}
-          </div>
-        </ng-template>
-        <div class="questions-container">
-          <!-- Top-level (non-conditional) questions -->
-          <div class="question-index" *ngFor="let question of getTopLevelQuestions(); let i = index">
-            <div class="question">
-              <p class="question-text">
-                <span class="question-text__number">{{ i + 1 }}.</span>
-                {{ getQuestionText(question) }}
-                <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
-              </p>
-              <div class="answer" *ngIf="question.questionType === 'multiple_choice'">
-                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
-                  <label>
-                    <input type="radio" class="cm-radio" (input)="onAnswerChange(question,subQuestion)"
-                      [formControlName]="question.id" [value]="subQuestion.id">
-                    <span>{{ getSubQuestionText(subQuestion) }}</span>
-                  </label>
-                </div>
-                <ng-container [ngTemplateOutlet]="errorBlock"
-                  [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
-              </div>
-              <div class="answer" *ngIf="question.questionType === 'dropdown'">
-                <ng-select [items]="question.subQuestions" bindLabel="questionText" [virtualScroll]="true"
-                  dropdownPosition="bottom" bindValue="id" [clearable]="false" loadingText="Searching..."
-                  [searchable]="false" (change)="onAnswerChange(question, $event)"
-                  [placeholder]="'Select an option' | translate" [formControlName]="question.id">
-                </ng-select>
-                <ng-container [ngTemplateOutlet]="errorBlock"
-                  [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
-              </div>
-              <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
-                <label class="answer__tips">Choose as many as you like</label>
-                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
-                  <label>
-                    <input type="checkbox" class="cm-radio"
-                      (input)="onAnswerChange(question,subQuestion, $event.target.checked)"
-                      [formControlName]="subQuestion.id" (click)="toggleCheckbox(question.id, subQuestion.id)">
-                    <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
-                    <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
-                  </label>
-                </div>
-                <ng-container [ngTemplateOutlet]="errorBlock"
-                  [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
-              </div>
-              <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
-                <div class="text-area">
-                  <textarea (input)="longTextAnswer = $event.target.value"
-                    [placeholder]="'Type your answer here.' | translate"
-                    aria-label="'Type your answer here.' | translate" [formControlName]="question.id"></textarea>
-                </div>
-                <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
-                  {{'This is a mandatory question and your response is required' | translate}}</div>
-              </div>
-              <div class="input-box" *ngIf="question.is_other">
-                <div class="input-box__border">
-                  <input [placeholder]="'Type answer here' | translate" type="text"
-                    aria-label="'Type answer here' | translate"
-                    [formControlName]="getOtherAnswerControlName(question.id)" />
-                </div>
-              </div>
-              <ng-container [ngTemplateOutlet]="errorBlock"
-                [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), show: question.is_other, addMargin: true }"></ng-container>
-            </div>
+    <div>
+      <button
+        class="start-button"
+        *ngIf="!isRecording && !blobUrl"
+        (click)="startRecording()"
+      >
+        <svg
+          class="icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 640 640"
+        >
+          <!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path
+            fill="#ffffff"
+            d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"
+          />
+        </svg>
+      </button>
 
-            <!-- Direct conditional questions children under the parent -->
-            <div class="conditional-question-index" *ngFor="let child of getDirectConditionalChildren(question)"
-              [style.display]="shouldShowConditionalQuestion(question, child.id) ? 'block' : 'none'">
-              <div class="question">
-                <p class="question-text">
-                  {{ getQuestionText(child) }}
-                  <span *ngIf="!child.isOptional" class="required-text pl-1"> *</span>
-                </p>
-                <div class="answer" *ngIf="child.questionType === 'multiple_choice'">
-                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
-                    <label>
-                      <input type="radio" class="cm-radio" (input)="onAnswerChange(child,subQuestion)"
-                        [formControlName]="child.id" [value]="subQuestion.id">
-                      <span>{{ getSubQuestionText(subQuestion) }}</span>
-                    </label>
-                  </div>
-                  <ng-container [ngTemplateOutlet]="errorBlock"
-                    [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
-                </div>
-                <div class="answer" *ngIf="child.questionType === 'dropdown'">
-                  <ng-select [items]="child.subQuestions" bindLabel="questionText" [virtualScroll]="true"
-                    dropdownPosition="bottom" bindValue="id" [clearable]="false" loadingText="Searching..."
-                    [searchable]="false" (change)="onAnswerChange(child, $event)"
-                    [placeholder]="'Select an option' | translate" [formControlName]="child.id">
-                  </ng-select>
-                  <ng-container [ngTemplateOutlet]="errorBlock"
-                    [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
-                </div>
-                <div class="answer" [formGroupName]="child.id" *ngIf="child.questionType === 'checkbox'">
-                  <label class="answer__tips">Choose as many as you like</label>
-                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
-                    <label>
-                      <input type="checkbox" class="cm-radio"
-                        (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
-                        [formControlName]="subQuestion.id" (click)="toggleCheckbox(child.id, subQuestion.id)">
-                      <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
-                      <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
-                    </label>
-                  </div>
-                  <ng-container [ngTemplateOutlet]="errorBlock"
-                    [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
-                </div>
-                <div class="answer" [id]="'text-area-' + child.id" *ngIf="child.questionType === 'long_text'">
-                  <div class="text-area">
-                    <textarea (input)="longTextAnswer = $event.target.value"
-                      [placeholder]="'Type your answer here.' | translate"
-                      aria-label="'Type your answer here.' | translate" [formControlName]="child.id"></textarea>
-                  </div>
-                  <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
-                    {{'This is a mandatory question and your response is required' | translate}}</div>
-                </div>
-                <div class="input-box" *ngIf="child.is_other">
-                  <div class="input-box__border">
-                    <input [placeholder]="'Type answer here' | translate" type="text"
-                      aria-label="'Type answer here' | translate"
-                      [formControlName]="getOtherAnswerControlName(child.id)" />
-                  </div>
-                </div>
-                <ng-container [ngTemplateOutlet]="errorBlock"
-                  [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), show: child.is_other, addMargin: true }"></ng-container>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="checkbox-area"
-          *ngIf="showPublicResponseOption() && consultationId !== 707 && consultationId !== 404">
-          <div class="input-checbox">
-            <input class="cm-checkbox mr-2" type="checkbox" [(ngModel)]="responseVisibility"
-              [ngModelOptions]="{standalone: true}" />
-            <label class="m-0">{{'Make my response public' | translate}}</label>
-            <span class="link"
-              [tooltip]="'Choosing to make your response public allows it to be viewed by others, who may use it as a reference or template for their own responses. Only your first name will be disclosed to the organisation conducting the consultation. This option is ideal for those who wish to transparently share their views and contribute to the broader discussion. If you are unsure about your own response, you also have the option to adopt and send a public response provided by someone else.' | translate">
-              {{'What does this mean?' | translate}}</span>
-          </div>
-        </div>
-        <div class="py-3">
-          <button class="btn-submit active" (click)='submitAnswer()' [tooltip]="getSubmitButtonTooltip() | translate"
-            data-event="purchase">
-            <p class="m-0">
-              {{'SUBMIT RESPONSE' | translate}}
-            </p>
-            <span class="ml-2"><i class="fa fa-angle-right"></i></span>
-          </button>
-        </div>
-      </form>
+      <button
+        class="stop-button"
+        *ngIf="isRecording && !blobUrl"
+        (click)="stopRecording()"
+      >
+        <svg
+          class="icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 640 640"
+        >
+          <!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path
+            fill="#f5f5f5"
+            d="M160 96L480 96C515.3 96 544 124.7 544 160L544 480C544 515.3 515.3 544 480 544L160 544C124.7 544 96 515.3 96 480L96 160C96 124.7 124.7 96 160 96z"
+          />
+        </svg>
+      </button>
+
+      <button
+        class="cancel-button"
+        *ngIf="!isRecording && blobUrl"
+        (click)="clearRecordedData()"
+      >
+        <svg
+          class="icon"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 640 640"
+        >
+          <!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+          <path
+            fill="#ffffff"
+            d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"
+          />
+        </svg>
+      </button>
+
+      <br />
+      <!-- <button
+        class="cancel-button"
+        *ngIf="!isRecording && blobUrl"
+        (click)="download()"
+      >
+        Download Recording
+      </button> -->
+
+      <div *ngIf="isRecording && !blobUrl">{{ recordedTime }}</div>
+      <div>
+        <audio *ngIf="!isRecording && blobUrl" controls>
+          <source [src]="blobUrl" type="audio/webm" />
+        </audio>
+      </div>
+    </div>
+    <div class="py-3" *ngIf="!isRecording && blobUrl">
+      <button
+        class="btn-submit active"
+        (click)="submitAnswer()"
+        data-event="purchase"
+      >
+        <p class="m-0">
+          {{ "SUBMIT RESPONSE" | translate }}
+        </p>
+        <span class="ml-2"><i class="fa fa-angle-right"></i></span>
+      </button>
     </div>
   </div>
 </div>
-<app-confirm-email-modal *ngIf="showConfirmEmailModal" (close)="showConfirmEmailModal = false">
+<app-confirm-email-modal
+  *ngIf="showConfirmEmailModal"
+  (close)="showConfirmEmailModal = false"
+>
 </app-confirm-email-modal>
 
-<app-auth-modal *ngIf="authModal" [consultationId]="consultationId" (close)="authModal = false"></app-auth-modal>
-<app-profane-modal *ngIf="isConfirmModal" [message]='confirmMessage' [showCancel]=false
-  (close)='confirmed($event)'></app-profane-modal>
+<app-auth-modal
+  *ngIf="authModal"
+  [consultationId]="consultationId"
+  (close)="authModal = false"
+></app-auth-modal>
+<app-profane-modal
+  *ngIf="isConfirmModal"
+  [message]="confirmMessage"
+  [showCancel]="false"
+  (close)="confirmed($event)"
+></app-profane-modal>

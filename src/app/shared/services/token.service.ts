@@ -6,8 +6,8 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class TokenService {
   token: string;
-  expiresAt: any;
-  hasToken$ = new BehaviorSubject(null);
+  expiresAt: string | null;
+  hasToken$ = new BehaviorSubject<boolean | null>(null);
 
   constructor() {
     this.tokenHandler();
@@ -42,9 +42,9 @@ export class TokenService {
     }
   }
 
-  storeToken(tokenObject: any) {
+  storeToken(tokenObject: { accessToken: string; expiresAt?: string }): void {
     const token = tokenObject.accessToken;
-    const expiresAt = tokenObject.expiresAt;
+    const expiresAt = tokenObject.expiresAt || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // Default to 24 hours
     localStorage.setItem("civis-token", token);
     localStorage.setItem("civis-token_expires", expiresAt);
   }

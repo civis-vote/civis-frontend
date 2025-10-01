@@ -5,6 +5,7 @@ import {BehaviorSubject} from 'rxjs';
 import {filter, map, take} from 'rxjs/operators';
 import {CurrentUser} from '../../graphql/queries.graphql';
 import {TokenService} from './token.service';
+import { User } from '../models/interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class UserService {
   token: string;
   userLoaded$ = new BehaviorSubject(null);
   forceCitySelection$ = new BehaviorSubject(null);
-  currentUser: any;
+  currentUser: User | null = null;
 
 constructor(
   private apollo: Apollo,

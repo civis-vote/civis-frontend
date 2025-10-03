@@ -21,6 +21,7 @@ import { NgxWebstorageModule } from 'ngx-webstorage';
 import { StarterService } from './shared/services/starter.service';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 import { WhiteLabelGuard } from "./shared/guards/white-label.guard";
+import { AudioRecordingService } from './shared/services/audio-recording.service';
 
 @NgModule({
   declarations: [AppComponent, PageNotFoundComponent],
@@ -48,6 +49,7 @@ import { WhiteLabelGuard } from "./shared/guards/white-label.guard";
     WhiteLabelGuard,
     CookieService,
     StarterService,
+    AudioRecordingService,
   ],
   bootstrap: [AppComponent],
 })

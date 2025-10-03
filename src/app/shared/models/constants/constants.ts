@@ -40,3 +40,5 @@ export const WHITE_LABEL_CONFIGS: WhiteLabelConfig[] = [
     allowedPaths: ['/consultations/1317', '/auth']
   }
 ];
+
+export const VOICE_DEMO_CONSULTATION_ID = 1346;

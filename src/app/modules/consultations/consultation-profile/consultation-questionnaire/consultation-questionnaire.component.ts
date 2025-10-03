@@ -1,3 +1,4 @@
+import { VOICE_DEMO_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
 import {
   Component,
   OnInit,
@@ -44,6 +45,15 @@ import { MetaPixelService } from "src/app/shared/services/pixel.service";
 import { CookieService } from "ngx-cookie";
 import { Router } from "@angular/router";
 import { WhiteLabelService } from "src/app/shared/services/white-label.service";
+import { AudioRecordingService } from "src/app/shared/services/audio-recording.service";
+import { DomSanitizer } from "@angular/platform-browser";
+
+const errorMessages: { [key: string]: string } = {
+  duplicatePriority:
+    "You have selected the same priority for multiple options. Please assign a unique priority to each.",
+  missingPriority: "Please assign a priority to all selected options.",
+  required: "This is a mandatory question and your response is required",
+};
 
 @Component({
   selector: "app-consultation-questionnaire",
@@ -53,6 +63,7 @@ import { WhiteLabelService } from "src/app/shared/services/white-label.service";
 export class ConsultationQuestionnaireComponent
   implements OnInit, AfterViewInit, AfterViewChecked
 {
+  public VOICE_DEMO_CONSULTATION_ID = VOICE_DEMO_CONSULTATION_ID;
   private static readonly OTHER_ANSWER_PREFIX = "other_answer-";
 
   public whiteLabelConsultationId: number | null = null;
@@ -94,6 +105,15 @@ export class ConsultationQuestionnaireComponent
   responseStatus = 0;
   profaneWords = [];
   environment: any = environment;
+  // https://stackblitz.com/edit/angular-audio-recorder
+  isRecording = false;
+  recordedTime;
+  blobUrl;
+  tempRecordingHolder;
+  private readonly priorityOptionsCache: Map<
+    number,
+    { options: number[]; subQuestionsLength: number }
+  > = new Map();
 
   get profanityCountGetter() {
     //TODO: Profanity filter feature, remove when ready for deployment to production
@@ -110,7 +130,9 @@ export class ConsultationQuestionnaireComponent
     private el: ElementRef,
     private cookieService: CookieService,
     private router: Router,
-    private whiteLabelService: WhiteLabelService
+    private whiteLabelService: WhiteLabelService,
+    private audioRecordingService: AudioRecordingService,
+    private sanitizer: DomSanitizer
   ) {
     this.currentLanguage = this.cookieService.get("civisLang");
     this.questionnaireForm = this._fb.group({});
@@ -141,6 +163,19 @@ export class ConsultationQuestionnaireComponent
     if (this.consultationId === 404 || this.consultationId === 707) {
       this.responseFeedback = "satisfied";
     }
+
+     this.audioRecordingService
+      .recordingFailed()
+      .subscribe(() => (this.isRecording = false));
+    this.audioRecordingService
+      .getRecordedTime()
+      .subscribe((time) => (this.recordedTime = time));
+    this.audioRecordingService.getRecordedBlob().subscribe((data) => {
+      this.tempRecordingHolder = data;
+      this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
+        URL.createObjectURL(data.blob)
+      );
+    });
   }
 
   ngOnInit(): void {
@@ -285,25 +320,31 @@ export class ConsultationQuestionnaireComponent
 
   makeCheckboxQuestionOptions(question, defaultValue?) {
     let form: any;
-    form = question.isOptional
-      ? new FormGroup({})
-      : new FormGroup(
-          {},
-          {
-            validators: atLeastOneCheckboxCheckedValidator(),
-          }
-        );
+    form = new FormGroup(
+      {},
+      {
+        validators: atLeastOneCheckboxCheckedValidator(1, question.isOptional),
+      }
+    );
     question.subQuestions.forEach((subQuestion) => {
-      form.addControl(
-        subQuestion.id,
-        new FormControl(defaultValue ? subQuestion.id === defaultValue : false)
-      );
+      const optionForm = new FormGroup({
+        value: new FormControl(
+          defaultValue ? subQuestion.id === defaultValue : false
+        ),
+        priority: new FormControl(0),
+      });
+
+      form.addControl(subQuestion.id, optionForm);
     });
     return form;
   }
 
   toggleCheckbox(questionId, subQuestionId) {
-    const control = this.questionnaireForm.get([questionId, subQuestionId]);
+    const control = this.questionnaireForm.get([
+      questionId,
+      subQuestionId,
+      "value",
+    ]);
     control.patchValue(!control.value);
   }
 
@@ -527,48 +568,69 @@ export class ConsultationQuestionnaireComponent
     for (const item in answers) {
       if (answers.hasOwnProperty(item) && answers[item] !== null) {
         if (typeof answers[item] === "object") {
-          const keys = Object.keys(answers[item]);
-          const filtered = keys.filter(function (key) {
-            return answers[item][key];
+          const isCheckBoxAnswer = Object.values(answers[item]).every(
+            (obj) =>
+              typeof obj === "object" &&
+              obj.hasOwnProperty("value") &&
+              obj.hasOwnProperty("priority")
+          );
+
+          const allKeys = Object.keys(answers[item]);
+          const selectedKeys = allKeys.filter(function (key) {
+            const keyObj = answers[item][key];
+            return isCheckBoxAnswer ? keyObj.value === true : keyObj;
           });
-          answers[item] = filtered;
-          let otherElement = false;
-          for (let i = 0; i < answers[item].length; i++) {
-            if (answers[item][i] === "other") {
-              otherElement = true;
-              break;
+
+          const getOptionsWithPriority = (optionKey) => {
+            if (!isCheckBoxAnswer) {
+              return optionKey;
             }
-          }
-          if (otherElement) {
-            const filteredAnswers = answers[item].filter((val) => {
-              return val !== "other";
-            });
+
+            const userSelection = answers[item][optionKey];
+            return {
+              priority: userSelection.priority,
+              option_id: optionKey,
+            };
+          };
+
+          let hasOtherElement = selectedKeys.includes("other");
+
+          if (hasOtherElement) {
+            const otherTextAnswer =
+              answers[this.getOtherAnswerControlName(item)];
+            let otherOptionAnswer = otherTextAnswer;
+
+            if (isCheckBoxAnswer) {
+              const otherPriority = answers[item]["other"].priority;
+              otherOptionAnswer = {
+                option_id: otherTextAnswer,
+                priority: otherPriority,
+              };
+            }
+
+            const response: any = {
+              question_id: item,
+              is_other: true,
+              other_option_answer: otherOptionAnswer,
+            };
+
+            const filteredAnswers = selectedKeys
+              .filter((val) => {
+                return val !== "other";
+              })
+              .map(getOptionsWithPriority);
             if (filteredAnswers.length > 0) {
-              responseAnswers.push({
-                question_id: item,
-                is_other: true,
-                other_option_answer:
-                  answers[this.getOtherAnswerControlName(item)],
-                answer: filteredAnswers,
-              });
-            } else {
-              responseAnswers.push({
-                question_id: item,
-                is_other: true,
-                other_option_answer:
-                  answers[this.getOtherAnswerControlName(item)],
-              });
+              response.answer = filteredAnswers;
             }
-          } else {
-            if (answers[item].length > 0) {
-              responseAnswers.push({
-                question_id: item,
-                answer: answers[item],
-              });
-            }
+
+            responseAnswers.push(response);
+          } else if (selectedKeys.length > 0) {
+            responseAnswers.push({
+              question_id: item,
+              answer: selectedKeys.map(getOptionsWithPriority),
+            });
           }
-        }
-        if (answers[item] === "other") {
+        } else if (answers[item] === "other") {
           responseAnswers.push({
             question_id: item,
             is_other: true,
@@ -611,6 +673,19 @@ export class ConsultationQuestionnaireComponent
     return;
   }
 
+  getNextAvailablePriority(
+    questionId: number,
+    subQuestionId: number | "other"
+  ): number {
+    const value = this.questionnaireForm.get([questionId]).value;
+    const numSubOptionsSelected = Object.entries(value).filter(
+      ([key, val]: [string, any]) =>
+        key !== `${subQuestionId}` && val.value === true
+    ).length;
+
+    return numSubOptionsSelected + 1;
+  }
+
   onAnswerChange(question?, value?, checkboxValue?) {
     if (question && value.id === "other") {
       let otherValue = true;
@@ -649,6 +724,25 @@ export class ConsultationQuestionnaireComponent
             }
           }
         });
+      }
+    }
+
+    // Auto set priority when checked for first time
+    if (question.questionType === "checkbox" && checkboxValue === true) {
+      const priorityControl = this.questionnaireForm.get([
+        question.id,
+        value.id,
+        "priority",
+      ]);
+      if (
+        priorityControl &&
+        (!priorityControl.value || priorityControl.value === 0)
+      ) {
+        const nextPriority = this.getNextAvailablePriority(
+          question.id,
+          value.id
+        );
+        priorityControl.setValue(nextPriority);
       }
     }
   }
@@ -889,5 +983,124 @@ export class ConsultationQuestionnaireComponent
     });
 
     return orderedChildren;
+  }
+
+  getErrorMessage(controlName: string): string | null {
+    const control = this.questionnaireForm?.controls?.[controlName];
+    if (!control?.errors) return null;
+
+    for (const key of Object.keys(control.errors)) {
+      if (errorMessages[key]) {
+        return errorMessages[key];
+      }
+    }
+
+    return errorMessages.required;
+  }
+
+  getPriorityOptionList(question: any): number[] {
+    if (!question?.subQuestions || !Array.isArray(question.subQuestions)) {
+      return [1];
+    }
+    const questionId =
+      typeof question.id === "number" ? question.id : parseInt(question.id, 10);
+    const subQuestionsLength = question.subQuestions.length;
+    const cachedOptions = this.priorityOptionsCache.get(questionId);
+    if (
+      cachedOptions &&
+      cachedOptions.subQuestionsLength === subQuestionsLength
+    ) {
+      return cachedOptions.options;
+    }
+    const options = Array.from({ length: subQuestionsLength }, (_, i) => i + 1);
+    this.priorityOptionsCache.set(questionId, { options, subQuestionsLength });
+    return options;
+  }
+
+  getCheckboxHelpText(question: any): string {
+    if (question?.selectedOptionsLimit) {
+      return `Choose up to ${question.selectedOptionsLimit} options and assign a priority to each.`;
+    }
+
+    return "Choose as many as you like";
+  }
+
+  getNumOptionsSelected(questionId: number): number {
+    const value = this.questionnaireForm.get([questionId]).value;
+
+    const numSubOptionsSelected = Object.values(value).filter(
+      (val: any) => val.value === true
+    ).length;
+
+    return numSubOptionsSelected;
+  }
+
+  checkSubQuestionSelected(question: any, subQuestion: any): boolean {
+    const subQuestionObj = this.questionnaireForm.get([
+      question.id,
+      subQuestion.id,
+    ]).value;
+
+    return subQuestionObj.value === true;
+  }
+
+  checkRadioOptionSelected(question: any, subQuestion: any): boolean {
+    const questionControl = this.questionnaireForm.get([question.id]);
+    if (!questionControl) return false;
+    return questionControl.value === subQuestion.id;
+  }
+
+  checkDropdownOptionDisabled(question: any, subQuestion: any): boolean {
+    // Cant disable if no limit set
+    if (!question?.selectedOptionsLimit) {
+      return null;
+    }
+
+    // Already selected options cannot be disabled
+    if (this.checkSubQuestionSelected(question, subQuestion)) {
+      return null;
+    }
+
+    const numSubOptionsSelected = this.getNumOptionsSelected(question.id);
+
+    return numSubOptionsSelected >= question.selectedOptionsLimit ? true : null;
+  }
+
+  ngOnDestroy(): void {
+    this.abortRecording();
+  }
+
+  download(): void {
+    const url = window.URL.createObjectURL(this.tempRecordingHolder.blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = this.tempRecordingHolder.title;
+    link.click();
+  }
+
+  startRecording() {
+    if (!this.isRecording) {
+      this.isRecording = true;
+      this.audioRecordingService.startRecording();
+    }
+  }
+
+  abortRecording() {
+    if (this.isRecording) {
+      this.isRecording = false;
+      this.audioRecordingService.abortRecording();
+    }
+  }
+
+  stopRecording() {
+    if (this.isRecording) {
+      this.audioRecordingService.stopRecording();
+      this.isRecording = false;
+    }
+  }
+
+  clearRecordedData() {
+    this.blobUrl = null;
+    this.startRecording();
   }
 }

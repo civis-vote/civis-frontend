@@ -331,7 +331,7 @@ export class ConsultationQuestionnaireComponent
     if (this.isFormValidForVisibleQuestions()) {
       this.responseAnswers = this.getResponseAnswers();
       const consultationResponse = this.getConsultationResponse();
-      if (this.consultationId === 1089) {
+      if (this.consultationId === 1089 || this.consultationId === 475 || this.consultationId === WHITE_LABEL_CONSULTATION_ID) {
         this.invokeSubmitResponse();
       } else {
         if (!isObjectEmpty(consultationResponse)) {

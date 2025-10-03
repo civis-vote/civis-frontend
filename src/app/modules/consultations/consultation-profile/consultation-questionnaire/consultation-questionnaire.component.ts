@@ -1,3 +1,4 @@
+import { VOICE_DEMO_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
 import {
   Component,
   OnInit,
@@ -44,6 +45,8 @@ import { MetaPixelService } from "src/app/shared/services/pixel.service";
 import { CookieService } from "ngx-cookie";
 import { Router } from "@angular/router";
 import { WhiteLabelService } from "src/app/shared/services/white-label.service";
+import { AudioRecordingService } from "src/app/shared/services/audio-recording.service";
+import { DomSanitizer } from "@angular/platform-browser";
 
 const errorMessages: { [key: string]: string } = {
   duplicatePriority:
@@ -60,6 +63,7 @@ const errorMessages: { [key: string]: string } = {
 export class ConsultationQuestionnaireComponent
   implements OnInit, AfterViewInit, AfterViewChecked
 {
+  public VOICE_DEMO_CONSULTATION_ID = VOICE_DEMO_CONSULTATION_ID;
   private static readonly OTHER_ANSWER_PREFIX = "other_answer-";
 
   public whiteLabelConsultationId: number | null = null;
@@ -101,6 +105,11 @@ export class ConsultationQuestionnaireComponent
   responseStatus = 0;
   profaneWords = [];
   environment: any = environment;
+  // https://stackblitz.com/edit/angular-audio-recorder
+  isRecording = false;
+  recordedTime;
+  blobUrl;
+  tempRecordingHolder;
   private readonly priorityOptionsCache: Map<
     number,
     { options: number[]; subQuestionsLength: number }
@@ -121,7 +130,9 @@ export class ConsultationQuestionnaireComponent
     private el: ElementRef,
     private cookieService: CookieService,
     private router: Router,
-    private whiteLabelService: WhiteLabelService
+    private whiteLabelService: WhiteLabelService,
+    private audioRecordingService: AudioRecordingService,
+    private sanitizer: DomSanitizer
   ) {
     this.currentLanguage = this.cookieService.get("civisLang");
     this.questionnaireForm = this._fb.group({});
@@ -152,6 +163,19 @@ export class ConsultationQuestionnaireComponent
     if (this.consultationId === 404 || this.consultationId === 707) {
       this.responseFeedback = "satisfied";
     }
+
+     this.audioRecordingService
+      .recordingFailed()
+      .subscribe(() => (this.isRecording = false));
+    this.audioRecordingService
+      .getRecordedTime()
+      .subscribe((time) => (this.recordedTime = time));
+    this.audioRecordingService.getRecordedBlob().subscribe((data) => {
+      this.tempRecordingHolder = data;
+      this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
+        URL.createObjectURL(data.blob)
+      );
+    });
   }
 
   ngOnInit(): void {
@@ -1040,5 +1064,43 @@ export class ConsultationQuestionnaireComponent
     const numSubOptionsSelected = this.getNumOptionsSelected(question.id);
 
     return numSubOptionsSelected >= question.selectedOptionsLimit ? true : null;
+  }
+
+  ngOnDestroy(): void {
+    this.abortRecording();
+  }
+
+  download(): void {
+    const url = window.URL.createObjectURL(this.tempRecordingHolder.blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = this.tempRecordingHolder.title;
+    link.click();
+  }
+
+  startRecording() {
+    if (!this.isRecording) {
+      this.isRecording = true;
+      this.audioRecordingService.startRecording();
+    }
+  }
+
+  abortRecording() {
+    if (this.isRecording) {
+      this.isRecording = false;
+      this.audioRecordingService.abortRecording();
+    }
+  }
+
+  stopRecording() {
+    if (this.isRecording) {
+      this.audioRecordingService.stopRecording();
+      this.isRecording = false;
+    }
+  }
+
+  clearRecordedData() {
+    this.blobUrl = null;
+    this.startRecording();
   }
 }

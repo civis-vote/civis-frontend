@@ -39,3 +39,73 @@ input[type="checkbox"][aria-disabled="true"] {
   font-size: 14px;
 }
 
+.voice-demo {
+  .start-button, .stop-button, .cancel-button {
+    background-color: #0e73b9;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin-bottom: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+  }
+
+  .temp-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    color: white !important;
+  }
+
+  .section-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .help-text {
+    font-size: 14px;
+    color: #6C757D;
+    margin-bottom: 12px;
+  }
+
+  .divider {
+    position: relative;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 16px;
+
+    .the-border {
+      border-top: 1px solid #D5DBE2;
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      z-index: 1;
+    }
+
+    .or-text {
+      background-color: white;
+      padding: 0 12px;
+      z-index: 2;
+      color: #6C757D;
+      font-weight: 500;
+    }
+  }
+
+  .recording-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .recording {
+    font-weight: 700;
+  }
+}

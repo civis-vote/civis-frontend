@@ -6,11 +6,22 @@
     </ng-container>
     <div class="question-box">
       <form [formGroup]="questionnaireForm" #f="ngForm">
+        <ng-template #otherInputBox let-controlName="controlName" let-isInline="isInline">
+          <div class="input-box" [ngClass]="{'other-input-box': isInline}">
+            <div class="input-box__border">
+              <input [placeholder]="'Type answer here' | translate" type="text"
+                aria-label="'Type answer here' | translate"
+                [formControlName]="controlName" />
+            </div>
+            <ng-container [ngTemplateOutlet]="errorBlock"
+              [ngTemplateOutletContext]="{ controlName: controlName, show: true, addMargin: addMargin }">
+            </ng-container>
+          </div>
+        </ng-template>
         <!-- Reusable error message block -->
         <ng-template #errorBlock let-controlName="controlName" let-show="show" let-addMargin="addMargin">
-          <div *ngIf="showError && show && questionnaireForm.controls[controlName]?.errors" class="error-msg text-left"
-            [ngClass]="{'ml-3': addMargin}">
-            {{'This is a mandatory question and your response is required' | translate}}
+          <div *ngIf="showError && show && getErrorMessage(controlName)" class="error-msg text-left" [ngClass]="{'ml-3': addMargin}">
+            {{ getErrorMessage(controlName) | translate }}
           </div>
         </ng-template>
         <div class="questions-container">
@@ -23,7 +34,9 @@
                 <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
               </p>
               <div class="answer" *ngIf="question.questionType === 'multiple_choice'">
-                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
+                <div class="option-box" *ngFor="let subQuestion of question.subQuestions"
+                  [ngClass]="{'option-box-selected': checkRadioOptionSelected(question, subQuestion)}"
+                >
                   <label>
                     <input type="radio" class="cm-radio" (input)="onAnswerChange(question,subQuestion)"
                       [formControlName]="question.id" [value]="subQuestion.id">
@@ -43,15 +56,41 @@
                   [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
               </div>
               <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
-                <label class="answer__tips">Choose as many as you like</label>
-                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
+                <label class="answer__tips">{{getCheckboxHelpText(question)}}</label>
+                <div *ngIf="question?.selectedOptionsLimit" class="mb-3 num-options-left-text">
+                  {{getNumOptionsSelected(question.id)}} of {{question.selectedOptionsLimit}} selected
+                </div>
+                <div class="option-box"
+                  [ngClass]="{'option-box-selected': checkSubQuestionSelected(question, subQuestion)}"
+                  *ngFor="let subQuestion of question.subQuestions"
+                  [formGroupName]="subQuestion.id"
+                >
                   <label>
                     <input type="checkbox" class="cm-radio"
                       (input)="onAnswerChange(question,subQuestion, $event.target.checked)"
-                      [formControlName]="subQuestion.id" (click)="toggleCheckbox(question.id, subQuestion.id)">
+                      formControlName="value" (click)="toggleCheckbox(question.id, subQuestion.id)"
+                      [attr.disabled]="checkDropdownOptionDisabled(question, subQuestion)"
+                    >
                     <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
                     <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                   </label>
+                  <ng-container *ngIf="question.is_other && subQuestion.id === 'other'"
+                    [ngTemplateOutlet]="otherInputBox"
+                    [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: true }">
+                  </ng-container>
+                  <div class="priority-select-input" *ngIf="checkSubQuestionSelected(question, subQuestion)">
+                    <label for="priority-{{question.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
+                    <ng-select
+                      id="priority-{{question.id}}-{{subQuestion.id}}"
+                      [items]="getPriorityOptionList(question)"
+                      [clearable]="false"
+                      [searchable]="false"
+                      dropdownPosition="bottom"
+                      [placeholder]="'Select priority' | translate"
+                      formControlName="priority"
+                    >
+                    </ng-select>
+                  </div>
                 </div>
                 <ng-container [ngTemplateOutlet]="errorBlock"
                   [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
@@ -65,15 +104,10 @@
                 <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
                   {{'This is a mandatory question and your response is required' | translate}}</div>
               </div>
-              <div class="input-box" *ngIf="question.is_other">
-                <div class="input-box__border">
-                  <input [placeholder]="'Type answer here' | translate" type="text"
-                    aria-label="'Type answer here' | translate"
-                    [formControlName]="getOtherAnswerControlName(question.id)" />
-                </div>
-              </div>
-              <ng-container [ngTemplateOutlet]="errorBlock"
-                [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), show: question.is_other, addMargin: true }"></ng-container>
+              <ng-container *ngIf="question.is_other && question.questionType !== 'checkbox'"
+                [ngTemplateOutlet]="otherInputBox"
+                [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: false }">
+              </ng-container>
             </div>
 
             <!-- Direct conditional questions children under the parent -->
@@ -85,7 +119,9 @@
                   <span *ngIf="!child.isOptional" class="required-text pl-1"> *</span>
                 </p>
                 <div class="answer" *ngIf="child.questionType === 'multiple_choice'">
-                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
+                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions"
+                    [ngClass]="{'option-box-selected': checkRadioOptionSelected(child, subQuestion)}"
+                  >
                     <label>
                       <input type="radio" class="cm-radio" (input)="onAnswerChange(child,subQuestion)"
                         [formControlName]="child.id" [value]="subQuestion.id">
@@ -105,15 +141,41 @@
                     [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
                 </div>
                 <div class="answer" [formGroupName]="child.id" *ngIf="child.questionType === 'checkbox'">
-                  <label class="answer__tips">Choose as many as you like</label>
-                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
+                  <label class="answer__tips">{{getCheckboxHelpText(child)}}</label>
+                  <div *ngIf="child?.selectedOptionsLimit" class="mb-3 num-options-left-text">
+                  {{getNumOptionsSelected(child.id)}} of {{child.selectedOptionsLimit}} selected
+                </div>
+                  <div class="option-box"
+                    [ngClass]="{'option-box-selected': checkSubQuestionSelected(child, subQuestion)}"
+                    *ngFor="let subQuestion of child.subQuestions"
+                    [formGroupName]="subQuestion.id"
+                  >
                     <label>
                       <input type="checkbox" class="cm-radio"
                         (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
-                        [formControlName]="subQuestion.id" (click)="toggleCheckbox(child.id, subQuestion.id)">
+                        [formControlName]="value" (click)="toggleCheckbox(child.id, subQuestion.id)"
+                        [attr.disabled]="checkDropdownOptionDisabled(child, subQuestion)"
+                      >
                       <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
                       <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                     </label>
+                    <ng-container *ngIf="question.is_other && subQuestion.id === 'other'"
+                      [ngTemplateOutlet]="otherInputBox"
+                      [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: true }">
+                    </ng-container>
+                    <div class="priority-select-input" *ngIf="checkSubQuestionSelected(child, subQuestion)">
+                      <label for="priority-{{child.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
+                      <ng-select
+                        id="priority-{{child.id}}-{{subQuestion.id}}"
+                        [items]="getPriorityOptionList(child)"
+                        [clearable]="false"
+                        [searchable]="false"
+                        dropdownPosition="bottom"
+                        [placeholder]="'Select priority' | translate"
+                        formControlName="priority"
+                      >
+                      </ng-select>
+                    </div>
                   </div>
                   <ng-container [ngTemplateOutlet]="errorBlock"
                     [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
@@ -127,15 +189,10 @@
                   <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
                     {{'This is a mandatory question and your response is required' | translate}}</div>
                 </div>
-                <div class="input-box" *ngIf="child.is_other">
-                  <div class="input-box__border">
-                    <input [placeholder]="'Type answer here' | translate" type="text"
-                      aria-label="'Type answer here' | translate"
-                      [formControlName]="getOtherAnswerControlName(child.id)" />
-                  </div>
-                </div>
-                <ng-container [ngTemplateOutlet]="errorBlock"
-                  [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), show: child.is_other, addMargin: true }"></ng-container>
+                <ng-container *ngIf="child.is_other && child.questionType !== 'checkbox'"
+                  [ngTemplateOutlet]="otherInputBox"
+                  [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), isInline: false }">
+                </ng-container>
               </div>
             </div>
           </div>

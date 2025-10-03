@@ -24,4 +24,18 @@
   .answer {
     padding: 0;
   }
+
 }
+
+input[type="checkbox"][disabled],
+input[type="checkbox"][attr-disabled],
+input[type="checkbox"][aria-disabled="true"] {
+  cursor: not-allowed !important;
+}
+
+.num-options-left-text {
+  color: #0E73B9;
+  font-weight: 500;
+  font-size: 14px;
+}
+

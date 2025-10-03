@@ -393,6 +393,56 @@
         border-radius: 4px;
         padding: 10px;
         margin-bottom: 8px;
+        position: relative;
+
+        &-selected {
+          background: #0e73b91a;
+
+          input.cm-radio[type="checkbox"]::after {
+            border: 1px solid #0e73b9;
+            content: "";
+            height: calc(100% - 70px);
+            position: absolute;
+            width: 0px;
+            margin-left: 5px;
+            top: 28px;
+          }
+        }
+
+        .priority-select-input {
+          margin-bottom: 15px;
+          width: 50%;
+          display: flex;
+          gap: 8px;
+          align-items: center;
+          margin-left: 6px;
+
+          label {
+            color: #15151580;
+            font-size: 14px;
+          }
+        }
+
+        .other-input-box {
+          display: flex;
+          align-items: center;
+          margin-left: 6px;
+
+          .input-box__border {
+            margin-left: 6px;
+          }
+
+          &::before {
+            margin-top: 16px;
+          }
+        }
+
+        .priority-select-input::before,
+        .other-input-box::before {
+          width: 10px;
+          border: 1px solid #0e73b9;
+          content: "";
+        }
 
         label {
           margin-bottom: 0;

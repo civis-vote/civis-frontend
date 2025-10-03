@@ -6,11 +6,22 @@
     </ng-container>
     <div class="question-box">
       <form [formGroup]="questionnaireForm" #f="ngForm">
+        <ng-template #otherInputBox let-controlName="controlName" let-isInline="isInline">
+          <div class="input-box" [ngClass]="{'other-input-box': isInline}">
+            <div class="input-box__border">
+              <input [placeholder]="'Type answer here' | translate" type="text"
+                aria-label="'Type answer here' | translate"
+                [formControlName]="controlName" />
+            </div>
+            <ng-container [ngTemplateOutlet]="errorBlock"
+              [ngTemplateOutletContext]="{ controlName: controlName, show: true, addMargin: addMargin }">
+            </ng-container>
+          </div>
+        </ng-template>
         <!-- Reusable error message block -->
         <ng-template #errorBlock let-controlName="controlName" let-show="show" let-addMargin="addMargin">
-          <div *ngIf="showError && show && questionnaireForm.controls[controlName]?.errors" class="error-msg text-left"
-            [ngClass]="{'ml-3': addMargin}">
-            {{'This is a mandatory question and your response is required' | translate}}
+          <div *ngIf="showError && show && getErrorMessage(controlName)" class="error-msg text-left" [ngClass]="{'ml-3': addMargin}">
+            {{ getErrorMessage(controlName) | translate }}
           </div>
         </ng-template>
         <div class="questions-container">
@@ -23,7 +34,9 @@
                 <span *ngIf="!question.isOptional" class="required-text pl-1"> *</span>
               </p>
               <div class="answer" *ngIf="question.questionType === 'multiple_choice'">
-                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
+                <div class="option-box" *ngFor="let subQuestion of question.subQuestions"
+                  [ngClass]="{'option-box-selected': checkRadioOptionSelected(question, subQuestion)}"
+                >
                   <label>
                     <input type="radio" class="cm-radio" (input)="onAnswerChange(question,subQuestion)"
                       [formControlName]="question.id" [value]="subQuestion.id">
@@ -43,18 +56,125 @@
                   [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
               </div>
               <div class="answer" [formGroupName]="question.id" *ngIf="question.questionType === 'checkbox'">
-                <label class="answer__tips">Choose as many as you like</label>
-                <div class="option-box" *ngFor="let subQuestion of question.subQuestions">
+                <label class="answer__tips">{{getCheckboxHelpText(question)}}</label>
+                <div *ngIf="question?.selectedOptionsLimit" class="mb-3 num-options-left-text">
+                  {{getNumOptionsSelected(question.id)}} of {{question.selectedOptionsLimit}} selected
+                </div>
+                <div class="option-box"
+                  [ngClass]="{'option-box-selected': checkSubQuestionSelected(question, subQuestion)}"
+                  *ngFor="let subQuestion of question.subQuestions"
+                  [formGroupName]="subQuestion.id"
+                >
                   <label>
                     <input type="checkbox" class="cm-radio"
                       (input)="onAnswerChange(question,subQuestion, $event.target.checked)"
-                      [formControlName]="subQuestion.id" (click)="toggleCheckbox(question.id, subQuestion.id)">
+                      formControlName="value" (click)="toggleCheckbox(question.id, subQuestion.id)"
+                      [attr.disabled]="checkDropdownOptionDisabled(question, subQuestion)"
+                    >
                     <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
                     <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                   </label>
+                  <ng-container *ngIf="question.is_other && subQuestion.id === 'other'"
+                    [ngTemplateOutlet]="otherInputBox"
+                    [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: true }">
+                  </ng-container>
+                  <div class="priority-select-input" *ngIf="checkSubQuestionSelected(question, subQuestion)">
+                    <label for="priority-{{question.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
+                    <ng-select
+                      id="priority-{{question.id}}-{{subQuestion.id}}"
+                      [items]="getPriorityOptionList(question)"
+                      [clearable]="false"
+                      [searchable]="false"
+                      dropdownPosition="bottom"
+                      [placeholder]="'Select priority' | translate"
+                      formControlName="priority"
+                    >
+                    </ng-select>
+                  </div>
                 </div>
                 <ng-container [ngTemplateOutlet]="errorBlock"
                   [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
+              </div>
+
+              <div class="voice-demo" *ngIf="consultationId === VOICE_DEMO_CONSULTATION_ID && question.questionText.includes('envision Telangana')">
+                <div class="section-title">Voice Response</div>
+                 <div class="recording-section">
+                  <button
+                    class="start-button"
+                    *ngIf="!isRecording && !blobUrl"
+                    (click)="startRecording()"
+                  >
+                    <svg
+                      class="temp-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 640 640"
+                    >
+                      <!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                      <path
+                        fill="#ffffff"
+                        d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"
+                      />
+                    </svg>
+                  </button>
+
+                  <button
+                    class="stop-button"
+                    *ngIf="isRecording && !blobUrl"
+                    (click)="stopRecording()"
+                  >
+                    <svg
+                      class="temp-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 640 640"
+                    >
+                      <!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                      <path
+                        fill="#f5f5f5"
+                        d="M160 96L480 96C515.3 96 544 124.7 544 160L544 480C544 515.3 515.3 544 480 544L160 544C124.7 544 96 515.3 96 480L96 160C96 124.7 124.7 96 160 96z"
+                      />
+                    </svg>
+                  </button>
+
+                  <button
+                    class="cancel-button"
+                    *ngIf="!isRecording && blobUrl"
+                    (click)="clearRecordedData()"
+                  >
+                    <svg
+                      class="temp-icon"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 640 640"
+                    >
+                      <!--!Font Awesome Free v7.0.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                      <path
+                        fill="#ffffff"
+                        d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"
+                      />
+                    </svg>
+                  </button>
+
+                  <br />
+                  <!-- <button
+                    class="cancel-button"
+                    *ngIf="!isRecording && blobUrl"
+                    (click)="download()"
+                  >
+                    Download Recording
+                  </button> -->
+
+                  <div *ngIf="isRecording && !blobUrl"><span class="recording">Recording...</span> {{ recordedTime }}</div>
+                  <div>
+                    <audio *ngIf="!isRecording && blobUrl" controls>
+                      <source [src]="blobUrl" type="audio/webm" />
+                    </audio>
+                  </div>
+                </div>
+                <div class="help-text">Record your voice response. You can play it back before submitting.</div>
+                <div class="divider">
+                  <div class="the-border"></div>
+                  <div class="or-text">OR</div>
+                </div>
+                <div class="section-title">Text Response</div>
               </div>
               <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
                 <div class="text-area">
@@ -65,15 +185,10 @@
                 <div *ngIf="showError && questionnaireForm.controls[question.id].errors" class="error-msg text-left">
                   {{'This is a mandatory question and your response is required' | translate}}</div>
               </div>
-              <div class="input-box" *ngIf="question.is_other">
-                <div class="input-box__border">
-                  <input [placeholder]="'Type answer here' | translate" type="text"
-                    aria-label="'Type answer here' | translate"
-                    [formControlName]="getOtherAnswerControlName(question.id)" />
-                </div>
-              </div>
-              <ng-container [ngTemplateOutlet]="errorBlock"
-                [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), show: question.is_other, addMargin: true }"></ng-container>
+              <ng-container *ngIf="question.is_other && question.questionType !== 'checkbox'"
+                [ngTemplateOutlet]="otherInputBox"
+                [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: false }">
+              </ng-container>
             </div>
 
             <!-- Direct conditional questions children under the parent -->
@@ -85,7 +200,9 @@
                   <span *ngIf="!child.isOptional" class="required-text pl-1"> *</span>
                 </p>
                 <div class="answer" *ngIf="child.questionType === 'multiple_choice'">
-                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
+                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions"
+                    [ngClass]="{'option-box-selected': checkRadioOptionSelected(child, subQuestion)}"
+                  >
                     <label>
                       <input type="radio" class="cm-radio" (input)="onAnswerChange(child,subQuestion)"
                         [formControlName]="child.id" [value]="subQuestion.id">
@@ -105,15 +222,41 @@
                     [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
                 </div>
                 <div class="answer" [formGroupName]="child.id" *ngIf="child.questionType === 'checkbox'">
-                  <label class="answer__tips">Choose as many as you like</label>
-                  <div class="option-box" *ngFor="let subQuestion of child.subQuestions">
+                  <label class="answer__tips">{{getCheckboxHelpText(child)}}</label>
+                  <div *ngIf="child?.selectedOptionsLimit" class="mb-3 num-options-left-text">
+                  {{getNumOptionsSelected(child.id)}} of {{child.selectedOptionsLimit}} selected
+                </div>
+                  <div class="option-box"
+                    [ngClass]="{'option-box-selected': checkSubQuestionSelected(child, subQuestion)}"
+                    *ngFor="let subQuestion of child.subQuestions"
+                    [formGroupName]="subQuestion.id"
+                  >
                     <label>
                       <input type="checkbox" class="cm-radio"
                         (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
-                        [formControlName]="subQuestion.id" (click)="toggleCheckbox(child.id, subQuestion.id)">
+                        [formControlName]="value" (click)="toggleCheckbox(child.id, subQuestion.id)"
+                        [attr.disabled]="checkDropdownOptionDisabled(child, subQuestion)"
+                      >
                       <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
                       <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                     </label>
+                    <ng-container *ngIf="question.is_other && subQuestion.id === 'other'"
+                      [ngTemplateOutlet]="otherInputBox"
+                      [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: true }">
+                    </ng-container>
+                    <div class="priority-select-input" *ngIf="checkSubQuestionSelected(child, subQuestion)">
+                      <label for="priority-{{child.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
+                      <ng-select
+                        id="priority-{{child.id}}-{{subQuestion.id}}"
+                        [items]="getPriorityOptionList(child)"
+                        [clearable]="false"
+                        [searchable]="false"
+                        dropdownPosition="bottom"
+                        [placeholder]="'Select priority' | translate"
+                        formControlName="priority"
+                      >
+                      </ng-select>
+                    </div>
                   </div>
                   <ng-container [ngTemplateOutlet]="errorBlock"
                     [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
@@ -127,15 +270,10 @@
                   <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
                     {{'This is a mandatory question and your response is required' | translate}}</div>
                 </div>
-                <div class="input-box" *ngIf="child.is_other">
-                  <div class="input-box__border">
-                    <input [placeholder]="'Type answer here' | translate" type="text"
-                      aria-label="'Type answer here' | translate"
-                      [formControlName]="getOtherAnswerControlName(child.id)" />
-                  </div>
-                </div>
-                <ng-container [ngTemplateOutlet]="errorBlock"
-                  [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), show: child.is_other, addMargin: true }"></ng-container>
+                <ng-container *ngIf="child.is_other && child.questionType !== 'checkbox'"
+                  [ngTemplateOutlet]="otherInputBox"
+                  [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), isInline: false }">
+                </ng-container>
               </div>
             </div>
           </div>

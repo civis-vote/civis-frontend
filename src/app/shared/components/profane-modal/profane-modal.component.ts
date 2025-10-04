@@ -17,8 +17,8 @@ export class ProfaneModalComponent implements OnInit {
     
   }
 
-  ngOnInit() {
-    console.log(this.showCancel);
+  ngOnInit(): void {
+    // Component initialization
   }
 
   selectOpt(opt: string) {

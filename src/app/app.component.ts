@@ -6,6 +6,7 @@ import { filter, pairwise } from 'rxjs/operators';
 import { StarterService } from './shared/services/starter.service';
 import { Subscription } from 'rxjs';
 import { LANGUAGES } from './shared/models/constants/constants';
+import { Language, ModalMessage } from './shared/models/interfaces';
 
 @Component({
   selector: "app-root",
@@ -17,15 +18,15 @@ export class AppComponent implements OnInit, OnDestroy {
   showCitySelection: boolean;
   paramsSubscription: Subscription;
   selectedLanguage = "en";
-  confirmMessage = {};
-  language = {
+  confirmMessage: ModalMessage = { title: null, msg: null };
+  language: Language = {
     id: null,
     name: null
   };
   isPrivate = false;
   confirmModalOpen = false;
 
-  languages = LANGUAGES;
+  languages: Language[] = LANGUAGES;
 
   constructor(
     private userService: UserService,
@@ -95,7 +96,16 @@ export class AppComponent implements OnInit, OnDestroy {
       });
   }
 
+  optionTranslate(selected: boolean): void {
+    this.confirmModalOpen = false;
+    if (selected) {
+      this.translate(true);
+    }
+  }
+
   ngOnDestroy() {
-    this.paramsSubscription.unsubscribe();
+    if (this.paramsSubscription) {
+      this.paramsSubscription.unsubscribe();
+    }
   }
 }

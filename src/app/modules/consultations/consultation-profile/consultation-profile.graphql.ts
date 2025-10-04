@@ -31,6 +31,7 @@ const  ConditionalQuestionFragment = gql`
     supportsOther
     position
     isConditionalQuestion
+    selectedOptionsLimit
     subQuestions {
       id
       questionText
@@ -49,6 +50,7 @@ const SubQuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
+    selectedOptionsLimit
     conditionalQuestion {
       ...ConditionalQuestionFragment
     }
@@ -68,6 +70,7 @@ const QuestionFragment = gql`
     supportsOther
     position
     isConditionalQuestion
+    selectedOptionsLimit
     subQuestions {
       ...SubQuestionFragment
     }

@@ -5,6 +5,22 @@
         (selectSatisfaction)="responseFeedback = $event"></app-satisfaction-rating-selection>
     </ng-container>
     <div class="question-box">
+      <!-- Progress bar for step-by-step flow -->
+       <div class="progress-container" *ngIf="isStepByStepFlow"> 
+        <div class="progress-text-wrapper">
+          <p class="blue-text bold-text mb-0">Progress</p>
+          <div class="question-count">{{ getCurrentQuestionNumber() }} of {{ getTotalQuestionsCount() }}</div>
+        </div>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar"
+               [style.width.%]="(getCurrentQuestionNumber() / getTotalQuestionsCount()) * 100" 
+               [attr.aria-valuenow]="getCurrentQuestionNumber()" 
+               aria-valuemin="0" 
+               [attr.aria-valuemax]="getTotalQuestionsCount()">
+          </div>
+        </div>
+       </div>
+      
       <form [formGroup]="questionnaireForm" #f="ngForm">
         <ng-template #otherInputBox let-controlName="controlName" let-isInline="isInline">
           <div class="input-box" [ngClass]="{'other-input-box': isInline}">
@@ -25,8 +41,234 @@
           </div>
         </ng-template>
         <div class="questions-container">
-          <!-- Top-level (non-conditional) questions -->
-          <div class="question-index" *ngFor="let question of getTopLevelQuestions(); let i = index">
+          <!-- Step-by-step flow for consultation -->
+          <ng-container *ngIf="isStepByStepFlow">
+            <div class="question-index" *ngIf="getCurrentQuestion() as currentQuestion">
+              <!-- Display current question -->
+              <div class="question">
+                <p class="question-text">
+                  <span class="question-text__number">{{ getCurrentQuestionNumber() }}.</span>
+                  {{ getQuestionText(currentQuestion) }}
+                  <span *ngIf="!currentQuestion.isOptional" class="required-text pl-1"> *</span>
+                </p>
+                
+                <!-- Multiple choice question -->
+                <div class="answer" *ngIf="currentQuestion.questionType === 'multiple_choice'">
+                  <div class="option-box" *ngFor="let subQuestion of currentQuestion.subQuestions"
+                    [ngClass]="{'option-box-selected': checkRadioOptionSelected(currentQuestion, subQuestion)}">
+                    <label>
+                      <input type="radio" class="cm-radio" (input)="onAnswerChange(currentQuestion,subQuestion)"
+                        [formControlName]="currentQuestion.id" [value]="subQuestion.id">
+                      <span>{{ getSubQuestionText(subQuestion) }}</span>
+                    </label>
+                  </div>
+                  <ng-container [ngTemplateOutlet]="errorBlock"
+                    [ngTemplateOutletContext]="{ controlName: currentQuestion.id, show: true, addMargin: false }"></ng-container>
+                </div>
+                
+                <!-- Dropdown question -->
+                <div class="answer" *ngIf="currentQuestion.questionType === 'dropdown'">
+                  <ng-select [items]="currentQuestion.subQuestions" bindLabel="questionText" [virtualScroll]="true"
+                    dropdownPosition="bottom" bindValue="id" [clearable]="false" loadingText="Searching..."
+                    [searchable]="false" (change)="onAnswerChange(currentQuestion, $event)"
+                    [placeholder]="'Select an option' | translate" [formControlName]="currentQuestion.id">
+                  </ng-select>
+                  <ng-container [ngTemplateOutlet]="errorBlock"
+                    [ngTemplateOutletContext]="{ controlName: currentQuestion.id, show: true, addMargin: false }"></ng-container>
+                </div>
+                
+                <!-- Checkbox question -->
+                <div class="answer" [formGroupName]="currentQuestion.id" *ngIf="currentQuestion.questionType === 'checkbox'">
+                  <label class="answer__tips">{{getCheckboxHelpText(currentQuestion)}}</label>
+                  <div *ngIf="currentQuestion?.selectedOptionsLimit" class="mb-3 num-options-left-text">
+                    {{getNumOptionsSelected(currentQuestion.id)}} of {{currentQuestion.selectedOptionsLimit}} selected
+                  </div>
+                  <div class="option-box"
+                    [ngClass]="{'option-box-selected': checkSubQuestionSelected(currentQuestion, subQuestion)}"
+                    *ngFor="let subQuestion of currentQuestion.subQuestions"
+                    [formGroupName]="subQuestion.id">
+                    <label class="checkbox-option-label">
+                      <input type="checkbox" class="cm-radio"
+                        [ngClass]="{'remove-line': !currentQuestion.hasChoicePriority}"
+                        (input)="onAnswerChange(currentQuestion,subQuestion, $event.target.checked)"
+                        formControlName="value" (click)="toggleCheckbox(currentQuestion.id, subQuestion.id)"
+                        [attr.disabled]="checkDropdownOptionDisabled(currentQuestion, subQuestion)">
+                      <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
+                      <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
+                    </label>
+                    <ng-container *ngIf="currentQuestion.is_other && subQuestion.id === 'other'"
+                      [ngTemplateOutlet]="otherInputBox"
+                      [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(currentQuestion.id), isInline: true }">
+                    </ng-container>
+                    <div class="priority-select-input" *ngIf="checkSubQuestionSelected(currentQuestion, subQuestion) && currentQuestion.hasChoicePriority">
+                      <label for="priority-{{currentQuestion.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
+                      <ng-select
+                        id="priority-{{currentQuestion.id}}-{{subQuestion.id}}"
+                        [items]="getPriorityOptionList(currentQuestion)"
+                        [clearable]="false"
+                        [searchable]="false"
+                        dropdownPosition="bottom"
+                        [placeholder]="'Select priority' | translate"
+                        formControlName="priority">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <ng-container [ngTemplateOutlet]="errorBlock"
+                    [ngTemplateOutletContext]="{ controlName: currentQuestion.id, show: true, addMargin: false }"></ng-container>
+                </div>
+                
+                <!-- Voice demo for specific question -->
+                <div class="voice-demo" *ngIf="consultationId === VOICE_DEMO_CONSULTATION_ID && currentQuestion.questionText.includes('envision Telangana')">
+                  <div class="section-title">Voice Response</div>
+                  <div class="recording-section">
+                    <button class="start-button" *ngIf="!isRecording && !blobUrl" (click)="startRecording()">
+                      <svg class="temp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                        <path fill="#ffffff" d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"/>
+                      </svg>
+                    </button>
+                    <button class="stop-button" *ngIf="isRecording && !blobUrl" (click)="stopRecording()">
+                      <svg class="temp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                        <path fill="#f5f5f5" d="M160 96L480 96C515.3 96 544 124.7 544 160L544 480C544 515.3 515.3 544 480 544L160 544C124.7 544 96 515.3 96 480L96 160C96 124.7 124.7 96 160 96z"/>
+                      </svg>
+                    </button>
+                    <button class="cancel-button" *ngIf="!isRecording && blobUrl" (click)="clearRecordedData()">
+                      <svg class="temp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                        <path fill="#ffffff" d="M320 64C267 64 224 107 224 160L224 288C224 341 267 384 320 384C373 384 416 341 416 288L416 160C416 107 373 64 320 64zM176 248C176 234.7 165.3 224 152 224C138.7 224 128 234.7 128 248L128 288C128 385.9 201.3 466.7 296 478.5L296 528L248 528C234.7 528 224 538.7 224 552C224 565.3 234.7 576 248 576L392 576C405.3 576 416 565.3 416 552C416 538.7 405.3 528 392 528L344 528L344 478.5C438.7 466.7 512 385.9 512 288L512 248C512 234.7 501.3 224 488 224C474.7 224 464 234.7 464 248L464 288C464 367.5 399.5 432 320 432C240.5 432 176 367.5 176 288L176 248z"/>
+                      </svg>
+                    </button>
+                    <br />
+                    <div *ngIf="isRecording && !blobUrl"><span class="recording">Recording...</span> {{ recordedTime }}</div>
+                    <div>
+                      <audio *ngIf="!isRecording && blobUrl" controls>
+                        <source [src]="blobUrl" type="audio/webm" />
+                      </audio>
+                    </div>
+                  </div>
+                  <div class="help-text">Record your voice response. You can play it back before submitting.</div>
+                  <div class="divider">
+                    <div class="the-border"></div>
+                    <div class="or-text">OR</div>
+                  </div>
+                  <div class="section-title">Text Response</div>
+                </div>
+                
+                <!-- Long text question -->
+                <div class="answer" [id]="'text-area-' + currentQuestion.id" *ngIf="currentQuestion.questionType === 'long_text'">
+                  <div class="text-area">
+                    <textarea (input)="longTextAnswer = $event.target.value"
+                      [placeholder]="'Type your answer here.' | translate"
+                      aria-label="'Type your answer here.' | translate" [formControlName]="currentQuestion.id"></textarea>
+                  </div>
+                  <div *ngIf="showError && questionnaireForm.controls[currentQuestion.id].errors" class="error-msg text-left">
+                    {{'This is a mandatory question and your response is required' | translate}}</div>
+                </div>
+                
+                <!-- Other input for non-checkbox questions -->
+                <ng-container *ngIf="currentQuestion.is_other && currentQuestion.questionType !== 'checkbox'"
+                  [ngTemplateOutlet]="otherInputBox"
+                  [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(currentQuestion.id), isInline: false }">
+                </ng-container>
+              </div>
+
+              <!-- Conditional questions for the current question in step-by-step flow -->
+              <div class="conditional-question-index" *ngFor="let child of getDirectConditionalChildren(currentQuestion)"
+                [style.display]="shouldShowConditionalQuestion(currentQuestion, child.id) ? 'block' : 'none'">
+                <div class="question">
+                  <p class="question-text">
+                    {{ getQuestionText(child) }}
+                    <span *ngIf="!child.isOptional" class="required-text pl-1"> *</span>
+                  </p>
+                  
+                  <!-- Multiple choice conditional question -->
+                  <div class="answer" *ngIf="child.questionType === 'multiple_choice'">
+                    <div class="option-box" *ngFor="let subQuestion of child.subQuestions"
+                      [ngClass]="{'option-box-selected': checkRadioOptionSelected(child, subQuestion)}">
+                      <label>
+                        <input type="radio" class="cm-radio" (input)="onAnswerChange(child,subQuestion)"
+                          [formControlName]="child.id" [value]="subQuestion.id">
+                        <span>{{ getSubQuestionText(subQuestion) }}</span>
+                      </label>
+                    </div>
+                    <ng-container [ngTemplateOutlet]="errorBlock"
+                      [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
+                  </div>
+                  
+                  <!-- Dropdown conditional question -->
+                  <div class="answer" *ngIf="child.questionType === 'dropdown'">
+                    <ng-select [items]="child.subQuestions" bindLabel="questionText" [virtualScroll]="true"
+                      dropdownPosition="bottom" bindValue="id" [clearable]="false" loadingText="Searching..."
+                      [searchable]="false" (change)="onAnswerChange(child, $event)"
+                      [placeholder]="'Select an option' | translate" [formControlName]="child.id">
+                    </ng-select>
+                    <ng-container [ngTemplateOutlet]="errorBlock"
+                      [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
+                  </div>
+                  
+                  <!-- Checkbox conditional question -->
+                  <div class="answer" [formGroupName]="child.id" *ngIf="child.questionType === 'checkbox'">
+                    <label class="answer__tips">{{getCheckboxHelpText(child)}}</label>
+                    <div *ngIf="child?.selectedOptionsLimit" class="mb-3 num-options-left-text">
+                      {{getNumOptionsSelected(child.id)}} of {{child.selectedOptionsLimit}} selected
+                    </div>
+                    <div class="option-box"
+                      [ngClass]="{'option-box-selected': checkSubQuestionSelected(child, subQuestion)}"
+                      *ngFor="let subQuestion of child.subQuestions"
+                      [formGroupName]="subQuestion.id">
+                      <label class="checkbox-option-label">
+                        <input type="checkbox" class="cm-radio"
+                          [ngClass]="{'remove-line': !child.hasChoicePriority}"
+                          (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
+                          formControlName="value" (click)="toggleCheckbox(child.id, subQuestion.id)"
+                          [attr.disabled]="checkDropdownOptionDisabled(child, subQuestion)">
+                        <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
+                        <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
+                      </label>
+                      <ng-container *ngIf="child.is_other && subQuestion.id === 'other'"
+                        [ngTemplateOutlet]="otherInputBox"
+                        [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), isInline: true }">
+                      </ng-container>
+                      <div class="priority-select-input" *ngIf="checkSubQuestionSelected(child, subQuestion) && child.hasChoicePriority">
+                        <label for="priority-{{child.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
+                        <ng-select
+                          id="priority-{{child.id}}-{{subQuestion.id}}"
+                          [items]="getPriorityOptionList(child)"
+                          [clearable]="false"
+                          [searchable]="false"
+                          dropdownPosition="bottom"
+                          [placeholder]="'Select priority' | translate"
+                          formControlName="priority">
+                        </ng-select>
+                      </div>
+                    </div>
+                    <ng-container [ngTemplateOutlet]="errorBlock"
+                      [ngTemplateOutletContext]="{ controlName: child.id, show: true, addMargin: false }"></ng-container>
+                  </div>
+                  
+                  <!-- Long text conditional question -->
+                  <div class="answer" [id]="'text-area-' + child.id" *ngIf="child.questionType === 'long_text'">
+                    <div class="text-area">
+                      <textarea (input)="longTextAnswer = $event.target.value"
+                        [placeholder]="'Type your answer here.' | translate"
+                        aria-label="'Type your answer here.' | translate" [formControlName]="child.id"></textarea>
+                    </div>
+                    <div *ngIf="showError && questionnaireForm.controls[child.id].errors" class="error-msg text-left">
+                      {{'This is a mandatory question and your response is required' | translate}}</div>
+                  </div>
+                  
+                  <!-- Other input for conditional questions -->
+                  <ng-container *ngIf="child.is_other && child.questionType !== 'checkbox'"
+                    [ngTemplateOutlet]="otherInputBox"
+                    [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), isInline: false }">
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          
+          <!-- Default flow for other consultations -->
+          <ng-container *ngIf="!isStepByStepFlow">
+            <!-- Top-level (non-conditional) questions -->
+            <div class="question-index" *ngFor="let question of getTopLevelQuestions(); let i = index">
             <div class="question">
               <p class="question-text">
                 <span class="question-text__number">{{ i + 1 }}.</span>
@@ -65,7 +307,7 @@
                   *ngFor="let subQuestion of question.subQuestions"
                   [formGroupName]="subQuestion.id"
                 >
-                  <label>
+                  <label class="checkbox-option-label">
                     <input type="checkbox" class="cm-radio"
                       [ngClass]="{'remove-line': !question.hasChoicePriority}"
                       (input)="onAnswerChange(question,subQuestion, $event.target.checked)"
@@ -232,7 +474,7 @@
                     *ngFor="let subQuestion of child.subQuestions"
                     [formGroupName]="subQuestion.id"
                   >
-                    <label>
+                    <label class="checkbox-option-label">
                       <input type="checkbox" class="cm-radio"
                       [ngClass]="{'remove-line': !child.hasChoicePriority}"
                     (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
@@ -279,6 +521,7 @@
               </div>
             </div>
           </div>
+          </ng-container>
         </div>
         <div class="checkbox-area"
           *ngIf="showPublicResponseOption() && consultationId !== 707 && consultationId !== 404">
@@ -291,7 +534,39 @@
               {{'What does this mean?' | translate}}</span>
           </div>
         </div>
-        <div class="py-3">
+        <!-- Navigation buttons for step-by-step flow -->
+        <div class="navigation-buttons py-3" *ngIf="isStepByStepFlow">
+            <button class="btn btn-outline-secondary" 
+                    (click)="onPreviousClick()" 
+                    [disabled]="isFirstQuestion()"
+                    *ngIf="!isFirstQuestion()">
+              <i class="fa fa-angle-left"></i>
+              {{'PREVIOUS' | translate}}
+            </button>
+            
+            <button class="btn-submit active" 
+                    (click)="onNextClick()" 
+                    *ngIf="!isLastQuestion()">
+              <p class="m-0">
+                {{'NEXT' | translate}}
+              </p>
+              <span class="ml-2"><i class="fa fa-angle-right"></i></span>
+            </button>
+            
+            <button class="btn-submit active" 
+                    (click)='submitAnswer()' 
+                    [tooltip]="getSubmitButtonTooltip() | translate"
+                    data-event="purchase"
+                    *ngIf="isLastQuestion()">
+              <p class="m-0">
+                {{'SUBMIT RESPONSE' | translate}}
+              </p>
+              <span class="ml-2"><i class="fa fa-angle-right"></i></span>
+            </button>
+        </div>
+        
+        <!-- Default submit button for other consultations -->
+        <div class="py-3" *ngIf="!isStepByStepFlow">
           <button class="btn-submit active" (click)='submitAnswer()' [tooltip]="getSubmitButtonTooltip() | translate"
             data-event="purchase">
             <p class="m-0">

@@ -407,6 +407,10 @@
             margin-left: 5px;
             top: 28px;
           }
+
+          .remove-line::after {
+            border: none !important;
+          }
         }
 
         .priority-select-input {

@@ -67,6 +67,7 @@
                 >
                   <label>
                     <input type="checkbox" class="cm-radio"
+                      [ngClass]="{'remove-line': !question.hasChoicePriority}"
                       (input)="onAnswerChange(question,subQuestion, $event.target.checked)"
                       formControlName="value" (click)="toggleCheckbox(question.id, subQuestion.id)"
                       [attr.disabled]="checkDropdownOptionDisabled(question, subQuestion)"
@@ -78,7 +79,7 @@
                     [ngTemplateOutlet]="otherInputBox"
                     [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: true }">
                   </ng-container>
-                  <div class="priority-select-input" *ngIf="checkSubQuestionSelected(question, subQuestion)">
+                  <div class="priority-select-input" *ngIf="checkSubQuestionSelected(question, subQuestion) && question.hasChoicePriority">
                     <label for="priority-{{question.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
                     <ng-select
                       id="priority-{{question.id}}-{{subQuestion.id}}"
@@ -233,6 +234,7 @@
                   >
                     <label>
                       <input type="checkbox" class="cm-radio"
+                      [ngClass]="{'remove-line': !child.hasChoicePriority}"
                     (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
                         formControlName="value" (click)="toggleCheckbox(child.id, subQuestion.id)"
                         [attr.disabled]="checkDropdownOptionDisabled(child, subQuestion)"
@@ -244,7 +246,7 @@
                       [ngTemplateOutlet]="otherInputBox"
                       [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), isInline: true }">
                     </ng-container>
-                    <div class="priority-select-input" *ngIf="checkSubQuestionSelected(child, subQuestion)">
+                    <div class="priority-select-input" *ngIf="checkSubQuestionSelected(child, subQuestion) && child.hasChoicePriority">
                       <label for="priority-{{child.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>
                       <ng-select
                         id="priority-{{child.id}}-{{subQuestion.id}}"

@@ -1,4 +1,4 @@
-import { VOICE_DEMO_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
+import { VOICE_DEMO_CONSULTATION_ID } from "src/app/shared/models/constants/constants";
 import {
   Component,
   OnInit,
@@ -110,9 +110,15 @@ export class ConsultationQuestionnaireComponent
   recordedTime;
   blobUrl;
   tempRecordingHolder;
+  currentQuestionIndex: number = 0;
+  isStepByStepFlow: boolean = false;
   private readonly priorityOptionsCache: Map<
     number,
-    { options: number[]; subQuestionsLength: number }
+    {
+      options: number[];
+      subQuestionsLength: number;
+      numSelectedOptions: number;
+    }
   > = new Map();
 
   get profanityCountGetter() {
@@ -164,7 +170,7 @@ export class ConsultationQuestionnaireComponent
       this.responseFeedback = "satisfied";
     }
 
-     this.audioRecordingService
+    this.audioRecordingService
       .recordingFailed()
       .subscribe(() => (this.isRecording = false));
     this.audioRecordingService
@@ -228,6 +234,7 @@ export class ConsultationQuestionnaireComponent
         }
       }
       this.questionnaireForm = this.makeQuestionnaireModal();
+      this.checkIsStepByStepFlow();
     });
   }
 
@@ -686,6 +693,45 @@ export class ConsultationQuestionnaireComponent
     return numSubOptionsSelected + 1;
   }
 
+  reassignPrioritiesAfterDeselection(
+    questionId: number,
+    deselectedSubQuestionId: number | "other"
+  ): void {
+    const questionFormGroup = this.questionnaireForm.get([questionId]);
+    if (!questionFormGroup) return;
+
+    const value = questionFormGroup.value;
+
+    const selectedOptionsWithPriorities: Array<{
+      key: string;
+      priority: number;
+    }> = [];
+
+    Object.entries(value).forEach(([key, val]: [string, any]) => {
+      if (
+        key !== `${deselectedSubQuestionId}` &&
+        val.value === true &&
+        val.priority > 0
+      ) {
+        selectedOptionsWithPriorities.push({
+          key: key,
+          priority: val.priority,
+        });
+      }
+    });
+
+    selectedOptionsWithPriorities.sort((a, b) => a.priority - b.priority);
+
+    selectedOptionsWithPriorities.forEach((option, index) => {
+      const priorityControl = questionFormGroup.get([option.key, "priority"]);
+      if (priorityControl) {
+        priorityControl.setValue(index + 1);
+      }
+    });
+
+    this.priorityOptionsCache.delete(questionId);
+  }
+
   onAnswerChange(question?, value?, checkboxValue?) {
     if (question && value.id === "other") {
       let otherValue = true;
@@ -727,22 +773,39 @@ export class ConsultationQuestionnaireComponent
       }
     }
 
-    // Auto set priority when checked for first time
-    if (question.questionType === "checkbox" && checkboxValue === true) {
-      const priorityControl = this.questionnaireForm.get([
-        question.id,
-        value.id,
-        "priority",
-      ]);
-      if (
-        priorityControl &&
-        (!priorityControl.value || priorityControl.value === 0)
-      ) {
-        const nextPriority = this.getNextAvailablePriority(
+    if (question.questionType === "checkbox") {
+      if (checkboxValue === true) {
+        // Auto set priority when checked for first time
+        const priorityControl = this.questionnaireForm.get([
           question.id,
-          value.id
-        );
-        priorityControl.setValue(nextPriority);
+          value.id,
+          "priority",
+        ]);
+        if (
+          priorityControl &&
+          (!priorityControl.value || priorityControl.value === 0)
+        ) {
+          const nextPriority = this.getNextAvailablePriority(
+            question.id,
+            value.id
+          );
+          priorityControl.setValue(nextPriority);
+        }
+      } else if (checkboxValue === false) {
+        // Reset priority when unchecked and reassign priorities for remaining selected options
+        const priorityControl = this.questionnaireForm.get([
+          question.id,
+          value.id,
+          "priority",
+        ]);
+        if (priorityControl) {
+          priorityControl.setValue(0);
+        }
+
+        // Reassign priorities for remaining selected options to maintain sequential order
+        if (question.hasChoicePriority) {
+          this.reassignPrioritiesAfterDeselection(question.id, value.id);
+        }
       }
     }
   }
@@ -906,8 +969,8 @@ export class ConsultationQuestionnaireComponent
     if (parentQuestion.questionType === "checkbox") {
       // Check if any selected option has the specific conditional question
       const selectedOptions = Object.entries(control.value)
-        .filter(([_, isSelected]) => isSelected)
-        .map(([optionId, _]) => optionId);
+        .filter(([_key, val]: [string, any]) => val?.value === true)
+        .map(([optionId]) => optionId);
 
       return selectedOptions.some((optionId) => {
         const subQuestion = parentQuestion.subQuestions?.find(
@@ -1002,18 +1065,31 @@ export class ConsultationQuestionnaireComponent
     if (!question?.subQuestions || !Array.isArray(question.subQuestions)) {
       return [1];
     }
+
     const questionId =
       typeof question.id === "number" ? question.id : parseInt(question.id, 10);
-    const subQuestionsLength = question.subQuestions.length;
+    const numSelectedOptions = this.getNumOptionsSelected(questionId);
+
+    if (numSelectedOptions === 0) {
+      return [];
+    }
+
     const cachedOptions = this.priorityOptionsCache.get(questionId);
     if (
       cachedOptions &&
-      cachedOptions.subQuestionsLength === subQuestionsLength
+      cachedOptions.numSelectedOptions === numSelectedOptions
     ) {
       return cachedOptions.options;
     }
-    const options = Array.from({ length: subQuestionsLength }, (_, i) => i + 1);
-    this.priorityOptionsCache.set(questionId, { options, subQuestionsLength });
+
+    const options = Array.from({ length: numSelectedOptions }, (_, i) => i + 1);
+    const subQuestionsLength = question.subQuestions.length;
+    this.priorityOptionsCache.set(questionId, {
+      options,
+      numSelectedOptions,
+      subQuestionsLength,
+    });
+
     return options;
   }
 
@@ -1102,5 +1178,186 @@ export class ConsultationQuestionnaireComponent
   clearRecordedData() {
     this.blobUrl = null;
     this.startRecording();
+  }
+
+  // ===== STEP-BY-STEP FLOW FOR SPECIFIC CONSULTATION =====
+
+  private checkIsStepByStepFlow(): void {
+    this.isStepByStepFlow = this.consultationId === VOICE_DEMO_CONSULTATION_ID;
+    if (this.isStepByStepFlow) {
+      this.currentQuestionIndex = 0;
+    }
+  }
+
+  getVisibleQuestionsForStepFlow(): any[] {
+    if (!this.questions) return [];
+    return this.getTopLevelQuestions();
+  }
+
+  getCurrentQuestion(): any {
+    const visibleQuestions = this.getVisibleQuestionsForStepFlow();
+    return visibleQuestions[this.currentQuestionIndex] || null;
+  }
+
+  getTotalQuestionsCount(): number {
+    return this.getVisibleQuestionsForStepFlow().length;
+  }
+
+  getCurrentQuestionNumber(): number {
+    return this.currentQuestionIndex + 1;
+  }
+
+  isLastQuestion(): boolean {
+    return this.currentQuestionIndex >= this.getTotalQuestionsCount() - 1;
+  }
+
+  isFirstQuestion(): boolean {
+    return this.currentQuestionIndex === 0;
+  }
+
+  nextQuestion(): void {
+    if (!this.isLastQuestion()) {
+      this.currentQuestionIndex++;
+    }
+  }
+
+  previousQuestion(): void {
+    if (!this.isFirstQuestion()) {
+      this.currentQuestionIndex--;
+    }
+  }
+
+  /**
+   * Check if current question is valid before allowing navigation
+   */
+  isCurrentQuestionValid(): boolean {
+    const currentQuestion = this.getCurrentQuestion();
+    if (!currentQuestion) return true;
+
+    let allValid = true;
+
+    // Validate main question
+    const control = this.questionnaireForm.get(currentQuestion.id.toString());
+    if (control) {
+      control.markAsTouched({ onlySelf: true });
+      control.updateValueAndValidity({ onlySelf: true });
+      if (control.invalid) allValid = false;
+    }
+
+    // Check other answer control for main question if applicable
+    if (currentQuestion.is_other) {
+      const otherControl = this.questionnaireForm.get(
+        this.getOtherAnswerControlName(currentQuestion.id)
+      );
+      if (otherControl) {
+        otherControl.markAsTouched({ onlySelf: true });
+        otherControl.updateValueAndValidity({ onlySelf: true });
+        if (otherControl.invalid) allValid = false;
+      }
+    }
+
+    // Validate visible conditional questions
+    const conditionalChildren =
+      this.getDirectConditionalChildren(currentQuestion);
+    conditionalChildren.forEach((child) => {
+      if (this.shouldShowConditionalQuestion(currentQuestion, child.id)) {
+        const childControl = this.questionnaireForm.get(child.id.toString());
+        if (childControl) {
+          childControl.markAsTouched({ onlySelf: true });
+          childControl.updateValueAndValidity({ onlySelf: true });
+          if (childControl.invalid) allValid = false;
+        }
+
+        if (child.is_other) {
+          const childOtherControl = this.questionnaireForm.get(
+            this.getOtherAnswerControlName(child.id)
+          );
+          if (childOtherControl) {
+            childOtherControl.markAsTouched({ onlySelf: true });
+            childOtherControl.updateValueAndValidity({ onlySelf: true });
+            if (childOtherControl.invalid) allValid = false;
+          }
+        }
+      }
+    });
+
+    return allValid;
+  }
+
+  onNextClick(): void {
+    if (this.isCurrentQuestionValid()) {
+      const currentQuestion = this.getCurrentQuestion();
+      if (currentQuestion) {
+        this.handleConditionalQuestionsForStepFlow(currentQuestion);
+      }
+      this.nextQuestion();
+      this.showError = false;
+      this.scrollToTop();
+    } else {
+      this.showError = true;
+    }
+  }
+
+  /**
+   * Handle conditional questions for step-by-step flow
+   */
+  private handleConditionalQuestionsForStepFlow(question: any): void {
+    // Add/remove form controls for conditional questions based on current answer
+    const conditionalChildren = this.getDirectConditionalChildren(question);
+
+    conditionalChildren.forEach((child) => {
+      const shouldShow = this.shouldShowConditionalQuestion(question, child.id);
+      const childControl = this.questionnaireForm.get(child.id.toString());
+
+      if (shouldShow && !childControl) {
+        if (child.questionType !== "checkbox") {
+          const control = child.isOptional
+            ? new FormControl(null)
+            : new FormControl(null, Validators.required);
+          this.questionnaireForm.addControl(child.id.toString(), control);
+        } else {
+          const checkboxControl = this.makeCheckboxQuestionOptions(child);
+          this.questionnaireForm.addControl(
+            child.id.toString(),
+            checkboxControl
+          );
+        }
+
+        if (child.is_other) {
+          const otherControlName = this.getOtherAnswerControlName(child.id);
+          const otherControl = child.isOptional
+            ? new FormControl(null)
+            : new FormControl(null, Validators.required);
+          this.questionnaireForm.addControl(otherControlName, otherControl);
+        }
+      } else if (!shouldShow && childControl) {
+        this.questionnaireForm.removeControl(child.id.toString());
+
+        const otherControlName = this.getOtherAnswerControlName(child.id);
+        if (this.questionnaireForm.get(otherControlName)) {
+          this.questionnaireForm.removeControl(otherControlName);
+        }
+      }
+    });
+  }
+
+  onPreviousClick(): void {
+    this.previousQuestion();
+    this.showError = false;
+    this.scrollToTop();
+  }
+
+  private scrollToTop(): void {
+    if (this.questionnaireContainer?.nativeElement) {
+      this.questionnaireContainer.nativeElement.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    } else {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
   }
 }

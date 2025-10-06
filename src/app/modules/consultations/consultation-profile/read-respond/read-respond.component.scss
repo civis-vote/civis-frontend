@@ -401,11 +401,15 @@
           input.cm-radio[type="checkbox"]::after {
             border: 1px solid #0e73b9;
             content: "";
-            height: calc(100% - 70px);
+            height: calc(100% - 68px);
             position: absolute;
             width: 0px;
             margin-left: 5px;
-            top: 28px;
+            top: 26px;
+          }
+
+          .remove-line::after {
+            border: none !important;
           }
         }
 
@@ -459,6 +463,11 @@
             width: 18px;
             height: 18px;
           }
+        }
+
+        .checkbox-option-label {
+          display: flex;
+          align-items: baseline;
         }
       }
 

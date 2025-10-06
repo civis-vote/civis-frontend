@@ -1,3 +1,5 @@
+@import './src/assets/styles/app';
+
 /* Ensure the border appears after conditional children, not immediately after the parent */
 .questions-container {
   .question-index {
@@ -109,3 +111,56 @@ input[type="checkbox"][aria-disabled="true"] {
     font-weight: 700;
   }
 }
+
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  .btn-submit {
+    margin: 0;
+  }
+  .btn-outline-secondary {
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+
+.progress-container {
+  margin-top: 24px;
+  .progress-text-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .question-count {
+    padding: 5px 15px;
+    background-color: #E5F2FA;
+    border: none;
+    border-radius: 22px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #0E73B9;
+    font-weight: 600;
+  }
+  .progress {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    
+    .progress-bar {
+      background-color: #0E73B9;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+  }
+}
+
+

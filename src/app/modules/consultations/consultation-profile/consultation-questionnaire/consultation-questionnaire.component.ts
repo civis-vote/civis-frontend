@@ -1,4 +1,4 @@
-import { VOICE_DEMO_CONSULTATION_ID } from 'src/app/shared/models/constants/constants';
+import { VOICE_DEMO_CONSULTATION_ID } from "src/app/shared/models/constants/constants";
 import {
   Component,
   OnInit,
@@ -164,7 +164,7 @@ export class ConsultationQuestionnaireComponent
       this.responseFeedback = "satisfied";
     }
 
-     this.audioRecordingService
+    this.audioRecordingService
       .recordingFailed()
       .subscribe(() => (this.isRecording = false));
     this.audioRecordingService
@@ -906,8 +906,8 @@ export class ConsultationQuestionnaireComponent
     if (parentQuestion.questionType === "checkbox") {
       // Check if any selected option has the specific conditional question
       const selectedOptions = Object.entries(control.value)
-        .filter(([_, isSelected]) => isSelected)
-        .map(([optionId, _]) => optionId);
+        .filter(([_key, val]: [string, any]) => val?.value === true)
+        .map(([optionId]) => optionId);
 
       return selectedOptions.some((optionId) => {
         const subQuestion = parentQuestion.subQuestions?.find(

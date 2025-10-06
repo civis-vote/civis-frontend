@@ -233,16 +233,16 @@
                   >
                     <label>
                       <input type="checkbox" class="cm-radio"
-                        (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
-                        [formControlName]="value" (click)="toggleCheckbox(child.id, subQuestion.id)"
+                    (input)="onAnswerChange(child,subQuestion, $event.target.checked)"
+                        formControlName="value" (click)="toggleCheckbox(child.id, subQuestion.id)"
                         [attr.disabled]="checkDropdownOptionDisabled(child, subQuestion)"
                       >
                       <span *ngIf="subQuestion.id !== 'other'">{{ getSubQuestionText(subQuestion) }}</span>
                       <span *ngIf="subQuestion.id === 'other'"> {{'Other' | translate}}</span>
                     </label>
-                    <ng-container *ngIf="question.is_other && subQuestion.id === 'other'"
+                    <ng-container *ngIf="child.is_other && subQuestion.id === 'other'"
                       [ngTemplateOutlet]="otherInputBox"
-                      [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(question.id), isInline: true }">
+                      [ngTemplateOutletContext]="{ controlName: getOtherAnswerControlName(child.id), isInline: true }">
                     </ng-container>
                     <div class="priority-select-input" *ngIf="checkSubQuestionSelected(child, subQuestion)">
                       <label for="priority-{{child.id}}-{{subQuestion.id}}" class="priority-label">Priority</label>

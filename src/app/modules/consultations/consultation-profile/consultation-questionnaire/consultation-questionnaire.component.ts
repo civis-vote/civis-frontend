@@ -693,6 +693,45 @@ export class ConsultationQuestionnaireComponent
     return numSubOptionsSelected + 1;
   }
 
+  reassignPrioritiesAfterDeselection(
+    questionId: number,
+    deselectedSubQuestionId: number | "other"
+  ): void {
+    const questionFormGroup = this.questionnaireForm.get([questionId]);
+    if (!questionFormGroup) return;
+
+    const value = questionFormGroup.value;
+
+    const selectedOptionsWithPriorities: Array<{
+      key: string;
+      priority: number;
+    }> = [];
+
+    Object.entries(value).forEach(([key, val]: [string, any]) => {
+      if (
+        key !== `${deselectedSubQuestionId}` &&
+        val.value === true &&
+        val.priority > 0
+      ) {
+        selectedOptionsWithPriorities.push({
+          key: key,
+          priority: val.priority,
+        });
+      }
+    });
+
+    selectedOptionsWithPriorities.sort((a, b) => a.priority - b.priority);
+
+    selectedOptionsWithPriorities.forEach((option, index) => {
+      const priorityControl = questionFormGroup.get([option.key, "priority"]);
+      if (priorityControl) {
+        priorityControl.setValue(index + 1);
+      }
+    });
+
+    this.priorityOptionsCache.delete(questionId);
+  }
+
   onAnswerChange(question?, value?, checkboxValue?) {
     if (question && value.id === "other") {
       let otherValue = true;
@@ -734,22 +773,39 @@ export class ConsultationQuestionnaireComponent
       }
     }
 
-    // Auto set priority when checked for first time
-    if (question.questionType === "checkbox" && checkboxValue === true) {
-      const priorityControl = this.questionnaireForm.get([
-        question.id,
-        value.id,
-        "priority",
-      ]);
-      if (
-        priorityControl &&
-        (!priorityControl.value || priorityControl.value === 0)
-      ) {
-        const nextPriority = this.getNextAvailablePriority(
+    if (question.questionType === "checkbox") {
+      if (checkboxValue === true) {
+        // Auto set priority when checked for first time
+        const priorityControl = this.questionnaireForm.get([
           question.id,
-          value.id
-        );
-        priorityControl.setValue(nextPriority);
+          value.id,
+          "priority",
+        ]);
+        if (
+          priorityControl &&
+          (!priorityControl.value || priorityControl.value === 0)
+        ) {
+          const nextPriority = this.getNextAvailablePriority(
+            question.id,
+            value.id
+          );
+          priorityControl.setValue(nextPriority);
+        }
+      } else if (checkboxValue === false) {
+        // Reset priority when unchecked and reassign priorities for remaining selected options
+        const priorityControl = this.questionnaireForm.get([
+          question.id,
+          value.id,
+          "priority",
+        ]);
+        if (priorityControl) {
+          priorityControl.setValue(0);
+        }
+
+        // Reassign priorities for remaining selected options to maintain sequential order
+        if (question.hasChoicePriority) {
+          this.reassignPrioritiesAfterDeselection(question.id, value.id);
+        }
       }
     }
   }

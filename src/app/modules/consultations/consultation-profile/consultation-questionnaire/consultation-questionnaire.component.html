@@ -29,10 +29,10 @@
                 aria-label="'Type answer here' | translate"
                 [formControlName]="controlName" />
             </div>
-            <ng-container [ngTemplateOutlet]="errorBlock"
-              [ngTemplateOutletContext]="{ controlName: controlName, show: true, addMargin: addMargin }">
-            </ng-container>
           </div>
+          <ng-container [ngTemplateOutlet]="errorBlock"
+              [ngTemplateOutletContext]="{ controlName: controlName, show: true, addMargin: true }">
+            </ng-container>
         </ng-template>
         <!-- Reusable error message block -->
         <ng-template #errorBlock let-controlName="controlName" let-show="show" let-addMargin="addMargin">

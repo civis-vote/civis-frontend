@@ -27,6 +27,7 @@ const  ConditionalQuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
+    hasChoicePriority
     questionType
     supportsOther
     position
@@ -66,7 +67,8 @@ const QuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
-    questionType
+    hasChoicePriority
+    questionType 
     supportsOther
     position
     isConditionalQuestion

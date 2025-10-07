@@ -10,7 +10,7 @@ import { ConstantType } from '../models';
 export class ConstantsService {
 
   constantTypeList: Array<string>;
-  constantList: any = {};
+  constantList: Record<string, any> = {}; // TODO: Define proper Constants interface
 
   constructor(
     private apollo: Apollo,

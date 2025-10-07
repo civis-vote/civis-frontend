@@ -26,7 +26,7 @@ loading: AsyncSubject<boolean> = new AsyncSubject();
 
 currentLanguage: string;
 dictionary: BehaviorSubject<Array<Dictionary>> = new BehaviorSubject([]);
-environment: any;
+environment: any; // TODO: Import proper Environment interface
 
 // Added a version key for translations
 private TRANSLATION_VERSION = '1';

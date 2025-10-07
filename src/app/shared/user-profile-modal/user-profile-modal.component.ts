@@ -12,7 +12,7 @@ import { UserProfileQuery } from './user-profile.graphql';
 })
 export class UserProfileModalComponent implements OnInit {
 
-  @Input() userId: any;
+  @Input() userId: string | number;
 
   @Output() close: EventEmitter<any> = new EventEmitter();
   @ViewChild('leaderModal', { static: false }) leaderModal: ModalDirective;
@@ -39,7 +39,7 @@ export class UserProfileModalComponent implements OnInit {
     .subscribe((res: any) => {
       this.user = res.data.userProfile;
     }, err => {
-      console.log(err);
+      // Handle error silently or implement proper error handling
     });
   }
 

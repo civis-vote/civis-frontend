@@ -39,7 +39,7 @@ query getCurrentUser{
           consultation {
             id
              title
-            ministry {
+            department {
               id
               name
               logo (resolution : "100X100") {

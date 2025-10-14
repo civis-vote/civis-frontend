@@ -103,8 +103,8 @@ export class ConsultationListComponent implements OnInit {
     const city = (this.currentUser && this.currentUser.city)  ?  this.currentUser.city.id : undefined;
     if (list && city) {
       list.sort((a,b) => {
-          if (a.ministry.locationId === city && b.ministry.locationId === city) return 1;
-          return (a.ministry.locationId === city) ? -1: 1;
+          if (a.department.locationId === city && b.department.locationId === city) return 1;
+          return (a.department.locationId === city) ? -1: 1;
       });
     }
     return list;
@@ -190,8 +190,8 @@ export class ConsultationListComponent implements OnInit {
     return getTranslatedText(this.currentLanguage, textMap, item?.title);
   }
 
-  getTranslatedMinistryName(item: any) {
-    const textMap = createLangObject({ source: item?.ministry, suffix: "Name" });
-    return getTranslatedText(this.currentLanguage, textMap, item?.ministry?.name);
+  getTranslatedDepartmentName(item: any) {
+    const textMap = createLangObject({ source: item?.department, suffix: "Name" });
+    return getTranslatedText(this.currentLanguage, textMap, item?.department?.name);
   }
 }

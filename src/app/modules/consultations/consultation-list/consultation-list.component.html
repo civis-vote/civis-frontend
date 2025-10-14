@@ -38,11 +38,11 @@
       <ng-container *ngFor="let item of closedConsultationList">
         <div class="table-body">
           <div class="cell-1 consultation-cell">
-            <img appDefaultImage [type]="'consultation-cover'" [src]="item.ministry?.category?.coverPhoto?.url"
+            <img appDefaultImage [type]="'consultation-cover'" [src]="item.department?.theme?.coverPhoto?.url"
               class="avatar avatar--64 fit-cover" />
             <div class="c-profile-data">
               <p>{{ getTranslatedTitle(item) }}</p>
-              <p>{{ getTranslatedMinistryName(item) }}</p>
+              <p>{{ getTranslatedDepartmentName(item) }}</p>
             </div>
           </div>
           <div class="cell-2">
@@ -60,12 +60,12 @@
         <!-- list-mobile-layout -->
         <div class="table-list">
           <div class="list-grid">
-            <img appDefaultImage [type]="'consultation-cover'" [src]="item.ministry?.category?.coverPhoto?.url"
+            <img appDefaultImage [type]="'consultation-cover'" [src]="item.department?.theme?.coverPhoto?.url"
               class="avatar avatar--42 fit-cover" />
             <div class="list-detail">
               <div class="c-profile-data">
                 <p>{{ getTranslatedTitle(item) }}</p>
-                <p>{{ getTranslatedMinistryName(item) }}</p>
+                <p>{{ getTranslatedDepartmentName(item) }}</p>
               </div>
               <p class="reponse-count-text">
                 {{ item?.consultationResponsesCount ? item?.consultationResponsesCount : '--'}} RESPONSES

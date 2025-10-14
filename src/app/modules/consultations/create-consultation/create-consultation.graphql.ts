@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const MinistryAutocompleteQuery = gql`
-    query ministryAutocomplete ($q: String) {
-        ministryAutocomplete (q: $q) {
+export const DepartmentAutocompleteQuery = gql`
+    query departmentAutocomplete ($q: String) {
+        departmentAutocomplete (q: $q) {
             name
             id
             level
@@ -21,15 +21,15 @@ export const CreateConsultationMutation = gql`
     }
 `
 
-export const MinistryCreateMutation = gql `
-    mutation ministryCreate($ministry: Create!) {
-        ministryCreate(ministry: $ministry) {
-        id
-        name
-        level
-        logo {
-            url
-        }
+export const DepartmentCreateMutation = gql `
+    mutation departmentCreate($department: Create!) {
+        departmentCreate(department: $department) {
+            id
+            name
+            level
+            logo {
+                url
+            }
         }
     }
 `
@@ -43,20 +43,20 @@ export const ConstantForTypeQuery = gql`
     }
 `;
 
-export const CategoryListQuery = gql`
-query categoryList($sort: CategorySort, $sortDirection: SortDirections){
-    categoryList(sort: $sort, sortDirection: $sortDirection){
-    data {
-        id
-        name
-        coverPhoto {
-        filename
-        url
+export const ThemeListQuery = gql`
+query themeList($sort: ThemeSort, $sortDirection: SortDirections){
+    themeList(sort: $sort, sortDirection: $sortDirection){
+        data {
+            id
+            name
+            coverPhoto {
+                filename
+                url
+            }
         }
-    }
-    paging {
-        totalItems
-    }
+        paging {
+            totalItems
+        }
     }
 }
 `;

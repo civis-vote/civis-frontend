@@ -1,13 +1,13 @@
 <div class="response-index"
-  [ngStyle]="{'background-image': 'url(' + profile?.consultation?.ministry?.category?.coverPhoto?.url + ')'}">
+  [ngStyle]="{'background-image': 'url(' + profile?.consultation?.department?.theme?.coverPhoto?.url + ')'}">
   <div class="response-profile">
     <section class="response-profile__sidebar-section">
       <div class="c-profile-card sticky">
         <div class="c-profile-card__top-section">
           <p class="light-text">{{'CONSULTATION BY'}}</p>
           <div class="ministry-detail">
-            <img [src]="profile?.consultation?.ministry?.logo?.url" appDefaultImage [type]="'user'" class="avatar avatar--42" alt=" " />
-            <p class="ministry-text m-0">{{profile?.consultation?.ministry?.name}}</p>
+            <img [src]="profile?.consultation?.department?.logo?.url" appDefaultImage [type]="'user'" class="avatar avatar--42" alt=" " />
+            <p class="ministry-text m-0">{{profile?.consultation?.department?.name}}</p>
           </div>
         </div>
         <div class="c-profile-card__middle-section">

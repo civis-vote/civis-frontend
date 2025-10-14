@@ -1,9 +1,9 @@
 <a href="javascript:void(0)" class="decoration-none" [routerLink]="['/consultations', consultation?.id]">
   <div class="consultation-card">
-    <div class="consultation-card__card-image" appDefaultImage appLazyLoad [type]="'consultation-cover'" [ngStyle]="consultation?.ministry?.category?.coverPhoto?.url ? {'background-image': 'url(' + consultation?.ministry?.category?.coverPhoto?.url + ')'} : null"></div>
+    <div class="consultation-card__card-image" appDefaultImage appLazyLoad [type]="'consultation-cover'" [ngStyle]="consultation?.department?.theme?.coverPhoto?.url ? {'background-image': 'url(' + consultation?.department?.theme?.coverPhoto?.url + ')'} : null"></div>
     <div class="consultation-card__details">
       <p class="title">{{ getConsultationTitle() }}</p>
-      <p class="sub-title">{{ getMinistryName() }}</p>
+      <p class="sub-title">{{ getDepartmentName() }}</p>
       <div class="cta-section">
         <div>
           <p class="days-remaining-text">{{ getRemainingDays() }} {{getRemainingDaysText() | translate}}</p>

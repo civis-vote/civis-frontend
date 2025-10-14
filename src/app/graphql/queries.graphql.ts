@@ -24,6 +24,7 @@ query getCurrentUser{
     firstName
     lastName
     notifyForNewConsultation
+    newsletterSubscription
     phoneNumber
     profilePicture (resolution: "100X100") {
       id

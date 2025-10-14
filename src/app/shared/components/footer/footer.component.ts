@@ -16,6 +16,7 @@ export class FooterComponent implements OnInit {
   selectedLanguage = 'en';
   currentUser: any;
   showConfirmEmailModal: boolean;
+  authModal: boolean;
 
   constructor(
     private _cookieService: CookieService,
@@ -49,7 +50,7 @@ export class FooterComponent implements OnInit {
 
   submitConsultation() {
     if (!this.currentUser) {
-      this.router.navigateByUrl('/auth');
+      this.authModal = true;
       return;
     }
     if (this?.currentUser) {

@@ -1,0 +1,166 @@
+@import './src/assets/styles/app';
+
+/* Ensure the border appears after conditional children, not immediately after the parent */
+.questions-container {
+  .question-index {
+    border-bottom: 1px solid #D5DBE2;
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+/* Remove any border from the inner parent block so we don't get double borders */
+.question-index {
+  .question {
+    border-bottom: none !important;
+  }
+}
+
+.conditional-question-index {
+  margin-left: 24px;
+  .question {
+    padding-top: 0 !important;
+    border-bottom: none !important;
+  }
+  .answer {
+    padding: 0;
+  }
+
+}
+
+input[type="checkbox"][disabled],
+input[type="checkbox"][attr-disabled],
+input[type="checkbox"][aria-disabled="true"] {
+  cursor: not-allowed !important;
+}
+
+.num-options-left-text {
+  color: #0E73B9;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.voice-demo {
+  .start-button, .stop-button, .cancel-button {
+    background-color: #0e73b9;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin-bottom: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+  }
+
+  .temp-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    color: white !important;
+  }
+
+  .section-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .help-text {
+    font-size: 14px;
+    color: #6C757D;
+    margin-bottom: 12px;
+  }
+
+  .divider {
+    position: relative;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 16px;
+
+    .the-border {
+      border-top: 1px solid #D5DBE2;
+      width: 100%;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      z-index: 1;
+    }
+
+    .or-text {
+      background-color: white;
+      padding: 0 12px;
+      z-index: 2;
+      color: #6C757D;
+      font-weight: 500;
+    }
+  }
+
+  .recording-section {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .recording {
+    font-weight: 700;
+  }
+}
+
+
+.navigation-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  .btn-submit {
+    margin: 0;
+  }
+  .btn-outline-secondary {
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 600;
+    i {
+      margin-right: 5px;
+    }
+  }
+}
+
+
+.progress-container {
+  margin-top: 24px;
+  .progress-text-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .question-count {
+    padding: 5px 15px;
+    background-color: #E5F2FA;
+    border: none;
+    border-radius: 22px;
+    font-size: 14px;
+    line-height: 22px;
+    color: #0E73B9;
+    font-weight: 600;
+  }
+  .progress {
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    
+    .progress-bar {
+      background-color: #0E73B9;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+  }
+}
+
+

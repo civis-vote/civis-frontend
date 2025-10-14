@@ -196,7 +196,7 @@
       <div *ngIf="currentUser?.responses?.edges?.length" class="consultations-container">
         <div class="consultation-item" *ngFor="let item of currentUser?.responses?.edges">
           <div class="consultation-image">
-            <img [src]="item?.node?.consultation?.ministry?.logo?.url" alt=" " />
+            <img [src]="item?.node?.consultation?.department?.logo?.url" alt=" " />
           </div>
           <div class="consultation-info">
             <div class="consultation-info__left">
@@ -204,7 +204,7 @@
                 {{item?.node?.consultation?.title}}
               </div>
               <div class="ministry-title">
-                {{item?.node?.consultation?.ministry?.name}}
+                {{item?.node?.consultation?.department?.name}}
               </div>
               <div class="response-cta">
                 <button class="btn btn-transparent action-btn"

@@ -37,8 +37,8 @@ export class ConsultationCardComponent implements OnInit {
     return getTranslatedText(this.currentLanguage, textMap, this.consultation?.title);
   }
 
-  getMinistryName() {
-    const textMap = createLangObject({ source: this.consultation?.ministry, suffix: "Name" });
-    return getTranslatedText(this.currentLanguage, textMap, this.consultation?.ministry?.name);
+  getDepartmentName() {
+    const textMap = createLangObject({ source: this.consultation?.department, suffix: "Name" });
+    return getTranslatedText(this.currentLanguage, textMap, this.consultation?.department?.name);
   }
 }

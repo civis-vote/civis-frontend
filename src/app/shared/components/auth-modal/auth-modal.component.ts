@@ -348,7 +348,6 @@ export class AuthModalComponent implements OnInit {
 
   onNotificationPreferenceChange(fieldName: string, value: boolean) {
     this.userDetailsForm[fieldName] = value;
-    console.log(this.userDetailsForm);
   }
 
   submitUserDetails(form: NgForm) {

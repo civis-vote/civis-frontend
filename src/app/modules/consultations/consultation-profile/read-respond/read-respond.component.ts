@@ -203,10 +203,10 @@ export class ReadRespondComponent implements OnInit {
 
   createMetaTags(consultationProfile) {
     const title = consultationProfile.title ? consultationProfile.title : '' ;
-    const image = (consultationProfile['mininstry'] ?
-    consultationProfile['mininstry']['category'] ?
-    (consultationProfile['mininstry']['category']['coverPhoto'] ?
-    consultationProfile['mininstry']['category']['coverPhoto']['url'] : '') : '' : '');
+    const image = (consultationProfile['department'] ?
+    consultationProfile['department']['theme'] ?
+    (consultationProfile['department']['theme']['coverPhoto'] ?
+    consultationProfile['department']['theme']['coverPhoto']['url'] : '') : '' : '');
     const description = consultationProfile['summary'] ? (consultationProfile['summary'].length < 140 ?
                         consultationProfile['summary'] : consultationProfile['summary'].slice(0, 140)) : '';
     this.deleteMetaTags();

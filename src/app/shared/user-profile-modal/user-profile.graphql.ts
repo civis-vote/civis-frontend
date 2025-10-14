@@ -29,7 +29,7 @@ query userProfile($id: Int!) {
                 consultation {
                 id
                 title
-                ministry {
+                department {
                     id
                     name
                     logo (resolution : "100X100") {

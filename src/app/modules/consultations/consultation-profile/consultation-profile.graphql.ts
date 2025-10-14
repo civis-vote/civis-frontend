@@ -113,9 +113,9 @@ export const ConsultationProfile = gql`
       responsesReadingTimes
       url
       consultationResponsesCount
-      ministry {
+      department {
         id
-        category {
+        theme {
           id
           coverPhoto (resolution: "1500X750") {
             id
@@ -218,9 +218,9 @@ export const ConsultationProfileCurrentUser = gql`
       responseSubmissionMessage
       url
       consultationResponsesCount
-      ministry {
+      department {
         id
-        category {
+        theme {
           id
           coverPhoto (resolution: "1500X750") {
             id
@@ -325,9 +325,9 @@ export const ConsultationProfileUser = gql`
       responseSubmissionMessage
       url
       consultationResponsesCount
-      ministry {
+      department {
         id
-        category {
+        theme {
           id
           coverPhoto (resolution: "1500X750") {
             id

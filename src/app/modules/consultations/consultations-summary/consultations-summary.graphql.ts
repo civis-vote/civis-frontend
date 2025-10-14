@@ -44,10 +44,10 @@ export const ConsultationProfileQuery = gql`
       url
       visibility
       consultationResponsesCount
-      ministry {
+      department {
         id
         name
-        category {
+        theme {
           id
           coverPhoto (resolution: "350X285") {
             id

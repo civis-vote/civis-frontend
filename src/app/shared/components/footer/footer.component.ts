@@ -52,7 +52,7 @@ export class FooterComponent implements OnInit {
       this.router.navigateByUrl('/auth');
       return;
     }
-    if (this?.currentUser?.confirmedAt) {
+    if (this?.currentUser) {
       this.router.navigateByUrl('/consultations/new');
     } else {
       this.showConfirmEmailModal = true;

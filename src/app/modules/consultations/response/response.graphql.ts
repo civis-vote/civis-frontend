@@ -16,9 +16,9 @@ export const ResponseProfileQuery = gql`
                 responseDeadline
                 url
                 consultationResponsesCount
-                ministry {
+                department {
                   id
-                  category {
+                  theme {
                     id
                     coverPhoto (resolution: "350X285") {
                       id

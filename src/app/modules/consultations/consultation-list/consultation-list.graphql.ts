@@ -3,7 +3,7 @@ import { environment } from '../../../../environments/environment';
 //TODO: Sort consultations by city feature, remove condition when ready fo deployment to production
 //name field is added here to amke sure that fragment is not empty
 const fragments = environment.production ? gql `
-    fragment ministryFields on Ministry {
+    fragment departmentFields on Department {
       name
       locationId
       hindiName
@@ -11,7 +11,7 @@ const fragments = environment.production ? gql `
       marathiName
     }
   `: gql `
-    fragment ministryFields on Ministry {
+    fragment departmentFields on Department {
       name
       hindiName
       odiaName
@@ -32,13 +32,13 @@ export const ConsultationList = gql`
         consultationResponsesCount
         updatedAt
         responseDeadline
-        ministry {
+        department {
           id
           hindiName
           name
           odiaName
           marathiName
-          category {
+          theme {
             id
             coverPhoto (resolution: "350X285") {
               id
@@ -46,7 +46,7 @@ export const ConsultationList = gql`
               url
             }
           }
-          ... ministryFields
+          ...departmentFields
         }
         status
       }

@@ -46,10 +46,10 @@
           <div class="participation-list-container">
             <div *ngFor="let item of user?.sharedResponses?.edges">
               <div class="paticipant-list">
-                <img [src]="item?.node?.consultation?.ministry?.logo?.url"  class="avatar avatar--42" />
+                <img [src]="item?.node?.consultation?.department?.logo?.url"  class="avatar avatar--42" />
                 <div class="list-detail">
                   <p>{{item?.node?.consultation?.title}}</p>
-                  <p>{{item?.node?.consultation?.ministry?.name}}</p>
+                  <p>{{item?.node?.consultation?.department?.name}}</p>
                   <div class="response-cta">
                     <button class="btn btn-transparent action-btn" (click)="viewResponse(item?.node)" >
                       {{'View my response' | translate}}

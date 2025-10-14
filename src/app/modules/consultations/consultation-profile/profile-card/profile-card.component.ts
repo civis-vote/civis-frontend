@@ -83,9 +83,9 @@ export class ProfileCardComponent implements OnInit, OnChanges {
     return getTranslatedText(this.currentLanguage, textMap, this.profile?.title);
   }
 
-  getMinistryName() {
-    const textMap = createLangObject({ source: this.profile?.ministry, suffix: "Name" });
-    return getTranslatedText(this.currentLanguage, textMap, this.profile?.ministry?.name);
+  getDepartmentName() {
+    const textMap = createLangObject({ source: this.profile?.department, suffix: "Name" });
+    return getTranslatedText(this.currentLanguage, textMap, this.profile?.department?.name);
   }
 
   enableSubmitResponse() {

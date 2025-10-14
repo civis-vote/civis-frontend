@@ -139,7 +139,7 @@ export class CreateConsultationComponent implements OnInit {
         },
       })
       .pipe(
-        map((i: any) => i.data.ministryAutocomplete),
+        map((i: any) => i.data.departmentAutocomplete),
         tap(() => (this.loadingMinistries = false))
       )
       .subscribe(

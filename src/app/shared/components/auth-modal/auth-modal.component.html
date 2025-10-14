@@ -152,6 +152,34 @@
               {{'City is required.' | translate}}
             </div>
           </div>
+          <div class="input-checbox mb-1 mt-3 pointer">
+            <input
+              class="cm-checkbox"
+              type="checkbox"
+              id="notifyForNewConsultation"
+              name="notifyForNewConsultation"
+              #notifyForNewConsultation="ngModel"
+              [(ngModel)]="userDetailsForm.notifyForNewConsultation"
+              (change)="onNotificationPreferenceChange('notifyForNewConsultation', $event.target.checked)"
+            />
+            <label for="notifyForNewConsultation">
+              Notify me when new consultations that might interest me are published on Civis
+            </label>
+          </div>
+          <div class="input-checbox mb-0 pointer">
+            <input
+              class="cm-checkbox"
+              type="checkbox"
+              id="newsletterSubscription"
+              name="newsletterSubscription"
+              #newsletterSubscription="ngModel"
+              [(ngModel)]="userDetailsForm.newsletterSubscription"
+              (change)="onNotificationPreferenceChange('newsletterSubscription', $event.target.checked)"
+            />
+            <label for="newsletterSubscription">
+              Subscribe me to Civis' monthly newsletter 
+            </label>
+          </div>
           <div *ngIf="userDetailsError" class="alert alert-danger mt-2">{{ userDetailsError }}</div>
         </div>
         <div class="modal-footer">

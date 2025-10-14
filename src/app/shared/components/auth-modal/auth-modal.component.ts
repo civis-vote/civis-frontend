@@ -91,7 +91,9 @@ export class AuthModalComponent implements OnInit {
   userDetailsForm: any = {
     firstName: '',
     cityId: null,
-    email: ''
+    email: '',
+    notifyForNewConsultation: true,
+    newsletterSubscription: true
   };
   userDetailsError: string = '';
   userDetailsLoading: boolean = false;
@@ -295,7 +297,9 @@ export class AuthModalComponent implements OnInit {
           this.userDetailsForm = {
             firstName: user?.firstName || '',
             cityId: user?.city?.id || null,
-            email: user?.email || this.emailForOtp
+            email: user?.email || this.emailForOtp,
+            notifyForNewConsultation: user?.notifyForNewConsultation || true,
+            newsletterSubscription: user?.newsletterSubscription || true
           };
           this.showUserDetailsModal = true;
           if (this.isCitySelectionShown) {
@@ -311,7 +315,9 @@ export class AuthModalComponent implements OnInit {
         this.userDetailsForm = {
           firstName: '',
           cityId: null,
-          email: this.emailForOtp
+          email: this.emailForOtp,
+          notifyForNewConsultation: true,
+          newsletterSubscription: true
         };
         this.showUserDetailsModal = true;
         if (this.isCitySelectionShown) {
@@ -340,6 +346,11 @@ export class AuthModalComponent implements OnInit {
     );
   }
 
+  onNotificationPreferenceChange(fieldName: string, value: boolean) {
+    this.userDetailsForm[fieldName] = value;
+    console.log(this.userDetailsForm);
+  }
+
   submitUserDetails(form: NgForm) {
     const isValid = this.userDetailsForm.firstName && 
                    (!this.isCitySelectionShown || this.userDetailsForm.cityId);
@@ -351,7 +362,8 @@ export class AuthModalComponent implements OnInit {
     
     const userUpdateData: any = {
       firstName: this.userDetailsForm.firstName,
-      notifyForNewConsultation: true,
+      notifyForNewConsultation: this.userDetailsForm.notifyForNewConsultation,
+      newsletterSubscription: this.userDetailsForm.newsletterSubscription
     };
     
     if (this.isCitySelectionShown && this.userDetailsForm.cityId) {

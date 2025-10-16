@@ -1184,7 +1184,9 @@ export class ConsultationQuestionnaireComponent
   // ===== STEP-BY-STEP FLOW FOR SPECIFIC CONSULTATION =====
 
   private checkIsStepByStepFlow(): void {
-    this.isStepByStepFlow = this.profileData?.questionFlow === ConsultationQuestionnaireComponent.QUESTION_LIST;
+    this.isStepByStepFlow =
+      this.profileData?.questionFlow ===
+      ConsultationQuestionnaireComponent.QUESTION_LIST;
     if (this.isStepByStepFlow) {
       this.currentQuestionIndex = 0;
     }

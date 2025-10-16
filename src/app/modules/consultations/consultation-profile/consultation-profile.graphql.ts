@@ -33,6 +33,7 @@ const  ConditionalQuestionFragment = gql`
     position
     isConditionalQuestion
     selectedOptionsLimit
+    acceptVoiceMessage
     subQuestions {
       id
       questionText
@@ -73,6 +74,7 @@ const QuestionFragment = gql`
     position
     isConditionalQuestion
     selectedOptionsLimit
+    acceptVoiceMessage
     subQuestions {
       ...SubQuestionFragment
     }

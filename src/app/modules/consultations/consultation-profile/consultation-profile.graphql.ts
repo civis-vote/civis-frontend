@@ -85,6 +85,7 @@ export const ConsultationProfile = gql`
     consultationProfile(id: $id) {
       id
       title
+      questionFlow
       showDiscussSection
       showSatisfactionRating
       isSatisfactionRatingOptional
@@ -189,6 +190,7 @@ export const ConsultationProfileCurrentUser = gql`
       enforcePrivateResponse
       id
       title
+      questionFlow
       showDiscussSection
       showSatisfactionRating
       isSatisfactionRatingOptional
@@ -301,6 +303,7 @@ export const ConsultationProfileUser = gql`
       enforcePrivateResponse
       id
       title
+      questionFlow
       showSatisfactionRating
       isSatisfactionRatingOptional
       summary

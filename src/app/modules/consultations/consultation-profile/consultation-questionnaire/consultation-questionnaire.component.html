@@ -149,14 +149,29 @@
                 <div class="or-text">OR</div>
               </div>
               <div class="section-title">Text Response</div>
+              <div class="answer">
+                <div class="text-area">
+                  <textarea
+                    [attr.name]="'long-text-' + question.id"
+                    autocomplete="off"
+                    [placeholder]="'Type your answer here.' | translate"
+                    aria-label="'Type your answer here.' | translate"
+                    [formControl]="questionnaireForm.get(question.id.toString())"></textarea>
+                </div>
+                <ng-container [ngTemplateOutlet]="errorBlock"
+                  [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>
+              </div>
             </div>
             
-            <!-- Long text question -->
-            <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text'">
+            <!-- Long text question  -->
+            <div class="answer" [id]="'text-area-' + question.id" *ngIf="question.questionType === 'long_text' && !question.acceptVoiceMessage">
               <div class="text-area">
-                <textarea (input)="longTextAnswer = $event.target.value"
+                <textarea
+                  [attr.name]="'long-text-' + question.id"
+                  autocomplete="off"
                   [placeholder]="'Type your answer here.' | translate"
-                  aria-label="'Type your answer here.' | translate" [formControlName]="question.id"></textarea>
+                  aria-label="'Type your answer here.' | translate"
+                  [formControl]="questionnaireForm.get(question.id.toString())"></textarea>
               </div>
               <ng-container [ngTemplateOutlet]="errorBlock"
                 [ngTemplateOutletContext]="{ controlName: question.id, show: true, addMargin: false }"></ng-container>

@@ -47,6 +47,7 @@ import { Router } from "@angular/router";
 import { WhiteLabelService } from "src/app/shared/services/white-label.service";
 import { AudioRecordingService } from "src/app/shared/services/audio-recording.service";
 import { DomSanitizer } from "@angular/platform-browser";
+import { print } from "graphql";
 
 const errorMessages: { [key: string]: string } = {
   duplicatePriority:
@@ -65,6 +66,7 @@ export class ConsultationQuestionnaireComponent
 {
   public VOICE_DEMO_CONSULTATION_ID = VOICE_DEMO_CONSULTATION_ID;
   private static readonly OTHER_ANSWER_PREFIX = "other_answer-";
+  private static readonly QUESTION_LIST = "question_list";
 
   public whiteLabelConsultationId: number | null = null;
 
@@ -106,10 +108,12 @@ export class ConsultationQuestionnaireComponent
   profaneWords = [];
   environment: any = environment;
   // https://stackblitz.com/edit/angular-audio-recorder
-  isRecording = false;
-  recordedTime;
-  blobUrl;
-  tempRecordingHolder;
+  private currentRecordingQuestionId: number | null = null;
+  private isRecordingByQuestionId: { [questionId: number]: boolean } = {};
+  private recordedTimeByQuestionId: { [questionId: number]: string } = {};
+  private blobUrlByQuestionId: { [questionId: number]: any } = {};
+  private blobByQuestionId: { [questionId: number]: Blob } = {};
+  private titleByQuestionId: { [questionId: number]: string } = {};
   currentQuestionIndex: number = 0;
   isStepByStepFlow: boolean = false;
   private readonly priorityOptionsCache: Map<
@@ -170,17 +174,26 @@ export class ConsultationQuestionnaireComponent
       this.responseFeedback = "satisfied";
     }
 
-    this.audioRecordingService
-      .recordingFailed()
-      .subscribe(() => (this.isRecording = false));
-    this.audioRecordingService
-      .getRecordedTime()
-      .subscribe((time) => (this.recordedTime = time));
+    this.audioRecordingService.recordingFailed().subscribe(() => {
+      if (this.currentRecordingQuestionId != null) {
+        this.isRecordingByQuestionId[this.currentRecordingQuestionId] = false;
+      }
+    });
+    this.audioRecordingService.getRecordedTime().subscribe((time) => {
+      if (this.currentRecordingQuestionId != null) {
+        this.recordedTimeByQuestionId[this.currentRecordingQuestionId] = time;
+      }
+    });
     this.audioRecordingService.getRecordedBlob().subscribe((data) => {
-      this.tempRecordingHolder = data;
-      this.blobUrl = this.sanitizer.bypassSecurityTrustUrl(
+      if (this.currentRecordingQuestionId == null) return;
+      const qid = this.currentRecordingQuestionId;
+      this.blobByQuestionId[qid] = data.blob;
+      this.titleByQuestionId[qid] = data.title;
+      this.blobUrlByQuestionId[qid] = this.sanitizer.bypassSecurityTrustUrl(
         URL.createObjectURL(data.blob)
       );
+      this.isRecordingByQuestionId[qid] = false;
+      this.currentRecordingQuestionId = null;
     });
   }
 
@@ -675,6 +688,25 @@ export class ConsultationQuestionnaireComponent
     if (checkPropertiesPresence(consultationResponse)) {
       consultationResponse["templateId"] = this.templateId;
       consultationResponse["answers"] = this.responseAnswers;
+      // Build voiceResponses array with proper File objects (not Blob)
+      const voiceResponses: Array<{ questionId: string; file: File }> = [];
+      Object.keys(this.blobByQuestionId).forEach((key) => {
+        const qidNum = parseInt(key as any, 10);
+        const blob = this.blobByQuestionId[qidNum];
+        if (!blob) return;
+        const mimeType = blob.type || "audio/webm";
+        const ext = mimeType.includes("webm")
+          ? "webm"
+          : mimeType.includes("mp3")
+          ? "mp3"
+          : "webm";
+        const fileName = `voice-${qidNum}-${Date.now()}.${ext}`;
+        const file = new File([blob], fileName, { type: mimeType });
+        voiceResponses.push({ questionId: String(qidNum), file });
+      });
+      if (voiceResponses.length > 0) {
+        consultationResponse["voiceResponses"] = voiceResponses;
+      }
       return consultationResponse;
     }
     return;
@@ -843,56 +875,160 @@ export class ConsultationQuestionnaireComponent
       consultationResponse.visibility,
       this.currentUser?.isVerified
     );
-    this.apollo
-      .mutate({
-        mutation: this.currentUser
-          ? SubmitResponseQuery
-          : SubmitResponseGuestUser,
-        variables: {
-          consultationResponse: consultationResponse,
-        },
-        update: (store, { data: res }) => {
-          const variables = { id: this.consultationId };
-          const resp: any = store.readQuery({
-            query: this.currentUser
-              ? ConsultationProfileCurrentUser
-              : ConsultationProfileUser,
-            variables,
-          });
-          if (res) {
-            if (this.currentUser?.id) {
-              resp.consultationProfile.respondedOn =
-                res.consultationResponseCreate.consultation.respondedOn;
-            }
-            resp.consultationProfile.sharedResponses =
-              res.consultationResponseCreate.consultation.sharedResponses;
-            resp.consultationProfile.responseSubmissionMessage =
-              res.consultationResponseCreate.consultation.responseSubmissionMessage;
-            resp.consultationProfile.satisfactionRatingDistribution =
-              res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
-          }
-          store.writeQuery({
-            query: this.currentUser
-              ? ConsultationProfileCurrentUser
-              : ConsultationProfileUser,
-            variables,
-            data: resp,
-          });
-        },
-      })
-      .pipe(map((res: any) => res.data.consultationResponseCreate))
-      .subscribe(
-        (res) => {
-          this.openThankYouModal.emit(res.points);
+    const hasUploads =
+      Array.isArray(consultationResponse?.voiceResponses) &&
+      consultationResponse.voiceResponses.length > 0;
+    if (hasUploads) {
+      const mutationDoc = this.currentUser
+        ? SubmitResponseQuery
+        : SubmitResponseGuestUser;
+      this.submitResponseMultipart(consultationResponse, mutationDoc)
+        .then((res: any) => {
+          const data = res?.data?.consultationResponseCreate;
+          this.openThankYouModal.emit(data?.points);
           this.responseSubmitLoading = false;
           this.responseCreated = true;
+          // Best-effort cache refresh
+          try {
+            const variables = { id: this.consultationId };
+            const queryDoc = this.currentUser
+              ? ConsultationProfileCurrentUser
+              : ConsultationProfileUser;
+            const store: any = (this.apollo as any).getClient();
+            const resp: any = store.readQuery({ query: queryDoc, variables });
+            if (data) {
+              if (this.currentUser?.id && resp?.consultationProfile) {
+                resp.consultationProfile.respondedOn =
+                  data.consultation.respondedOn;
+              }
+              if (resp?.consultationProfile) {
+                resp.consultationProfile.sharedResponses =
+                  data.consultation.sharedResponses;
+                resp.consultationProfile.responseSubmissionMessage =
+                  data.consultation.responseSubmissionMessage;
+                resp.consultationProfile.satisfactionRatingDistribution =
+                  data.consultation.satisfactionRatingDistribution;
+              }
+              store.writeQuery({ query: queryDoc, variables, data: resp });
+            }
+          } catch (_e) {
+            // If cache not primed, ignore.
+          }
           this.consultationService.submitResponseActiveRoundEnabled.next(false);
-        },
-        (err) => {
+        })
+        .catch((err) => {
           this.responseSubmitLoading = false;
           this.errorService.showErrorModal(err);
-        }
-      );
+        });
+    } else {
+      this.apollo
+        .mutate({
+          mutation: this.currentUser
+            ? SubmitResponseQuery
+            : SubmitResponseGuestUser,
+          variables: {
+            consultationResponse: consultationResponse,
+          },
+          update: (store, { data: res }) => {
+            const variables = { id: this.consultationId };
+            const resp: any = store.readQuery({
+              query: this.currentUser
+                ? ConsultationProfileCurrentUser
+                : ConsultationProfileUser,
+              variables,
+            });
+            if (res) {
+              if (this.currentUser?.id) {
+                resp.consultationProfile.respondedOn =
+                  res.consultationResponseCreate.consultation.respondedOn;
+              }
+              resp.consultationProfile.sharedResponses =
+                res.consultationResponseCreate.consultation.sharedResponses;
+              resp.consultationProfile.responseSubmissionMessage =
+                res.consultationResponseCreate.consultation.responseSubmissionMessage;
+              resp.consultationProfile.satisfactionRatingDistribution =
+                res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
+            }
+            store.writeQuery({
+              query: this.currentUser
+                ? ConsultationProfileCurrentUser
+                : ConsultationProfileUser,
+              variables,
+              data: resp,
+            });
+          },
+        })
+        .pipe(map((res: any) => res.data.consultationResponseCreate))
+        .subscribe(
+          (res) => {
+            this.openThankYouModal.emit(res.points);
+            this.responseSubmitLoading = false;
+            this.responseCreated = true;
+            this.consultationService.submitResponseActiveRoundEnabled.next(
+              false
+            );
+          },
+          (err) => {
+            this.responseSubmitLoading = false;
+            this.errorService.showErrorModal(err);
+          }
+        );
+    }
+  }
+
+  private submitResponseMultipart(
+    consultationResponse: any,
+    mutationDoc: any
+  ): Promise<any> {
+    const uri = `${environment.api}/graphql`;
+    const operations = {
+      query: print(mutationDoc),
+      variables: {
+        consultationResponse,
+      },
+    };
+
+    // Build files map
+    const fileMap: any = {};
+    let fileIndex = 0;
+    const files: File[] = [];
+    const voiceResponses = consultationResponse.voiceResponses || [];
+    voiceResponses.forEach((vr: any, idx: number) => {
+      if (vr && vr.file instanceof File) {
+        fileMap[fileIndex] = [
+          `variables.consultationResponse.voiceResponses.${idx}.file`,
+        ];
+        files.push(vr.file);
+        fileIndex++;
+      }
+    });
+
+    const form = new FormData();
+    form.append("operations", JSON.stringify(operations));
+    form.append("map", JSON.stringify(fileMap));
+    files.forEach((file, i) => {
+      form.append(String(i), file, file.name);
+    });
+
+    const headers: any = {};
+    const token: string = localStorage.getItem("civis-token") || null;
+    if (token) headers["Authorization"] = token;
+
+    return fetch(uri, {
+      method: "POST",
+      headers,
+      body: form,
+    }).then(async (resp) => {
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || "Upload failed");
+      }
+      const json = await resp.json();
+      if (json.errors) {
+        throw json.errors[0] || json.errors;
+      }
+      return json;
+    });
   }
 
   showPublicResponseOption() {
@@ -1143,47 +1279,66 @@ export class ConsultationQuestionnaireComponent
   }
 
   ngOnDestroy(): void {
-    this.abortRecording();
+    this.abortCurrentRecording();
   }
 
-  download(): void {
-    const url = window.URL.createObjectURL(this.tempRecordingHolder.blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = this.tempRecordingHolder.title;
-    link.click();
-  }
-
-  startRecording() {
-    if (!this.isRecording) {
-      this.isRecording = true;
-      this.audioRecordingService.startRecording();
-    }
-  }
-
-  abortRecording() {
-    if (this.isRecording) {
-      this.isRecording = false;
+  // ===== Voice recording helpers (per question) =====
+  private abortCurrentRecording(): void {
+    if (
+      this.currentRecordingQuestionId != null &&
+      this.isRecordingByQuestionId[this.currentRecordingQuestionId]
+    ) {
+      this.isRecordingByQuestionId[this.currentRecordingQuestionId] = false;
       this.audioRecordingService.abortRecording();
+      this.currentRecordingQuestionId = null;
     }
   }
 
-  stopRecording() {
-    if (this.isRecording) {
-      this.audioRecordingService.stopRecording();
-      this.isRecording = false;
-    }
+  isRecordingFor(questionId: number): boolean {
+    return !!this.isRecordingByQuestionId[questionId];
   }
 
-  clearRecordedData() {
-    this.blobUrl = null;
-    this.startRecording();
+  getRecordedTimeFor(questionId: number): string {
+    return this.recordedTimeByQuestionId[questionId] || "00:00";
+  }
+
+  getBlobUrlFor(questionId: number): any {
+    return this.blobUrlByQuestionId[questionId] || null;
+  }
+
+  startRecordingFor(questionId: number): void {
+    if (
+      this.currentRecordingQuestionId != null &&
+      this.currentRecordingQuestionId !== questionId
+    ) {
+      this.abortCurrentRecording();
+    }
+    if (this.isRecordingFor(questionId)) return;
+    this.currentRecordingQuestionId = questionId;
+    this.isRecordingByQuestionId[questionId] = true;
+    this.recordedTimeByQuestionId[questionId] = "00:00";
+    this.audioRecordingService.startRecording();
+  }
+
+  stopRecordingFor(questionId: number): void {
+    if (!this.isRecordingFor(questionId)) return;
+    if (this.currentRecordingQuestionId !== questionId) return;
+    this.audioRecordingService.stopRecording();
+  }
+
+  clearRecordedDataFor(questionId: number): void {
+    this.blobUrlByQuestionId[questionId] = null;
+    this.blobByQuestionId[questionId] = null;
+    this.titleByQuestionId[questionId] = null;
+    this.startRecordingFor(questionId);
   }
 
   // ===== STEP-BY-STEP FLOW FOR SPECIFIC CONSULTATION =====
 
   private checkIsStepByStepFlow(): void {
-    this.isStepByStepFlow = this.consultationId === VOICE_DEMO_CONSULTATION_ID;
+    this.isStepByStepFlow =
+      this.profileData?.questionFlow ===
+      ConsultationQuestionnaireComponent.QUESTION_LIST;
     if (this.isStepByStepFlow) {
       this.currentQuestionIndex = 0;
     }

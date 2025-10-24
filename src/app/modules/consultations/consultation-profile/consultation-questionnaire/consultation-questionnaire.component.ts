@@ -66,7 +66,7 @@ export class ConsultationQuestionnaireComponent
 {
   public VOICE_DEMO_CONSULTATION_ID = VOICE_DEMO_CONSULTATION_ID;
   private static readonly OTHER_ANSWER_PREFIX = "other_answer-";
-  private static readonly QUESTION_LIST = "question_list";
+  private static readonly SINGLE_QUESTION = "single_question";
 
   public whiteLabelConsultationId: number | null = null;
 
@@ -1338,7 +1338,7 @@ export class ConsultationQuestionnaireComponent
   private checkIsStepByStepFlow(): void {
     this.isStepByStepFlow =
       this.profileData?.questionFlow ===
-      ConsultationQuestionnaireComponent.QUESTION_LIST;
+      ConsultationQuestionnaireComponent.SINGLE_QUESTION;
     if (this.isStepByStepFlow) {
       this.currentQuestionIndex = 0;
     }

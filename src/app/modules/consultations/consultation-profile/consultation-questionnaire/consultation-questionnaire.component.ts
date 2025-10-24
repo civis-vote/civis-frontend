@@ -194,6 +194,7 @@ export class ConsultationQuestionnaireComponent
       );
       this.isRecordingByQuestionId[qid] = false;
       this.currentRecordingQuestionId = null;
+      this.changeFieldRequirement(qid, false);
     });
   }
 
@@ -262,6 +263,30 @@ export class ConsultationQuestionnaireComponent
 
   getSubQuestionText(subQuestion: any) {
     return this.getTranslatedTextForQuestion(subQuestion);
+  }
+
+  // Used for questions where voice response is given
+  changeFieldRequirement(
+    questionId: string | number,
+    shouldBeRequired: boolean
+  ) {
+    const questionObj = this.questions.find((q) => q.id === questionId);
+    const isOptional = questionObj?.isOptional;
+    if (!questionObj && isOptional) {
+      return;
+    }
+
+    const formControl = this.questionnaireForm.get(questionId.toString());
+    if (!formControl) {
+      return;
+    }
+
+    if (shouldBeRequired) {
+      formControl.setValidators(Validators.required);
+    } else {
+      formControl.clearValidators();
+      formControl.updateValueAndValidity();
+    }
   }
 
   makeQuestionnaireModal(roundNumber?) {

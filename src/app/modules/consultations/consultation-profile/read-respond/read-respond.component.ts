@@ -16,6 +16,7 @@ import { profanityList } from 'src/app/graphql/queries.graphql';
 import { environment } from '../../../../../environments/environment';
 import { LANGUAGE_IDS, LANGUAGES } from 'src/app/shared/models/constants/constants';
 import { WhiteLabelService } from 'src/app/shared/services/white-label.service';
+import { print } from 'graphql';
 
 @Component({
   selector: 'app-read-respond',
@@ -311,47 +312,85 @@ export class ReadRespondComponent implements OnInit {
     }
 
     consultationResponse.responseStatus = isProfane ? 1:0;
-    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified)
+    consultationResponse.visibility = setResponseVisibility(consultationResponse.visibility, this.currentUser?.isVerified);
 
-    this.apollo.mutate({
-      mutation: SubmitResponseQuery,
-      variables: {
-        consultationResponse: consultationResponse
-      },
-      update: (store, {data: res}) => {
-        const variables = {id: this.consultationId};
-        this.apollo.watchQuery({
-          query: ConsultationProfileCurrentUser,
-          variables
+    // Check if voice responses need to be converted from base64
+    const hasBase64VoiceResponses = 
+      consultationResponse.voiceResponses && 
+      consultationResponse.voiceResponses.length > 0 &&
+      consultationResponse.voiceResponses[0].base64Data;
+
+    if (hasBase64VoiceResponses) {
+      // Convert base64 to File objects
+      consultationResponse.voiceResponses = consultationResponse.voiceResponses.map((vr: any) => {
+        const blob = this.base64ToBlob(vr.base64Data, vr.mimeType || 'audio/webm');
+        const file = new File([blob], vr.fileName || `voice-${vr.questionId}.webm`, { type: vr.mimeType || 'audio/webm' });
+        return { questionId: vr.questionId, file };
+      });
+    }
+
+    const hasUploads =
+      Array.isArray(consultationResponse?.voiceResponses) &&
+      consultationResponse.voiceResponses.length > 0;
+
+    if (hasUploads) {
+      // Use multipart submission for files
+      this.submitResponseMultipart(consultationResponse, SubmitResponseQuery)
+        .then((res: any) => {
+          const data = res?.data?.consultationResponseCreate;
+          this.earnedPoints = data?.points;
+          this.getConsultationProfile();
+          this.showThankYouModal = true;
+          this.profanity_count_changed = true;
+          this.short_response_count_changed = true;
+          this.isSubmittingConsultationResponse = false;
         })
-        .valueChanges
-        .pipe(map((result: any) => result.data))
-        .subscribe((resultData: any) => {
-          if (res && resultData) {
-            resultData.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
-            resultData.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
-            resultData.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
-            resultData.consultationProfile.satisfactionRatingDistribution =
-              res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
-            store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resultData});
-          }
+        .catch((err) => {
+          this.isSubmittingConsultationResponse = false;
+          this.errorService.showErrorModal(err);
         });
-      }
-    })
-    .pipe (
-      map((res: any) => res.data.consultationResponseCreate)
-    )
-    .subscribe((res) => {
-        this.earnedPoints = res.points;
-        this.getConsultationProfile();
-        this.showThankYouModal = true;
-        this.profanity_count_changed=true;
-        this.short_response_count_changed=true;
+    } else {
+      // Use regular mutation for non-file submissions
+      this.apollo.mutate({
+        mutation: SubmitResponseQuery,
+        variables: {
+          consultationResponse: consultationResponse
+        },
+        update: (store, {data: res}) => {
+          const variables = {id: this.consultationId};
+          this.apollo.watchQuery({
+            query: ConsultationProfileCurrentUser,
+            variables
+          })
+          .valueChanges
+          .pipe(map((result: any) => result.data))
+          .subscribe((resultData: any) => {
+            if (res && resultData) {
+              resultData.consultationProfile.respondedOn = res.consultationResponseCreate.consultation.respondedOn;
+              resultData.consultationProfile.sharedResponses = res.consultationResponseCreate.consultation.sharedResponses;
+              resultData.consultationProfile.responseSubmissionMessage = res.consultationResponseCreate.consultation.responseSubmissionMessage;
+              resultData.consultationProfile.satisfactionRatingDistribution =
+                res.consultationResponseCreate.consultation.satisfactionRatingDistribution;
+              store.writeQuery({query: ConsultationProfileCurrentUser, variables, data: resultData});
+            }
+          });
+        }
+      })
+      .pipe (
+        map((res: any) => res.data.consultationResponseCreate)
+      )
+      .subscribe((res) => {
+          this.earnedPoints = res.points;
+          this.getConsultationProfile();
+          this.showThankYouModal = true;
+          this.profanity_count_changed=true;
+          this.short_response_count_changed=true;
+          this.isSubmittingConsultationResponse = false;
+      }, err => {
+        this.errorService.showErrorModal(err);
         this.isSubmittingConsultationResponse = false;
-    }, err => {
-      this.errorService.showErrorModal(err);
-      this.isSubmittingConsultationResponse = false;
-    });
+      });
+    }
   }
 
   updateProfanityCountRecord(profanityCount,shortResponseCount, isProfanity){
@@ -495,5 +534,70 @@ export class ReadRespondComponent implements OnInit {
 
   onCloseThanksModal() {
     this.showThankYouModal = false;
+  }
+
+  base64ToBlob(base64: string, mimeType: string): Blob {
+    const byteCharacters = atob(base64.split(',')[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
+  }
+
+  private submitResponseMultipart(
+    consultationResponse: any,
+    mutationDoc: any
+  ): Promise<any> {
+    const uri = `${environment.api}/graphql`;
+    const operations = {
+      query: print(mutationDoc),
+      variables: {
+        consultationResponse,
+      },
+    };
+
+    // Build files map
+    const fileMap: any = {};
+    let fileIndex = 0;
+    const files: File[] = [];
+    const voiceResponses = consultationResponse.voiceResponses || [];
+    voiceResponses.forEach((vr: any, idx: number) => {
+      if (vr && vr.file instanceof File) {
+        fileMap[fileIndex] = [
+          `variables.consultationResponse.voiceResponses.${idx}.file`,
+        ];
+        files.push(vr.file);
+        fileIndex++;
+      }
+    });
+
+    const form = new FormData();
+    form.append("operations", JSON.stringify(operations));
+    form.append("map", JSON.stringify(fileMap));
+    files.forEach((file, i) => {
+      form.append(String(i), file, file.name);
+    });
+
+    const headers: any = {};
+    const token: string = localStorage.getItem("civis-token") || null;
+    if (token) headers["Authorization"] = token;
+
+    return fetch(uri, {
+      method: "POST",
+      headers,
+      body: form,
+    }).then(async (resp) => {
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || "Upload failed");
+      }
+      const json = await resp.json();
+      if (json.errors) {
+        throw json.errors[0] || json.errors;
+      }
+      return json;
+    });
   }
 }

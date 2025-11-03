@@ -403,7 +403,7 @@ export class ConsultationQuestionnaireComponent
     return true;
   }
 
-  submitAnswer() {
+  async submitAnswer() {
     if (this.responseSubmitLoading) {
       return;
     }
@@ -449,10 +449,15 @@ export class ConsultationQuestionnaireComponent
             const currentUrl = this.router.url;
             this.cookieService.put("loginCallbackUrl", currentUrl);
             this.authModal = true;
-            localStorage.setItem(
-              "consultationResponse",
-              JSON.stringify(consultationResponse)
-            );
+            // Store with base64-encoded blobs
+            const responseForStorage =
+              await this.getConsultationResponseForStorage();
+            if (responseForStorage) {
+              localStorage.setItem(
+                "consultationResponse",
+                JSON.stringify(responseForStorage)
+              );
+            }
           }
         }
       }
@@ -738,6 +743,40 @@ export class ConsultationQuestionnaireComponent
       return consultationResponse;
     }
     return;
+  }
+
+  async blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  async getConsultationResponseForStorage(): Promise<any> {
+    // Returns a version with base64-encoded blobs for localStorage storage
+    const consultationResponse = this.getConsultationResponse();
+    if (!consultationResponse) return null;
+
+    // Convert File objects to base64 for storage
+    const voiceResponses: Array<{ questionId: string; file: File }> =
+      consultationResponse["voiceResponses"] || [];
+    if (voiceResponses.length > 0) {
+      const base64VoiceResponses = await Promise.all(
+        voiceResponses.map(async (vr) => {
+          const base64 = await this.blobToBase64(vr.file);
+          return {
+            questionId: vr.questionId,
+            base64Data: base64,
+            mimeType: vr.file.type,
+            fileName: vr.file.name,
+          };
+        })
+      );
+      consultationResponse["voiceResponses"] = base64VoiceResponses;
+    }
+    return consultationResponse;
   }
 
   getNextAvailablePriority(

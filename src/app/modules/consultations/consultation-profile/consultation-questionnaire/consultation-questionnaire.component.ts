@@ -10,6 +10,7 @@ import {
   AfterViewInit,
   AfterViewChecked,
 } from "@angular/core";
+import { ChangeDetectorRef } from "@angular/core";
 import {
   FormGroup,
   FormBuilder,
@@ -142,7 +143,8 @@ export class ConsultationQuestionnaireComponent
     private router: Router,
     private whiteLabelService: WhiteLabelService,
     private audioRecordingService: AudioRecordingService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef
   ) {
     this.currentLanguage = this.cookieService.get("civisLang");
     this.questionnaireForm = this._fb.group({});
@@ -716,15 +718,16 @@ export class ConsultationQuestionnaireComponent
       // Build voiceResponses array with proper File objects (not Blob)
       const voiceResponses: Array<{ questionId: string; file: File }> = [];
       Object.keys(this.blobByQuestionId).forEach((key) => {
-        const qidNum = parseInt(key as any, 10);
+        const qidNum = Number.parseInt(key, 10);
         const blob = this.blobByQuestionId[qidNum];
         if (!blob) return;
         const mimeType = blob.type || "audio/webm";
-        const ext = mimeType.includes("webm")
-          ? "webm"
-          : mimeType.includes("mp3")
-          ? "mp3"
-          : "webm";
+        let ext = "webm";
+        if (mimeType.includes("webm")) {
+          ext = "webm";
+        } else if (mimeType.includes("mp3")) {
+          ext = "mp3";
+        }
         const fileName = `voice-${qidNum}-${Date.now()}.${ext}`;
         const file = new File([blob], fileName, { type: mimeType });
         voiceResponses.push({ questionId: String(qidNum), file });
@@ -1473,6 +1476,7 @@ export class ConsultationQuestionnaireComponent
       this.nextQuestion();
       this.showError = false;
       this.scrollToTop();
+      this.cdr.detectChanges();
     } else {
       this.showError = true;
     }
@@ -1525,6 +1529,7 @@ export class ConsultationQuestionnaireComponent
     this.previousQuestion();
     this.showError = false;
     this.scrollToTop();
+    this.cdr.detectChanges();
   }
 
   private scrollToTop(): void {

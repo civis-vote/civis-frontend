@@ -1266,21 +1266,27 @@ export class ConsultationQuestionnaireComponent
   }
 
   getNumOptionsSelected(questionId: number): number {
-    const value = this.questionnaireForm.get([questionId]).value;
+    const control = this.questionnaireForm.get([questionId]);
+    if (!control || !control.value) {
+      return 0;
+    }
 
+    const value = control.value;
     const numSubOptionsSelected = Object.values(value).filter(
-      (val: any) => val.value === true
+      (val: any) => val && val.value === true
     ).length;
 
     return numSubOptionsSelected;
   }
 
   checkSubQuestionSelected(question: any, subQuestion: any): boolean {
-    const subQuestionObj = this.questionnaireForm.get([
-      question.id,
-      subQuestion.id,
-    ]).value;
+    const control = this.questionnaireForm.get([question.id, subQuestion.id]);
 
+    if (!control || !control.value) {
+      return false;
+    }
+
+    const subQuestionObj = control.value;
     return subQuestionObj.value === true;
   }
 
@@ -1483,6 +1489,33 @@ export class ConsultationQuestionnaireComponent
   }
 
   /**
+   * Ensure a conditional question has its form control
+   */
+  private ensureConditionalQuestionControl(child: any): void {
+    if (!this.questionnaireForm.get(child.id.toString())) {
+      if (child.questionType === "checkbox") {
+        const checkboxControl = this.makeCheckboxQuestionOptions(child);
+        this.questionnaireForm.addControl(child.id.toString(), checkboxControl);
+      } else {
+        const control = child.isOptional
+          ? new FormControl(null)
+          : new FormControl(null, Validators.required);
+        this.questionnaireForm.addControl(child.id.toString(), control);
+      }
+
+      if (child.is_other) {
+        const otherControlName = this.getOtherAnswerControlName(child.id);
+        if (!this.questionnaireForm.get(otherControlName)) {
+          const otherControl = child.isOptional
+            ? new FormControl(null)
+            : new FormControl(null, Validators.required);
+          this.questionnaireForm.addControl(otherControlName, otherControl);
+        }
+      }
+    }
+  }
+
+  /**
    * Handle conditional questions for step-by-step flow
    */
   private handleConditionalQuestionsForStepFlow(question: any): void {
@@ -1494,29 +1527,9 @@ export class ConsultationQuestionnaireComponent
       const childControl = this.questionnaireForm.get(child.id.toString());
 
       if (shouldShow && !childControl) {
-        if (child.questionType !== "checkbox") {
-          const control = child.isOptional
-            ? new FormControl(null)
-            : new FormControl(null, Validators.required);
-          this.questionnaireForm.addControl(child.id.toString(), control);
-        } else {
-          const checkboxControl = this.makeCheckboxQuestionOptions(child);
-          this.questionnaireForm.addControl(
-            child.id.toString(),
-            checkboxControl
-          );
-        }
-
-        if (child.is_other) {
-          const otherControlName = this.getOtherAnswerControlName(child.id);
-          const otherControl = child.isOptional
-            ? new FormControl(null)
-            : new FormControl(null, Validators.required);
-          this.questionnaireForm.addControl(otherControlName, otherControl);
-        }
+        this.ensureConditionalQuestionControl(child);
       } else if (!shouldShow && childControl) {
         this.questionnaireForm.removeControl(child.id.toString());
-
         const otherControlName = this.getOtherAnswerControlName(child.id);
         if (this.questionnaireForm.get(otherControlName)) {
           this.questionnaireForm.removeControl(otherControlName);
@@ -1526,10 +1539,23 @@ export class ConsultationQuestionnaireComponent
   }
 
   onPreviousClick(): void {
-    this.previousQuestion();
-    this.showError = false;
-    this.scrollToTop();
-    this.cdr.detectChanges();
+    if (!this.isFirstQuestion()) {
+      this.currentQuestionIndex--;
+      this.showError = false;
+
+      // Template renders ALL conditional children (even hidden), so ensure all have controls
+      const currentQuestion = this.getCurrentQuestion();
+      if (currentQuestion) {
+        const conditionalChildren =
+          this.getDirectConditionalChildren(currentQuestion);
+        conditionalChildren.forEach((child) =>
+          this.ensureConditionalQuestionControl(child)
+        );
+      }
+
+      this.cdr.detectChanges();
+      this.scrollToTop();
+    }
   }
 
   private scrollToTop(): void {

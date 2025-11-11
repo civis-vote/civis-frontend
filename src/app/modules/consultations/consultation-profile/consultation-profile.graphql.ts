@@ -33,6 +33,7 @@ const  ConditionalQuestionFragment = gql`
     position
     isConditionalQuestion
     selectedOptionsLimit
+    acceptVoiceMessage
     subQuestions {
       id
       questionText
@@ -73,6 +74,7 @@ const QuestionFragment = gql`
     position
     isConditionalQuestion
     selectedOptionsLimit
+    acceptVoiceMessage
     subQuestions {
       ...SubQuestionFragment
     }
@@ -85,6 +87,7 @@ export const ConsultationProfile = gql`
     consultationProfile(id: $id) {
       id
       title
+      questionFlow
       showDiscussSection
       showSatisfactionRating
       isSatisfactionRatingOptional
@@ -189,6 +192,7 @@ export const ConsultationProfileCurrentUser = gql`
       enforcePrivateResponse
       id
       title
+      questionFlow
       showDiscussSection
       showSatisfactionRating
       isSatisfactionRatingOptional
@@ -301,6 +305,7 @@ export const ConsultationProfileUser = gql`
       enforcePrivateResponse
       id
       title
+      questionFlow
       showSatisfactionRating
       isSatisfactionRatingOptional
       summary

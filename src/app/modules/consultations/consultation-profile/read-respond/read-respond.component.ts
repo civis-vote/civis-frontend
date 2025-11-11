@@ -322,10 +322,10 @@ export class ReadRespondComponent implements OnInit {
 
     if (hasBase64VoiceResponses) {
       // Convert base64 to File objects
-      consultationResponse.voiceResponses = consultationResponse.voiceResponses.map((vr: any) => {
-        const blob = this.base64ToBlob(vr.base64Data, vr.mimeType || 'audio/webm');
-        const file = new File([blob], vr.fileName || `voice-${vr.questionId}.webm`, { type: vr.mimeType || 'audio/webm' });
-        return { questionId: vr.questionId, file };
+      consultationResponse.voiceResponses = consultationResponse.voiceResponses.map((voiceResponse: { base64Data: string; mimeType: string; fileName: string; questionId: string }) => {
+        const blob = this.base64ToBlob(voiceResponse.base64Data, voiceResponse.mimeType || 'audio/webm');
+        const file = new File([blob], voiceResponse.fileName || `voice-${voiceResponse.questionId}.webm`, { type: voiceResponse.mimeType || 'audio/webm' });
+        return { questionId: voiceResponse.questionId, file };
       });
     }
 
@@ -563,12 +563,12 @@ export class ReadRespondComponent implements OnInit {
     let fileIndex = 0;
     const files: File[] = [];
     const voiceResponses = consultationResponse.voiceResponses || [];
-    voiceResponses.forEach((vr: any, idx: number) => {
-      if (vr && vr.file instanceof File) {
+    voiceResponses.forEach((voiceResponse, index: number) => {
+      if (voiceResponse && voiceResponse.file instanceof File) {
         fileMap[fileIndex] = [
-          `variables.consultationResponse.voiceResponses.${idx}.file`,
+          `variables.consultationResponse.voiceResponses.${index}.file`,
         ];
-        files.push(vr.file);
+        files.push(voiceResponse.file);
         fileIndex++;
       }
     });

@@ -449,7 +449,7 @@ export class ConsultationQuestionnaireComponent
             const currentUrl = this.router.url;
             this.cookieService.put("loginCallbackUrl", currentUrl);
             this.authModal = true;
-            // Store with base64-encoded blobs
+            // Persist voice recordings by encoding each File as base64 before writing to localStorage; JSON.stringify drops Blob/File objects.
             const responseForStorage =
               await this.getConsultationResponseForStorage();
             if (responseForStorage) {

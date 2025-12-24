@@ -38,15 +38,15 @@ export const ConsultationList = gql`
           name
           odiaName
           marathiName
-          theme {
-            id
-            coverPhoto (resolution: "350X285") {
-              id
-              filename
-              url
-            }
-          }
           ...departmentFields
+        }
+        theme {
+          id
+          coverPhoto (resolution: "350X285") {
+            id
+            filename
+            url
+          }
         }
         status
       }

@@ -47,15 +47,15 @@ export const ConsultationProfileQuery = gql`
       department {
         id
         name
-        theme {
-          id
-          coverPhoto (resolution: "350X285") {
-            id
-            filename
-            url
-          }
-        }
         logo (resolution: "100X100") {
+          id
+          filename
+          url
+        }
+      }
+      theme {
+        id
+        coverPhoto (resolution: "350X285") {
           id
           filename
           url

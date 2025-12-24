@@ -118,19 +118,19 @@ export const ConsultationProfile = gql`
       consultationResponsesCount
       department {
         id
-        theme {
-          id
-          coverPhoto (resolution: "1500X750") {
-            id
-            filename
-            url
-          }
-        }
         name
         hindiName
         odiaName
         marathiName
         logo (resolution: "100X100") {
+          id
+          filename
+          url
+        }
+      }
+      theme {
+        id
+        coverPhoto (resolution: "1500X750") {
           id
           filename
           url
@@ -224,19 +224,19 @@ export const ConsultationProfileCurrentUser = gql`
       consultationResponsesCount
       department {
         id
-        theme {
-          id
-          coverPhoto (resolution: "1500X750") {
-            id
-            filename
-            url
-          }
-        }
         name
         hindiName
         odiaName
         marathiName
         logo (resolution: "100X100") {
+          id
+          filename
+          url
+        }
+      }
+      theme {
+        id
+        coverPhoto (resolution: "1500X750") {
           id
           filename
           url
@@ -332,19 +332,19 @@ export const ConsultationProfileUser = gql`
       consultationResponsesCount
       department {
         id
-        theme {
-          id
-          coverPhoto (resolution: "1500X750") {
-            id
-            filename
-            url
-          }
-        }
         name
         hindiName
         odiaName
         marathiName
         logo (resolution: "100X100") {
+          id
+          filename
+          url
+        }
+      }
+      theme {
+        id
+        coverPhoto (resolution: "1500X750") {
           id
           filename
           url

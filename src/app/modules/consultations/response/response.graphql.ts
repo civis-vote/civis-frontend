@@ -18,16 +18,16 @@ export const ResponseProfileQuery = gql`
                 consultationResponsesCount
                 department {
                   id
-                  theme {
-                    id
-                    coverPhoto (resolution: "350X285") {
-                      id
-                      filename
-                      url
-                    }
-                  }
                   name
                   logo (resolution: "100X100") {
+                    id
+                    filename
+                    url
+                  }
+                }
+                theme {
+                  id
+                  coverPhoto (resolution: "350X285") {
                     id
                     filename
                     url

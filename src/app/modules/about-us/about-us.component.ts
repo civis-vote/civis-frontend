@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { map } from "rxjs/operators";
 import { TeamMemberListQuery } from "./about-us.graphql";
+import { ErrorService } from "src/app/shared/components/error-modal/error.service";
 
 @Component({
   selector: "app-about-us",
@@ -129,7 +130,10 @@ export class AboutUsComponent implements OnInit {
     },
   ];
 
-  constructor(private apollo: Apollo) {}
+  constructor(
+    private apollo: Apollo,
+    private errorService: ErrorService,
+  ) {}
 
   ngOnInit() {
     this.getTeamMembers();
@@ -145,9 +149,14 @@ export class AboutUsComponent implements OnInit {
         },
       })
       .pipe(map((res: any) => res.data.teamMemberList.data))
-      .subscribe((teamMembers) => {
-        this.teamMembers = teamMembers.length ? teamMembers : null;
-      });
+      .subscribe(
+        (teamMembers) => {
+          this.teamMembers = teamMembers.length ? teamMembers : [];
+        },
+        (err) => {
+          this.errorService.showErrorModal(err);
+        },
+      );
   }
 
   getAdvisors() {
@@ -159,8 +168,13 @@ export class AboutUsComponent implements OnInit {
         },
       })
       .pipe(map((res: any) => res.data.teamMemberList.data))
-      .subscribe((advisors) => {
-        this.advisors = advisors.length ? advisors : null;
-      });
+      .subscribe(
+        (advisors) => {
+          this.advisors = advisors.length ? advisors : [];
+        },
+        (err) => {
+          this.errorService.showErrorModal(err);
+        },
+      );
   }
 }

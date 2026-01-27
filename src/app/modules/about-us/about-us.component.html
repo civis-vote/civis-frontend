@@ -1,3 +1,17 @@
+<ng-template #memberListTemplate let-members="members">
+  <div class="members-list">
+    <ng-container *ngFor="let member of members">
+      <a [href]="member?.linkedinUrl" target="_blank" class="member-link long-description">
+        <div class="member-card">
+          <img [src]="member?.profilePicture?.url" [alt]="member?.name" />
+          <div class="name">{{ member?.name }}</div>
+          <div class="member-description">{{ member?.designation }}</div>
+        </div>
+      </a>
+    </ng-container>
+  </div>
+</ng-template>
+
 <div class="about-us-wrapper">
   <section>
     <h1>About Us</h1>
@@ -90,31 +104,11 @@
   <section class="team-section">
     <h1>The People Behind Civis</h1>
     <div class="title">The Team</div>
-    <div class="members-list">
-      <ng-container *ngFor="let teamMember of teamMembers">
-        <a [href]="teamMember?.linkedinUrl" target="_blank" class="member-link long-description">
-          <div class="member-card">
-            <img [src]="teamMember?.profilePicture?.url" [alt]="teamMember?.name" />
-            <div class="name">{{ teamMember?.name }}</div>
-            <div class="member-description">{{ teamMember?.designation }}</div>
-          </div>
-        </a>
-      </ng-container>
-    </div>
+    <ng-container *ngTemplateOutlet="memberListTemplate; context: { members: teamMembers }"></ng-container>
   </section>
   <section class="team-section">
     <div class="title">Advisory Board</div>
-    <div class="members-list">
-      <ng-container *ngFor="let advisor of advisors">
-        <a [href]="advisor?.linkedinUrl" target="_blank" class="member-link long-description">
-          <div class="member-card">
-            <img [src]="advisor?.profilePicture?.url" [alt]="advisor?.name" />
-            <div class="name">{{ advisor?.name }}</div>
-            <div class="member-description">{{ advisor?.designation }}</div>
-          </div>
-        </a>
-      </ng-container>
-    </div>
+    <ng-container *ngTemplateOutlet="memberListTemplate; context: { members: advisors }"></ng-container>
   </section>
   <section class="partners-section">
     <div class="title">PAST CONSULTATION PARTNERS</div>

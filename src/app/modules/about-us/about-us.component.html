@@ -92,11 +92,25 @@
     <div class="title">The Team</div>
     <div class="members-list">
       <ng-container *ngFor="let teamMember of teamMembers">
-        <a [href]="teamMember.href" target="_blank" class="member-link" [ngClass]="teamMember.class">
+        <a [href]="teamMember?.linkedinUrl" target="_blank" class="member-link long-description">
           <div class="member-card">
-            <img [src]="teamMember.image" [alt]="teamMember.name" />
-            <div class="name">{{ teamMember.name }}</div>
-            <div class="member-description">{{ teamMember.description }}</div>
+            <img [src]="teamMember?.profilePicture?.url" [alt]="teamMember?.name" />
+            <div class="name">{{ teamMember?.name }}</div>
+            <div class="member-description">{{ teamMember?.designation }}</div>
+          </div>
+        </a>
+      </ng-container>
+    </div>
+  </section>
+  <section class="team-section">
+    <div class="title">Advisory Board</div>
+    <div class="members-list">
+      <ng-container *ngFor="let advisor of advisors">
+        <a [href]="advisor?.linkedinUrl" target="_blank" class="member-link long-description">
+          <div class="member-card">
+            <img [src]="advisor?.profilePicture?.url" [alt]="advisor?.name" />
+            <div class="name">{{ advisor?.name }}</div>
+            <div class="member-description">{{ advisor?.designation }}</div>
           </div>
         </a>
       </ng-container>

@@ -125,7 +125,7 @@
 
   .error-msg {
     margin: 10px 0;
-    color: #f0653a;
+    color: $secondary-color;
     font-size: 14px;
     text-align: center;
     font-weight: 500;
@@ -348,7 +348,7 @@
 }
 
 .active {
-  background-color: #F0653A;
+  background-color: $secondary-color;
 }
 
 .question-box {

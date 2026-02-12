@@ -372,7 +372,7 @@
   .section-heading {
     text-align: center;
     font-size: 17px;
-    color: #f0653a;
+    color: $secondary-color;
     font-weight: bold;
     letter-spacing: 0.58em;
     @media screen and (max-width: 991px) {
@@ -482,7 +482,7 @@
     @media screen and (max-width: 990px) {
       text-align: left;
       font-size: 14px;
-      color: #f0653a;
+      color: $secondary-color;
       margin-left: 25px;
     }
   }

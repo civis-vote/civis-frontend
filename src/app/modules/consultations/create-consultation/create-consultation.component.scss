@@ -101,12 +101,12 @@
       }
 
       .active-btn {
-        background: #f0653a !important;
+        background: $secondary-color !important;
       }
 
       .error-msg {
         margin: 10px 0;
-        color: #f0653a;
+        color: $secondary-color;
         font-size: 14px;
       }
 
@@ -236,7 +236,7 @@
     }
 
     .active-btn {
-      background: #f0653a !important;
+      background: $secondary-color !important;
     }
 
     .back-btn {
@@ -255,7 +255,7 @@
 
     .error-msg {
       margin: 10px 0;
-      color: #f0653a;
+      color: $secondary-color;
       font-size: 14px;
     }
 
@@ -302,7 +302,7 @@
           .subheader-text {
             font-weight: 500;
             font-size: 16px;
-            color: #f0653a;
+            color: $secondary-color;
 
             .light-text {
               font-weight: normal;
@@ -388,7 +388,7 @@
 
             .submit-btn {
               border: none;
-              background: #f0653a;
+              background: $secondary-color;
               padding: 12px 15px;
               border-radius: 3px;
               color: $white;
@@ -402,7 +402,7 @@
 
             .error-msg {
               margin: 10px 0;
-              color: #f0653a;
+              color: $secondary-color;
               font-size: 14px;
             }
           }

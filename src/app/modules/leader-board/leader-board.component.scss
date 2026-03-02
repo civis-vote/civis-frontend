@@ -3,7 +3,7 @@
 .leader-wrapper {
   width: 100%;
   margin-top: 77px;
-  background-color: #E5F4FF;
+  background-color: $blue-bg-light;
   min-height: 100vh;
 
   &__inner-container {
@@ -47,7 +47,7 @@
 
         ng-select {
           .ng-select-container {
-            background-color: #e5f4ff;
+            background-color: $blue-bg-light;
             border: none;
             color: $primary-color;
             font-weight: bold;

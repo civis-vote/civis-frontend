@@ -29,7 +29,7 @@
       font-size: 42px;
       line-height: 111.5%;
       letter-spacing: 0.005em;
-      color: #0e73b9;
+      color: $primary-color;
       @media screen and (max-width: 991px) {
         font-size: 24px;
       }
@@ -151,7 +151,7 @@
       font-size: 42px;
       line-height: 111.5%;
       letter-spacing: 0.005em;
-      color: #0e73b9;
+      color: $primary-color;
       @media screen and (max-width: 991px) {
         font-size: 24px;
       }
@@ -428,7 +428,7 @@
       font-size: 48px;
       line-height: 60px;
       text-align: center;
-      color: #0e73b9;
+      color: $primary-color;
     }
 
     .text {

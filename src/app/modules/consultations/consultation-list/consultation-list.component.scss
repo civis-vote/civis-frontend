@@ -63,7 +63,7 @@
       align-items: center;
       width: 100%;
       padding: 10px 0;
-      box-shadow: inset 90px 0 0 0 #e5f4ff, inset 0 -1px 0 0 #C0E6FF;
+      box-shadow: inset 90px 0 0 0 $blue-bg-light, inset 0 -1px 0 0 #C0E6FF;
       @media screen and (max-width: 991px) {
         display: none;
       }

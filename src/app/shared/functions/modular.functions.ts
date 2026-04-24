@@ -224,6 +224,10 @@ export function getTranslatedText(currentLanguage: string, textMap: { [key: stri
     return textMap.marathi;
   }
 
+  if (currentLanguage === LANGUAGE_IDS.KANNADA && textMap.kannada) {
+    return textMap.kannada;
+  }
+
   return defaultText;
 }
 
@@ -231,8 +235,9 @@ export const createLangObject = ({ source, suffix }: { source: any; suffix: stri
   const HINDI = "hindi";
   const ODIA = "odia";
   const MARATHI = "marathi";
+  const KANNADA = "kannada";
 
-  const languages = [HINDI, ODIA, MARATHI];
+  const languages = [HINDI, ODIA, MARATHI, KANNADA];
   const obj: { [key: string]: string } = {};
 
   languages.forEach((lang) => {

@@ -27,6 +27,7 @@ const  ConditionalQuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
+    kannadaQuestionText
     hasChoicePriority
     questionType
     supportsOther
@@ -40,6 +41,7 @@ const  ConditionalQuestionFragment = gql`
       hindiQuestionText
       odiaQuestionText
       marathiQuestionText
+      kannadaQuestionText
     }
   }
 `;
@@ -52,6 +54,7 @@ const SubQuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
+    kannadaQuestionText
     selectedOptionsLimit
     conditionalQuestion {
       ...ConditionalQuestionFragment
@@ -68,6 +71,7 @@ const QuestionFragment = gql`
     hindiQuestionText
     odiaQuestionText
     marathiQuestionText
+    kannadaQuestionText
     hasChoicePriority
     questionType 
     supportsOther
@@ -99,10 +103,12 @@ export const ConsultationProfile = gql`
       hindiTitle
       odiaTitle
       marathiTitle
+      kannadaTitle
       englishSummary
       hindiSummary
       odiaSummary
       marathiSummary
+      kannadaSummary
       responseRounds {
         active
         id
@@ -122,6 +128,7 @@ export const ConsultationProfile = gql`
         hindiName
         odiaName
         marathiName
+        kannadaName
         logo (resolution: "100X100") {
           id
           filename
@@ -199,6 +206,7 @@ export const ConsultationProfileCurrentUser = gql`
       hindiTitle
       odiaTitle
       marathiTitle
+      kannadaTitle
       summary
       consultationLogo (resolution: "350X285") {
         id
@@ -208,6 +216,7 @@ export const ConsultationProfileCurrentUser = gql`
       hindiSummary
       odiaSummary
       marathiSummary
+      kannadaSummary
       responseDeadline
       readingTime
       responsesReadingTimes
@@ -228,6 +237,7 @@ export const ConsultationProfileCurrentUser = gql`
         hindiName
         odiaName
         marathiName
+        kannadaName
         logo (resolution: "100X100") {
           id
           filename
@@ -313,9 +323,11 @@ export const ConsultationProfileUser = gql`
       hindiTitle
       odiaTitle
       marathiTitle
+      kannadaTitle
       hindiSummary
       odiaSummary
       marathiSummary
+      kannadaSummary
       responseDeadline
       readingTime
       responsesReadingTimes
@@ -336,6 +348,7 @@ export const ConsultationProfileUser = gql`
         hindiName
         odiaName
         marathiName
+        kannadaName
         logo (resolution: "100X100") {
           id
           filename

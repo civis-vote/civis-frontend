@@ -3,6 +3,7 @@ export const LANGUAGE_IDS = {
   HINDI: 'hi',
   ODIA: 'od',
   MARATHI: 'mr',
+  KANNADA: 'kn',
 };
 
 export const LANGUAGES = [
@@ -10,6 +11,7 @@ export const LANGUAGES = [
   { id: LANGUAGE_IDS.HINDI, name: "Hindi" },
   { id: LANGUAGE_IDS.ODIA, name: "Odia" },
   { id: LANGUAGE_IDS.MARATHI, name: "Marathi" },
+  { id: LANGUAGE_IDS.KANNADA, name: "Kannada" },
 ];
 
 export interface WhiteLabelConfig {

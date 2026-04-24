@@ -16,6 +16,7 @@ interface Dictionary {
   hi: string;
   od: string;
   mr: string;
+  kn: string;
 }
 
 @Injectable({
@@ -92,6 +93,8 @@ translate(text: string) {
       translationKey = LANGUAGE_IDS.ODIA;
   } else if (this.currentLanguage === LANGUAGE_IDS.MARATHI) {
       translationKey = LANGUAGE_IDS.MARATHI;
+  } else if (this.currentLanguage === LANGUAGE_IDS.KANNADA) {
+      translationKey = LANGUAGE_IDS.KANNADA;
   } else {
       return text;
   }

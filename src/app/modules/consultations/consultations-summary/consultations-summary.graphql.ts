@@ -13,6 +13,7 @@ const fragments = {
             hindiQuestionText
             odiaQuestionText
             marathiQuestionText
+            kannadaQuestionText
             questionType
             supportsOther
             isOptional
@@ -22,6 +23,7 @@ const fragments = {
               hindiQuestionText
               odiaQuestionText
               marathiQuestionText
+              kannadaQuestionText
             }
           }
           roundNumber
@@ -40,6 +42,7 @@ export const ConsultationProfileQuery = gql`
       hindiSummary
       odiaSummary
       marathiSummary
+      kannadaSummary
       responseDeadline
       url
       visibility

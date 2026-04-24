@@ -30,6 +30,7 @@ export class ConsultationsSummaryComponent implements OnInit {
   currentLanguage: any;
   satisfactionRatingDistribution: any;
   useSummaryHindi: boolean;
+  useSummaryKannada: boolean;
   activeRoundNumber: any;
   responseRounds: any;
   publicResponsesLength: any;
@@ -71,6 +72,17 @@ export class ConsultationsSummaryComponent implements OnInit {
       }
     } else {
       this.useSummaryHindi = false;
+    }
+
+    if (this.currentLanguage === 'kn') {
+      const summaryKannada = this.profileData.kannadaSummary;
+      if (summaryKannada) {
+        this.useSummaryKannada = true;
+      } else {
+        this.useSummaryKannada = false;
+      }
+    } else {
+      this.useSummaryKannada = false;
     }
   }
 

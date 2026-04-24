@@ -9,6 +9,7 @@ const fragments = environment.production ? gql `
       hindiName
       odiaName
       marathiName
+      kannadaName
     }
   `: gql `
     fragment departmentFields on Department {
@@ -16,6 +17,7 @@ const fragments = environment.production ? gql `
       hindiName
       odiaName
       marathiName
+      kannadaName
     }
   `
 
@@ -28,6 +30,7 @@ export const ConsultationList = gql`
         hindiTitle
         odiaTitle
         marathiTitle
+        kannadaTitle
         createdAt
         consultationResponsesCount
         updatedAt
@@ -38,6 +41,7 @@ export const ConsultationList = gql`
           name
           odiaName
           marathiName
+          kannadaName
           ...departmentFields
         }
         theme {

@@ -107,7 +107,7 @@ export class ReadRespondComponent implements OnInit {
   }
 
   get hasContentForLanguage(): boolean {
-    return this.hasContent(this.profileData?.hindiSummary) || this.hasContent(this.profileData?.odiaSummary) || this.hasContent(this.profileData?.marathiSummary);
+    return this.hasContent(this.profileData?.hindiSummary) || this.hasContent(this.profileData?.odiaSummary) || this.hasContent(this.profileData?.marathiSummary) || this.hasContent(this.profileData?.kannadaSummary);
   }
 
   private hasContent(summary: string | null | undefined): boolean {
@@ -126,6 +126,9 @@ export class ReadRespondComponent implements OnInit {
     }
     if (this.hasContent(this.profileData?.marathiSummary)) {
       this.availableLanguages.push({ id: LANGUAGE_IDS.MARATHI, name: "Marathi" });
+    }
+    if (this.hasContent(this.profileData?.kannadaSummary)) {
+      this.availableLanguages.push({ id: LANGUAGE_IDS.KANNADA, name: "Kannada" });
     }
   }
 

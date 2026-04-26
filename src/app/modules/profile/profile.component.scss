@@ -5,7 +5,7 @@
   width: 100%;
   margin-top: 77px;
   padding: 30px 45px;
-  background-color: #e5f4ff;
+  background-color: $blue-bg-light;
 
   @media screen and (max-width: 991px) {
     margin-top: 57px;
@@ -16,7 +16,7 @@
     .heading {
       font-size: 20px;
       font-weight: bold;
-      color: #0e73b9;
+      color: $primary-color;
       margin-bottom: 35px;
       @media screen and (max-width: 991px) {
         margin-bottom: 20px;
@@ -80,7 +80,7 @@
         }
         .btn {
           font-size: 13px;
-          color: #0e73b9;
+          color: $primary-color;
           letter-spacing: 0.08em;
           cursor: pointer;
         }
@@ -96,7 +96,7 @@
       }
       .view-more-btn {
         font-size: 13px;
-        color: #0e73b9;
+        color: $primary-color;
         cursor: pointer;
       }
     }
@@ -150,7 +150,7 @@
       .login-change-cta {
         .btn {
           font-size: 13px;
-          color: #0e73b9;
+          color: $primary-color;
           margin-bottom: 5px;
           letter-spacing: 0.055em;
         }
@@ -187,7 +187,7 @@
       .contact-change-cta {
         .btn {
           font-size: 13px;
-          color: #0e73b9;
+          color: $primary-color;
           margin-bottom: 5px;
           letter-spacing: 0.055em;
           cursor: pointer;
@@ -260,7 +260,7 @@
       .heading {
         font-weight: bold;
         font-size: 20px;
-        color: #0e73b9;
+        color: $primary-color;
       }
       .info-block {
         display: grid;
@@ -322,7 +322,7 @@
         margin-bottom: 20px;
         font-weight: bold;
         font-size: 20px;
-        color: #0e73b9;
+        color: $primary-color;
       }
 
       .consultations-container {
@@ -379,7 +379,7 @@
                   line-height: 16px;
                   letter-spacing: 0.08em;
 
-                  color: #0e73b9;
+                  color: $primary-color;
                 }
               }
             }
@@ -418,8 +418,8 @@
           .btn-oval {
             font-weight: bold;
             font-size: 17px;
-            color: #ffffff;
-            background: #f0653a;
+            color: $white;
+            background: $secondary-color;
             border-radius: 33px;
             padding: 10px 15px;
           }
@@ -492,7 +492,7 @@
 
           .error-msg {
             margin: 10px 0;
-            color: #f0653a;
+            color: $secondary-color;
             font-size: 14px;
           }
         }

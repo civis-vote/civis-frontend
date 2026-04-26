@@ -4,7 +4,7 @@
   $mobile-breakpoint: 481px;
   $desktop-breakpoint: 992px;
   $desktop-large-size: 1440px;
-  background: #e5f4ff;
+  background: $blue-bg-light;
   color: #010002;
   --side-padding: 16px;
   --vertical-padding: 40px;
@@ -47,7 +47,7 @@
     line-height: 120%;
     text-align: center;
     margin-bottom: 0;
-    color: #0e73b9;
+    color: $primary-color;
 
     @media screen and (min-width: $mobile-breakpoint) {
       font-size: 32px;
@@ -89,7 +89,7 @@
         font-size: 24px;
         line-height: 140%;
         text-align: center;
-        color: #0e73b9;
+        color: $primary-color;
 
         @media screen and (min-width: $mobile-breakpoint) {
           font-size: 32px;
@@ -251,7 +251,7 @@
 
   .title {
     text-align: center;
-    color: #f0653a;
+    color: $secondary-color;
     font-weight: 700;
     text-transform: uppercase;
     font-size: 18px;
@@ -309,7 +309,7 @@
         text-align: center;
 
         .name {
-          color: #0e73b9;
+          color: $primary-color;
           font-weight: 700;
           font-size: 18px;
 
@@ -424,7 +424,7 @@
     }
 
     h2 {
-      color: #0e73b9;
+      color: $primary-color;
       font-size: 18px;
       margin-bottom: 16px;
       font-weight: 700;

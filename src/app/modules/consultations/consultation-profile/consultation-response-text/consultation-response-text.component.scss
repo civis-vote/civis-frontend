@@ -1,3 +1,6 @@
+
+@import "src/assets/styles/app";
+
 .response-index {
     min-height: 386px;
     height: 386px;
@@ -31,7 +34,7 @@
         font-size: 14px;
         line-height: 106.6%;
         text-decoration-line: underline;
-        color: #0e73b9;
+        color: $primary-color;
         cursor: pointer;
       }
 

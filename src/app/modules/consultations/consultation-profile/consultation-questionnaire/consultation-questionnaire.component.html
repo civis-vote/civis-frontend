@@ -118,7 +118,7 @@
             
             <!-- Voice UI for long_text when acceptVoiceMessage -->
             <div class="voice-demo" *ngIf="question.questionType === 'long_text' && question.acceptVoiceMessage">
-              <div class="section-title">Voice Response</div>
+              <div class="section-title">{{'Voice Response' | translate}}</div>
               <div class="recording-section">
                 <button class="start-button" *ngIf="!isRecordingFor(question.id) && !getBlobUrlFor(question.id)" (click)="startRecordingFor(question.id)">
                   <svg class="temp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
@@ -143,12 +143,12 @@
                   </audio>
                 </div>
               </div>
-              <div class="help-text">Record your voice response. You can play it back before submitting.</div>
+              <div class="help-text">{{'Record your voice response. You can play it back before submitting.' | translate}}</div>
               <div class="divider">
                 <div class="the-border"></div>
                 <div class="or-text">OR</div>
               </div>
-              <div class="section-title">Text Response</div>
+              <div class="section-title">{{'Text Response' | translate}}</div>
               <div class="answer">
                 <div class="text-area">
                   <textarea

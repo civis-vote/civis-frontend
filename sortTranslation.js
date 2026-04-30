@@ -12,6 +12,6 @@ const sortLang = (a, b) => {
   }
   return 0;
 }
-fs.writeFile(fileName, JSON.stringify(words.sort(sortLang)), () => {
+fs.writeFile(fileName, JSON.stringify(words.sort(sortLang), null, 2), () => {
   console.log('done');
 });

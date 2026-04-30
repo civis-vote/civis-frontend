@@ -4,6 +4,53 @@
     .unordered-list {
       padding-left: 24px;
     }
+
+    .lexxy-content {
+      ol {
+        list-style: none;
+        counter-reset: lexxy-ol;
+
+        & > li {
+          counter-increment: lexxy-ol;
+
+          &::before {
+            content: counter(lexxy-ol) ". ";
+          }
+
+          &.lexxy-nested-listitem {
+            counter-increment: none;
+
+            &::before {
+              content: none;
+            }
+          }
+        }
+      }
+
+      ul {
+        list-style: none;
+
+        & > li:not(.lexxy-nested-listitem)::before {
+          content: "• ";
+        }
+
+        & > li.lexxy-nested-listitem::before {
+          content: none;
+        }
+
+        ul {
+          & > li:not(.lexxy-nested-listitem)::before {
+            content: "◦ ";
+          }
+        }
+      }
+
+      ol,
+      ul {
+        margin-inline-start: 1.5rem;
+        padding: 0;
+      }
+    }
   
     .media-img {
       border-radius: 3px;

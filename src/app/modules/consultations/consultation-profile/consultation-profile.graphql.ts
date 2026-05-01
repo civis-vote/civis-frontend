@@ -186,6 +186,7 @@ export const ConsultationProfile = gql`
       consultationPartnerResponses {
         ...ConsultationPartnerResponsesFragment
       }
+      enforcePrivateResponse
     }
   }
   ${ConsultationPartnerResponsesFragment}

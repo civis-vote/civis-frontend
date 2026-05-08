@@ -36,14 +36,14 @@ input[type="checkbox"][aria-disabled="true"] {
 }
 
 .num-options-left-text {
-  color: #0E73B9;
+  color: $primary-color;
   font-weight: 500;
   font-size: 14px;
 }
 
 .voice-demo {
   .start-button, .stop-button, .cancel-button {
-    background-color: #0e73b9;
+    background-color: $primary-color;
     border: none;
     color: white;
     text-align: center;
@@ -146,7 +146,7 @@ input[type="checkbox"][aria-disabled="true"] {
     border-radius: 22px;
     font-size: 14px;
     line-height: 22px;
-    color: #0E73B9;
+    color: $primary-color;
     font-weight: 600;
   }
   .progress {
@@ -156,7 +156,7 @@ input[type="checkbox"][aria-disabled="true"] {
     margin-bottom: 16px;
     
     .progress-bar {
-      background-color: #0E73B9;
+      background-color: $primary-color;
       transition: width 0.3s ease;
       border-radius: 4px;
     }

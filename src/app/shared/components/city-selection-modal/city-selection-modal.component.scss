@@ -56,7 +56,7 @@
     label {
         &::after {
             content: "*";
-            color: #F0653A;
+            color: $secondary-color;
         }
     }
 }

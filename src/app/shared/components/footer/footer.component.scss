@@ -121,7 +121,7 @@
 
   &__bottom-section {
     display: grid;
-    grid-template-columns: repeat(3, 27%);
+    grid-template-columns: 27% 45% 27%;
     justify-content: space-between;
     align-items: center;
     @media screen and (max-width: 991px) {
@@ -142,20 +142,32 @@
         }
       }
     }
-    .stripo-logo-container {
-      text-align: center;
-      .title-text {
-        font-size: 14px;
-        color: #767676;
-        line-height: 20px;
-        font-weight: 400;
-        margin-bottom: 0px;
+    .footer-partners {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+
+      .footer-partners__item {
+        text-align: center;
+        .title-text {
+          font-size: 14px;
+          color: #767676;
+          line-height: 20px;
+          font-weight: 400;
+          margin-bottom: 0px;
+        }
+        img {
+          height: 35px;
+          width: 110px;
+          object-fit: contain;
+        }
+        @media screen and (max-width: 991px) {
+          margin-bottom: 15px;
+        }
       }
-      img {
-        height: 35px;
-      }
+
       @media screen and (max-width: 991px) {
-        margin-bottom: 15px;
+        flex-wrap: wrap;
       }
     }
     .logo-right {

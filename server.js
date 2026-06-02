@@ -49,6 +49,10 @@ const sitemapRouter = express.Router({mergeParams: true});  // Nest rest of the 
 app.use('/sitemaps', sitemapRouter);
 sitemapRouter.get('*', s3Proxy(s3BucketOptions));
 
+app.get('/api/health', (req, res) => {
+    res.status(200).json({ message: 'Health Check OK' });
+});
+
 app.get('*', function(req, res) {
     res.sendFile(path.join(__dirname + '/dist/civis/index.html'));
 });

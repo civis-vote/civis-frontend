@@ -26,7 +26,16 @@
   .answer {
     padding: 0;
   }
+}
 
+.conditional-question-nested {
+  .question {
+    padding-top: 0 !important;
+    border-bottom: none !important;
+  }
+  .answer {
+    padding: 0;
+  }
 }
 
 input[type="checkbox"][disabled],

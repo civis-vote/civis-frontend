@@ -1238,11 +1238,15 @@ export class ConsultationQuestionnaireComponent
     }
 
     const orderedChildren: any[] = [];
+    const seenChildIds = new Set<string>();
     parentQuestion.subQuestions.forEach((sq: any) => {
       const childId = sq?.conditionalQuestion?.id;
       if (childId) {
-        const child = idToQuestionMap[childId.toString()];
+        const childIdStr = childId.toString();
+        if (seenChildIds.has(childIdStr)) return;
+        const child = idToQuestionMap[childIdStr];
         if (child && child.isConditionalQuestion) {
+          seenChildIds.add(childIdStr);
           orderedChildren.push(child);
         }
       }

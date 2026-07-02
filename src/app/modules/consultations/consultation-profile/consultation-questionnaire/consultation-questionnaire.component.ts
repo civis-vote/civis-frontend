@@ -478,47 +478,41 @@ export class ConsultationQuestionnaireComponent
    */
   private isFormValidForVisibleQuestions(): boolean {
     if (!this.questions || !this.questionnaireForm) return true;
-
-    let allValid = true;
-
+    const allValid = { value: true };
     const parents = this.getTopLevelQuestions();
     parents.forEach((parent: any) => {
-      const parentCtrl = this.questionnaireForm.get(parent.id.toString());
-      if (parentCtrl) {
-        parentCtrl.markAsTouched({ onlySelf: true });
-        parentCtrl.updateValueAndValidity({ onlySelf: true });
-        if (parentCtrl.invalid) allValid = false;
-      }
-      const parentOther = this.questionnaireForm.get(
-        this.getOtherAnswerControlName(parent.id)
-      );
-      if (parent.is_other && parentOther) {
-        parentOther.markAsTouched({ onlySelf: true });
-        parentOther.updateValueAndValidity({ onlySelf: true });
-        if (parentOther.invalid) allValid = false;
-      }
-
-      const children = this.getDirectConditionalChildren(parent);
-      children.forEach((child: any) => {
-        if (!this.shouldShowConditionalQuestion(parent, child.id)) return;
-        const childCtrl = this.questionnaireForm.get(child.id.toString());
-        if (childCtrl) {
-          childCtrl.markAsTouched({ onlySelf: true });
-          childCtrl.updateValueAndValidity({ onlySelf: true });
-          if (childCtrl.invalid) allValid = false;
-        }
-        const childOther = this.questionnaireForm.get(
-          this.getOtherAnswerControlName(child.id)
-        );
-        if (child.is_other && childOther) {
-          childOther.markAsTouched({ onlySelf: true });
-          childOther.updateValueAndValidity({ onlySelf: true });
-          if (childOther.invalid) allValid = false;
-        }
-      });
+      this.validateQuestionBranch(parent, allValid);
     });
+    return allValid.value;
+  }
 
-    return allValid;
+  /**
+   * Recursively validate a question and all its visible conditional descendants
+   */
+  private validateQuestionBranch(
+    question: any,
+    allValidRef: { value: boolean }
+  ): void {
+    const ctrl = this.questionnaireForm.get(question.id.toString());
+    if (ctrl) {
+      ctrl.markAsTouched({ onlySelf: true });
+      ctrl.updateValueAndValidity({ onlySelf: true });
+      if (ctrl.invalid) allValidRef.value = false;
+    }
+    const other = this.questionnaireForm.get(
+      this.getOtherAnswerControlName(question.id)
+    );
+    if (question.is_other && other) {
+      other.markAsTouched({ onlySelf: true });
+      other.updateValueAndValidity({ onlySelf: true });
+      if (other.invalid) allValidRef.value = false;
+    }
+
+    const children = this.getDirectConditionalChildren(question);
+    children.forEach((child: any) => {
+      if (!this.shouldShowConditionalQuestion(question, child.id)) return;
+      this.validateQuestionBranch(child, allValidRef);
+    });
   }
 
   checkAndUpdateProfanityCount() {
@@ -1141,11 +1135,15 @@ export class ConsultationQuestionnaireComponent
     // Non-conditional questions are always visible
     if (!question.isConditionalQuestion) return true;
 
-    // For conditional questions, check if parent has selected value with conditional questions
-    const parentQuestion = this.findParentQuestion(question.id);
-    if (!parentQuestion) return false;
-
-    return this.shouldShowConditionalQuestion(parentQuestion, question.id);
+    // Walk up the full ancestor chain; every ancestor must be visible
+    let current = question;
+    while (current?.isConditionalQuestion) {
+      const parent = this.findParentQuestion(current.id);
+      if (!parent) return false;
+      if (!this.shouldShowConditionalQuestion(parent, current.id)) return false;
+      current = parent;
+    }
+    return true;
   }
 
   /**
@@ -1465,55 +1463,9 @@ export class ConsultationQuestionnaireComponent
   isCurrentQuestionValid(): boolean {
     const currentQuestion = this.getCurrentQuestion();
     if (!currentQuestion) return true;
-
-    let allValid = true;
-
-    // Validate main question
-    const control = this.questionnaireForm.get(currentQuestion.id.toString());
-    if (control) {
-      control.markAsTouched({ onlySelf: true });
-      control.updateValueAndValidity({ onlySelf: true });
-      if (control.invalid) allValid = false;
-    }
-
-    // Check other answer control for main question if applicable
-    if (currentQuestion.is_other) {
-      const otherControl = this.questionnaireForm.get(
-        this.getOtherAnswerControlName(currentQuestion.id)
-      );
-      if (otherControl) {
-        otherControl.markAsTouched({ onlySelf: true });
-        otherControl.updateValueAndValidity({ onlySelf: true });
-        if (otherControl.invalid) allValid = false;
-      }
-    }
-
-    // Validate visible conditional questions
-    const conditionalChildren =
-      this.getDirectConditionalChildren(currentQuestion);
-    conditionalChildren.forEach((child) => {
-      if (this.shouldShowConditionalQuestion(currentQuestion, child.id)) {
-        const childControl = this.questionnaireForm.get(child.id.toString());
-        if (childControl) {
-          childControl.markAsTouched({ onlySelf: true });
-          childControl.updateValueAndValidity({ onlySelf: true });
-          if (childControl.invalid) allValid = false;
-        }
-
-        if (child.is_other) {
-          const childOtherControl = this.questionnaireForm.get(
-            this.getOtherAnswerControlName(child.id)
-          );
-          if (childOtherControl) {
-            childOtherControl.markAsTouched({ onlySelf: true });
-            childOtherControl.updateValueAndValidity({ onlySelf: true });
-            if (childOtherControl.invalid) allValid = false;
-          }
-        }
-      }
-    });
-
-    return allValid;
+    const allValid = { value: true };
+    this.validateQuestionBranch(currentQuestion, allValid);
+    return allValid.value;
   }
 
   onNextClick(): void {
@@ -1562,7 +1514,13 @@ export class ConsultationQuestionnaireComponent
    * Handle conditional questions for step-by-step flow
    */
   private handleConditionalQuestionsForStepFlow(question: any): void {
-    // Add/remove form controls for conditional questions based on current answer
+    this.handleConditionalQuestionsForStepFlowRecursive(question);
+  }
+
+  /**
+   * Recursively add/remove form controls for conditional questions
+   */
+  private handleConditionalQuestionsForStepFlowRecursive(question: any): void {
     const conditionalChildren = this.getDirectConditionalChildren(question);
 
     conditionalChildren.forEach((child) => {
@@ -1571,14 +1529,32 @@ export class ConsultationQuestionnaireComponent
 
       if (shouldShow && !childControl) {
         this.ensureConditionalQuestionControl(child);
+        this.handleConditionalQuestionsForStepFlowRecursive(child);
       } else if (!shouldShow && childControl) {
-        this.questionnaireForm.removeControl(child.id.toString());
-        const otherControlName = this.getOtherAnswerControlName(child.id);
-        if (this.questionnaireForm.get(otherControlName)) {
-          this.questionnaireForm.removeControl(otherControlName);
-        }
+        this.removeConditionalQuestionAndDescendants(child);
+      } else if (shouldShow && childControl) {
+        this.handleConditionalQuestionsForStepFlowRecursive(child);
       }
     });
+  }
+
+  /**
+   * Remove a conditional question and all its descendants from the form
+   */
+  private removeConditionalQuestionAndDescendants(question: any): void {
+    const children = this.getDirectConditionalChildren(question);
+    children.forEach((child) => {
+      const childControl = this.questionnaireForm.get(child.id.toString());
+      if (childControl) {
+        this.removeConditionalQuestionAndDescendants(child);
+      }
+    });
+
+    this.questionnaireForm.removeControl(question.id.toString());
+    const otherControlName = this.getOtherAnswerControlName(question.id);
+    if (this.questionnaireForm.get(otherControlName)) {
+      this.questionnaireForm.removeControl(otherControlName);
+    }
   }
 
   onPreviousClick(): void {
@@ -1589,16 +1565,23 @@ export class ConsultationQuestionnaireComponent
       // Template renders ALL conditional children (even hidden), so ensure all have controls
       const currentQuestion = this.getCurrentQuestion();
       if (currentQuestion) {
-        const conditionalChildren =
-          this.getDirectConditionalChildren(currentQuestion);
-        conditionalChildren.forEach((child) =>
-          this.ensureConditionalQuestionControl(child)
-        );
+        this.ensureConditionalQuestionControlRecursive(currentQuestion);
       }
 
       this.cdr.detectChanges();
       this.scrollToTop();
     }
+  }
+
+  /**
+   * Recursively ensure all conditional descendants have form controls
+   */
+  private ensureConditionalQuestionControlRecursive(question: any): void {
+    const conditionalChildren = this.getDirectConditionalChildren(question);
+    conditionalChildren.forEach((child) => {
+      this.ensureConditionalQuestionControl(child);
+      this.ensureConditionalQuestionControlRecursive(child);
+    });
   }
 
   private scrollToTop(): void {

@@ -186,11 +186,17 @@
         </ng-template>
 
         <!-- Reusable conditional question template -->
-        <ng-template #conditionalQuestionTemplate let-child="child" let-parentQuestion="parentQuestion">
-          <div class="conditional-question-index"
+        <ng-template #conditionalQuestionTemplate let-child="child" let-parentQuestion="parentQuestion" let-depth="depth">
+          <div [class.conditional-question-index]="(depth || 0) === 0"
+            [class.conditional-question-nested]="(depth || 0) > 0"
             [style.display]="shouldShowConditionalQuestion(parentQuestion, child.id) ? 'block' : 'none'">
             <ng-container [ngTemplateOutlet]="questionTemplate"
               [ngTemplateOutletContext]="{ question: child, showQuestionNumber: false, questionNumber: null }">
+            </ng-container>
+            <!-- Recursively render nested conditional children -->
+            <ng-container *ngFor="let nestedChild of getDirectConditionalChildren(child)"
+              [ngTemplateOutlet]="conditionalQuestionTemplate"
+              [ngTemplateOutletContext]="{ child: nestedChild, parentQuestion: child, depth: (depth || 0) + 1 }">
             </ng-container>
           </div>
         </ng-template>
@@ -207,7 +213,7 @@
               <!-- Conditional questions for the current question in step-by-step flow -->
               <ng-container *ngFor="let child of getDirectConditionalChildren(currentQuestion)"
                 [ngTemplateOutlet]="conditionalQuestionTemplate"
-                [ngTemplateOutletContext]="{ child: child, parentQuestion: currentQuestion }">
+                [ngTemplateOutletContext]="{ child: child, parentQuestion: currentQuestion, depth: 0 }">
               </ng-container>
             </div>
           </ng-container>
@@ -224,7 +230,7 @@
               <!-- Direct conditional questions children under the parent -->
               <ng-container *ngFor="let child of getDirectConditionalChildren(question)"
                 [ngTemplateOutlet]="conditionalQuestionTemplate"
-                [ngTemplateOutletContext]="{ child: child, parentQuestion: question }">
+                [ngTemplateOutletContext]="{ child: child, parentQuestion: question, depth: 0 }">
               </ng-container>
             </div>
           </ng-container>

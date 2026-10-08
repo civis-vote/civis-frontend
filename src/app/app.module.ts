@@ -17,6 +17,7 @@ import { CitySelectionModalModule } from './shared/components/city-selection-mod
 import { ConfirmUserGuard } from './shared/guards/confirm-user.guard';
 import { UnsubscribeUserGuard } from './shared/guards/unsubscribe-user.guard';
 import { CookieModule, CookieService } from 'ngx-cookie';
+import { CookieService as NgxCookieService } from 'ngx-cookie-service';
 import { NgxWebstorageModule } from 'ngx-webstorage';
 import { StarterService } from './shared/services/starter.service';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
@@ -48,6 +49,7 @@ import { AudioRecordingService } from './shared/services/audio-recording.service
     UnsubscribeUserGuard,
     WhiteLabelGuard,
     CookieService,
+    NgxCookieService,
     StarterService,
     AudioRecordingService,
   ],

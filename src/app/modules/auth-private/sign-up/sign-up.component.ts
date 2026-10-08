@@ -10,6 +10,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { GraphqlService } from 'src/app/graphql/graphql.service';
 import { NgForm } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
+import { V2AuthCookieService } from 'src/app/shared/services/v2-auth-cookie.service';
 import gql from 'graphql-tag';
 import { isObjectEmpty } from 'src/app/shared/functions/modular.functions';
 
@@ -60,6 +61,7 @@ export class SignUpComponent implements OnInit {
               private graphqlService: GraphqlService,
               private cookieService: CookieService,
               private route: ActivatedRoute,
+              private v2AuthCookieService: V2AuthCookieService,
               ) {
   this.reCAPTCHA_KEY = this.graphqlService.environment.RECAPTCHA_SITE_KEY;
   }
@@ -303,6 +305,7 @@ export class SignUpComponent implements OnInit {
     this.invitationToken = null;
     localStorage.removeItem('civis-token');
     localStorage.removeItem('civis-token_expires');
+    this.v2AuthCookieService.clearV2LoginCookies();
     this.userService.currentUser = null;
     this.userService.userLoaded$.next(false);
     this.router.navigateByUrl('/auth-private');

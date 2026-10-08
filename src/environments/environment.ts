@@ -8,7 +8,9 @@ export const environment = {
   development: true,
   staging: false,
   production: false,
-  api: ''
+  api: '',
+  v2FrontendUrl: '',
+  v2StoragePrefix: ''
 };
 
 

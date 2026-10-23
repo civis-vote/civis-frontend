@@ -191,13 +191,15 @@ export class AuthModalComponent implements OnInit {
     this.close.emit(true);
   }
 
-  redirectTo(socialPlatform) {
+  redirectTo(socialPlatform: "google" | "facebook") {
+    // Tells the shared API which frontend to redirect back to after social auth.
+    const clientParam = "?client=civis_v1";
     switch (socialPlatform) {
       case 'google':
-        window.location.href = `${this.graphqlService.environment.api}/signin_google`;
+        window.location.href = `${this.graphqlService.environment.api}/signin_google${clientParam}`;
         break;
       case 'facebook':
-        window.location.href = `${this.graphqlService.environment.api}/signin_facebook`;
+        window.location.href = `${this.graphqlService.environment.api}/signin_facebook${clientParam}`;
         break;
     }
   }

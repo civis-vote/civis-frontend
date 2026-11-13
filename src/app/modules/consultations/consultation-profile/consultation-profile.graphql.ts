@@ -135,14 +135,6 @@ export const ConsultationProfile = gql`
           url
         }
       }
-      theme {
-        id
-        coverPhoto (resolution: "1500X750") {
-          id
-          filename
-          url
-        }
-      }
       reviewType
       satisfactionRatingDistribution
       status
@@ -240,14 +232,6 @@ export const ConsultationProfileCurrentUser = gql`
         marathiName
         kannadaName
         logo (resolution: "100X100") {
-          id
-          filename
-          url
-        }
-      }
-      theme {
-        id
-        coverPhoto (resolution: "1500X750") {
           id
           filename
           url
@@ -351,14 +335,6 @@ export const ConsultationProfileUser = gql`
         marathiName
         kannadaName
         logo (resolution: "100X100") {
-          id
-          filename
-          url
-        }
-      }
-      theme {
-        id
-        coverPhoto (resolution: "1500X750") {
           id
           filename
           url

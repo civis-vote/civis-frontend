@@ -25,14 +25,6 @@ export const ResponseProfileQuery = gql`
                     url
                   }
                 }
-                theme {
-                  id
-                  coverPhoto (resolution: "350X285") {
-                    id
-                    filename
-                    url
-                  }
-                }
                 satisfactionRatingDistribution
                 sharedResponses(sort: created_at, sortDirection: desc) {
                   totalCount

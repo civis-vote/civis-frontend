@@ -207,9 +207,7 @@ export class ReadRespondComponent implements OnInit {
 
   createMetaTags(consultationProfile) {
     const title = consultationProfile.title ? consultationProfile.title : '' ;
-    const image = (consultationProfile['theme'] ?
-    (consultationProfile['theme']['coverPhoto'] ?
-    consultationProfile['theme']['coverPhoto']['url'] : '') : '');
+    const image = '';
     const description = consultationProfile['summary'] ? (consultationProfile['summary'].length < 140 ?
                         consultationProfile['summary'] : consultationProfile['summary'].slice(0, 140)) : '';
     this.deleteMetaTags();

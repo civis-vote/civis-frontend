@@ -56,14 +56,6 @@ export const ConsultationProfileQuery = gql`
           url
         }
       }
-      theme {
-        id
-        coverPhoto (resolution: "350X285") {
-          id
-          filename
-          url
-        }
-      }
       satisfactionRatingDistribution
       responses(sort: created_at, sortDirection: desc, responseToken: $responseToken) {
         edges {

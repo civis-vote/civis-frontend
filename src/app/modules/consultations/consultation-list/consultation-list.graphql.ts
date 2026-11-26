@@ -44,14 +44,6 @@ export const ConsultationList = gql`
           kannadaName
           ...departmentFields
         }
-        theme {
-          id
-          coverPhoto (resolution: "350X285") {
-            id
-            filename
-            url
-          }
-        }
         status
       }
       paging {
